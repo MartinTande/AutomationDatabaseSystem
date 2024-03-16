@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Security.AccessControl;
 using Microsoft.Data.SqlClient;
 
 namespace AutomationSystem.Classes
@@ -78,6 +79,33 @@ namespace AutomationSystem.Classes
             }
 
             return objectList;
+        }
+
+        public void CreateTagObject(TagObject tagObject)
+        {
+            try
+            {
+                SqlConnection connection = new SqlConnection(connectionString);
+
+                connection.Open();
+
+                SqlCommand command = new SqlCommand("CreateObject", connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add(new SqlParameter("@ObjectName", tagObject.ObjectName));
+                command.Parameters.Add(new SqlParameter("@ObjectType", tagObject.ObjectType));
+                command.Parameters.Add(new SqlParameter("@Hierarchy1", tagObject.Hierarchy_1));
+                command.Parameters.Add(new SqlParameter("@Hierarchy2", tagObject.Hierarchy_2));
+                command.Parameters.Add(new SqlParameter("@EasGroup", tagObject.EasGroup));
+                command.Parameters.Add(new SqlParameter("@Otd", tagObject.Otd));
+
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch
+            {
+                MessageBox.Show("Error when inserting data into database");
+            }
         }
     }
 }

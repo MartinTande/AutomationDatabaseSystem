@@ -50,7 +50,12 @@ namespace AutomationSystem
             objectList = tagObject.GetTagObjects();
 
             dataGridViewObjectTable.DataSource = objectList;
+        }
 
+        private void btnNewForm_Click(object sender, EventArgs e)
+        {
+            NewObjectForm newObjectForm = new NewObjectForm();
+            newObjectForm.ShowDialog();
         }
     }
 }

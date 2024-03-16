@@ -9,7 +9,7 @@ namespace AutomationSystem.Classes
     {
         string connectionString = DatabaseAccess.GetConnectionString();
         public int ObjectTypeId {  get; set; }
-        public string ObjectTypeName { get; set; }
+        public string? ObjectTypeName { get; set; }
 
         public List<ObjectType> GetObjectTypes()
         {

@@ -1,4 +1,5 @@
-﻿namespace AutomationSystem
+﻿
+namespace AutomationSystem
 {
     partial class MainForm
     {
@@ -34,6 +35,7 @@
             btnSave = new Button();
             comboObjectType = new ComboBox();
             dataGridViewObjectTable = new DataGridView();
+            btnNewForm = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewObjectTable).BeginInit();
             SuspendLayout();
             // 
@@ -89,11 +91,22 @@
             dataGridViewObjectTable.Size = new Size(2187, 689);
             dataGridViewObjectTable.TabIndex = 6;
             // 
+            // btnNewForm
+            // 
+            btnNewForm.Location = new Point(2097, 1045);
+            btnNewForm.Name = "btnNewForm";
+            btnNewForm.Size = new Size(131, 40);
+            btnNewForm.TabIndex = 7;
+            btnNewForm.Text = "New";
+            btnNewForm.UseVisualStyleBackColor = true;
+            btnNewForm.Click += btnNewForm_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2273, 1325);
+            Controls.Add(btnNewForm);
             Controls.Add(dataGridViewObjectTable);
             Controls.Add(comboObjectType);
             Controls.Add(btnSave);
@@ -107,6 +120,8 @@
             PerformLayout();
         }
 
+
+
         #endregion
 
         private TextBox txtObjectName;
@@ -115,5 +130,6 @@
         private Button btnSave;
         private ComboBox comboObjectType;
         private DataGridView dataGridViewObjectTable;
+        private Button btnNewForm;
     }
 }
