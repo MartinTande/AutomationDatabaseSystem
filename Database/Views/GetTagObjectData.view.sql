@@ -5,7 +5,7 @@ IF EXISTS (SELECT name
 DROP VIEW GetTagObjectData
 GO
 
-CREATE VIEW SaveObject
+CREATE VIEW GetTagObjectData
 
 AS
 
