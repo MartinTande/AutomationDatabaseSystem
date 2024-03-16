@@ -8,12 +8,13 @@ using AutomationSystem.Classes;
 
 namespace AutomationSystem
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             FillObjectTypeComboBox();
+            FillGridView();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -38,6 +39,18 @@ namespace AutomationSystem
             {
                 comboObjectType.Items.Add(objectTypeItem.ObjectTypeName);
             }
+        }
+
+        private void FillGridView()
+        {
+            List<TagObject> objectList = new List<TagObject>();
+
+            TagObject tagObject = new TagObject();
+
+            objectList = tagObject.GetTagObjects();
+
+            dataGridViewObjectTable.DataSource = objectList;
+
         }
     }
 }

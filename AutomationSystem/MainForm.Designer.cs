@@ -1,6 +1,6 @@
 ﻿namespace AutomationSystem
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -33,11 +33,13 @@
             label2 = new Label();
             btnSave = new Button();
             comboObjectType = new ComboBox();
+            dataGridViewObjectTable = new DataGridView();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewObjectTable).BeginInit();
             SuspendLayout();
             // 
             // txtObjectName
             // 
-            txtObjectName.Location = new Point(350, 184);
+            txtObjectName.Location = new Point(41, 982);
             txtObjectName.Name = "txtObjectName";
             txtObjectName.Size = new Size(430, 35);
             txtObjectName.TabIndex = 0;
@@ -45,7 +47,7 @@
             // ObjectName
             // 
             ObjectName.AutoSize = true;
-            ObjectName.Location = new Point(354, 150);
+            ObjectName.Location = new Point(45, 948);
             ObjectName.Name = "ObjectName";
             ObjectName.Size = new Size(136, 30);
             ObjectName.TabIndex = 2;
@@ -54,7 +56,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(354, 285);
+            label2.Location = new Point(45, 1083);
             label2.Name = "label2";
             label2.Size = new Size(123, 30);
             label2.TabIndex = 3;
@@ -62,7 +64,7 @@
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(350, 413);
+            btnSave.Location = new Point(41, 1211);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(131, 40);
             btnSave.TabIndex = 4;
@@ -73,23 +75,34 @@
             // comboObjectType
             // 
             comboObjectType.FormattingEnabled = true;
-            comboObjectType.Location = new Point(350, 328);
+            comboObjectType.Location = new Point(41, 1126);
             comboObjectType.Name = "comboObjectType";
             comboObjectType.Size = new Size(431, 38);
             comboObjectType.TabIndex = 5;
             // 
-            // Form1
+            // dataGridViewObjectTable
+            // 
+            dataGridViewObjectTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewObjectTable.Location = new Point(41, 58);
+            dataGridViewObjectTable.Name = "dataGridViewObjectTable";
+            dataGridViewObjectTable.RowHeadersWidth = 72;
+            dataGridViewObjectTable.Size = new Size(2187, 689);
+            dataGridViewObjectTable.TabIndex = 6;
+            // 
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1744, 1122);
+            ClientSize = new Size(2273, 1325);
+            Controls.Add(dataGridViewObjectTable);
             Controls.Add(comboObjectType);
             Controls.Add(btnSave);
             Controls.Add(label2);
             Controls.Add(ObjectName);
             Controls.Add(txtObjectName);
-            Name = "Form1";
+            Name = "MainForm";
             Text = "Automation System";
+            ((System.ComponentModel.ISupportInitialize)dataGridViewObjectTable).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -101,5 +114,6 @@
         private Label label2;
         private Button btnSave;
         private ComboBox comboObjectType;
+        private DataGridView dataGridViewObjectTable;
     }
 }

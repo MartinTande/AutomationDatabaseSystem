@@ -1,15 +1,22 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
-using System.Configuration;
 
 namespace AutomationSystem.Classes
 {
     class TagObject
     {
+        public int ObjectId { get; set; }
+        public string? ObjectName { get; set; }
+        public string? ObjectType { get; set; }
+        public string? Hierarchy_1 { get; set; }
+        public string? Hierarchy_2 {  get; set; }
+        public string? EasGroup { get; set; }
+        public string? Otd { get; set; }
+
+        string connectionString = DatabaseAccess.GetConnectionString();
+
         public void SaveData(string  objectName, string objectType)
         {
-            string connectionString = DatabaseAccess.GetConnectionString();
-
             try
             {
                 SqlConnection connection = new SqlConnection(connectionString);
@@ -29,6 +36,48 @@ namespace AutomationSystem.Classes
             {
                 MessageBox.Show("Error when inserting data into database");
             }
+        }
+
+        public List<TagObject> GetTagObjects()
+        {
+            List<TagObject> objectList = new List<TagObject>();
+            try
+            {
+                SqlConnection connection = new SqlConnection(connectionString);
+
+                string selectSQL = "select ObjectId, ObjectName, ObjectType, Hierarchy1, Hierarchy2, EasGroup, Otd from GetTagObjectData";
+
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(selectSQL, connection);
+                SqlDataReader dataReader = command.ExecuteReader();
+
+                if (dataReader != null)
+                {
+                    while (dataReader.Read())
+                    {
+                        TagObject tagObject = new TagObject();
+
+                        ObjectId = Convert.ToInt32(dataReader["ObjectId"]);
+                        ObjectName = dataReader["ObjectName"].ToString();
+                        ObjectType = dataReader["ObjectType"].ToString();
+                        Hierarchy_1 = dataReader["Hierarchy1"].ToString();
+                        Hierarchy_2 = dataReader["Hierarchy2"].ToString();
+                        EasGroup = dataReader["EasGroup"].ToString();
+                        Otd = dataReader["Otd"].ToString();
+
+                        objectList.Add(tagObject);
+                    }
+                }
+                connection.Close();
+            }
+
+            catch
+            {
+                MessageBox.Show("Error when retrieving data from database");
+            }
+
+            return objectList;
         }
     }
 }
