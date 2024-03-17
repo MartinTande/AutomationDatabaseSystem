@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutomationSystem.Classes
+namespace AutomationSystem.Categories
 {
     public interface ICategory<T>
     {

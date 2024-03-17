@@ -41,6 +41,7 @@ namespace AutomationSystem
             TagObject tagObject = new TagObject();
             objectList = tagObject.GetTagObjects();
             dataGridViewObjectTable.DataSource = objectList;
+            advDataGridViewObjectTable.DataSource = objectList;
         }
 
         private void OpenNewObjectForm()
@@ -62,6 +63,16 @@ namespace AutomationSystem
             TagObject tagObject = new TagObject();
             tagObject.DeleteTagObject(selectedObjectId);
             FillGridView();
+        }
+
+        private void advDataGridViewObjectTable_SortStringChanged(object sender, Zuby.ADGV.AdvancedDataGridView.SortEventArgs e)
+        {
+            MessageBox.Show(this.advDataGridViewObjectTable.SortString);
+        }
+
+        private void advDataGridViewObjectTable_FilterStringChanged(object sender, Zuby.ADGV.AdvancedDataGridView.FilterEventArgs e)
+        {
+            MessageBox.Show(this.advDataGridViewObjectTable.FilterString);
         }
     }
 }

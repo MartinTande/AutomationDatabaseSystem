@@ -1,13 +1,12 @@
-﻿using Microsoft.Data.SqlClient;
-using System;
+﻿using System.Data;
+using Microsoft.Data.SqlClient;
+using System.Configuration;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutomationSystem.Classes;
 
-namespace AutomationSystem.Classes
+namespace AutomationSystem.Categories
 {
-    public class Otd : ICategory<Otd>
+    public class ObjectType : ICategory<ObjectType>
     {
         string connectionString = DatabaseAccess.GetConnectionString();
         public int Id { get; set; }
@@ -17,11 +16,11 @@ namespace AutomationSystem.Classes
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                List<string> otdList = new List<string>();
+                List<string> objectTypeList = new List<string>();
 
                 connection.Open();
 
-                string sqlQuery = "select OtdId, Otd from OTD order by Otd";
+                string sqlQuery = "select ObjectTypeId, ObjectType from OBJECT_TYPE order by ObjectType";
                 SqlCommand command = new SqlCommand(sqlQuery, connection);
 
                 SqlDataReader dataReader = command.ExecuteReader();
@@ -30,19 +29,18 @@ namespace AutomationSystem.Classes
                 {
                     while (dataReader.Read())
                     {
-                        Otd otd = new Otd();
+                        ObjectType objectType = new ObjectType();
 
-                        otd.Id = Convert.ToInt32(dataReader["OtdId"]);
-                        otd.Name = dataReader["Otd"].ToString();
+                        objectType.Id = Convert.ToInt32(dataReader["ObjectTypeId"]);
+                        objectType.Name = dataReader["ObjectType"].ToString();
 
-                        otdList.Add(otd.Name);
+                        objectTypeList.Add(objectType.Name);
                     }
                 }
 
                 connection.Close();
-                return otdList;
+                return objectTypeList;
             }
-
         }
 
         public List<string> GetNames(string category)
@@ -50,14 +48,14 @@ namespace AutomationSystem.Classes
             throw new NotImplementedException();
         }
 
-        public List<Otd> GetTypes()
+        public List<ObjectType> GetTypes()
         {
-            List<Otd> otdList = new List<Otd>();
+            List<ObjectType> objectTypeList = new List<ObjectType>();
 
             SqlConnection connection = new SqlConnection(connectionString);
             connection.Open();
 
-            string sqlQuery = "select OtdId, Otd from OTD order by Otd";
+            string sqlQuery = "select ObjectTypeId, ObjectType from OBJECT_TYPE order by ObjectType";
             SqlCommand command = new SqlCommand(sqlQuery, connection);
 
             SqlDataReader dataReader = command.ExecuteReader();
@@ -66,17 +64,18 @@ namespace AutomationSystem.Classes
             {
                 while (dataReader.Read())
                 {
-                    Otd otd = new Otd();
+                    ObjectType objectType = new ObjectType();
 
-                    otd.Id = Convert.ToInt32(dataReader["OtdId"]);
-                    otd.Name = dataReader["Otd"].ToString();
+                    objectType.Id = Convert.ToInt32(dataReader["ObjectTypeId"]);
+                    objectType.Name = dataReader["ObjectType"].ToString();
 
-                    otdList.Add(otd);
+                    objectTypeList.Add(objectType);
                 }
             }
 
             connection.Close();
-            return otdList;
+            return objectTypeList;
         }
+
     }
 }

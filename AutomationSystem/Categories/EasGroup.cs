@@ -1,11 +1,12 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using AutomationSystem.Classes;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutomationSystem.Classes
+namespace AutomationSystem.Categories
 {
     public class EasGroup : ICategory<EasGroup>
     {
@@ -54,7 +55,7 @@ namespace AutomationSystem.Classes
                 List<EasGroup> easGroupList = new List<EasGroup>();
                 string sqlQuery = "select EasGroupId, EasGroup from EAS_GROUP order by EasGroup";
                 SqlCommand command = new SqlCommand(sqlQuery, connection);
-                
+
                 connection.Open();
                 SqlDataReader dataReader = command.ExecuteReader();
 

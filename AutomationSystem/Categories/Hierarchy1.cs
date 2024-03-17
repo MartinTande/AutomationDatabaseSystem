@@ -1,11 +1,12 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using AutomationSystem.Classes;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutomationSystem.Classes
+namespace AutomationSystem.Categories
 {
     public class Hierarchy1 : ICategory<Hierarchy1>
     {
