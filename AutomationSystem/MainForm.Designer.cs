@@ -31,6 +31,7 @@ namespace AutomationSystem
         {
             dataGridViewObjectTable = new DataGridView();
             btnNewForm = new Button();
+            btnEditForm = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewObjectTable).BeginInit();
             SuspendLayout();
             // 
@@ -40,7 +41,7 @@ namespace AutomationSystem
             dataGridViewObjectTable.Location = new Point(41, 58);
             dataGridViewObjectTable.Name = "dataGridViewObjectTable";
             dataGridViewObjectTable.RowHeadersWidth = 72;
-            dataGridViewObjectTable.Size = new Size(2187, 689);
+            dataGridViewObjectTable.Size = new Size(2187, 956);
             dataGridViewObjectTable.TabIndex = 6;
             // 
             // btnNewForm
@@ -53,11 +54,22 @@ namespace AutomationSystem
             btnNewForm.UseVisualStyleBackColor = true;
             btnNewForm.Click += btnNewForm_Click;
             // 
+            // btnEditForm
+            // 
+            btnEditForm.Location = new Point(1944, 1045);
+            btnEditForm.Name = "btnEditForm";
+            btnEditForm.Size = new Size(131, 40);
+            btnEditForm.TabIndex = 8;
+            btnEditForm.Text = "Edit";
+            btnEditForm.UseVisualStyleBackColor = true;
+            btnEditForm.Click += btnEditForm_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(2273, 1325);
+            ClientSize = new Size(2273, 1134);
+            Controls.Add(btnEditForm);
             Controls.Add(btnNewForm);
             Controls.Add(dataGridViewObjectTable);
             Name = "MainForm";
@@ -70,5 +82,6 @@ namespace AutomationSystem
         #endregion
         private DataGridView dataGridViewObjectTable;
         private Button btnNewForm;
+        private Button btnEditForm;
     }
 }

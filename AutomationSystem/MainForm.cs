@@ -24,7 +24,7 @@ namespace AutomationSystem
             TagObject tagObject = new TagObject();
 
             objectList = tagObject.GetTagObjects();
- 
+
             dataGridViewObjectTable.DataSource = objectList;
         }
 
@@ -38,5 +38,19 @@ namespace AutomationSystem
         {
             FillGridView();
         }
+
+        private void btnEditForm_Click(object sender, EventArgs e)
+        {
+            EditObject();
+        }
+
+        private void EditObject()
+        {
+            int objectId = (int)dataGridViewObjectTable.CurrentRow.Cells[0].Value;
+
+            EditObjectForm formEditObject = new EditObjectForm(objectId);
+            formEditObject.ShowDialog();
+        }
+
     }
 }
