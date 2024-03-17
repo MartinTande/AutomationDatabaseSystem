@@ -20,11 +20,8 @@ namespace AutomationSystem
         private void FillGridView()
         {
             List<TagObject> objectList = new List<TagObject>();
-
             TagObject tagObject = new TagObject();
-
             objectList = tagObject.GetTagObjects();
-
             dataGridViewObjectTable.DataSource = objectList;
         }
 
@@ -46,11 +43,23 @@ namespace AutomationSystem
 
         private void EditObject()
         {
-            int objectId = (int)dataGridViewObjectTable.CurrentRow.Cells[0].Value;
+            int selectedObjectId = (int)dataGridViewObjectTable.CurrentRow.Cells[0].Value;
 
-            EditObjectForm formEditObject = new EditObjectForm(objectId);
+            EditObjectForm formEditObject = new EditObjectForm(selectedObjectId);
             formEditObject.ShowDialog();
         }
 
+        private void btnDeleteObject_Click(object sender, EventArgs e)
+        {
+            DeleteObject();
+        }
+
+        private void DeleteObject()
+        {
+            int selectedObjectId = (int)dataGridViewObjectTable.CurrentRow.Cells[0].Value;
+            TagObject tagObject = new TagObject();
+            tagObject.DeleteTagObject(selectedObjectId);
+            FillGridView();
+        }
     }
 }

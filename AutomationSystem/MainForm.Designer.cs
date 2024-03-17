@@ -32,6 +32,7 @@ namespace AutomationSystem
             dataGridViewObjectTable = new DataGridView();
             btnNewForm = new Button();
             btnEditForm = new Button();
+            btnDeleteObject = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewObjectTable).BeginInit();
             SuspendLayout();
             // 
@@ -64,11 +65,22 @@ namespace AutomationSystem
             btnEditForm.UseVisualStyleBackColor = true;
             btnEditForm.Click += btnEditForm_Click;
             // 
+            // btnDeleteObject
+            // 
+            btnDeleteObject.Location = new Point(1775, 1045);
+            btnDeleteObject.Name = "btnDeleteObject";
+            btnDeleteObject.Size = new Size(131, 40);
+            btnDeleteObject.TabIndex = 9;
+            btnDeleteObject.Text = "Delete";
+            btnDeleteObject.UseVisualStyleBackColor = true;
+            btnDeleteObject.Click += btnDeleteObject_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2273, 1134);
+            Controls.Add(btnDeleteObject);
             Controls.Add(btnEditForm);
             Controls.Add(btnNewForm);
             Controls.Add(dataGridViewObjectTable);
@@ -83,5 +95,6 @@ namespace AutomationSystem
         private DataGridView dataGridViewObjectTable;
         private Button btnNewForm;
         private Button btnEditForm;
+        private Button btnDeleteObject;
     }
 }

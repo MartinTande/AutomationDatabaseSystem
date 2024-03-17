@@ -1,5 +1,0 @@
-INSERT INTO OBJECT_TYPE (ObjectType) VALUES ('Motor')
-INSERT INTO OBJECT_TYPE (ObjectType) VALUES ('Valve')
-INSERT INTO OBJECT_TYPE (ObjectType) VALUES ('AnalogSensor')
-INSERT INTO OBJECT_TYPE (ObjectType) VALUES ('DigitalSensor')
-

@@ -82,7 +82,29 @@ namespace AutomationSystem.Classes
 
         public void CreateTagObject(TagObject tagObject)
         {
-            ExecuteStoredProcedureOnTagObject(tagObject, "CreateObject");
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand("CreateObject", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.Add(new SqlParameter("@ObjectName", tagObject.ObjectName));
+                    command.Parameters.Add(new SqlParameter("@ObjectType", tagObject.ObjectType));
+                    command.Parameters.Add(new SqlParameter("@Hierarchy1", tagObject.Hierarchy_1));
+                    command.Parameters.Add(new SqlParameter("@Hierarchy2", tagObject.Hierarchy_2));
+                    command.Parameters.Add(new SqlParameter("@EasGroup", tagObject.EasGroup));
+                    command.Parameters.Add(new SqlParameter("@Otd", tagObject.Otd));
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+                catch
+                {
+                    MessageBox.Show("Error when inserting data into database");
+                }
+            }
         }
 
         public TagObject GetTagObjectData(int objectId)
@@ -120,7 +142,7 @@ namespace AutomationSystem.Classes
             return tagObject;
         }
 
-        public void EditTagObject(TagObject tagObject)
+        public void EditTagObject(TagObject updatedTagObject)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -129,13 +151,13 @@ namespace AutomationSystem.Classes
                     SqlCommand command = new SqlCommand("UpdateObject", connection);
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.Add(new SqlParameter("@ObjectId", tagObject.ObjectId));
-                    command.Parameters.Add(new SqlParameter("@ObjectName", tagObject.ObjectName));
-                    command.Parameters.Add(new SqlParameter("@ObjectType", tagObject.ObjectType));
-                    command.Parameters.Add(new SqlParameter("@Hierarchy1", tagObject.Hierarchy_1));
-                    command.Parameters.Add(new SqlParameter("@Hierarchy2", tagObject.Hierarchy_2));
-                    command.Parameters.Add(new SqlParameter("@EasGroup", tagObject.EasGroup));
-                    command.Parameters.Add(new SqlParameter("@Otd", tagObject.Otd));
+                    command.Parameters.Add(new SqlParameter("@ObjectId", updatedTagObject.ObjectId));
+                    command.Parameters.Add(new SqlParameter("@ObjectName", updatedTagObject.ObjectName));
+                    command.Parameters.Add(new SqlParameter("@ObjectType", updatedTagObject.ObjectType));
+                    command.Parameters.Add(new SqlParameter("@Hierarchy1", updatedTagObject.Hierarchy_1));
+                    command.Parameters.Add(new SqlParameter("@Hierarchy2", updatedTagObject.Hierarchy_2));
+                    command.Parameters.Add(new SqlParameter("@EasGroup", updatedTagObject.EasGroup));
+                    command.Parameters.Add(new SqlParameter("@Otd", updatedTagObject.Otd));
 
                     connection.Open();
                     command.ExecuteNonQuery();
@@ -147,22 +169,17 @@ namespace AutomationSystem.Classes
                 }
             }
         }
-
-        private void ExecuteStoredProcedureOnTagObject(TagObject tagObject, string storedProcedure)
+       
+        public void DeleteTagObject(int selectedTagObjectId)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 try
                 {
-                    SqlCommand command = new SqlCommand(storedProcedure, connection);
+                    SqlCommand command = new SqlCommand("DeleteObject", connection);
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.Add(new SqlParameter("@ObjectName", tagObject.ObjectName));
-                    command.Parameters.Add(new SqlParameter("@ObjectType", tagObject.ObjectType));
-                    command.Parameters.Add(new SqlParameter("@Hierarchy1", tagObject.Hierarchy_1));
-                    command.Parameters.Add(new SqlParameter("@Hierarchy2", tagObject.Hierarchy_2));
-                    command.Parameters.Add(new SqlParameter("@EasGroup", tagObject.EasGroup));
-                    command.Parameters.Add(new SqlParameter("@Otd", tagObject.Otd));
+                    command.Parameters.Add(new SqlParameter("@ObjectId", selectedTagObjectId));
 
                     connection.Open();
                     command.ExecuteNonQuery();
@@ -173,7 +190,6 @@ namespace AutomationSystem.Classes
                     MessageBox.Show("Error when inserting data into database");
                 }
             }
-
         }
     }
 }
