@@ -1,4 +1,4 @@
--- Check it Stored Procedure exists and deletes it if it does
+-- Check if Stored Procedure exists and deletes it if it does
 IF EXISTS (SELECT name
 	FROM sysobjects
 	WHERE name = 'CreateObject'
