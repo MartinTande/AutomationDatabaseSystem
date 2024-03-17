@@ -1,4 +1,5 @@
 ﻿using AutomationSystem.Classes;
+using AutomationSystem.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,23 +17,25 @@ namespace AutomationSystem
         public NewObjectForm()
         {
             InitializeComponent();
-            FillEasGroupComboBox();
-            FillHierarchy1ComboBox();
-            FillObjectTypeComboBox();
-            FillOtdComboBox();
+            FillComboBoxes();
         }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
             SaveObjectData();
-            this.Close();
+            Close();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
         private void SaveObjectData()
         {
             TagObject tagObject = new TagObject();
 
-            tagObject.ObjectName = txtBoxName.Text;
+            tagObject.Name = txtBoxName.Text;
             tagObject.ObjectType = comboBoxObjectType.Text;
             tagObject.Hierarchy_1 = comboBoxHierarchy1.Text;
             tagObject.Hierarchy_2 = comboBoxHierarchy2.Text;
@@ -42,74 +45,25 @@ namespace AutomationSystem
             tagObject.CreateTagObject(tagObject);
         }
 
-        private void FillObjectTypeComboBox()
+        private void FillComboBoxes()
         {
             ObjectType objectType = new ObjectType();
-            List<ObjectType> objectTypeList = new List<ObjectType>();
-            objectTypeList = objectType.GetObjectTypes();
-
-            foreach (ObjectType objectTypeItem in objectTypeList)
-            {
-                comboBoxObjectType.Items.Add(objectTypeItem.ObjectTypeName);
-            }
-        }
-
-        private void FillHierarchy1ComboBox()
-        {
             Hierarchy1 hierarchy1 = new Hierarchy1();
-            List<Hierarchy1> hierarchy1List = new List<Hierarchy1>();
-            hierarchy1List = hierarchy1.GetHierarchy1Types();
-
-            foreach (Hierarchy1 hierarchy1Item in hierarchy1List)
-            {
-                comboBoxHierarchy1.Items.Add(hierarchy1Item.Hierarchy1Name);
-            }
-        }
-
-        private void FillHierarchy2ComboBox()
-        {
             Hierarchy2 hierarchy2 = new Hierarchy2();
-            List<Hierarchy2> hierarchy2List = new List<Hierarchy2>();
-            hierarchy2List = hierarchy2.GetHierarchy2Types(comboBoxHierarchy1.Text);
-
-            foreach (Hierarchy2 hierarchy2Item in hierarchy2List)
-            {
-                comboBoxHierarchy2.Items.Add(hierarchy2Item.Hierarchy2Name);
-            }
-        }
-
-        private void FillEasGroupComboBox()
-        {
             EasGroup easGroup = new EasGroup();
-            List<EasGroup> easGroupList = new List<EasGroup>();
-            easGroupList = easGroup.GetEasGroups();
-
-            foreach (EasGroup easGroupItem in easGroupList)
-            {
-                comboBoxEasGroup.Items.Add(easGroupItem.EasGroupName);
-            }
-        }
-
-        private void FillOtdComboBox()
-        {
             Otd otd = new Otd();
-            List<Otd> otdList = new List<Otd>();
-            otdList = otd.GetOTDs();
 
-            foreach (Otd otdItem in otdList)
-            {
-                comboBoxOtd.Items.Add(otdItem.OtdName);
-            }
+            ComboBoxUtil.FillComboBox(comboBoxObjectType, objectType.GetNames());
+            ComboBoxUtil.FillComboBox(comboBoxHierarchy1, hierarchy1.GetNames());
+            ComboBoxUtil.FillUnderCategoryComboBox(comboBoxHierarchy2, comboBoxHierarchy1.Text, hierarchy2);
+            ComboBoxUtil.FillComboBox(comboBoxEasGroup, easGroup.GetNames());
+            ComboBoxUtil.FillComboBox(comboBoxOtd, otd.GetNames());
         }
 
         private void comboBoxHierarchy1_TextChanged(object sender, EventArgs e)
         {
-            FillHierarchy2ComboBox();
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            this.Close();
+            Hierarchy2 hierarchy2 = new Hierarchy2();
+            ComboBoxUtil.FillUnderCategoryComboBox(comboBoxHierarchy2, comboBoxHierarchy1.Text, hierarchy2);
         }
     }
 }

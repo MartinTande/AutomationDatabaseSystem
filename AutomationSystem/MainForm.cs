@@ -15,7 +15,25 @@ namespace AutomationSystem
             InitializeComponent();
             FillGridView();
         }
+        private void MainForm_Activated(object sender, EventArgs e)
+        {
+            FillGridView();
+        }
 
+        private void btnNewForm_Click(object sender, EventArgs e)
+        {
+            OpenNewObjectForm();
+        }
+
+        private void btnEditForm_Click(object sender, EventArgs e)
+        {
+            OpenEditObjectForm();
+        }
+
+        private void btnDeleteObject_Click(object sender, EventArgs e)
+        {
+            DeleteObject();
+        }
 
         private void FillGridView()
         {
@@ -25,33 +43,17 @@ namespace AutomationSystem
             dataGridViewObjectTable.DataSource = objectList;
         }
 
-        private void btnNewForm_Click(object sender, EventArgs e)
+        private void OpenNewObjectForm()
         {
             NewObjectForm newObjectForm = new NewObjectForm();
             newObjectForm.ShowDialog();
         }
-
-        private void MainForm_Activated(object sender, EventArgs e)
-        {
-            FillGridView();
-        }
-
-        private void btnEditForm_Click(object sender, EventArgs e)
-        {
-            EditObject();
-        }
-
-        private void EditObject()
+        private void OpenEditObjectForm()
         {
             int selectedObjectId = (int)dataGridViewObjectTable.CurrentRow.Cells[0].Value;
 
             EditObjectForm formEditObject = new EditObjectForm(selectedObjectId);
             formEditObject.ShowDialog();
-        }
-
-        private void btnDeleteObject_Click(object sender, EventArgs e)
-        {
-            DeleteObject();
         }
 
         private void DeleteObject()

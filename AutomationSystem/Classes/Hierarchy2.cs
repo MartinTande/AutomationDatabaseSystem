@@ -9,13 +9,49 @@ using System.Threading.Tasks;
 
 namespace AutomationSystem.Classes
 {
-    public class Hierarchy2
+    public class Hierarchy2 : ICategory<Hierarchy2>
     {
         string connectionString = DatabaseAccess.GetConnectionString();
-        public int Hierarchy2Id { get; set; }
-        public string? Hierarchy2Name { get; set; }
+        public int Id { get; set; }
+        public string? Name { get; set; }
 
-        public List<Hierarchy2> GetHierarchy2Types(string hierarchy1)
+        public List<string> GetNames(string hierarchy1)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                List<string> hierarchy2List = new List<string>();
+
+                connection.Open();
+
+                SqlCommand command = new SqlCommand("GetHierarchy2Data", connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add(new SqlParameter("@Hierarchy1", hierarchy1));
+
+                SqlDataReader dataReader = command.ExecuteReader();
+
+                if (dataReader != null)
+                {
+                    while (dataReader.Read())
+                    {
+                        Hierarchy2 hierarchy2 = new Hierarchy2();
+                        hierarchy2.Name = dataReader["Hierarchy2"].ToString();
+
+                        hierarchy2List.Add(hierarchy2.Name);
+                    }
+                }
+
+                connection.Close();
+                return hierarchy2List;
+            }
+        }
+
+        public List<string> GetNames()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Hierarchy2> GetTypes(string hierarchy1)
         {
             List<Hierarchy2> hierarchy2List = new List<Hierarchy2>();
 
@@ -34,7 +70,7 @@ namespace AutomationSystem.Classes
                 while (dataReader.Read())
                 {
                     Hierarchy2 hierarchy2 = new Hierarchy2();
-                    hierarchy2.Hierarchy2Name = dataReader["Hierarchy2"].ToString();
+                    hierarchy2.Name = dataReader["Hierarchy2"].ToString();
 
                     hierarchy2List.Add(hierarchy2);
                 }
@@ -42,6 +78,11 @@ namespace AutomationSystem.Classes
 
             connection.Close();
             return hierarchy2List;
+        }
+
+        public List<Hierarchy2> GetTypes()
+        {
+            throw new NotImplementedException();
         }
     }
 }

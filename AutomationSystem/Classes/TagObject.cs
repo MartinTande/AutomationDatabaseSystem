@@ -6,8 +6,8 @@ namespace AutomationSystem.Classes
 {
     class TagObject
     {
-        public int ObjectId { get; set; }
-        public string? ObjectName { get; set; }
+        public int Id { get; set; }
+        public string? Name { get; set; }
         public string? ObjectType { get; set; }
         public string? Hierarchy_1 { get; set; }
         public string? Hierarchy_2 {  get; set; }
@@ -58,8 +58,8 @@ namespace AutomationSystem.Classes
                         {
                             TagObject tagObject = new TagObject();
 
-                            tagObject.ObjectId = Convert.ToInt32(dataReader["ObjectId"]);
-                            tagObject.ObjectName = dataReader["ObjectName"].ToString();
+                            tagObject.Id = Convert.ToInt32(dataReader["ObjectId"]);
+                            tagObject.Name = dataReader["ObjectName"].ToString();
                             tagObject.ObjectType = dataReader["ObjectType"].ToString();
                             tagObject.Hierarchy_1 = dataReader["Hierarchy1"].ToString();
                             tagObject.Hierarchy_2 = dataReader["Hierarchy2"].ToString();
@@ -89,7 +89,7 @@ namespace AutomationSystem.Classes
                     SqlCommand command = new SqlCommand("CreateObject", connection);
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.Add(new SqlParameter("@ObjectName", tagObject.ObjectName));
+                    command.Parameters.Add(new SqlParameter("@ObjectName", tagObject.Name));
                     command.Parameters.Add(new SqlParameter("@ObjectType", tagObject.ObjectType));
                     command.Parameters.Add(new SqlParameter("@Hierarchy1", tagObject.Hierarchy_1));
                     command.Parameters.Add(new SqlParameter("@Hierarchy2", tagObject.Hierarchy_2));
@@ -123,8 +123,8 @@ namespace AutomationSystem.Classes
                     {
                         while (dataReader.Read())
                         {
-                            tagObject.ObjectId = Convert.ToInt32(dataReader["ObjectId"]);
-                            tagObject.ObjectName = dataReader["ObjectName"].ToString();
+                            tagObject.Id = Convert.ToInt32(dataReader["ObjectId"]);
+                            tagObject.Name = dataReader["ObjectName"].ToString();
                             tagObject.ObjectType = dataReader["ObjectType"].ToString();
                             tagObject.Hierarchy_1 = dataReader["Hierarchy1"].ToString();
                             tagObject.Hierarchy_2 = dataReader["Hierarchy2"].ToString();
@@ -151,8 +151,8 @@ namespace AutomationSystem.Classes
                     SqlCommand command = new SqlCommand("UpdateObject", connection);
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.Add(new SqlParameter("@ObjectId", updatedTagObject.ObjectId));
-                    command.Parameters.Add(new SqlParameter("@ObjectName", updatedTagObject.ObjectName));
+                    command.Parameters.Add(new SqlParameter("@ObjectId", updatedTagObject.Id));
+                    command.Parameters.Add(new SqlParameter("@ObjectName", updatedTagObject.Name));
                     command.Parameters.Add(new SqlParameter("@ObjectType", updatedTagObject.ObjectType));
                     command.Parameters.Add(new SqlParameter("@Hierarchy1", updatedTagObject.Hierarchy_1));
                     command.Parameters.Add(new SqlParameter("@Hierarchy2", updatedTagObject.Hierarchy_2));
