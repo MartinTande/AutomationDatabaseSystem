@@ -40,7 +40,7 @@ DECLARE @UtilitySystemHierarchyId INT;
 SET @UtilitySystemHierarchyId = (SELECT Hierarchy1Id FROM HIERARCHY_1 WHERE Hierarchy1 = 'Utility System');
 
 -- Insert subcategories under "Fire System"
-INSERT INTO HIERARCHY_2 (Hierarchy2, Hierarchy1Id) VALUES ('Compressed Air System', @FUtilitySystemHierarchyId);
+INSERT INTO HIERARCHY_2 (Hierarchy2, Hierarchy1Id) VALUES ('Compressed Air System', @UtilitySystemHierarchyId);
 INSERT INTO HIERARCHY_2 (Hierarchy2, Hierarchy1Id) VALUES ('Hydraulic System', @UtilitySystemHierarchyId);
 
 -- Insert sample data into EAS_GROUP
