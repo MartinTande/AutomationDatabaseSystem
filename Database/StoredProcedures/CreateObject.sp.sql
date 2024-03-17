@@ -1,3 +1,4 @@
+-- Check it Stored Procedure exists and deletes it if it does
 IF EXISTS (SELECT name
 	FROM sysobjects
 	WHERE name = 'CreateObject'
@@ -5,17 +6,19 @@ IF EXISTS (SELECT name
 DROP PROCEDURE CreateObject
 GO
 
+-- Stored Procedure
 CREATE PROCEDURE CreateObject
+	-- Input parameters
 	@ObjectName varchar(50),
 	@ObjectType varchar(50),
 	@Hierarchy1 varchar(50),
 	@Hierarchy2 varchar(50),
 	@EasGroup varchar(50),
 	@Otd varchar(50)
-
 AS
 
 DECLARE
+	-- Internal variables
 	@ObjectTypeId int,
 	@Hierarchy1Id varchar(50),
 	@Hierarchy2Id varchar(50),
