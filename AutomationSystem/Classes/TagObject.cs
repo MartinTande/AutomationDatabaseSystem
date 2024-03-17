@@ -59,13 +59,13 @@ namespace AutomationSystem.Classes
                     {
                         TagObject tagObject = new TagObject();
 
-                        ObjectId = Convert.ToInt32(dataReader["ObjectId"]);
-                        ObjectName = dataReader["ObjectName"].ToString();
-                        ObjectType = dataReader["ObjectType"].ToString();
-                        Hierarchy_1 = dataReader["Hierarchy1"].ToString();
-                        Hierarchy_2 = dataReader["Hierarchy2"].ToString();
-                        EasGroup = dataReader["EasGroup"].ToString();
-                        Otd = dataReader["Otd"].ToString();
+                        tagObject.ObjectId = Convert.ToInt32(dataReader["ObjectId"]);
+                        tagObject.ObjectName = dataReader["ObjectName"].ToString();
+                        tagObject.ObjectType = dataReader["ObjectType"].ToString();
+                        tagObject.Hierarchy_1 = dataReader["Hierarchy1"].ToString();
+                        tagObject.Hierarchy_2 = dataReader["Hierarchy2"].ToString();
+                        tagObject.EasGroup = dataReader["EasGroup"].ToString();
+                        tagObject.Otd = dataReader["Otd"].ToString();
 
                         objectList.Add(tagObject);
                     }

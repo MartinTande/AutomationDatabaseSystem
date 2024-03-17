@@ -146,6 +146,7 @@
             comboBoxHierarchy1.Name = "comboBoxHierarchy1";
             comboBoxHierarchy1.Size = new Size(589, 38);
             comboBoxHierarchy1.TabIndex = 4;
+            comboBoxHierarchy1.TextChanged += comboBoxHierarchy1_TextChanged;
             // 
             // comboBoxHierarchy2
             // 

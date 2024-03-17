@@ -18,7 +18,6 @@ namespace AutomationSystem
             InitializeComponent();
             FillEasGroupComboBox();
             FillHierarchy1ComboBox();
-            FillHierarchy2ComboBox();
             FillObjectTypeComboBox();
             FillOtdComboBox();
         }
@@ -26,6 +25,7 @@ namespace AutomationSystem
         private void btnOK_Click(object sender, EventArgs e)
         {
             SaveObjectData();
+            this.Close();
         }
 
         private void SaveObjectData()
@@ -70,7 +70,7 @@ namespace AutomationSystem
         {
             Hierarchy2 hierarchy2 = new Hierarchy2();
             List<Hierarchy2> hierarchy2List = new List<Hierarchy2>();
-            hierarchy2List = hierarchy2.GetHierarchy2Types();
+            hierarchy2List = hierarchy2.GetHierarchy2Types(comboBoxHierarchy1.Text);
 
             foreach (Hierarchy2 hierarchy2Item in hierarchy2List)
             {
@@ -100,6 +100,11 @@ namespace AutomationSystem
             {
                 comboBoxOtd.Items.Add(otdItem.OtdName);
             }
+        }
+
+        private void comboBoxHierarchy1_TextChanged(object sender, EventArgs e)
+        {
+            FillHierarchy2ComboBox();
         }
     }
 }
