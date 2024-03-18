@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AutomationSystem.Categories
 {
-    public class Otd : ICategory<Otd>
+    public class Otd : Category
     {
         string connectionString = DatabaseAccess.GetConnectionString();
         public int Id { get; set; }
@@ -16,68 +16,40 @@ namespace AutomationSystem.Categories
 
         public List<string> GetNames()
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                List<string> otdList = new List<string>();
+            return base.GetNames("select OtdName from OTD");
+            //using (SqlConnection connection = new SqlConnection(connectionString))
+            //{
+            //    List<string> otdNameList = new List<string>();
 
-                connection.Open();
+            //    connection.Open();
 
-                string sqlQuery = "select OtdId, Otd from OTD order by Otd";
-                SqlCommand command = new SqlCommand(sqlQuery, connection);
+            //    string sqlQuery = "select OtdId, OtdName from OTD order by OtdName";
+            //    SqlCommand command = new SqlCommand(sqlQuery, connection);
 
-                SqlDataReader dataReader = command.ExecuteReader();
+            //    SqlDataReader dataReader = command.ExecuteReader();
 
-                if (dataReader != null)
-                {
-                    while (dataReader.Read())
-                    {
-                        Otd otd = new Otd();
+            //    if (dataReader != null)
+            //    {
+            //        while (dataReader.Read())
+            //        {
+            //            Otd otd = new Otd();
 
-                        otd.Id = Convert.ToInt32(dataReader["OtdId"]);
-                        otd.Name = dataReader["Otd"].ToString();
+            //            otd.Id = Convert.ToInt32(dataReader["OtdId"]);
+            //            otd.Name = dataReader["OtdName"].ToString();
 
-                        otdList.Add(otd.Name);
-                    }
-                }
+            //            otdNameList.Add(otd.Name);
+            //        }
+            //    }
 
-                connection.Close();
-                return otdList;
-            }
+            //    connection.Close();
+            //    return otdNameList;
+            //}
 
         }
 
         public List<string> GetNames(string category)
         {
             throw new NotImplementedException();
-        }
-
-        public List<Otd> GetTypes()
-        {
-            List<Otd> otdList = new List<Otd>();
-
-            SqlConnection connection = new SqlConnection(connectionString);
-            connection.Open();
-
-            string sqlQuery = "select OtdId, Otd from OTD order by Otd";
-            SqlCommand command = new SqlCommand(sqlQuery, connection);
-
-            SqlDataReader dataReader = command.ExecuteReader();
-
-            if (dataReader != null)
-            {
-                while (dataReader.Read())
-                {
-                    Otd otd = new Otd();
-
-                    otd.Id = Convert.ToInt32(dataReader["OtdId"]);
-                    otd.Name = dataReader["Otd"].ToString();
-
-                    otdList.Add(otd);
-                }
-            }
-
-            connection.Close();
-            return otdList;
         }
     }
 }

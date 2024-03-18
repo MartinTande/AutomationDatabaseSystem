@@ -10,8 +10,6 @@ namespace AutomationSystem.Categories
     {
         public List<string> GetNames();
 
-        public List<T> GetTypes();
-
         public List<string> GetNames(string category);
     }
 }

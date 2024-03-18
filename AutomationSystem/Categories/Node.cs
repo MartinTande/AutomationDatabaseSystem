@@ -1,12 +1,14 @@
-﻿using System.Data;
+﻿using AutomationSystem.Classes;
 using Microsoft.Data.SqlClient;
-using System.Configuration;
+using System;
 using System.Collections.Generic;
-using AutomationSystem.Classes;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AutomationSystem.Categories
 {
-    public class ObjectType : ICategory<ObjectType>
+    public class Node : ICategory<Node>
     {
         string connectionString = DatabaseAccess.GetConnectionString();
         public int Id { get; set; }
@@ -16,11 +18,11 @@ namespace AutomationSystem.Categories
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                List<string> objectTypeNameList = new List<string>();
+                List<string> nodeNameList = new List<string>();
 
                 connection.Open();
 
-                string sqlQuery = "select ObjectTypeId, ObjectTypeName from OBJECT_TYPE order by ObjectTypeName";
+                string sqlQuery = "select NodeId, NodeName from NODE order by NodeName";
                 SqlCommand command = new SqlCommand(sqlQuery, connection);
 
                 SqlDataReader dataReader = command.ExecuteReader();
@@ -29,17 +31,17 @@ namespace AutomationSystem.Categories
                 {
                     while (dataReader.Read())
                     {
-                        ObjectType objectType = new ObjectType();
+                        Node node = new Node();
 
-                        objectType.Id = Convert.ToInt32(dataReader["ObjectTypeId"]);
-                        objectType.Name = dataReader["ObjectTypeName"].ToString();
+                        node.Id = Convert.ToInt16(dataReader["NodeId"]);
+                        node.Name = dataReader["NodeName"].ToString();
 
-                        objectTypeNameList.Add(objectType.Name);
+                        nodeNameList.Add(node.Name);
                     }
                 }
 
                 connection.Close();
-                return objectTypeNameList;
+                return nodeNameList;
             }
         }
 
@@ -47,6 +49,5 @@ namespace AutomationSystem.Categories
         {
             throw new NotImplementedException();
         }
-
     }
 }

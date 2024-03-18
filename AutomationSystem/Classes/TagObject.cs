@@ -7,12 +7,17 @@ namespace AutomationSystem.Classes
     class TagObject
     {
         public int Id { get; set; }
-        public string? Name { get; set; }
+        public int SfiNumber { get; set; }
+        public string? MainEqNumber { get; set; }
+        public string? EqNumber { get; set; }
+        public string? ObjectDescription { get; set; }
         public string? ObjectType { get; set; }
         public string? Hierarchy_1 { get; set; }
         public string? Hierarchy_2 {  get; set; }
         public string? EasGroup { get; set; }
         public string? Otd { get; set; }
+        public string? AcknowledgeAllowed { get; set; }
+        public string? AlwaysVisible { get; set; }
 
         string connectionString = DatabaseAccess.GetConnectionString();
 
@@ -46,7 +51,7 @@ namespace AutomationSystem.Classes
             {
                 try
                 {
-                    string selectSQL = "select ObjectId, ObjectName, ObjectType, Hierarchy1, Hierarchy2, EasGroup, Otd from GetTagObjectData";
+                    string selectSQL = "select * from GetTagObjectData";
                     SqlCommand command = new SqlCommand(selectSQL, connection);
 
                     connection.Open();
@@ -59,12 +64,16 @@ namespace AutomationSystem.Classes
                             TagObject tagObject = new TagObject();
 
                             tagObject.Id = Convert.ToInt32(dataReader["ObjectId"]);
-                            tagObject.Name = dataReader["ObjectName"].ToString();
+                            tagObject.SfiNumber = Convert.ToInt32(dataReader["SfiNumber"]);
+                            tagObject.MainEqNumber = dataReader["MainEqNumber"].ToString();
+                            tagObject.EqNumber = dataReader["EqNumber"].ToString();
+                            tagObject.ObjectDescription = dataReader["Description"].ToString();
                             tagObject.ObjectType = dataReader["ObjectType"].ToString();
                             tagObject.Hierarchy_1 = dataReader["Hierarchy1"].ToString();
                             tagObject.Hierarchy_2 = dataReader["Hierarchy2"].ToString();
                             tagObject.EasGroup = dataReader["EasGroup"].ToString();
-                            tagObject.Otd = dataReader["Otd"].ToString();
+                            tagObject.Otd = dataReader["AcknowledgeAllowed"].ToString();
+                            tagObject.Otd = dataReader["AlwaysVisible"].ToString();
 
                             objectList.Add(tagObject);
                         }
@@ -80,31 +89,9 @@ namespace AutomationSystem.Classes
             return objectList;
         }
 
-        public void CreateTagObject(TagObject tagObject)
+        public void CreateTagObject(TagObject newTagObject)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    SqlCommand command = new SqlCommand("CreateObject", connection);
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    command.Parameters.Add(new SqlParameter("@ObjectName", tagObject.Name));
-                    command.Parameters.Add(new SqlParameter("@ObjectType", tagObject.ObjectType));
-                    command.Parameters.Add(new SqlParameter("@Hierarchy1", tagObject.Hierarchy_1));
-                    command.Parameters.Add(new SqlParameter("@Hierarchy2", tagObject.Hierarchy_2));
-                    command.Parameters.Add(new SqlParameter("@EasGroup", tagObject.EasGroup));
-                    command.Parameters.Add(new SqlParameter("@Otd", tagObject.Otd));
-
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.Close();
-                }
-                catch
-                {
-                    MessageBox.Show("Error when inserting data into database");
-                }
-            }
+            InsertDataIntoDatabase(newTagObject, "CreateObject");
         }
 
         public TagObject GetTagObjectData(int objectId)
@@ -114,7 +101,8 @@ namespace AutomationSystem.Classes
             {
                 try
                 {
-                    string selectSQL = $"select ObjectId, ObjectName, ObjectType, Hierarchy1, Hierarchy2, EasGroup, Otd from GetTagObjectData where ObjectId = {objectId}";
+                    string selectSQL = $"select * from GetTagObjectData where ObjectId = {objectId}";
+
                     SqlCommand command = new SqlCommand(selectSQL, connection);
                     
                     connection.Open();
@@ -124,12 +112,16 @@ namespace AutomationSystem.Classes
                         while (dataReader.Read())
                         {
                             tagObject.Id = Convert.ToInt32(dataReader["ObjectId"]);
-                            tagObject.Name = dataReader["ObjectName"].ToString();
+                            tagObject.SfiNumber = Convert.ToInt32(dataReader["SfiNumber"]);
+                            tagObject.MainEqNumber = dataReader["MainEqNumber"].ToString();
+                            tagObject.EqNumber = dataReader["EqNumber"].ToString();
+                            tagObject.ObjectDescription = dataReader["Description"].ToString();
                             tagObject.ObjectType = dataReader["ObjectType"].ToString();
                             tagObject.Hierarchy_1 = dataReader["Hierarchy1"].ToString();
                             tagObject.Hierarchy_2 = dataReader["Hierarchy2"].ToString();
                             tagObject.EasGroup = dataReader["EasGroup"].ToString();
-                            tagObject.Otd = dataReader["Otd"].ToString();
+                            tagObject.Otd = dataReader["AcknowledgeAllowed"].ToString();
+                            tagObject.Otd = dataReader["AlwaysVisible"].ToString();
                         }
                     }
                     connection.Close();
@@ -144,30 +136,7 @@ namespace AutomationSystem.Classes
 
         public void EditTagObject(TagObject updatedTagObject)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    SqlCommand command = new SqlCommand("UpdateObject", connection);
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    command.Parameters.Add(new SqlParameter("@ObjectId", updatedTagObject.Id));
-                    command.Parameters.Add(new SqlParameter("@ObjectName", updatedTagObject.Name));
-                    command.Parameters.Add(new SqlParameter("@ObjectType", updatedTagObject.ObjectType));
-                    command.Parameters.Add(new SqlParameter("@Hierarchy1", updatedTagObject.Hierarchy_1));
-                    command.Parameters.Add(new SqlParameter("@Hierarchy2", updatedTagObject.Hierarchy_2));
-                    command.Parameters.Add(new SqlParameter("@EasGroup", updatedTagObject.EasGroup));
-                    command.Parameters.Add(new SqlParameter("@Otd", updatedTagObject.Otd));
-
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.Close();
-                }
-                catch
-                {
-                    MessageBox.Show("Error when inserting data into database");
-                }
-            }
+            InsertDataIntoDatabase(updatedTagObject, "UpdateObject");
         }
        
         public void DeleteTagObject(int selectedTagObjectId)
@@ -180,6 +149,38 @@ namespace AutomationSystem.Classes
                     command.CommandType = CommandType.StoredProcedure;
 
                     command.Parameters.Add(new SqlParameter("@ObjectId", selectedTagObjectId));
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+                catch
+                {
+                    MessageBox.Show("Error when inserting data into database");
+                }
+            }
+        }
+
+        private void InsertDataIntoDatabase(TagObject tagObject, string sqlQuery)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand(sqlQuery, connection);
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.Add(new SqlParameter("@SfiNumber", tagObject.SfiNumber));
+                    command.Parameters.Add(new SqlParameter("@MainEqNumber", tagObject.MainEqNumber));
+                    command.Parameters.Add(new SqlParameter("@EqNumber", tagObject.EqNumber));
+                    command.Parameters.Add(new SqlParameter("@EqNumber", tagObject.ObjectDescription));
+                    command.Parameters.Add(new SqlParameter("@ObjectType", tagObject.ObjectType));
+                    command.Parameters.Add(new SqlParameter("@Hierarchy1", tagObject.Hierarchy_1));
+                    command.Parameters.Add(new SqlParameter("@Hierarchy2", tagObject.Hierarchy_2));
+                    command.Parameters.Add(new SqlParameter("@EasGroup", tagObject.EasGroup));
+                    command.Parameters.Add(new SqlParameter("@Otd", tagObject.Otd));
+                    command.Parameters.Add(new SqlParameter("@Otd", tagObject.AcknowledgeAllowed));
+                    command.Parameters.Add(new SqlParameter("@Otd", tagObject.AlwaysVisible));
 
                     connection.Open();
                     command.ExecuteNonQuery();

@@ -1,4 +1,4 @@
--- Check if View exists and deletes it if it does
+-- Check if View exists and deletes it if yes
 IF EXISTS (SELECT name
 	FROM sysobjects
 	WHERE name = 'GetTagObjectData'
@@ -13,12 +13,17 @@ AS
 
 SELECT
 TAG_OBJECT.ObjectId,
-TAG_OBJECT.ObjectName,
-OBJECT_TYPE.ObjectType,
-HIERARCHY_1.Hierarchy1,
-HIERARCHY_2.Hierarchy2,
-EAS_GROUP.EasGroup,
-OTD.Otd
+TAG_OBJECT.SfiNumber,
+TAG_OBJECT.MainEqNumber,
+TAG_OBJECT.EqNumber,
+TAG_OBJECT.ObjectDescription,
+OBJECT_TYPE.ObjectTypeName,
+HIERARCHY_1.Hierarchy1Name,
+HIERARCHY_2.Hierarchy2Name,
+EAS_GROUP.EasGroupName,
+OTD.OtdName,
+ACKNOWLEDGE_ALLOWED.AcknowledgeAllowedLocation,
+ALWAYS_VISIBLE.AlwaysVisibleLocation
 
 FROM TAG_OBJECT
 INNER JOIN OBJECT_TYPE ON TAG_OBJECT.ObjectTypeId = OBJECT_TYPE.ObjectTypeId
@@ -26,5 +31,9 @@ INNER JOIN HIERARCHY_1 ON TAG_OBJECT.Hierarchy1Id = HIERARCHY_1.Hierarchy1Id
 INNER JOIN HIERARCHY_2 ON TAG_OBJECT.Hierarchy2Id = HIERARCHY_2.Hierarchy2Id
 INNER JOIN EAS_GROUP ON TAG_OBJECT.EasGroupId = EAS_GROUP.EasGroupId
 INNER JOIN OTD ON TAG_OBJECT.OtdId = OTD.OtdId
+INNER JOIN ACKNOWLEDGE_ALLOWED 
+ON TAG_OBJECT.AcknowledgeAllowedId = ACKNOWLEDGE_ALLOWED.AcknowledgeAllowedId
+INNER JOIN ALWAYS_VISIBLE 
+ON TAG_OBJECT.AlwaysVisibleId = ALWAYS_VISIBLE.AlwaysVisibleId
 
 GO

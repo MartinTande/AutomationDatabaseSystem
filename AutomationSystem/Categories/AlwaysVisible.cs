@@ -1,26 +1,28 @@
-﻿using System.Data;
+﻿using AutomationSystem.Classes;
 using Microsoft.Data.SqlClient;
-using System.Configuration;
+using System;
 using System.Collections.Generic;
-using AutomationSystem.Classes;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AutomationSystem.Categories
 {
-    public class ObjectType : ICategory<ObjectType>
+    public class AlwaysVisible : ICategory<AlwaysVisible>
     {
         string connectionString = DatabaseAccess.GetConnectionString();
         public int Id { get; set; }
-        public string? Name { get; set; }
+        public string? Location { get; set; }
 
         public List<string> GetNames()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                List<string> objectTypeNameList = new List<string>();
+                List<string> alwaysVisibleLocationList = new List<string>();
 
                 connection.Open();
 
-                string sqlQuery = "select ObjectTypeId, ObjectTypeName from OBJECT_TYPE order by ObjectTypeName";
+                string sqlQuery = "select AlwaysVisibleId, AlwaysVisibleLocation from ALWAYS_VISIBLE order by AlwaysVisibleLocation";
                 SqlCommand command = new SqlCommand(sqlQuery, connection);
 
                 SqlDataReader dataReader = command.ExecuteReader();
@@ -29,17 +31,17 @@ namespace AutomationSystem.Categories
                 {
                     while (dataReader.Read())
                     {
-                        ObjectType objectType = new ObjectType();
+                        AlwaysVisible alwaysVisible = new AlwaysVisible();
 
-                        objectType.Id = Convert.ToInt32(dataReader["ObjectTypeId"]);
-                        objectType.Name = dataReader["ObjectTypeName"].ToString();
+                        alwaysVisible.Id = Convert.ToInt32(dataReader["AlwaysVisibleId"]);
+                        alwaysVisible.Location = dataReader["AlwaysVisibleLocation"].ToString();
 
-                        objectTypeNameList.Add(objectType.Name);
+                        alwaysVisibleLocationList.Add(alwaysVisible.Location);
                     }
                 }
 
                 connection.Close();
-                return objectTypeNameList;
+                return alwaysVisibleLocationList;
             }
         }
 
@@ -47,6 +49,5 @@ namespace AutomationSystem.Categories
         {
             throw new NotImplementedException();
         }
-
     }
 }

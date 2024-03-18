@@ -20,14 +20,14 @@ namespace AutomationSystem.Categories
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                List<string> hierarchy2List = new List<string>();
+                List<string> hierarchy2NameList = new List<string>();
 
                 connection.Open();
 
                 SqlCommand command = new SqlCommand("GetHierarchy2Data", connection);
                 command.CommandType = CommandType.StoredProcedure;
 
-                command.Parameters.Add(new SqlParameter("@Hierarchy1", hierarchy1));
+                command.Parameters.Add(new SqlParameter("@Hierarchy1Name", hierarchy1));
 
                 SqlDataReader dataReader = command.ExecuteReader();
 
@@ -36,14 +36,14 @@ namespace AutomationSystem.Categories
                     while (dataReader.Read())
                     {
                         Hierarchy2 hierarchy2 = new Hierarchy2();
-                        hierarchy2.Name = dataReader["Hierarchy2"].ToString();
+                        hierarchy2.Name = dataReader["Hierarchy2Name"].ToString();
 
-                        hierarchy2List.Add(hierarchy2.Name);
+                        hierarchy2NameList.Add(hierarchy2.Name);
                     }
                 }
 
                 connection.Close();
-                return hierarchy2List;
+                return hierarchy2NameList;
             }
         }
 
@@ -52,38 +52,5 @@ namespace AutomationSystem.Categories
             throw new NotImplementedException();
         }
 
-        public List<Hierarchy2> GetTypes(string hierarchy1)
-        {
-            List<Hierarchy2> hierarchy2List = new List<Hierarchy2>();
-
-            SqlConnection connection = new SqlConnection(connectionString);
-            connection.Open();
-
-            SqlCommand command = new SqlCommand("GetHierarchy2Data", connection);
-            command.CommandType = CommandType.StoredProcedure;
-
-            command.Parameters.Add(new SqlParameter("@Hierarchy1", hierarchy1));
-
-            SqlDataReader dataReader = command.ExecuteReader();
-
-            if (dataReader != null)
-            {
-                while (dataReader.Read())
-                {
-                    Hierarchy2 hierarchy2 = new Hierarchy2();
-                    hierarchy2.Name = dataReader["Hierarchy2"].ToString();
-
-                    hierarchy2List.Add(hierarchy2);
-                }
-            }
-
-            connection.Close();
-            return hierarchy2List;
-        }
-
-        public List<Hierarchy2> GetTypes()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

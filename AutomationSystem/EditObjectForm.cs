@@ -40,7 +40,7 @@ namespace AutomationSystem
             TagObject tagObject = new TagObject();
             tagObject = tagObject.GetTagObjectData(selectedObjectId);
 
-            txtBoxName.Text = tagObject.Name;
+            txtBoxName.Text = tagObject.ObjectDescription;
             comboBoxObjectType.Text = tagObject.ObjectType;
             comboBoxHierarchy1.Text = tagObject.Hierarchy_1;
             comboBoxHierarchy2.Text = tagObject.Hierarchy_2;
@@ -53,7 +53,7 @@ namespace AutomationSystem
             TagObject tagObject = new TagObject();
 
             tagObject.Id = selectedObjectId;
-            tagObject.Name = txtBoxName.Text;
+            tagObject.ObjectDescription = txtBoxName.Text;
             tagObject.ObjectType = comboBoxObjectType.Text;
             tagObject.Hierarchy_1 = comboBoxHierarchy1.Text;
             tagObject.Hierarchy_2 = comboBoxHierarchy2.Text;

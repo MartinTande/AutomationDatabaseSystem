@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AutomationSystem.Categories
 {
-    public class EasGroup : ICategory<EasGroup>
+    public class EasGroup : Category
     {
         string connectionString = DatabaseAccess.GetConnectionString();
         public int Id { get; set; }
@@ -16,65 +16,34 @@ namespace AutomationSystem.Categories
 
         public List<string> GetNames()
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                List<string> easGroupList = new List<string>();
-                string sqlQuery = "select EasGroupId, EasGroup from EAS_GROUP order by EasGroup";
-                SqlCommand command = new SqlCommand(sqlQuery, connection);
+            return base.GetNames("select EasGroupName from EAS_GROUP");
+            //using (SqlConnection connection = new SqlConnection(connectionString))
+            //{
+            //    List<string> easGroupNameList = new List<string>();
 
-                connection.Open();
-                SqlDataReader dataReader = command.ExecuteReader();
+            //    string sqlQuery = "select EasGroupId, EasGroupName from EAS_GROUP order by EasGroupName";
+            //    SqlCommand command = new SqlCommand(sqlQuery, connection);
 
-                if (dataReader != null)
-                {
-                    while (dataReader.Read())
-                    {
-                        EasGroup easGroup = new EasGroup();
+            //    connection.Open();
+            //    SqlDataReader dataReader = command.ExecuteReader();
 
-                        easGroup.Id = Convert.ToInt32(dataReader["EasGroupId"]);
-                        easGroup.Name = dataReader["EasGroup"].ToString();
+            //    if (dataReader != null)
+            //    {
+            //        while (dataReader.Read())
+            //        {
+            //            EasGroup easGroup = new EasGroup();
 
-                        easGroupList.Add(easGroup.Name);
-                    }
-                }
+            //            easGroup.Id = Convert.ToInt32(dataReader["EasGroupId"]);
+            //            easGroup.Name = dataReader["EasGroupName"].ToString();
 
-                connection.Close();
-                return easGroupList;
-            }
+            //            easGroupNameList.Add(easGroup.Name);
+            //        }
+            //    }
+
+            //    connection.Close();
+            //    return easGroupNameList;
+            //}
         }
 
-        public List<string> GetNames(string category)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<EasGroup> GetTypes()
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                List<EasGroup> easGroupList = new List<EasGroup>();
-                string sqlQuery = "select EasGroupId, EasGroup from EAS_GROUP order by EasGroup";
-                SqlCommand command = new SqlCommand(sqlQuery, connection);
-
-                connection.Open();
-                SqlDataReader dataReader = command.ExecuteReader();
-
-                if (dataReader != null)
-                {
-                    while (dataReader.Read())
-                    {
-                        EasGroup easGroup = new EasGroup();
-
-                        easGroup.Id = Convert.ToInt32(dataReader["EasGroupId"]);
-                        easGroup.Name = dataReader["EasGroup"].ToString();
-
-                        easGroupList.Add(easGroup);
-                    }
-                }
-
-                connection.Close();
-                return easGroupList;
-            }
-        }
     }
 }

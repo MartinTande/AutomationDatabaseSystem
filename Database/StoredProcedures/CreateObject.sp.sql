@@ -9,12 +9,17 @@ GO
 -- Stored Procedure
 CREATE PROCEDURE CreateObject
 	-- Input parameters
-	@ObjectName varchar(50),
+	@SfiNumber int,
+	@MainEqNumber varchar(100),
+	@EqNumber varchar(100),
+	@ObjectDescription varchar(100),
 	@ObjectType varchar(50),
 	@Hierarchy1 varchar(50),
 	@Hierarchy2 varchar(50),
 	@EasGroup varchar(50),
-	@Otd varchar(50)
+	@Otd varchar(50),
+	@AcknowledgeAllowed varchar(100),
+	@AlwaysVisible varchar(100)
 AS
 
 DECLARE
