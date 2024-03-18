@@ -1,4 +1,5 @@
-﻿using AutomationSystem.Classes;
+﻿using AutomationSystem.Categories;
+using AutomationSystem.Classes;
 using AutomationSystem.Forms;
 using System;
 using System.Collections.Generic;

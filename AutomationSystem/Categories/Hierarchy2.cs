@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using AutomationSystem.Classes;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +8,7 @@ using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutomationSystem.Classes
+namespace AutomationSystem.Categories
 {
     public class Hierarchy2 : ICategory<Hierarchy2>
     {
