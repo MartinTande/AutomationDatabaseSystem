@@ -22,7 +22,7 @@ CREATE PROCEDURE CreateObject
 	@AlwaysVisible varchar(100),
 	@Node varchar(100),
 	@Cabinet varchar(100),
-	@DataBlock varchar(100),
+	@DataBlock varchar(100)
 AS
 
 DECLARE
