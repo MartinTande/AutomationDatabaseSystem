@@ -8,14 +8,15 @@ using System.Threading.Tasks;
 
 namespace AutomationSystem.Categories
 {
-    public class AlwaysVisible : Category
+    public class VduGroup : Category
     {
+        string connectionString = DatabaseAccess.GetConnectionString();
         public int Id { get; set; }
-        public string? Location { get; set; }
+        public string? Name { get; set; }
 
         public List<string> GetNames()
         {
-            return base.GetNames("select AlwaysVisibleLocation from ALWAYS_VISIBLE");
+            return base.GetNames("select VduGroupName from VDU_GROUP");
         }
     }
 }

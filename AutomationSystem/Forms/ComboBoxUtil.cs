@@ -9,19 +9,10 @@ namespace AutomationSystem.Forms
 {
     public static class ComboBoxUtil
     {
+
         public static void FillComboBox(ComboBox comboBox, List<string> items)
         {
             comboBox.Items.Clear();
-            foreach (string item in items)
-            {
-                comboBox.Items.Add(item);
-            }
-        }
-
-        public static void FillComboBox<T>(ComboBox comboBox, ICategory<T> type)
-        {
-            comboBox.Items.Clear();
-            List<string> items = type.GetNames();
             foreach (string item in items)
             {
                 comboBox.Items.Add(item);

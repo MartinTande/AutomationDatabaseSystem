@@ -11,38 +11,19 @@ namespace AutomationSystem.Classes
         public string? MainEqNumber { get; set; }
         public string? EqNumber { get; set; }
         public string? ObjectDescription { get; set; }
-        public string? ObjectType { get; set; }
         public string? Hierarchy_1 { get; set; }
         public string? Hierarchy_2 {  get; set; }
-        public string? EasGroup { get; set; }
+        public string? VduGroup { get; set; }
+        public string? AlarmGroup { get; set; }
         public string? Otd { get; set; }
         public string? AcknowledgeAllowed { get; set; }
         public string? AlwaysVisible { get; set; }
+        public string? Node { get; set; }
+        public string? Cabinet { get; set; }
+        public string? DataBlock { get; set; }
 
         string connectionString = DatabaseAccess.GetConnectionString();
 
-        public void SaveData(string  objectName, string objectType)
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    SqlCommand command = new SqlCommand("SaveObject", connection);
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    command.Parameters.Add(new SqlParameter("@ObjectName", objectName));
-                    command.Parameters.Add(new SqlParameter("@ObjectType", objectType));
-
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.Close();
-                }
-                catch
-                {
-                    MessageBox.Show("Error when inserting data into database");
-                }
-            }
-        }
 
         public List<TagObject> GetTagObjects()
         {
@@ -68,12 +49,16 @@ namespace AutomationSystem.Classes
                             tagObject.MainEqNumber = dataReader["MainEqNumber"].ToString();
                             tagObject.EqNumber = dataReader["EqNumber"].ToString();
                             tagObject.ObjectDescription = dataReader["Description"].ToString();
-                            tagObject.ObjectType = dataReader["ObjectType"].ToString();
                             tagObject.Hierarchy_1 = dataReader["Hierarchy1"].ToString();
                             tagObject.Hierarchy_2 = dataReader["Hierarchy2"].ToString();
-                            tagObject.EasGroup = dataReader["EasGroup"].ToString();
-                            tagObject.Otd = dataReader["AcknowledgeAllowed"].ToString();
-                            tagObject.Otd = dataReader["AlwaysVisible"].ToString();
+                            tagObject.VduGroup = dataReader["VduGroup"].ToString();
+                            tagObject.AlarmGroup = dataReader["AlarmGroup"].ToString();
+                            tagObject.Otd = dataReader["Otd"].ToString();
+                            tagObject.AcknowledgeAllowed = dataReader["AcknowledgeAllowed"].ToString();
+                            tagObject.AlwaysVisible = dataReader["AlwaysVisible"].ToString();
+                            tagObject.Node = dataReader["Node"].ToString();
+                            tagObject.Cabinet = dataReader["Cabinet"].ToString();
+                            tagObject.DataBlock = dataReader["DataBlock"].ToString();
 
                             objectList.Add(tagObject);
                         }
@@ -116,12 +101,16 @@ namespace AutomationSystem.Classes
                             tagObject.MainEqNumber = dataReader["MainEqNumber"].ToString();
                             tagObject.EqNumber = dataReader["EqNumber"].ToString();
                             tagObject.ObjectDescription = dataReader["Description"].ToString();
-                            tagObject.ObjectType = dataReader["ObjectType"].ToString();
                             tagObject.Hierarchy_1 = dataReader["Hierarchy1"].ToString();
                             tagObject.Hierarchy_2 = dataReader["Hierarchy2"].ToString();
-                            tagObject.EasGroup = dataReader["EasGroup"].ToString();
-                            tagObject.Otd = dataReader["AcknowledgeAllowed"].ToString();
-                            tagObject.Otd = dataReader["AlwaysVisible"].ToString();
+                            tagObject.VduGroup = dataReader["VduGroup"].ToString();
+                            tagObject.AlarmGroup = dataReader["AlarmGroup"].ToString();
+                            tagObject.Otd = dataReader["Otd"].ToString();
+                            tagObject.AcknowledgeAllowed = dataReader["AcknowledgeAllowed"].ToString();
+                            tagObject.AlwaysVisible = dataReader["AlwaysVisible"].ToString();
+                            tagObject.Node = dataReader["Node"].ToString();
+                            tagObject.Cabinet = dataReader["Cabinet"].ToString();
+                            tagObject.DataBlock = dataReader["DataBlock"].ToString();
                         }
                     }
                     connection.Close();
@@ -173,14 +162,17 @@ namespace AutomationSystem.Classes
                     command.Parameters.Add(new SqlParameter("@SfiNumber", tagObject.SfiNumber));
                     command.Parameters.Add(new SqlParameter("@MainEqNumber", tagObject.MainEqNumber));
                     command.Parameters.Add(new SqlParameter("@EqNumber", tagObject.EqNumber));
-                    command.Parameters.Add(new SqlParameter("@EqNumber", tagObject.ObjectDescription));
-                    command.Parameters.Add(new SqlParameter("@ObjectType", tagObject.ObjectType));
+                    command.Parameters.Add(new SqlParameter("@ObjectDescription", tagObject.ObjectDescription));
                     command.Parameters.Add(new SqlParameter("@Hierarchy1", tagObject.Hierarchy_1));
                     command.Parameters.Add(new SqlParameter("@Hierarchy2", tagObject.Hierarchy_2));
-                    command.Parameters.Add(new SqlParameter("@EasGroup", tagObject.EasGroup));
+                    command.Parameters.Add(new SqlParameter("@VduGroup", tagObject.VduGroup));
+                    command.Parameters.Add(new SqlParameter("@AlarmGroup", tagObject.AlarmGroup));
                     command.Parameters.Add(new SqlParameter("@Otd", tagObject.Otd));
-                    command.Parameters.Add(new SqlParameter("@Otd", tagObject.AcknowledgeAllowed));
-                    command.Parameters.Add(new SqlParameter("@Otd", tagObject.AlwaysVisible));
+                    command.Parameters.Add(new SqlParameter("@AcknowledgeAllowed", tagObject.AcknowledgeAllowed));
+                    command.Parameters.Add(new SqlParameter("@AlwaysVisible", tagObject.AlwaysVisible));
+                    command.Parameters.Add(new SqlParameter("@Node", tagObject.Node));
+                    command.Parameters.Add(new SqlParameter("@Cabinet", tagObject.Cabinet));
+                    command.Parameters.Add(new SqlParameter("@DataBlock", tagObject.DataBlock));
 
                     connection.Open();
                     command.ExecuteNonQuery();

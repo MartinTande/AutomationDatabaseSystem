@@ -1,15 +1,6 @@
 ﻿using AutomationSystem.Categories;
 using AutomationSystem.Classes;
 using AutomationSystem.Forms;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace AutomationSystem
 {
@@ -40,11 +31,9 @@ namespace AutomationSystem
             TagObject tagObject = new TagObject();
             tagObject = tagObject.GetTagObjectData(selectedObjectId);
 
-            txtBoxName.Text = tagObject.ObjectDescription;
-            comboBoxObjectType.Text = tagObject.ObjectType;
             comboBoxHierarchy1.Text = tagObject.Hierarchy_1;
             comboBoxHierarchy2.Text = tagObject.Hierarchy_2;
-            comboBoxEasGroup.Text = tagObject.EasGroup;
+            comboBoxVduGroup.Text = tagObject.VduGroup;
             comboBoxOtd.Text = tagObject.Otd;
         }
 
@@ -53,11 +42,10 @@ namespace AutomationSystem
             TagObject tagObject = new TagObject();
 
             tagObject.Id = selectedObjectId;
-            tagObject.ObjectDescription = txtBoxName.Text;
-            tagObject.ObjectType = comboBoxObjectType.Text;
+            tagObject.ObjectDescription = txtObjectDescription.Text;
             tagObject.Hierarchy_1 = comboBoxHierarchy1.Text;
             tagObject.Hierarchy_2 = comboBoxHierarchy2.Text;
-            tagObject.EasGroup = comboBoxEasGroup.Text;
+            tagObject.VduGroup = comboBoxVduGroup.Text;
             tagObject.Otd = comboBoxOtd.Text;
 
             tagObject.EditTagObject(tagObject);
@@ -65,17 +53,25 @@ namespace AutomationSystem
 
         private void FillComboBoxes()
         {
-            ObjectType objectType = new ObjectType();
             Hierarchy1 hierarchy1 = new Hierarchy1();
             Hierarchy2 hierarchy2 = new Hierarchy2();
-            EasGroup easGroup = new EasGroup();
+            VduGroup vduGroup = new VduGroup();
+            AlarmGroup alarmGroup = new AlarmGroup();
             Otd otd = new Otd();
+            AcknowledgeAllowed ackAllowed = new AcknowledgeAllowed();
+            AlwaysVisible alwaysVisible = new AlwaysVisible();
+            Node node = new Node();
+            Cabinet cabinet = new Cabinet();
 
-            ComboBoxUtil.FillComboBox(comboBoxObjectType, objectType.GetNames());
             ComboBoxUtil.FillComboBox(comboBoxHierarchy1, hierarchy1.GetNames());
             ComboBoxUtil.FillUnderCategoryComboBox(comboBoxHierarchy2, comboBoxHierarchy1.Text, hierarchy2);
-            ComboBoxUtil.FillComboBox(comboBoxEasGroup, easGroup.GetNames());
+            ComboBoxUtil.FillComboBox(comboBoxVduGroup, vduGroup.GetNames());
+            ComboBoxUtil.FillComboBox(comboBoxVduGroup, alarmGroup.GetNames());
             ComboBoxUtil.FillComboBox(comboBoxOtd, otd.GetNames());
+            ComboBoxUtil.FillComboBox(comboBoxOtd, ackAllowed.GetNames());
+            ComboBoxUtil.FillComboBox(comboBoxOtd, alwaysVisible.GetNames());
+            ComboBoxUtil.FillComboBox(comboBoxOtd, node.GetNames());
+            ComboBoxUtil.FillComboBox(comboBoxOtd, cabinet.GetNames());
         }
 
         private void comboBoxHierarchy1_TextChanged(object sender, EventArgs e)

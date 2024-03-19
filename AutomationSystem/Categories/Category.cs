@@ -27,7 +27,6 @@ namespace AutomationSystem.Categories
                 {
                     while (dataReader.Read())
                     {
-
                         string _name = dataReader.ToString();
 
                         nameList.Add(_name);

@@ -32,7 +32,15 @@ namespace AutomationSystem
 
         private void btnDeleteObject_Click(object sender, EventArgs e)
         {
-            DeleteObject();
+            try
+            {
+                DeleteObject();
+            }
+            catch
+            {
+                MessageBox.Show("Error");
+            }
+            
         }
 
         private void FillGridView()
@@ -51,6 +59,11 @@ namespace AutomationSystem
         }
         private void OpenEditObjectForm()
         {
+            if (dataGridViewObjectTable.CurrentRow.Cells[0].Value == null)
+            {
+                MessageBox.Show("You have not chosen an object to edit");
+                return;
+            }
             int selectedObjectId = (int)dataGridViewObjectTable.CurrentRow.Cells[0].Value;
 
             EditObjectForm formEditObject = new EditObjectForm(selectedObjectId);
@@ -59,10 +72,12 @@ namespace AutomationSystem
 
         private void DeleteObject()
         {
-            int selectedObjectId = (int)dataGridViewObjectTable.CurrentRow.Cells[0].Value;
+            int selectedObjectId;
+            selectedObjectId = (int)dataGridViewObjectTable.CurrentRow.Cells[0].Value;
             TagObject tagObject = new TagObject();
             tagObject.DeleteTagObject(selectedObjectId);
             FillGridView();
+            
         }
 
         private void advDataGridViewObjectTable_SortStringChanged(object sender, Zuby.ADGV.AdvancedDataGridView.SortEventArgs e)

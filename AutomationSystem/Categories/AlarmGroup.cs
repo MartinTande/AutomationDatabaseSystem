@@ -1,21 +1,19 @@
-﻿using AutomationSystem.Classes;
+﻿using System.Data;
 using Microsoft.Data.SqlClient;
-using System;
+using System.Configuration;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutomationSystem.Classes;
 
 namespace AutomationSystem.Categories
 {
-    public class Node : Category
+    public class AlarmGroup : Category
     {
         public int Id { get; set; }
         public string? Name { get; set; }
 
         public List<string> GetNames()
         {
-            return base.GetNames("select NodeName from NODE");
+            return base.GetNames("select AlarmGroupName from ALARM_GROUP");
         }
     }
 }

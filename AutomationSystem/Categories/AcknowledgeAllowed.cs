@@ -1,6 +1,4 @@
-﻿using AutomationSystem.Classes;
-using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace AutomationSystem.Categories
 {
-    public class AlwaysVisible : Category
+    public class AcknowledgeAllowed : Category
     {
         public int Id { get; set; }
         public string? Location { get; set; }
 
         public List<string> GetNames()
         {
-            return base.GetNames("select AlwaysVisibleLocation from ALWAYS_VISIBLE");
+            return base.GetNames("select AcknowledgeAllowedLocation from ACKNOWLEDGE_ALLOWED");
         }
     }
 }

@@ -10,7 +10,7 @@ CREATE PROCEDURE GetHierarchy2Data
 	@Hierarchy1Name varchar(50)
 AS
 
-SELECT Hierarchy2
+SELECT Hierarchy2Name
 FROM HIERARCHY_2
 WHERE Hierarchy1Id = (SELECT Hierarchy1Id FROM HIERARCHY_1 WHERE Hierarchy1Name = @Hierarchy1Name);
 

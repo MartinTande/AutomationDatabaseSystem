@@ -47,10 +47,5 @@ namespace AutomationSystem.Categories
             }
         }
 
-        public List<string> GetNames()
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

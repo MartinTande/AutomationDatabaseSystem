@@ -39,7 +39,7 @@ namespace AutomationSystem
             advDataGridViewObjectTable = new Zuby.ADGV.AdvancedDataGridView();
             PictureHierarchy = new TabPage();
             ObjectTypes = new TabPage();
-            EASGroup = new TabPage();
+            VduGroup = new TabPage();
             bindingSource1 = new BindingSource(components);
             ((System.ComponentModel.ISupportInitialize)dataGridViewObjectTable).BeginInit();
             tabControl1.SuspendLayout();
@@ -92,7 +92,7 @@ namespace AutomationSystem
             tabControl1.Controls.Add(IOList);
             tabControl1.Controls.Add(PictureHierarchy);
             tabControl1.Controls.Add(ObjectTypes);
-            tabControl1.Controls.Add(EASGroup);
+            tabControl1.Controls.Add(VduGroup);
             tabControl1.Location = new Point(29, 25);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -151,14 +151,14 @@ namespace AutomationSystem
             ObjectTypes.Text = "Object Types";
             ObjectTypes.UseVisualStyleBackColor = true;
             // 
-            // EASGroup
+            // VduGroup
             // 
-            EASGroup.Location = new Point(4, 39);
-            EASGroup.Name = "EASGroup";
-            EASGroup.Size = new Size(2190, 1028);
-            EASGroup.TabIndex = 3;
-            EASGroup.Text = "EAS Group";
-            EASGroup.UseVisualStyleBackColor = true;
+            VduGroup.Location = new Point(4, 39);
+            VduGroup.Name = "VduGroup";
+            VduGroup.Size = new Size(2190, 1028);
+            VduGroup.TabIndex = 3;
+            VduGroup.Text = "EAS Group";
+            VduGroup.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -186,7 +186,7 @@ namespace AutomationSystem
         private TabPage IOList;
         private TabPage PictureHierarchy;
         private TabPage ObjectTypes;
-        private TabPage EASGroup;
+        private TabPage VduGroup;
         private Zuby.ADGV.AdvancedDataGridView advDataGridViewObjectTable;
         private BindingSource bindingSource1;
     }

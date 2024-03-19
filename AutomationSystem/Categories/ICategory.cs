@@ -8,8 +8,6 @@ namespace AutomationSystem.Categories
 {
     public interface ICategory<T>
     {
-        public List<string> GetNames();
-
         public List<string> GetNames(string category);
     }
 }
