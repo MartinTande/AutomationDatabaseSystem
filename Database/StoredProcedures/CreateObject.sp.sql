@@ -13,16 +13,16 @@ CREATE PROCEDURE CreateObject
 	@MainEqNumber varchar(100),
 	@EqNumber varchar(100),
 	@ObjectDescription varchar(100),
-	@Hierarchy1 varchar(50),
-	@Hierarchy2 varchar(50),
-	@VduGroup varchar(50),
-	@AlarmGroup varchar(50),
-	@Otd varchar(50),
-	@AcknowledgeAllowed varchar(100),
-	@AlwaysVisible varchar(100),
-	@Node varchar(100),
-	@Cabinet varchar(100),
-	@DataBlock varchar(100)
+	@Hierarchy1Name varchar(50),
+	@Hierarchy2Name varchar(50),
+	@VduGroupName varchar(50),
+	@AlarmGroupName varchar(50),
+	@OtdName varchar(50),
+	@AcknowledgeAllowedLocation varchar(100),
+	@AlwaysVisibleLocation varchar(100),
+	@NodeName varchar(100),
+	@CabinetName varchar(100),
+	@DataBlockName varchar(100)
 AS
 
 DECLARE
@@ -38,16 +38,16 @@ DECLARE
 	@CabinetId int,
 	@DataBlockId int
 
-SELECT @Hierarchy1Id=Hierarchy1Id FROM HIERARCHY_1 WHERE Hierarchy1=@Hierarchy1
-SELECT @Hierarchy2Id=Hierarchy2Id FROM HIERARCHY_2 WHERE Hierarchy2=@Hierarchy2
-SELECT @VduGroupId=VduGroupId FROM VDU_GROUP WHERE VduGroup=@VduGroup
-SELECT @AlarmGroupId=AlarmGroupId FROM ALARM_GROUP WHERE AlarmGroup=@AlarmGroup
-SELECT @OtdId=OtdId FROM OTD WHERE Otd=@Otd
-SELECT @AcknowledgeAllowedId=AcknowledgeAllowedId FROM ACKNOWLEDGE_ALLOWED WHERE AcknowledgeAllowed=@AcknowledgeAllowed
-SELECT @AlwaysVisibleId=AlwaysVisibleId FROM ALWAYS_VISIBLE WHERE AlwaysVisible=@AlwaysVisible
-SELECT @NodeId=NodeId FROM NODE WHERE Node=@Node
-SELECT @CabinetId=CabinetId FROM CABINET WHERE Cabinet=@Cabinet
-SELECT @DataBlockId=DataBlockId FROM DATA_BLOCK WHERE DataBlock=@DataBlock
+SELECT @Hierarchy1Id=Hierarchy1Id FROM HIERARCHY_1 WHERE Hierarchy1Name=@Hierarchy1Name
+SELECT @Hierarchy2Id=Hierarchy2Id FROM HIERARCHY_2 WHERE Hierarchy2Name=@Hierarchy2Name
+SELECT @VduGroupId=VduGroupId FROM VDU_GROUP WHERE VduGroupName=@VduGroupName
+SELECT @AlarmGroupId=AlarmGroupId FROM ALARM_GROUP WHERE AlarmGroupName=@AlarmGroupName
+SELECT @OtdId=OtdId FROM OTD WHERE OtdName=@OtdName
+SELECT @AcknowledgeAllowedId=AcknowledgeAllowedId FROM ACKNOWLEDGE_ALLOWED WHERE AcknowledgeAllowedName=@AcknowledgeAllowedName
+SELECT @AlwaysVisibleId=AlwaysVisibleId FROM ALWAYS_VISIBLE WHERE AlwaysVisible=@AlwaysVisibleName
+SELECT @NodeId=NodeId FROM NODE WHERE NodeName=@NodeName
+SELECT @CabinetId=CabinetId FROM CABINET WHERE CabinetName=@CabinetName
+SELECT @DataBlockId=DataBlockId FROM DATA_BLOCK WHERE DataBlockName=@DataBlockName
 
 INSERT INTO TAG_OBJECT (SfiNumber, MainEqNumber, EqNumber, ObjectDescription, Hierarchy1Id, Hierarchy2Id, VduGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId, DataBlockId) 
 VALUES (@SfiNumber, @MainEqNumber, @EqNumber, @ObjectDescription, @Hierarchy1Id, @Hierarchy2Id, @VduGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId, @DataBlockId)

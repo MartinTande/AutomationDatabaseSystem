@@ -13,16 +13,16 @@ CREATE PROCEDURE UpdateObject
 	@MainEqNumber varchar(100),
 	@EqNumber varchar(100),
 	@ObjectDescription varchar(100),
-	@Hierarchy1 varchar(50),
-	@Hierarchy2 varchar(50),
-	@VduGroup varchar(50),
-	@AlarmGroup varchar(50),
-	@Otd varchar(50),
-	@AcknowledgeAllowed varchar(100),
-	@AlwaysVisible varchar(100),
-	@Node varchar(100),
-	@Cabinet varchar(100),
-	@DataBlock varchar(100)
+	@Hierarchy1Name varchar(50),
+	@Hierarchy2Name varchar(50),
+	@VduGroupName varchar(50),
+	@AlarmGroupName varchar(50),
+	@OtdName varchar(50),
+	@AcknowledgeAllowedLocation varchar(100),
+	@AlwaysVisibleLocation varchar(100),
+	@NodeName varchar(100),
+	@CabinetName varchar(100),
+	@DataBlockName varchar(100)
 AS
 
 UPDATE TAG_OBJECT SET
@@ -30,16 +30,16 @@ SfiNumber = @SfiNumber,
 MainEqNumber = @MainEqNumber,
 EqNumber = @EqNumber,
 ObjectDescription = @ObjectDescription,
-Hierarchy1Id = (SELECT Hierarchy1Id FROM HIERARCHY_1 WHERE Hierarchy1=@Hierarchy1),
-Hierarchy2Id = (SELECT Hierarchy2Id FROM HIERARCHY_2 WHERE Hierarchy2=@Hierarchy2),
-VduGroupId = (SELECT VduGroupId FROM VDU_GROUP WHERE VduGroup=@VduGroup),
-AlarmGroupId = (SELECT AlarmGroupId FROM ALARM_GROUP WHERE AlarmGroup=@AlarmGroup),
-OtdId = (SELECT OtdId FROM OTD WHERE Otd=@Otd),
-AcknowledgeAllowedId = (SELECT AcknowledgeAllowedId FROM ACKNOWLEDGE_ALLOWED WHERE AcknowledgeAllowed=@AcknowledgeAllowed),
-AlwaysVisibleId = (SELECT AlwaysVisibleId FROM ALWAYS_VISIBLE WHERE AlwaysVisible=@AlwaysVisible),
-NodeId = (SELECT NodeId FROM NODE WHERE Node=@Node),
-CabinetId = (SELECT CabinetId FROM CABINET WHERE Cabinet=@Cabinet),
-DataBlockId = (SELECT DataBlockId FROM DATA_BLOCK WHERE DataBlock=@DataBlock)
+Hierarchy1Id = (SELECT Hierarchy1Id FROM HIERARCHY_1 WHERE Hierarchy1Name=@Hierarchy1Name),
+Hierarchy2Id = (SELECT Hierarchy2Id FROM HIERARCHY_2 WHERE Hierarchy2Name=@Hierarchy2Name),
+VduGroupId = (SELECT VduGroupId FROM VDU_GROUP WHERE VduGroupName=@VduGroupName),
+AlarmGroupId = (SELECT AlarmGroupId FROM ALARM_GROUP WHERE AlarmGroupName=@AlarmGroupName),
+OtdId = (SELECT OtdId FROM OTD WHERE OtdName=@OtdName),
+AcknowledgeAllowedId = (SELECT AcknowledgeAllowedId FROM ACKNOWLEDGE_ALLOWED WHERE AcknowledgeAllowedLocation=@AcknowledgeAllowedLocation),
+AlwaysVisibleId = (SELECT AlwaysVisibleId FROM ALWAYS_VISIBLE WHERE AlwaysVisibleLocation=@AlwaysVisibleLocation),
+NodeId = (SELECT NodeId FROM NODE WHERE NodeName=@NodeName),
+CabinetId = (SELECT CabinetId FROM CABINET WHERE CabinetName=@CabinetName),
+DataBlockId = (SELECT DataBlockId FROM DATA_BLOCK WHERE DataBlockName=@DataBlockName)
 
 WHERE ObjectId = @ObjectId
 
