@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AutomationSystem.Categories
 {
-    public class Hierarchy2 : ICategory<Hierarchy2>
+    public class Hierarchy2 : ISubCategory
     {
         string connectionString = DatabaseAccess.GetConnectionString();
         public int Id { get; set; }
@@ -23,11 +23,10 @@ namespace AutomationSystem.Categories
                 List<string> hierarchy2NameList = new List<string>();
 
                 connection.Open();
-
                 SqlCommand command = new SqlCommand("GetHierarchy2Data", connection);
                 command.CommandType = CommandType.StoredProcedure;
 
-                command.Parameters.Add(new SqlParameter("@Hierarchy1Name", hierarchy1));
+                command.Parameters.Add(new SqlParameter("@Hierarchy1Name", ""));
 
                 SqlDataReader dataReader = command.ExecuteReader();
 
@@ -35,10 +34,9 @@ namespace AutomationSystem.Categories
                 {
                     while (dataReader.Read())
                     {
-                        Hierarchy2 hierarchy2 = new Hierarchy2();
-                        hierarchy2.Name = dataReader["Hierarchy2Name"].ToString();
+                        this.Name = dataReader["Hierarchy2Name"].ToString();
 
-                        hierarchy2NameList.Add(hierarchy2.Name);
+                        hierarchy2NameList.Add(this.Name);
                     }
                 }
 

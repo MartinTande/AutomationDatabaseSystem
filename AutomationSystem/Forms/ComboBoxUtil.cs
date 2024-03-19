@@ -19,11 +19,11 @@ namespace AutomationSystem.Forms
             }
         }
 
-        public static void FillUnderCategoryComboBox<T>(ComboBox comboBox, string hierarchy1, ICategory<T> undercategory)
+        public static void FillUnderCategoryComboBox(ComboBox comboBox, string mainCategory, ISubCategory undercategory)
         {
             comboBox.Items.Clear();
             List<string> itemList = new List<string>();
-            itemList = undercategory.GetNames(hierarchy1);
+            itemList = undercategory.GetNames(mainCategory);
 
             foreach (string item in itemList)
             {

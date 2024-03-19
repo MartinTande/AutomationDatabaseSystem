@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AutomationSystem.Categories
 {
-    public interface ICategory<T>
+    public interface ISubCategory
     {
         public List<string> GetNames(string category);
     }
