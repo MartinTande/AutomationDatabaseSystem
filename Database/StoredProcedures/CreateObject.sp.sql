@@ -13,30 +13,43 @@ CREATE PROCEDURE CreateObject
 	@MainEqNumber varchar(100),
 	@EqNumber varchar(100),
 	@ObjectDescription varchar(100),
-	@ObjectType varchar(50),
 	@Hierarchy1 varchar(50),
 	@Hierarchy2 varchar(50),
-	@EasGroup varchar(50),
+	@VduGroup varchar(50),
+	@AlarmGroup varchar(50),
 	@Otd varchar(50),
 	@AcknowledgeAllowed varchar(100),
-	@AlwaysVisible varchar(100)
+	@AlwaysVisible varchar(100),
+	@Node varchar(100),
+	@Cabinet varchar(100),
+	@DataBlock varchar(100),
 AS
 
 DECLARE
 	-- Internal variables
-	@ObjectTypeId int,
-	@Hierarchy1Id varchar(50),
-	@Hierarchy2Id varchar(50),
-	@EasGroupId varchar(50),
-	@OtdId varchar(50)
+	@Hierarchy1Id int,
+	@Hierarchy2Id int,
+	@VduGroupId int,
+	@AlarmGroupId int,
+	@OtdId int,
+	@AcknowledgeAllowedId int,
+	@AlwaysVisibleId int,
+	@NodeId int,
+	@CabinetId int,
+	@DataBlockId int
 
-SELECT @ObjectTypeId=ObjectTypeId FROM OBJECT_TYPE WHERE ObjectType=@ObjectType
 SELECT @Hierarchy1Id=Hierarchy1Id FROM HIERARCHY_1 WHERE Hierarchy1=@Hierarchy1
 SELECT @Hierarchy2Id=Hierarchy2Id FROM HIERARCHY_2 WHERE Hierarchy2=@Hierarchy2
-SELECT @EasGroupId=EasGroupId FROM EAS_GROUP WHERE EasGroup=@EasGroup
+SELECT @VduGroupId=VduGroupId FROM VDU_GROUP WHERE VduGroup=@VduGroup
+SELECT @AlarmGroupId=AlarmGroupId FROM ALARM_GROUP WHERE AlarmGroup=@AlarmGroup
 SELECT @OtdId=OtdId FROM OTD WHERE Otd=@Otd
+SELECT @AcknowledgeAllowedId=AcknowledgeAllowedId FROM ACKNOWLEDGE_ALLOWED WHERE AcknowledgeAllowed=@AcknowledgeAllowed
+SELECT @AlwaysVisibleId=AlwaysVisibleId FROM ALWAYS_VISIBLE WHERE AlwaysVisible=@AlwaysVisible
+SELECT @NodeId=NodeId FROM NODE WHERE Node=@Node
+SELECT @CabinetId=CabinetId FROM CABINET WHERE Cabinet=@Cabinet
+SELECT @DataBlockId=DataBlockId FROM DATA_BLOCK WHERE DataBlock=@DataBlock
 
-INSERT INTO TAG_OBJECT (ObjectName, ObjectTypeId, Hierarchy1Id, Hierarchy2Id, EasGroupId, OtdId) 
-VALUES (@ObjectName, @ObjectTypeId, @Hierarchy1Id, @Hierarchy2Id, @EasGroupId, @OtdId)
+INSERT INTO TAG_OBJECT (SfiNumber, MainEqNumber, EqNumber, ObjectDescription, Hierarchy1Id, Hierarchy2Id, VduGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId, DataBlockId) 
+VALUES (@SfiNumber, @MainEqNumber, @EqNumber, @ObjectDescription, @Hierarchy1Id, @Hierarchy2Id, @VduGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId, @DataBlockId)
 
 GO
