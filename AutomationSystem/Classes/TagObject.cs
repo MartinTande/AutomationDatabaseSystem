@@ -49,16 +49,16 @@ namespace AutomationSystem.Classes
                             tagObject.MainEqNumber = dataReader["MainEqNumber"].ToString();
                             tagObject.EqNumber = dataReader["EqNumber"].ToString();
                             tagObject.ObjectDescription = dataReader["Description"].ToString();
-                            tagObject.Hierarchy_1 = dataReader["Hierarchy1"].ToString();
-                            tagObject.Hierarchy_2 = dataReader["Hierarchy2"].ToString();
-                            tagObject.VduGroup = dataReader["VduGroup"].ToString();
-                            tagObject.AlarmGroup = dataReader["AlarmGroup"].ToString();
-                            tagObject.Otd = dataReader["Otd"].ToString();
-                            tagObject.AcknowledgeAllowed = dataReader["AcknowledgeAllowed"].ToString();
-                            tagObject.AlwaysVisible = dataReader["AlwaysVisible"].ToString();
-                            tagObject.Node = dataReader["Node"].ToString();
-                            tagObject.Cabinet = dataReader["Cabinet"].ToString();
-                            tagObject.DataBlock = dataReader["DataBlock"].ToString();
+                            tagObject.Hierarchy_1 = dataReader["Hierarchy1Name"].ToString();
+                            tagObject.Hierarchy_2 = dataReader["Hierarchy2Name"].ToString();
+                            tagObject.VduGroup = dataReader["VduGroupName"].ToString();
+                            tagObject.AlarmGroup = dataReader["AlarmGroupName"].ToString();
+                            tagObject.Otd = dataReader["OtdName"].ToString();
+                            tagObject.AcknowledgeAllowed = dataReader["AcknowledgeAllowedLocation"].ToString();
+                            tagObject.AlwaysVisible = dataReader["AlwaysVisibleLocation"].ToString();
+                            tagObject.Node = dataReader["NodeName"].ToString();
+                            tagObject.Cabinet = dataReader["CabinetName"].ToString();
+                            tagObject.DataBlock = dataReader["DataBlockName"].ToString();
 
                             objectList.Add(tagObject);
                         }
@@ -101,16 +101,16 @@ namespace AutomationSystem.Classes
                             tagObject.MainEqNumber = dataReader["MainEqNumber"].ToString();
                             tagObject.EqNumber = dataReader["EqNumber"].ToString();
                             tagObject.ObjectDescription = dataReader["Description"].ToString();
-                            tagObject.Hierarchy_1 = dataReader["Hierarchy1"].ToString();
-                            tagObject.Hierarchy_2 = dataReader["Hierarchy2"].ToString();
-                            tagObject.VduGroup = dataReader["VduGroup"].ToString();
-                            tagObject.AlarmGroup = dataReader["AlarmGroup"].ToString();
-                            tagObject.Otd = dataReader["Otd"].ToString();
-                            tagObject.AcknowledgeAllowed = dataReader["AcknowledgeAllowed"].ToString();
-                            tagObject.AlwaysVisible = dataReader["AlwaysVisible"].ToString();
-                            tagObject.Node = dataReader["Node"].ToString();
-                            tagObject.Cabinet = dataReader["Cabinet"].ToString();
-                            tagObject.DataBlock = dataReader["DataBlock"].ToString();
+                            tagObject.Hierarchy_1 = dataReader["Hierarchy1Name"].ToString();
+                            tagObject.Hierarchy_2 = dataReader["Hierarchy2Name"].ToString();
+                            tagObject.VduGroup = dataReader["VduGroupName"].ToString();
+                            tagObject.AlarmGroup = dataReader["AlarmGroupName"].ToString();
+                            tagObject.Otd = dataReader["OtdName"].ToString();
+                            tagObject.AcknowledgeAllowed = dataReader["AcknowledgeAllowedLocation"].ToString();
+                            tagObject.AlwaysVisible = dataReader["AlwaysVisibleLocation"].ToString();
+                            tagObject.Node = dataReader["NodeName"].ToString();
+                            tagObject.Cabinet = dataReader["CabinetName"].ToString();
+                            tagObject.DataBlock = dataReader["DataBlockName"].ToString();
                         }
                     }
                     connection.Close();
