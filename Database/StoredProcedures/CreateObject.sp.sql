@@ -43,8 +43,8 @@ SELECT @Hierarchy2Id=Hierarchy2Id FROM HIERARCHY_2 WHERE Hierarchy2Name=@Hierarc
 SELECT @VduGroupId=VduGroupId FROM VDU_GROUP WHERE VduGroupName=@VduGroupName
 SELECT @AlarmGroupId=AlarmGroupId FROM ALARM_GROUP WHERE AlarmGroupName=@AlarmGroupName
 SELECT @OtdId=OtdId FROM OTD WHERE OtdName=@OtdName
-SELECT @AcknowledgeAllowedId=AcknowledgeAllowedId FROM ACKNOWLEDGE_ALLOWED WHERE AcknowledgeAllowedName=@AcknowledgeAllowedName
-SELECT @AlwaysVisibleId=AlwaysVisibleId FROM ALWAYS_VISIBLE WHERE AlwaysVisible=@AlwaysVisibleName
+SELECT @AcknowledgeAllowedId=AcknowledgeAllowedId FROM ACKNOWLEDGE_ALLOWED WHERE AcknowledgeAllowedLocation=@AcknowledgeAllowedLocation
+SELECT @AlwaysVisibleId=AlwaysVisibleId FROM ALWAYS_VISIBLE WHERE AlwaysVisibleLocation=@AlwaysVisibleLocation
 SELECT @NodeId=NodeId FROM NODE WHERE NodeName=@NodeName
 SELECT @CabinetId=CabinetId FROM CABINET WHERE CabinetName=@CabinetName
 SELECT @DataBlockId=DataBlockId FROM DATA_BLOCK WHERE DataBlockName=@DataBlockName
