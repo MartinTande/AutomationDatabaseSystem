@@ -26,7 +26,7 @@ namespace AutomationSystem.Categories
                 SqlCommand command = new SqlCommand("GetHierarchy2Data", connection);
                 command.CommandType = CommandType.StoredProcedure;
 
-                command.Parameters.Add(new SqlParameter("@Hierarchy1Name", ""));
+                command.Parameters.Add(new SqlParameter("@Hierarchy1Name", hierarchy1));
 
                 SqlDataReader dataReader = command.ExecuteReader();
 
