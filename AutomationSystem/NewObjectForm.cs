@@ -1,15 +1,7 @@
 ﻿using AutomationSystem.Categories;
 using AutomationSystem.Classes;
 using AutomationSystem.Forms;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+
 
 namespace AutomationSystem
 {
@@ -36,11 +28,20 @@ namespace AutomationSystem
         {
             TagObject tagObject = new TagObject();
 
-            tagObject.ObjectDescription = txtSfiNumber.Text;
+            tagObject.SfiNumber = Convert.ToInt32(txtSfiNumber.Text);
+            tagObject.MainEqNumber = txtMainEqNumber.Text;
+            tagObject.EqNumber = txtEqNumber.Text;
+            tagObject.ObjectDescription = txtObjectDescription.Text;
             tagObject.Hierarchy_1 = comboBoxHierarchy1.Text;
             tagObject.Hierarchy_2 = comboBoxHierarchy2.Text;
             tagObject.VduGroup = comboBoxVduGroup.Text;
+            tagObject.AlarmGroup = comboBoxAlarmGroup.Text;
             tagObject.Otd = comboBoxOtd.Text;
+            tagObject.AlwaysVisible = comboBoxAlwaysVisible.Text;
+            tagObject.AcknowledgeAllowed = comboBoxAcknowledgeAllowed.Text;
+            tagObject.Node = comboBoxNode.Text;
+            tagObject.Cabinet = comboBoxCabinet.Text;
+            tagObject.DataBlock = txtDataBlock.Text;
 
             tagObject.CreateTagObject(tagObject);
         }
@@ -60,12 +61,12 @@ namespace AutomationSystem
             ComboBoxUtil.FillComboBox(comboBoxHierarchy1, hierarchy1.GetNames());
             ComboBoxUtil.FillUnderCategoryComboBox(comboBoxHierarchy2, comboBoxHierarchy1.Text, hierarchy2);
             ComboBoxUtil.FillComboBox(comboBoxVduGroup, vduGroup.GetNames());
-            ComboBoxUtil.FillComboBox(comboBoxVduGroup, alarmGroup.GetNames());
+            ComboBoxUtil.FillComboBox(comboBoxAlarmGroup, alarmGroup.GetNames());
             ComboBoxUtil.FillComboBox(comboBoxOtd, otd.GetNames());
-            ComboBoxUtil.FillComboBox(comboBoxOtd, ackAllowed.GetNames());
-            ComboBoxUtil.FillComboBox(comboBoxOtd, alwaysVisible.GetNames());
-            ComboBoxUtil.FillComboBox(comboBoxOtd, node.GetNames());
-            ComboBoxUtil.FillComboBox(comboBoxOtd, cabinet.GetNames());
+            ComboBoxUtil.FillComboBox(comboBoxAcknowledgeAllowed, ackAllowed.GetNames());
+            ComboBoxUtil.FillComboBox(comboBoxAlwaysVisible, alwaysVisible.GetNames());
+            ComboBoxUtil.FillComboBox(comboBoxNode, node.GetNames());
+            ComboBoxUtil.FillComboBox(comboBoxCabinet, cabinet.GetNames());
         }
 
         private void comboBoxHierarchy1_TextChanged(object sender, EventArgs e)

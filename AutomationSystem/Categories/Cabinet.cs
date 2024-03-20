@@ -13,7 +13,7 @@ namespace AutomationSystem.Categories
 
         public List<string> GetNames()
         {
-            return base.GetNames("select CabinetName from CABINET");
+            return base.GetNames("CabinetName", "CABINET");
         }
     }
 }

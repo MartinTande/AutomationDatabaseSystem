@@ -47,9 +47,11 @@ SELECT @AcknowledgeAllowedId=AcknowledgeAllowedId FROM ACKNOWLEDGE_ALLOWED WHERE
 SELECT @AlwaysVisibleId=AlwaysVisibleId FROM ALWAYS_VISIBLE WHERE AlwaysVisibleLocation=@AlwaysVisibleLocation
 SELECT @NodeId=NodeId FROM NODE WHERE NodeName=@NodeName
 SELECT @CabinetId=CabinetId FROM CABINET WHERE CabinetName=@CabinetName
-SELECT @DataBlockId=DataBlockId FROM DATA_BLOCK WHERE DataBlockName=@DataBlockName
+IF NOT EXISTS (SELECT * FROM DATA_BLOCK WHERE DataBlockName = @DataBlockName)
+INSERT INTO DATA_BLOCK (DataBlockName) VALUES (@DataBlockName)
 
 INSERT INTO TAG_OBJECT (SfiNumber, MainEqNumber, EqNumber, ObjectDescription, Hierarchy1Id, Hierarchy2Id, VduGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId, DataBlockId) 
-VALUES (@SfiNumber, @MainEqNumber, @EqNumber, @ObjectDescription, @Hierarchy1Id, @Hierarchy2Id, @VduGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId, @DataBlockId)
+VALUES (@SfiNumber, @MainEqNumber, @EqNumber, @ObjectDescription, @Hierarchy1Id, @Hierarchy2Id, @VduGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId, 
+		(SELECT DataBlockId FROM DATA_BLOCK WHERE DataBlockName=@DataBlockName))
 
 GO

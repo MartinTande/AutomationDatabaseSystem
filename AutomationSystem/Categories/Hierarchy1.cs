@@ -16,7 +16,8 @@ namespace AutomationSystem.Categories
 
         public List<string> GetNames()
         {
-            return base.GetNames("select Hierarchy1Name from HIERARCHY_1");
+            return base.GetNames("Hierarchy1Name", "HIERARCHY_1");
         }
+
     }
 }

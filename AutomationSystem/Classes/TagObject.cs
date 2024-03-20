@@ -48,7 +48,7 @@ namespace AutomationSystem.Classes
                             tagObject.SfiNumber = Convert.ToInt32(dataReader["SfiNumber"]);
                             tagObject.MainEqNumber = dataReader["MainEqNumber"].ToString();
                             tagObject.EqNumber = dataReader["EqNumber"].ToString();
-                            tagObject.ObjectDescription = dataReader["Description"].ToString();
+                            tagObject.ObjectDescription = dataReader["ObjectDescription"].ToString();
                             tagObject.Hierarchy_1 = dataReader["Hierarchy1Name"].ToString();
                             tagObject.Hierarchy_2 = dataReader["Hierarchy2Name"].ToString();
                             tagObject.VduGroup = dataReader["VduGroupName"].ToString();
@@ -66,9 +66,9 @@ namespace AutomationSystem.Classes
                     connection.Close();
                 }
 
-                catch
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Error when retrieving data from database");
+                    MessageBox.Show("Error when retrieving data from database: " + ex.Message);
                 }
             }
             return objectList;
@@ -76,7 +76,38 @@ namespace AutomationSystem.Classes
 
         public void CreateTagObject(TagObject newTagObject)
         {
-            InsertDataIntoDatabase(newTagObject, "CreateObject");
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand("CreateObject", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.Add(new SqlParameter("@SfiNumber", newTagObject.SfiNumber));
+                    command.Parameters.Add(new SqlParameter("@MainEqNumber", newTagObject.MainEqNumber));
+                    command.Parameters.Add(new SqlParameter("@EqNumber", newTagObject.EqNumber));
+                    command.Parameters.Add(new SqlParameter("@ObjectDescription", newTagObject.ObjectDescription));
+                    command.Parameters.Add(new SqlParameter("@Hierarchy1Name", newTagObject.Hierarchy_1));
+                    command.Parameters.Add(new SqlParameter("@Hierarchy2Name", newTagObject.Hierarchy_2));
+                    command.Parameters.Add(new SqlParameter("@VduGroupName", newTagObject.VduGroup));
+                    command.Parameters.Add(new SqlParameter("@AlarmGroupName", newTagObject.AlarmGroup));
+                    command.Parameters.Add(new SqlParameter("@OtdName", newTagObject.Otd));
+                    command.Parameters.Add(new SqlParameter("@AcknowledgeAllowedLocation", newTagObject.AcknowledgeAllowed));
+                    command.Parameters.Add(new SqlParameter("@AlwaysVisibleLocation", newTagObject.AlwaysVisible));
+                    command.Parameters.Add(new SqlParameter("@NodeName", newTagObject.Node));
+                    command.Parameters.Add(new SqlParameter("@CabinetName", newTagObject.Cabinet));
+                    command.Parameters.Add(new SqlParameter("@DataBlockName", newTagObject.DataBlock));
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error when inserting data into database: " + ex.Message);
+                }
+            }
         }
 
         public TagObject GetTagObjectData(int objectId)
@@ -100,7 +131,7 @@ namespace AutomationSystem.Classes
                             tagObject.SfiNumber = Convert.ToInt32(dataReader["SfiNumber"]);
                             tagObject.MainEqNumber = dataReader["MainEqNumber"].ToString();
                             tagObject.EqNumber = dataReader["EqNumber"].ToString();
-                            tagObject.ObjectDescription = dataReader["Description"].ToString();
+                            tagObject.ObjectDescription = dataReader["ObjectDescription"].ToString();
                             tagObject.Hierarchy_1 = dataReader["Hierarchy1Name"].ToString();
                             tagObject.Hierarchy_2 = dataReader["Hierarchy2Name"].ToString();
                             tagObject.VduGroup = dataReader["VduGroupName"].ToString();
@@ -115,9 +146,9 @@ namespace AutomationSystem.Classes
                     }
                     connection.Close();
                 }
-                catch
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Error when retrieving data from database");
+                    MessageBox.Show("Error when retrieving data from database" + ex.Message);
                 }
             }
             return tagObject;
@@ -125,7 +156,38 @@ namespace AutomationSystem.Classes
 
         public void EditTagObject(TagObject updatedTagObject)
         {
-            InsertDataIntoDatabase(updatedTagObject, "UpdateObject");
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand("UpdateObject", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.Add(new SqlParameter("@ObjectId", updatedTagObject.Id));
+                    command.Parameters.Add(new SqlParameter("@SfiNumber", updatedTagObject.SfiNumber));
+                    command.Parameters.Add(new SqlParameter("@MainEqNumber", updatedTagObject.MainEqNumber));
+                    command.Parameters.Add(new SqlParameter("@EqNumber", updatedTagObject.EqNumber));
+                    command.Parameters.Add(new SqlParameter("@ObjectDescription", updatedTagObject.ObjectDescription));
+                    command.Parameters.Add(new SqlParameter("@Hierarchy1Name", updatedTagObject.Hierarchy_1));
+                    command.Parameters.Add(new SqlParameter("@Hierarchy2Name", updatedTagObject.Hierarchy_2));
+                    command.Parameters.Add(new SqlParameter("@VduGroupName", updatedTagObject.VduGroup));
+                    command.Parameters.Add(new SqlParameter("@AlarmGroupName", updatedTagObject.AlarmGroup));
+                    command.Parameters.Add(new SqlParameter("@OtdName", updatedTagObject.Otd));
+                    command.Parameters.Add(new SqlParameter("@AcknowledgeAllowedLocation", updatedTagObject.AcknowledgeAllowed));
+                    command.Parameters.Add(new SqlParameter("@AlwaysVisibleLocation", updatedTagObject.AlwaysVisible));
+                    command.Parameters.Add(new SqlParameter("@NodeName", updatedTagObject.Node));
+                    command.Parameters.Add(new SqlParameter("@CabinetName", updatedTagObject.Cabinet));
+                    command.Parameters.Add(new SqlParameter("@DataBlockName", updatedTagObject.DataBlock));
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error when inserting data into database: " + ex.Message);
+                }
+            }
         }
        
         public void DeleteTagObject(int selectedTagObjectId)
@@ -143,9 +205,9 @@ namespace AutomationSystem.Classes
                     command.ExecuteNonQuery();
                     connection.Close();
                 }
-                catch
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Error when inserting data into database");
+                    MessageBox.Show("Error when inserting data into database" + ex.Message);
                 }
             }
         }
@@ -159,28 +221,29 @@ namespace AutomationSystem.Classes
                     SqlCommand command = new SqlCommand(sqlQuery, connection);
                     command.CommandType = CommandType.StoredProcedure;
 
+                    command.Parameters.Add(new SqlParameter("@ObjectId", tagObject.Id));
                     command.Parameters.Add(new SqlParameter("@SfiNumber", tagObject.SfiNumber));
                     command.Parameters.Add(new SqlParameter("@MainEqNumber", tagObject.MainEqNumber));
                     command.Parameters.Add(new SqlParameter("@EqNumber", tagObject.EqNumber));
                     command.Parameters.Add(new SqlParameter("@ObjectDescription", tagObject.ObjectDescription));
-                    command.Parameters.Add(new SqlParameter("@Hierarchy1", tagObject.Hierarchy_1));
-                    command.Parameters.Add(new SqlParameter("@Hierarchy2", tagObject.Hierarchy_2));
-                    command.Parameters.Add(new SqlParameter("@VduGroup", tagObject.VduGroup));
-                    command.Parameters.Add(new SqlParameter("@AlarmGroup", tagObject.AlarmGroup));
-                    command.Parameters.Add(new SqlParameter("@Otd", tagObject.Otd));
-                    command.Parameters.Add(new SqlParameter("@AcknowledgeAllowed", tagObject.AcknowledgeAllowed));
-                    command.Parameters.Add(new SqlParameter("@AlwaysVisible", tagObject.AlwaysVisible));
-                    command.Parameters.Add(new SqlParameter("@Node", tagObject.Node));
-                    command.Parameters.Add(new SqlParameter("@Cabinet", tagObject.Cabinet));
-                    command.Parameters.Add(new SqlParameter("@DataBlock", tagObject.DataBlock));
+                    command.Parameters.Add(new SqlParameter("@Hierarchy1Name", tagObject.Hierarchy_1));
+                    command.Parameters.Add(new SqlParameter("@Hierarchy2Name", tagObject.Hierarchy_2));
+                    command.Parameters.Add(new SqlParameter("@VduGroupName", tagObject.VduGroup));
+                    command.Parameters.Add(new SqlParameter("@AlarmGroupName", tagObject.AlarmGroup));
+                    command.Parameters.Add(new SqlParameter("@OtdName", tagObject.Otd));
+                    command.Parameters.Add(new SqlParameter("@AcknowledgeAllowedLocation", tagObject.AcknowledgeAllowed));
+                    command.Parameters.Add(new SqlParameter("@AlwaysVisibleLocation", tagObject.AlwaysVisible));
+                    command.Parameters.Add(new SqlParameter("@NodeName", tagObject.Node));
+                    command.Parameters.Add(new SqlParameter("@CabinetName", tagObject.Cabinet));
+                    command.Parameters.Add(new SqlParameter("@DataBlockName", tagObject.DataBlock));
 
                     connection.Open();
                     command.ExecuteNonQuery();
                     connection.Close();
                 }
-                catch
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Error when inserting data into database");
+                    MessageBox.Show("Error when inserting data into database: " + ex.Message);
                 }
             }
         }

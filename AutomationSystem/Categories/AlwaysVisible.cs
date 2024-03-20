@@ -15,7 +15,7 @@ namespace AutomationSystem.Categories
 
         public List<string> GetNames()
         {
-            return base.GetNames("select AlwaysVisibleLocation from ALWAYS_VISIBLE");
+            return base.GetNames("AlwaysVisibleLocation", "ALWAYS_VISIBLE");
         }
     }
 }

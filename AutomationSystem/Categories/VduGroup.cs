@@ -16,7 +16,7 @@ namespace AutomationSystem.Categories
 
         public List<string> GetNames()
         {
-            return base.GetNames("select VduGroupName from VDU_GROUP");
+            return base.GetNames("VduGroupName", "VDU_GROUP");
         }
     }
 }

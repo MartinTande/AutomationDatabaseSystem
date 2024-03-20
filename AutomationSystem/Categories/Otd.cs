@@ -10,13 +10,12 @@ namespace AutomationSystem.Categories
 {
     public class Otd : Category
     {
-        string connectionString = DatabaseAccess.GetConnectionString();
         public int Id { get; set; }
         public string? Name { get; set; }
 
         public List<string> GetNames()
         {
-            return base.GetNames("select OtdName from OTD");
+            return base.GetNames("OtdName", "OTD");
         }
     }
 }

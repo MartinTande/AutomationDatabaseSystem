@@ -12,13 +12,13 @@ namespace AutomationSystem.Categories
     {
         string connectionString = DatabaseAccess.GetConnectionString();
 
-        public List<string> GetNames(string sqlQuery)
+        public List<string> GetNames(string columnName, string tableName)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 List<string> nameList = new List<string>();
 
-                SqlCommand command = new SqlCommand(sqlQuery, connection);
+                SqlCommand command = new SqlCommand($"select {columnName} from {tableName}", connection);
 
                 connection.Open();
                 SqlDataReader dataReader = command.ExecuteReader();
@@ -27,7 +27,7 @@ namespace AutomationSystem.Categories
                 {
                     while (dataReader.Read())
                     {
-                        string _name = dataReader.ToString();
+                        string _name = dataReader[columnName].ToString();
 
                         nameList.Add(_name);
                     }

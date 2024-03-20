@@ -128,7 +128,7 @@
             btnOK.Location = new Point(455, 852);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(131, 40);
-            btnOK.TabIndex = 2;
+            btnOK.TabIndex = 15;
             btnOK.Text = "OK";
             btnOK.UseVisualStyleBackColor = true;
             btnOK.Click += btnOK_Click;
@@ -138,7 +138,7 @@
             btnCancel.Location = new Point(601, 852);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(131, 40);
-            btnCancel.TabIndex = 3;
+            btnCancel.TabIndex = 16;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
@@ -154,7 +154,7 @@
             comboBoxHierarchy1.Location = new Point(45, 269);
             comboBoxHierarchy1.Name = "comboBoxHierarchy1";
             comboBoxHierarchy1.Size = new Size(339, 38);
-            comboBoxHierarchy1.TabIndex = 4;
+            comboBoxHierarchy1.TabIndex = 5;
             comboBoxHierarchy1.TextChanged += comboBoxHierarchy1_TextChanged;
             // 
             // comboBoxHierarchy2
@@ -163,7 +163,7 @@
             comboBoxHierarchy2.Location = new Point(393, 269);
             comboBoxHierarchy2.Name = "comboBoxHierarchy2";
             comboBoxHierarchy2.Size = new Size(339, 38);
-            comboBoxHierarchy2.TabIndex = 4;
+            comboBoxHierarchy2.TabIndex = 6;
             // 
             // comboBoxVduGroup
             // 
@@ -171,7 +171,7 @@
             comboBoxVduGroup.Location = new Point(44, 352);
             comboBoxVduGroup.Name = "comboBoxVduGroup";
             comboBoxVduGroup.Size = new Size(339, 38);
-            comboBoxVduGroup.TabIndex = 4;
+            comboBoxVduGroup.TabIndex = 7;
             // 
             // comboBoxOtd
             // 
@@ -179,21 +179,21 @@
             comboBoxOtd.Location = new Point(44, 438);
             comboBoxOtd.Name = "comboBoxOtd";
             comboBoxOtd.Size = new Size(688, 38);
-            comboBoxOtd.TabIndex = 4;
+            comboBoxOtd.TabIndex = 9;
             // 
             // txtSfiNumber
             // 
             txtSfiNumber.Location = new Point(45, 93);
             txtSfiNumber.Name = "txtSfiNumber";
             txtSfiNumber.Size = new Size(213, 35);
-            txtSfiNumber.TabIndex = 5;
+            txtSfiNumber.TabIndex = 1;
             // 
             // txtObjectDescription
             // 
             txtObjectDescription.Location = new Point(44, 186);
             txtObjectDescription.Name = "txtObjectDescription";
             txtObjectDescription.Size = new Size(688, 35);
-            txtObjectDescription.TabIndex = 5;
+            txtObjectDescription.TabIndex = 4;
             // 
             // label8
             // 
@@ -228,7 +228,7 @@
             comboBoxAlarmGroup.Location = new Point(394, 352);
             comboBoxAlarmGroup.Name = "comboBoxAlarmGroup";
             comboBoxAlarmGroup.Size = new Size(338, 38);
-            comboBoxAlarmGroup.TabIndex = 4;
+            comboBoxAlarmGroup.TabIndex = 8;
             // 
             // label11
             // 
@@ -245,7 +245,7 @@
             comboBoxAcknowledgeAllowed.Location = new Point(44, 526);
             comboBoxAcknowledgeAllowed.Name = "comboBoxAcknowledgeAllowed";
             comboBoxAcknowledgeAllowed.Size = new Size(688, 38);
-            comboBoxAcknowledgeAllowed.TabIndex = 4;
+            comboBoxAcknowledgeAllowed.TabIndex = 10;
             // 
             // label12
             // 
@@ -262,7 +262,7 @@
             comboBoxAlwaysVisible.Location = new Point(45, 617);
             comboBoxAlwaysVisible.Name = "comboBoxAlwaysVisible";
             comboBoxAlwaysVisible.Size = new Size(687, 38);
-            comboBoxAlwaysVisible.TabIndex = 4;
+            comboBoxAlwaysVisible.TabIndex = 11;
             // 
             // label13
             // 
@@ -279,7 +279,7 @@
             comboBoxNode.Location = new Point(45, 705);
             comboBoxNode.Name = "comboBoxNode";
             comboBoxNode.Size = new Size(338, 38);
-            comboBoxNode.TabIndex = 4;
+            comboBoxNode.TabIndex = 12;
             // 
             // label14
             // 
@@ -296,21 +296,21 @@
             comboBoxCabinet.Location = new Point(397, 705);
             comboBoxCabinet.Name = "comboBoxCabinet";
             comboBoxCabinet.Size = new Size(335, 38);
-            comboBoxCabinet.TabIndex = 4;
+            comboBoxCabinet.TabIndex = 13;
             // 
             // txtMainEqNumber
             // 
             txtMainEqNumber.Location = new Point(282, 93);
             txtMainEqNumber.Name = "txtMainEqNumber";
             txtMainEqNumber.Size = new Size(213, 35);
-            txtMainEqNumber.TabIndex = 5;
+            txtMainEqNumber.TabIndex = 2;
             // 
             // txtEqNumber
             // 
             txtEqNumber.Location = new Point(519, 93);
             txtEqNumber.Name = "txtEqNumber";
             txtEqNumber.Size = new Size(213, 35);
-            txtEqNumber.TabIndex = 5;
+            txtEqNumber.TabIndex = 3;
             // 
             // label15
             // 
@@ -326,7 +326,7 @@
             txtDataBlock.Location = new Point(41, 788);
             txtDataBlock.Name = "txtDataBlock";
             txtDataBlock.Size = new Size(688, 35);
-            txtDataBlock.TabIndex = 5;
+            txtDataBlock.TabIndex = 14;
             // 
             // NewObjectForm
             // 

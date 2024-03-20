@@ -13,7 +13,7 @@ namespace AutomationSystem.Categories
 
         public List<string> GetNames()
         {
-            return base.GetNames("select AcknowledgeAllowedLocation from ACKNOWLEDGE_ALLOWED");
+            return base.GetNames("AcknowledgeAllowedLocation", "ACKNOWLEDGE_ALLOWED");
         }
     }
 }

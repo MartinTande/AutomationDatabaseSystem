@@ -15,7 +15,7 @@ namespace AutomationSystem.Categories
 
         public List<string> GetNames()
         {
-            return base.GetNames("select NodeName from NODE");
+            return base.GetNames("NodeName", "NODE");
         }
     }
 }

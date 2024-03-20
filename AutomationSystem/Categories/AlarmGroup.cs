@@ -13,7 +13,7 @@ namespace AutomationSystem.Categories
 
         public List<string> GetNames()
         {
-            return base.GetNames("select AlarmGroupName from ALARM_GROUP");
+            return base.GetNames("AlarmGroupName", "ALARM_GROUP");
         }
     }
 }
