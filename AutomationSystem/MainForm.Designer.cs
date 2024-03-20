@@ -38,6 +38,13 @@ namespace AutomationSystem
             IOList = new TabPage();
             advDataGridViewObjectTable = new Zuby.ADGV.AdvancedDataGridView();
             PictureHierarchy = new TabPage();
+            dataGridViewHVAC = new DataGridView();
+            dataGridViewEngines = new DataGridView();
+            dataGridViewBilge = new DataGridView();
+            dataGridViewFireSystem = new DataGridView();
+            dataGridViewCooling = new DataGridView();
+            dataGridViewSwitchboard = new DataGridView();
+            dataGridViewPropulsion = new DataGridView();
             ObjectTypes = new TabPage();
             VduGroup = new TabPage();
             bindingSource1 = new BindingSource(components);
@@ -45,6 +52,14 @@ namespace AutomationSystem
             tabControl1.SuspendLayout();
             IOList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)advDataGridViewObjectTable).BeginInit();
+            PictureHierarchy.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewHVAC).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewEngines).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewBilge).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewFireSystem).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewCooling).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewSwitchboard).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewPropulsion).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             SuspendLayout();
             // 
@@ -53,6 +68,7 @@ namespace AutomationSystem
             dataGridViewObjectTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewObjectTable.Location = new Point(29, 40);
             dataGridViewObjectTable.Name = "dataGridViewObjectTable";
+            dataGridViewObjectTable.RowHeadersVisible = false;
             dataGridViewObjectTable.RowHeadersWidth = 72;
             dataGridViewObjectTable.Size = new Size(2068, 338);
             dataGridViewObjectTable.TabIndex = 6;
@@ -133,6 +149,13 @@ namespace AutomationSystem
             // 
             // PictureHierarchy
             // 
+            PictureHierarchy.Controls.Add(dataGridViewHVAC);
+            PictureHierarchy.Controls.Add(dataGridViewEngines);
+            PictureHierarchy.Controls.Add(dataGridViewBilge);
+            PictureHierarchy.Controls.Add(dataGridViewFireSystem);
+            PictureHierarchy.Controls.Add(dataGridViewCooling);
+            PictureHierarchy.Controls.Add(dataGridViewSwitchboard);
+            PictureHierarchy.Controls.Add(dataGridViewPropulsion);
             PictureHierarchy.Location = new Point(4, 39);
             PictureHierarchy.Name = "PictureHierarchy";
             PictureHierarchy.Padding = new Padding(3);
@@ -140,6 +163,76 @@ namespace AutomationSystem
             PictureHierarchy.TabIndex = 1;
             PictureHierarchy.Text = "Picture Hierarchy";
             PictureHierarchy.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewHVAC
+            // 
+            dataGridViewHVAC.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewHVAC.Location = new Point(1661, 129);
+            dataGridViewHVAC.Name = "dataGridViewHVAC";
+            dataGridViewHVAC.RowHeadersVisible = false;
+            dataGridViewHVAC.RowHeadersWidth = 72;
+            dataGridViewHVAC.Size = new Size(228, 580);
+            dataGridViewHVAC.TabIndex = 0;
+            // 
+            // dataGridViewEngines
+            // 
+            dataGridViewEngines.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewEngines.Location = new Point(1381, 129);
+            dataGridViewEngines.Name = "dataGridViewEngines";
+            dataGridViewEngines.RowHeadersVisible = false;
+            dataGridViewEngines.RowHeadersWidth = 72;
+            dataGridViewEngines.Size = new Size(228, 580);
+            dataGridViewEngines.TabIndex = 0;
+            // 
+            // dataGridViewBilge
+            // 
+            dataGridViewBilge.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewBilge.Location = new Point(1094, 129);
+            dataGridViewBilge.Name = "dataGridViewBilge";
+            dataGridViewBilge.RowHeadersVisible = false;
+            dataGridViewBilge.RowHeadersWidth = 72;
+            dataGridViewBilge.Size = new Size(228, 580);
+            dataGridViewBilge.TabIndex = 0;
+            // 
+            // dataGridViewFireSystem
+            // 
+            dataGridViewFireSystem.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewFireSystem.Location = new Point(822, 129);
+            dataGridViewFireSystem.Name = "dataGridViewFireSystem";
+            dataGridViewFireSystem.RowHeadersVisible = false;
+            dataGridViewFireSystem.RowHeadersWidth = 72;
+            dataGridViewFireSystem.Size = new Size(228, 580);
+            dataGridViewFireSystem.TabIndex = 0;
+            // 
+            // dataGridViewCooling
+            // 
+            dataGridViewCooling.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCooling.Location = new Point(557, 129);
+            dataGridViewCooling.Name = "dataGridViewCooling";
+            dataGridViewCooling.RowHeadersVisible = false;
+            dataGridViewCooling.RowHeadersWidth = 72;
+            dataGridViewCooling.Size = new Size(228, 580);
+            dataGridViewCooling.TabIndex = 0;
+            // 
+            // dataGridViewSwitchboard
+            // 
+            dataGridViewSwitchboard.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewSwitchboard.Location = new Point(302, 129);
+            dataGridViewSwitchboard.Name = "dataGridViewSwitchboard";
+            dataGridViewSwitchboard.RowHeadersVisible = false;
+            dataGridViewSwitchboard.RowHeadersWidth = 72;
+            dataGridViewSwitchboard.Size = new Size(228, 580);
+            dataGridViewSwitchboard.TabIndex = 0;
+            // 
+            // dataGridViewPropulsion
+            // 
+            dataGridViewPropulsion.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewPropulsion.Location = new Point(51, 129);
+            dataGridViewPropulsion.Name = "dataGridViewPropulsion";
+            dataGridViewPropulsion.RowHeadersVisible = false;
+            dataGridViewPropulsion.RowHeadersWidth = 72;
+            dataGridViewPropulsion.Size = new Size(228, 580);
+            dataGridViewPropulsion.TabIndex = 0;
             // 
             // ObjectTypes
             // 
@@ -173,6 +266,14 @@ namespace AutomationSystem
             tabControl1.ResumeLayout(false);
             IOList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)advDataGridViewObjectTable).EndInit();
+            PictureHierarchy.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridViewHVAC).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewEngines).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewBilge).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewFireSystem).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewCooling).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewSwitchboard).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewPropulsion).EndInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).EndInit();
             ResumeLayout(false);
         }
@@ -189,5 +290,12 @@ namespace AutomationSystem
         private TabPage VduGroup;
         private Zuby.ADGV.AdvancedDataGridView advDataGridViewObjectTable;
         private BindingSource bindingSource1;
+        private DataGridView dataGridViewHVAC;
+        private DataGridView dataGridViewEngines;
+        private DataGridView dataGridViewBilge;
+        private DataGridView dataGridViewFireSystem;
+        private DataGridView dataGridViewCooling;
+        private DataGridView dataGridViewSwitchboard;
+        private DataGridView dataGridViewPropulsion;
     }
 }

@@ -1,14 +1,18 @@
+-- Check if Stored Procedure exists and deletes it if it does
+IF EXISTS (SELECT name
+	FROM sysobjects
+	WHERE name = 'FilterByColumn'
+	AND type = 'P')
+DROP PROCEDURE FilterByColumn
+GO
+
 CREATE PROCEDURE FilterByColumn
-    @ColumnName NVARCHAR(255),
-    @ColumnValue NVARCHAR(MAX)
+    @ColumnName VARCHAR(255),
+    @ColumnValues VARCHAR(255)
 AS
+
 BEGIN
-    DECLARE @SqlStatement NVARCHAR(MAX);
-
-    SET @SqlStatement = N'SELECT * FROM GetTagObjectData' +
-                        N' WHERE ' + QUOTENAME(@ColumnName) + N' = @ColumnValue;';
-
-    EXEC sp_executesql @SqlStatement,
-                       N'@ColumnValue NVARCHAR(MAX)',
-                       @ColumnValue;
+select *
+from GetTagObjectData
+where @ColumnName = @ColumnValues
 END;

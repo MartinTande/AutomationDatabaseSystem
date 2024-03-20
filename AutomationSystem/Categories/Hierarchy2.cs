@@ -34,9 +34,9 @@ namespace AutomationSystem.Categories
                 {
                     while (dataReader.Read())
                     {
-                        this.Name = dataReader["Hierarchy2Name"].ToString();
+                        Name = dataReader["Hierarchy2Name"].ToString();
 
-                        hierarchy2NameList.Add(this.Name);
+                        hierarchy2NameList.Add(Name);
                     }
                 }
 
