@@ -12,7 +12,7 @@ CREATE PROCEDURE FilterByColumn
 AS
 
 BEGIN
-select *
-from GetTagObjectData
-where @ColumnName = @ColumnValues
+SELECT *
+FROM GetTagObjectData
+WHERE @ColumnName = @ColumnValues
 END;

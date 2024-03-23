@@ -12,6 +12,8 @@ CREATE PROCEDURE DeleteObject
     @ObjectId int
 AS
 
-DELETE FROM TAG_OBJECT WHERE ObjectId=@ObjectId
+DELETE 
+FROM TAG_OBJECT 
+WHERE ObjectId=@ObjectId
 
 GO

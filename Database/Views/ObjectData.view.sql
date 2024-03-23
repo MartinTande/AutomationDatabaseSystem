@@ -1,13 +1,13 @@
 -- Check if View exists and deletes it if yes
 IF EXISTS (SELECT name
 	FROM sysobjects
-	WHERE name = 'GetTagObjectData'
+	WHERE name = 'ObjectData'
 	AND type = 'V')
-DROP VIEW GetTagObjectData
+DROP VIEW ObjectData
 GO
 
 -- View
-CREATE VIEW GetTagObjectData
+CREATE VIEW ObjectData
 
 AS
 
