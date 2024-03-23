@@ -1,7 +1,7 @@
-﻿<Application x:Class="AutomationSystemWPF.App"
+﻿<Application x:Class="AutomationSystemUI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:AutomationSystemWPF"
+             xmlns:local="clr-namespace:AutomationSystemUI"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          
