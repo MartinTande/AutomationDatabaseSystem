@@ -49,9 +49,33 @@ namespace AutomationSystemLibrary.DataAccess
                 }
 
                 connection.Open();
-                command.ExecuteReader();
+                SqlDataReader dataReader = command.ExecuteReader();
+                if (dataReader != null)
+                {
+                    while (dataReader.Read())
+                    {
+                        foreach (T parameter in parameters)
+                        {
+                            
+                        }
+                        T.Id = Convert.ToInt32(dataReader["ObjectId"]);
+                        tagObject.SfiNumber = Convert.ToInt32(dataReader["SfiNumber"]);
+                        tagObject.MainEqNumber = dataReader["MainEqNumber"].ToString();
+                        tagObject.EqNumber = dataReader["EqNumber"].ToString();
+                        tagObject.ObjectDescription = dataReader["ObjectDescription"].ToString();
+                        tagObject.Hierarchy_1 = dataReader["Hierarchy1Name"].ToString();
+                        tagObject.Hierarchy_2 = dataReader["Hierarchy2Name"].ToString();
+                        tagObject.VduGroup = dataReader["VduGroupName"].ToString();
+                        tagObject.AlarmGroup = dataReader["AlarmGroupName"].ToString();
+                        tagObject.Otd = dataReader["OtdName"].ToString();
+                        tagObject.AcknowledgeAllowed = dataReader["AcknowledgeAllowedLocation"].ToString();
+                        tagObject.AlwaysVisible = dataReader["AlwaysVisibleLocation"].ToString();
+                        tagObject.Node = dataReader["NodeName"].ToString();
+                        tagObject.Cabinet = dataReader["CabinetName"].ToString();
+                        tagObject.DataBlock = dataReader["DataBlockName"].ToString();
+                    }
+                }
                 connection.Close();
-                return 
             }
         }
     }
