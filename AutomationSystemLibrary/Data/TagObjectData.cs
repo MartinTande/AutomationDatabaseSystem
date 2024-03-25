@@ -9,45 +9,30 @@ using System.Threading.Tasks;
 
 namespace AutomationSystemLibrary.Data
 {
-    internal class TagObjectData
+    public class TagObjectData
     {
-        SqlConnector sqlConnector;
-        public TagObjectData()
-        { 
-            sqlConnector = new SqlConnector();
+        public List<TagObjectModel> GetTagObjectById(int id)
+        {
+            SqlConnector sqlConnector = new SqlConnector();
+
+            // Anonymous object, object with no name type
+            // Id is parameter of object, id is input to that parameter
+            var p = new { Id = id };
+
+            var tagObjectList = sqlConnector.LoadData<TagObjectModel, dynamic>("GetObjectById", p);
+            return tagObjectList;
         }
 
-        public List<TagObjectModel> GetTagObjects()
+        public List<TagObjectModel> GetTagObject(int id)
         {
-            List<TagObjectModel> list = new List<TagObjectModel>();
-            var parameters = new { };
-            list = sqlConnector.LoadData<TagObjectModel, dynamic>("GetAllObjects", parameters);
-            return list;
-        }
-        public TagObjectModel GetTagObject(int Id)
-        {
-            return GetTagObjects()[Id];
-        }
-        public void InsertTagObject(TagObjectModel newTagObject)
-        {
-            var parameters = new { 
-                newTagObject.SfiNumber, 
-                newTagObject.MainEqNumber,
-                newTagObject.EqNumber,
-                newTagObject.ObjectDescription,
-                newTagObject.Hierarchy_1,
-                newTagObject.Hierarchy_2,
-                newTagObject.VduGroup,
-                newTagObject.AlarmGroup,
-                newTagObject.Otd,
-                newTagObject.AcknowledgeAllowed,
-                newTagObject.AlwaysVisible,
-                newTagObject.Node,
-                newTagObject.Cabinet,
-                newTagObject.DataBlock,
-            };
+            SqlConnector sqlConnector = new SqlConnector();
 
-            sqlConnector.SaveData<TagObjectModel, dynamic>("GetAllObjects", parameters);
+            // Anonymous object, object with no name type
+            // Id is parameter of object, id is input to that parameter
+            var p = new {  };
+
+            var tagObjectList = sqlConnector.LoadData<TagObjectModel, dynamic>("GetObjectById", p);
+            return tagObjectList;
         }
     }
 }
