@@ -3,10 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutomationSystemLibrary.Data;
+using AutomationSystemLibrary.Models;
 
 namespace AutomationSystemUI.Models
 {
-    internal class TagObjectController
+    public class TagObjectController
     {
+        public List<TagObjectModel> GetById(int id)
+        {
+            TagObjectData data = new TagObjectData();
+
+            return data.GetTagObjectById(id);
+        }
     }
 }

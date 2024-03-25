@@ -56,8 +56,6 @@
     <Compile Include="Models\Categories\Otd.cs" />
     <Compile Include="Models\Categories\VduGroup.cs" />
     <Compile Include="Data\TagObjectData.cs" />
-    <Compile Include="DataAccess\ExcelConnector.cs" />
-    <Compile Include="DataAccess\IDataConnection.cs" />
     <Compile Include="DataAccess\SqlConnector.cs" />
     <Compile Include="GlobalConfig.cs" />
     <Compile Include="Models\TagObjectModel.cs" />

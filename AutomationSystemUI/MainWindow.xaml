@@ -4,9 +4,40 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AutomationSystemUI"
+        xmlns:userControls="clr-namespace:AutomationSystemUI.Views.UserControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Automation IO-Tracker" Height="700" Width="1000">
     <Grid>
-        
+        <TabControl>
+            <!-- IO List tab -->
+            <TabItem Header="IO List">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!-- Button panel -->
+                    <userControls:ButtonBar/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="13*"/>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid Grid.ColumnSpan="2"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+
+            <!-- Picture Hierarchy tab -->
+            <TabItem Header="Picture Hierarchy"/>
+
+            <!-- Alarm Groups tab -->
+            <TabItem Header="Alarm Groups"/>
+
+            <!-- OTD tab-->
+            <TabItem Header="OTD"/>
+        </TabControl>
+
     </Grid>
 </Window>
