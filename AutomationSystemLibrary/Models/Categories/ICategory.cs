@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace AutomationSystem.Categories
 {
-    public interface ISubCategory
+    public interface ICategory
     {
-        List<string> GetNames(string category);
+        int Id { get; set; }
+        string Name { get; set; }
     }
 }

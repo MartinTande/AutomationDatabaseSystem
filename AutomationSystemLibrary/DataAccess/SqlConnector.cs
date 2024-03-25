@@ -1,81 +1,74 @@
-﻿using System;
+﻿using AutomationSystem.Categories;
+using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 
 namespace AutomationSystemLibrary.DataAccess
 {
-    public class SqlConnector
+    internal class SqlConnector
     {
         public static string GetConnectionString()
         {
             return ConfigurationManager.ConnectionStrings["AUTOMATIONSYSTEM"].ConnectionString;
         }
-        public void SaveData<T>(string storedProcedure, T parameters) where T : IEnumerable<T>
+
+        public List<T> LoadData<T, U>(string storedProcedure, U parameters)
         {
             string connectionString = GetConnectionString();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (IDbConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand command = new SqlCommand(storedProcedure, connection);
-                command.CommandType = CommandType.StoredProcedure;
-
-                foreach(T parameter in parameters)
-                {
-                    command.Parameters.Add(new SqlParameter($"@{parameter}", parameter));
-
-                }
-
-                connection.Open();
-                command.ExecuteNonQuery();
-                connection.Close();
+                // Queries rows of type T into a list of T
+                List<T> rows = connection.Query<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure).ToList();
+                return rows;
             }
         }
 
-        public List<T> LoadData<T, U>(string storedProcedure, U parameters) where U : IEnumerable<T>
+        public void SaveData<T>(string storedProcedure, T parameters)
+        {
+            string connectionString = GetConnectionString();
+
+            using (IDbConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Execute(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        
+        public List<ICategory> GetCategoryValues<T>(string columnName, string tableName, T category) where T : ICategory
         {
             string connectionString = GetConnectionString();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand command = new SqlCommand(storedProcedure, connection);
-                command.CommandType = CommandType.StoredProcedure;
+                List<ICategory> categoryList = new List<ICategory>();
+                List<string> categoryValuesList = new List<string>();
 
-                foreach (T parameter in parameters)
-                {
-                    command.Parameters.Add(new SqlParameter($"@{parameter}", parameter));
-                }
+                SqlCommand command = new SqlCommand($"select {columnName} from {tableName}", connection);
 
                 connection.Open();
                 SqlDataReader dataReader = command.ExecuteReader();
+
                 if (dataReader != null)
                 {
                     while (dataReader.Read())
                     {
-                        foreach (T parameter in parameters)
-                        {
-                            
-                        }
-                        T.Id = Convert.ToInt32(dataReader["ObjectId"]);
-                        tagObject.SfiNumber = Convert.ToInt32(dataReader["SfiNumber"]);
-                        tagObject.MainEqNumber = dataReader["MainEqNumber"].ToString();
-                        tagObject.EqNumber = dataReader["EqNumber"].ToString();
-                        tagObject.ObjectDescription = dataReader["ObjectDescription"].ToString();
-                        tagObject.Hierarchy_1 = dataReader["Hierarchy1Name"].ToString();
-                        tagObject.Hierarchy_2 = dataReader["Hierarchy2Name"].ToString();
-                        tagObject.VduGroup = dataReader["VduGroupName"].ToString();
-                        tagObject.AlarmGroup = dataReader["AlarmGroupName"].ToString();
-                        tagObject.Otd = dataReader["OtdName"].ToString();
-                        tagObject.AcknowledgeAllowed = dataReader["AcknowledgeAllowedLocation"].ToString();
-                        tagObject.AlwaysVisible = dataReader["AlwaysVisibleLocation"].ToString();
-                        tagObject.Node = dataReader["NodeName"].ToString();
-                        tagObject.Cabinet = dataReader["CabinetName"].ToString();
-                        tagObject.DataBlock = dataReader["DataBlockName"].ToString();
+                        string _name = dataReader[columnName].ToString();
+                        category.Name = dataReader[columnName].ToString();
+                        category.Id = Convert.ToInt32(dataReader["Id"]);
+                        categoryList.Add(category);
+
+                        categoryValuesList.Add(_name);
                     }
                 }
+
                 connection.Close();
+                return categoryList;
             }
         }
     }

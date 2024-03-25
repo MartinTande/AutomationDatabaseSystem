@@ -3,14 +3,9 @@ using AutomationSystem.Categories;
 
 namespace AutomationSystemLibrary.Categories
 {
-    public class VduGroup : Category
+    public class Cabinet : ICategory
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
-        public List<string> GetNames()
-        {
-            return base.GetNames("VduGroupName", "VDU_GROUP");
-        }
     }
 }

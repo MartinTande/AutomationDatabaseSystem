@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutomationSystemLibrary.Classes
+namespace AutomationSystemLibrary.Data
 {
     internal class TagObjectData
     {

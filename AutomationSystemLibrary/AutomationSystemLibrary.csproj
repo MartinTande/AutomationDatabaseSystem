@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\AutomationSystemUI\packages\Dapper.2.1.35\lib\net461\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -42,18 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Categories\AcknowledgeAllowed.cs" />
-    <Compile Include="Categories\AlarmGroup.cs" />
-    <Compile Include="Categories\AlwaysVisible.cs" />
-    <Compile Include="Categories\Cabinet.cs" />
-    <Compile Include="Categories\Category.cs" />
-    <Compile Include="Categories\Hierarchy1.cs" />
-    <Compile Include="Categories\Hierarchy2.cs" />
-    <Compile Include="Categories\ISubCategory.cs" />
-    <Compile Include="Categories\Node.cs" />
-    <Compile Include="Categories\Otd.cs" />
-    <Compile Include="Categories\VduGroup.cs" />
-    <Compile Include="Classes\TagObjectData.cs" />
+    <Compile Include="Models\Categories\AcknowledgeAllowed.cs" />
+    <Compile Include="Models\Categories\AlarmGroup.cs" />
+    <Compile Include="Models\Categories\AlwaysVisible.cs" />
+    <Compile Include="Models\Categories\Cabinet.cs" />
+    <Compile Include="Models\Categories\Hierarchy1.cs" />
+    <Compile Include="Models\Categories\Hierarchy2.cs" />
+    <Compile Include="Models\Categories\ICategory.cs" />
+    <Compile Include="Models\Categories\Node.cs" />
+    <Compile Include="Models\Categories\Otd.cs" />
+    <Compile Include="Models\Categories\VduGroup.cs" />
+    <Compile Include="Data\TagObjectData.cs" />
     <Compile Include="DataAccess\ExcelConnector.cs" />
     <Compile Include="DataAccess\IDataConnection.cs" />
     <Compile Include="DataAccess\SqlConnector.cs" />
@@ -61,6 +63,8 @@
     <Compile Include="Models\TagObjectModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
