@@ -8,21 +8,21 @@ namespace AutomationSystemLibrary.Models
 {
     public class TagObjectModel
     {
-        public int Id { get; set; }
+        public int ObjectId { get; set; }
         public int SfiNumber { get; set; }
         public string MainEqNumber { get; set; }
         public string EqNumber { get; set; }
         public string ObjectDescription { get; set; }
-        public string Hierarchy_1 { get; set; }
-        public string Hierarchy_2 { get; set; }
-        public string VduGroup { get; set; }
-        public string AlarmGroup { get; set; }
-        public string Otd { get; set; }
-        public string AcknowledgeAllowed { get; set; }
-        public string AlwaysVisible { get; set; }
-        public string Node { get; set; }
-        public string Cabinet { get; set; }
-        public string DataBlock { get; set; }
+        public string Hierarchy1Name { get; set; }
+        public string Hierarchy2Name { get; set; }
+        public string VduGroupName { get; set; }
+        public string AlarmGroupName { get; set; }
+        public string OtdName { get; set; }
+        public string AcknowledgeAllowedLocation { get; set; }
+        public string AlwaysVisibleLocation { get; set; }
+        public string NodeName { get; set; }
+        public string CabinetName { get; set; }
+        public string DataBlockName { get; set; }
 
         public string FullObjectName
         {

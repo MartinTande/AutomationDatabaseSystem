@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AutomationSystemUI.Views"
         xmlns:userControls="clr-namespace:AutomationSystemUI.Views.UserControls"
         mc:Ignorable="d"
-        Title="AddObjectWindow" Height="400" Width="350">
+        Title="AddObjectWindow" Height="600" Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -18,35 +18,59 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <userControls:ClearableTextbox Grid.Row="1" Height="30" Placeholder="Object Description" Margin="5"/>
-        <userControls:ClearableTextbox Grid.Row="2" Height="30" Placeholder="SFI" Margin="5"/>
-        <userControls:ClearableTextbox Grid.Row="3" Height="30" Placeholder="SFI" Margin="5"/>
-        <userControls:ClearableTextbox Grid.Row="4" Height="30" Placeholder="SFI" Margin="5"/>
-        <userControls:ClearableTextbox Grid.Row="5" Height="30" Placeholder="SFI" Margin="5"/>
-        <userControls:ClearableTextbox Grid.Row="6" Height="30" Placeholder="SFI" Margin="5"/>
-        <userControls:ClearableTextbox Grid.Row="7" Height="30" Placeholder="SFI" Margin="5"/>
-
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <userControls:ClearableTextbox Grid.Column="0" Height="30" Placeholder="SFI" Margin="5"/>
-            <userControls:ClearableTextbox Grid.Column="1" Height="30" Placeholder="Main Eq Nr" Margin="5"/>
-            <userControls:ClearableTextbox Grid.Column="3" Height="30" Placeholder="Eq Nr" Margin="5"/>
+            <userControls:TextboxWithLabel Grid.Column="0" Margin="5,0,5,0" LabelText="SFI Nr"/>
+            <userControls:TextboxWithLabel Grid.Column="1" Margin="5,0,5,0" LabelText="Main Eq Nr"/>
+            <userControls:TextboxWithLabel Grid.Column="2" Margin="5,0,5,0" LabelText="Eq Nr"/>
         </Grid>
 
-        <Grid Grid.Row="8">
+        <userControls:TextboxWithLabel Grid.Row="1" Margin="5,0,5,0" LabelText="Object Description"/>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <userControls:ComboboxWithLabel Grid.Column="0" Margin="5,0,5,0" LabelText="Hierarchy 1"/>
+            <userControls:ComboboxWithLabel Grid.Column="1" Margin="5,0,5,0" LabelText="Hierarchy 2"/>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="2" Content="OK" Margin="5"/>
-            <Button Grid.Column="3" Content="Cancel"  Margin="5"/>
+            <userControls:ComboboxWithLabel Grid.Column="0" Margin="5,0,5,0" LabelText="Node"/>
+            <userControls:ComboboxWithLabel Grid.Column="1" Margin="5,0,5,0" LabelText="Cabinet"/>
+        </Grid>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <userControls:ComboboxWithLabel Grid.Column="0" Margin="5,0,5,0" LabelText="Vdu Group"/>
+            <userControls:ComboboxWithLabel Grid.Column="1" Margin="5,0,5,0" LabelText="Alarm Group"/>
+        </Grid>
+
+        <userControls:ComboboxWithLabel Grid.Row="5" Margin="5,0,5,0" LabelText="OTD"/>
+        <userControls:ComboboxWithLabel Grid.Row="6" Margin="5,0,5,0" LabelText="Acknowledge Allowed"/>
+        <userControls:ComboboxWithLabel Grid.Row="7" Margin="5,0,5,0" LabelText="Always Visible"/>
+
+        <userControls:ComboboxWithLabel Grid.Row="8" Margin="5,0,5,0" LabelText="Data block"/>
+        <Grid Grid.Row="9">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btnOK" Grid.Column="2" Content="OK" Margin="5"/>
+            <Button x:Name="btnCancel" Grid.Column="3" Content="Cancel"  Margin="5"/>
         </Grid>
     </Grid>
 </Window>

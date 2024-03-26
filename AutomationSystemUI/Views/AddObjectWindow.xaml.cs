@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,11 +18,29 @@ namespace AutomationSystemUI.Views
     /// <summary>
     /// Interaction logic for AddObjectWindow.xaml
     /// </summary>
-    public partial class AddObjectWindow : Window
+    public partial class AddObjectWindow : Window, INotifyPropertyChanged
     {
         public AddObjectWindow()
         {
+            DataContext = this;
             InitializeComponent();
         }
+
+        private string boundText;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+
+        public string BoundText
+        {
+            get { return boundText; }
+            set
+            {
+                boundText = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("BoundText"));
+
+            }
+        }
+
     }
 }

@@ -24,21 +24,5 @@ namespace AutomationSystemUI.Views.UserControls
         {
             InitializeComponent();
         }
-
-        private void btnAddObject_Click(object sender, RoutedEventArgs e)
-        {
-            AddObjectWindow addObjectWindow = new AddObjectWindow();
-            addObjectWindow.Show();
-        }
-
-        private void btnEditObject_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnDeleteObject_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

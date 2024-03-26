@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace AutomationSystemLibrary.DataAccess
 {
-    internal class SqlConnector
+    public class SqlConnector
     {
         public static string GetConnectionString()
         {

@@ -13,14 +13,9 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0" 
-                 Text="Object Commands" 
-                 Width="140" 
-                 VerticalContentAlignment="Center" 
-                 HorizontalContentAlignment="Center"/>
-        <Button x:Name="btnAddObject" Grid.Column="1" Content="Add" Width="50" Margin="5" Click="btnAddObject_Click"/>
-        <Button x:Name="btnEditObject" Grid.Column="2" Content="Edit" Width="50"  Margin="5" Click="btnEditObject_Click"/>
-        <Button x:Name="btnDeleteObject" Grid.Column="3" Content="Delete" Width="50" Margin="5" Click="btnDeleteObject_Click"/>
+        <Button x:Name="btnAddObject" Grid.Column="1" Content="Add Object" Width="100" Margin="5"/>
+        <Button x:Name="btnEditObject" Grid.Column="2" Content="Edit Object" Width="100"  Margin="5"/>
+        <Button x:Name="btnDeleteObject" Grid.Column="3" Content="Delete Object" Width="100" Margin="5"/>
         <TextBlock/>
     </Grid>
 </UserControl>
