@@ -26,42 +26,168 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <userControls:TextboxWithLabel Grid.Column="0" Margin="5,0,5,0" LabelText="SFI Nr"/>
-            <userControls:TextboxWithLabel Grid.Column="1" Margin="5,0,5,0" LabelText="Main Eq Nr"/>
-            <userControls:TextboxWithLabel Grid.Column="2" Margin="5,0,5,0" LabelText="Eq Nr"/>
+            <userControls:TextboxWithLabel Grid.Column="0" Margin="5,0,5,0" 
+                                           LabelText="SFI Nr" TextboxContent="{Binding SfiNumber}"/>
+            <userControls:TextboxWithLabel Grid.Column="1" Margin="5,0,5,0" 
+                                           LabelText="Main Eq Nr" TextboxContent="{Binding MainEqNumber}"/>
+            <userControls:TextboxWithLabel Grid.Column="2" Margin="5,0,5,0" 
+                                           LabelText="Eq Nr" TextboxContent="{Binding EqNumber}"/>
         </Grid>
 
-        <userControls:TextboxWithLabel Grid.Row="1" Margin="5,0,5,0" LabelText="Object Description"/>
-        <Grid Grid.Row="2">
+        <userControls:TextboxWithLabel Grid.Row="1" Margin="5,0,5,0" LabelText="Object Description"
+                                       TextboxContent="{Binding ObjectDescription}"/>
+        <Grid Grid.Row="2" Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <userControls:ComboboxWithLabel Grid.Column="0" Margin="5,0,5,0" LabelText="Hierarchy 1"/>
-            <userControls:ComboboxWithLabel Grid.Column="1" Margin="5,0,5,0" LabelText="Hierarchy 2"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Background="Transparent"
+                       Text="Hierarchy 1"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <ComboBox Background="White"
+                      Margin="0,0,5,0"
+                      ItemsSource="{Binding Hierarchy1Names}"
+                      Grid.Row="1"
+                      Grid.Column="0"
+                      VerticalContentAlignment="Center"/>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Background="Transparent"
+                       Text="Hierarchy 2"
+                       Margin="5,0,0,0"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <ComboBox Background="White"
+                      Grid.Row="1"
+                      Margin="5,0,0,0"
+                      Grid.Column="1"
+                      VerticalContentAlignment="Center"/>
         </Grid>
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="3" Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <userControls:ComboboxWithLabel Grid.Column="0" Margin="5,0,5,0" LabelText="Node"/>
-            <userControls:ComboboxWithLabel Grid.Column="1" Margin="5,0,5,0" LabelText="Cabinet"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Background="Transparent"
+                       Text="Vdu Group"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <ComboBox Background="White"
+                      ItemsSource="{Binding VduGroupNames}"
+                      Margin="0,0,5,0"
+                      Grid.Row="1"
+                      Grid.Column="0"
+                      VerticalContentAlignment="Center"/>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Background="Transparent"
+                       Text="Alarm Group"
+                       Margin="5,0,0,0"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <ComboBox Background="White"
+                      ItemsSource="{Binding AlarmGroupNames}"
+                      Grid.Row="1"
+                      Margin="5,0,0,0"
+                      Grid.Column="1"
+                      VerticalContentAlignment="Center"/>
         </Grid>
-        <Grid Grid.Row="4">
+        <Grid Grid.Row="4" Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <userControls:ComboboxWithLabel Grid.Column="0" Margin="5,0,5,0" LabelText="Vdu Group"/>
-            <userControls:ComboboxWithLabel Grid.Column="1" Margin="5,0,5,0" LabelText="Alarm Group"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Background="Transparent"
+                       Text="Node"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <ComboBox Background="White"
+                      ItemsSource="{Binding NodeNames}"
+                      Margin="0,0,5,0"
+                      Grid.Row="1"
+                      Grid.Column="0"
+                      VerticalContentAlignment="Center"/>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Background="Transparent"
+                       Text="Cabinet"
+                       FontSize="14"
+                       Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+            <ComboBox Background="White"
+                      ItemsSource="{Binding CabinetNames}"
+                      Grid.Row="1"
+                      Margin="5,0,0,0"
+                      Grid.Column="1"
+                      VerticalContentAlignment="Center"/>
+        </Grid>
+        <Grid Grid.Row="5" Margin="5,0,5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Background="Transparent"
+                       Text="OTD"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <ComboBox Background="White"
+                      ItemsSource="{Binding OtdNames}"
+                      Grid.Row="1"
+                      VerticalContentAlignment="Center"/>
+        </Grid>
+        <Grid Grid.Row="6" Margin="5,0,5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Background="Transparent"
+                       Text="Acknowledge Allowed"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <ComboBox Background="White"
+                      ItemsSource="{Binding AcknowledgeAllowedLocations}"
+                      Grid.Row="1"
+                      VerticalContentAlignment="Center"/>
+        </Grid>
+        <Grid Grid.Row="7" Margin="5,0,5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Background="Transparent"
+                       Text="Always Visible"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <ComboBox Background="White"
+                      ItemsSource="{Binding AlwaysVisibleLocations}"
+                      Grid.Row="1"
+                      VerticalContentAlignment="Center"/>
         </Grid>
 
-        <userControls:ComboboxWithLabel Grid.Row="5" Margin="5,0,5,0" LabelText="OTD"/>
-        <userControls:ComboboxWithLabel Grid.Row="6" Margin="5,0,5,0" LabelText="Acknowledge Allowed"/>
-        <userControls:ComboboxWithLabel Grid.Row="7" Margin="5,0,5,0" LabelText="Always Visible"/>
-
-        <userControls:ComboboxWithLabel Grid.Row="8" Margin="5,0,5,0" LabelText="Data block"/>
+        <userControls:TextboxWithLabel Grid.Row="8" Margin="5,0,5,0" LabelText="Data block"
+                                       TextboxContent="{Binding DataBlockName}"/>
         <Grid Grid.Row="9">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -69,7 +195,7 @@
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="btnOK" Grid.Column="2" Content="OK" Margin="5"/>
+            <Button x:Name="btnAdd" Grid.Column="2" Content="Add" Margin="5"/>
             <Button x:Name="btnCancel" Grid.Column="3" Content="Cancel"  Margin="5"/>
         </Grid>
     </Grid>

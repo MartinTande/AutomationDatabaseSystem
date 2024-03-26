@@ -24,7 +24,28 @@
                             <ColumnDefinition Width="13*"/>
                         </Grid.ColumnDefinitions>
                         <DataGrid ItemsSource="{Binding TagObjects}"
-                                  Grid.ColumnSpan="2"/>
+                                  AutoGenerateColumns="False"
+                                  Grid.ColumnSpan="2"
+                                  SelectionMode="Extended"
+                                  SelectionUnit="FullRow">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Sfi Nr" Binding="{Binding SfiNumber}"  />
+                                <DataGridTextColumn Header="Main Eq Nr" Binding="{Binding MainEqNumber}" />
+                                <DataGridTextColumn Header="Eq Nr" Binding="{Binding EqNumber}" />
+                                <DataGridTextColumn Header="Name" Binding="{Binding FullObjectName}" />
+                                <DataGridTextColumn Header="Description" Binding="{Binding ObjectDescription}" />
+                                <DataGridTextColumn Header="Hierarchy 1" Binding="{Binding Hierarchy1Name}" />
+                                <DataGridTextColumn Header="Hierarchy 2" Binding="{Binding Hierarchy1Name}" />
+                                <DataGridTextColumn Header="VDU Group" Binding="{Binding VduGroupName}" />
+                                <DataGridTextColumn Header="Alarm Group" Binding="{Binding AlarmGroupName}" />
+                                <DataGridTextColumn Header="OTD" Binding="{Binding OtdName}" />
+                                <DataGridTextColumn Header="Acknowledge Allowed" Binding="{Binding AcknowledgeAllowedLocation}"/>
+                                <DataGridTextColumn Header="Always Visible" Binding="{Binding AlwaysVisibleLocation}"/>
+                                <DataGridTextColumn Header="Node" Binding="{Binding NodeName}"/>
+                                <DataGridTextColumn Header="Cabinet" Binding="{Binding CabinetName}"/>
+                                <DataGridTextColumn Header="Datablock" Binding="{Binding DataBlockName}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </Grid>
                 </Grid>
             </TabItem>

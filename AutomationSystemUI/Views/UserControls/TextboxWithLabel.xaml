@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutomationSystemUI.Views.UserControls"
              mc:Ignorable="d" 
+             Name="TextboxWithLabelWindow"
              d:DesignHeight="40" d:DesignWidth="250">
     <Grid>
         <Grid.RowDefinitions>
@@ -16,12 +17,13 @@
                    Background="Transparent"
                    FontWeight="Medium"
                    FontSize="14"
-                   Text="{Binding LabelText, RelativeSource={RelativeSource AncestorType={x:Type local:TextboxWithLabel}}}"
+                   Text="{Binding LabelText, ElementName=TextboxWithLabelWindow}"
                    Foreground="DarkGray" 
                    VerticalAlignment="Center"/>
         <TextBox x:Name="txtInput" 
                  Background="White"
                  Grid.Row="1"
+                 Text="{Binding TextboxContent, ElementName=TextboxWithLabelWindow}"
                  VerticalContentAlignment="Center"
                  FontSize="14" 
                  FontWeight="light"/>

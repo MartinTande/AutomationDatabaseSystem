@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutomationSystemUI.Views.UserControls"
              mc:Ignorable="d" 
+             Name="ComboboxWithLabelWindow"
              d:DesignHeight="40" d:DesignWidth="250">
     <Grid>
         <Grid.RowDefinitions>
@@ -15,7 +16,7 @@
                    Grid.Row="0"
                    Background="Transparent"
                    FontWeight="Medium"
-                   Text="{Binding LabelText, RelativeSource={RelativeSource AncestorType={x:Type local:ComboboxWithLabel}}}"
+                   Text="{Binding LabelText, ElementName=ComboboxWithLabelWindow}"
                    FontSize="14"
                    Foreground="DarkGray" 
                    VerticalAlignment="Center"/>

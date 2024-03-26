@@ -23,7 +23,6 @@ namespace AutomationSystemLibrary.Models
         public string NodeName { get; set; }
         public string CabinetName { get; set; }
         public string DataBlockName { get; set; }
-
         public string FullObjectName
         {
             get

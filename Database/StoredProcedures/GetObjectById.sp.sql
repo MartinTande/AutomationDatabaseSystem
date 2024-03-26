@@ -13,7 +13,7 @@ AS
 BEGIN
 
 SELECT *
-FROM GetTagObjectData
+FROM ObjectData
 WHERE ObjectId=@Id;
 
 END;

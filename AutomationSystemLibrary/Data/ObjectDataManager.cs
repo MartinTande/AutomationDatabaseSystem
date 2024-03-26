@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace AutomationSystemLibrary.Data
 {
-    public class DataManager
+    public class ObjectDataManager
     {
         private readonly SqlConnector _sqlConnector;
-        public DataManager()
+        public ObjectDataManager()
         {
             _sqlConnector = new SqlConnector();
         }

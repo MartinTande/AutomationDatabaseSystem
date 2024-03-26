@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutomationSystemUI.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -18,29 +19,13 @@ namespace AutomationSystemUI.Views
     /// <summary>
     /// Interaction logic for AddObjectWindow.xaml
     /// </summary>
-    public partial class AddObjectWindow : Window, INotifyPropertyChanged
+    public partial class AddObjectWindow : Window
     {
         public AddObjectWindow()
         {
-            DataContext = this;
             InitializeComponent();
+            AddObjectViewModel addObjectViewModel = new AddObjectViewModel();
+            this.DataContext = addObjectViewModel;
         }
-
-        private string boundText;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-
-        public string BoundText
-        {
-            get { return boundText; }
-            set
-            {
-                boundText = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("BoundText"));
-
-            }
-        }
-
     }
 }

@@ -3,7 +3,6 @@ using AutomationSystemLibrary.Models;
 using AutomationSystemLibrary.Data;
 using System.Windows.Input;
 using AutomationSystemUI.Commands;
-using System;
 using AutomationSystemUI.Views;
 
 
@@ -19,11 +18,10 @@ namespace AutomationSystemUI.ViewModels
 
         public MainWindowViewModel()
         {
-            DataManager dataManager = new DataManager();
+            ObjectDataManager dataManager = new ObjectDataManager();
             TagObjects = new ObservableCollection<TagObjectModel>(dataManager.GetTagObjects());
-
-            ShowAddObjectWindowCommand = new RelayCommand(ShowAddObjectWindow, CanShowAddObjectWindow);
             
+            ShowAddObjectWindowCommand = new RelayCommand(ShowAddObjectWindow, CanShowAddObjectWindow);
         }
 
         private bool CanShowAddObjectWindow(object obj)

@@ -12,7 +12,7 @@ namespace AutomationSystemUI.Models
     {
         public List<TagObjectModel> GetById(int id)
         {
-            DataManager data = new DataManager();
+            ObjectDataManager data = new ObjectDataManager();
 
             return data.GetTagObjectById(id);
         }

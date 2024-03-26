@@ -1,10 +1,6 @@
-﻿using AutomationSystemLibrary.Data;
-using AutomationSystemLibrary.Models;
-using AutomationSystemUI.ViewModels;
-using Caliburn.Micro;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using AutomationSystemUI.ViewModels;
 using System.Windows;
+
 
 namespace AutomationSystemUI
 {

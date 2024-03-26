@@ -31,16 +31,25 @@ namespace AutomationSystemUI.Views.UserControls
             txtInput.Focus();
         }
 
-        // Define the dependency property
         public static readonly DependencyProperty LabelTextProperty =
             DependencyProperty.Register("LabelText", typeof(string), typeof(TextboxWithLabel), new PropertyMetadata(""));
 
 
-        // Public property to get/set the label text
         public string LabelText
         {
             get { return (string)GetValue(LabelTextProperty); }
             set { SetValue(LabelTextProperty, value); }
         }
+
+
+        public string TextboxContent
+        {
+            get { return (string)GetValue(TextboxContentProperty); }
+            set { SetValue(TextboxContentProperty, value); }
+        }
+
+        public static readonly DependencyProperty TextboxContentProperty =
+            DependencyProperty.Register("TextboxContent", typeof(string), typeof(TextboxWithLabel), new PropertyMetadata(""));
+
     }
 }

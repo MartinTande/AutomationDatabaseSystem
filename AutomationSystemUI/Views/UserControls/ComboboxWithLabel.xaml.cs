@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,12 +26,11 @@ namespace AutomationSystemUI.Views.UserControls
             InitializeComponent();
         }
 
-        // Define the dependency property
+        // Dependancy property for Label
         public static readonly DependencyProperty LabelTextProperty =
             DependencyProperty.Register("LabelText", typeof(string), typeof(ComboboxWithLabel), new PropertyMetadata(""));
 
 
-        // Public property to get/set the label text
         public string LabelText
         {
             get { return (string)GetValue(LabelTextProperty); }

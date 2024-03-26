@@ -13,8 +13,17 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="btnAddObject" Grid.Column="1" Content="Add Object" Width="100" Margin="5"/>
-        <Button x:Name="btnEditObject" Grid.Column="2" Content="Edit Object" Width="100"  Margin="5"/>
+        <Button x:Name="btnAddObject" 
+                Grid.Column="1"
+                Command="{Binding ShowAddObjectWindowCommand}"
+                Content="Add Object" 
+                Width="100" 
+                Margin="5"/>
+        <Button x:Name="btnEditObject" 
+                Grid.Column="2"            
+                Content="Edit Object" 
+                Width="100"  
+                Margin="5"/>
         <Button x:Name="btnDeleteObject" Grid.Column="3" Content="Delete Object" Width="100" Margin="5"/>
         <TextBlock/>
     </Grid>

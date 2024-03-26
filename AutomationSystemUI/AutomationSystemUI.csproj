@@ -106,6 +106,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Models\TagObjectController.cs" />
     <Compile Include="MVVM\ViewModelBase.cs" />
+    <Compile Include="ViewModels\AddObjectViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\AddObjectWindow.xaml.cs">
       <DependentUpon>AddObjectWindow.xaml</DependentUpon>
