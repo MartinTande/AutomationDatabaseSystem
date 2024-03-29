@@ -20,7 +20,7 @@
                    Text="{Binding LabelText, ElementName=TextboxWithLabelWindow}"
                    Foreground="DarkGray" 
                    VerticalAlignment="Center"/>
-        <TextBox x:Name="txtInput" 
+        <TextBox x:Name="txtInput"
                  Background="White"
                  Grid.Row="1"
                  Text="{Binding TextboxContent, ElementName=TextboxWithLabelWindow}"

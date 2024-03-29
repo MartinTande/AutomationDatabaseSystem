@@ -3,8 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AutomationSystemUI.Views"
-        xmlns:userControls="clr-namespace:AutomationSystemUI.Views.UserControls"
         mc:Ignorable="d"
         Title="AddObjectWindow" Height="600" Width="500">
     <Grid>
@@ -20,22 +18,71 @@
             <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <userControls:TextboxWithLabel Grid.Column="0" Margin="5,0,5,0" 
-                                           LabelText="SFI Nr" TextboxContent="{Binding SfiNumber}"/>
-            <userControls:TextboxWithLabel Grid.Column="1" Margin="5,0,5,0" 
-                                           LabelText="Main Eq Nr" TextboxContent="{Binding MainEqNumber}"/>
-            <userControls:TextboxWithLabel Grid.Column="2" Margin="5,0,5,0" 
-                                           LabelText="Eq Nr" TextboxContent="{Binding EqNumber}"/>
+            <!-- Sfi Nr -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Text="Sfi Number"
+                       Background="Transparent"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <TextBox Grid.Row="1"
+                     Grid.Column="0"
+                     Text="{Binding SfiNumberInput}"
+                     Margin="0,0,5,0"
+                     VerticalContentAlignment="Center"/>
+            <!-- Main Eq Nr -->
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Text="Main Eq Number"
+                       Background="Transparent"
+                       Margin="5,0,5,0"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     Text="{Binding MainEqNumberInput}"
+                     Margin="5,0,5,0"
+                     VerticalContentAlignment="Center"/>
+            <!-- Eq Nr -->
+            <TextBlock Grid.Row="0"
+                       Grid.Column="2"
+                       Text="Eq Number"
+                       Background="Transparent"
+                       Margin="5,0,0,0"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <TextBox Grid.Row="1"
+                     Grid.Column="2"
+                     Text="{Binding EqNumberInput}"
+                     Margin="5,0,0,0"
+                     VerticalContentAlignment="Center"/>
+        </Grid>
+        <!-- Object Description -->
+        <Grid Grid.Row="1" Margin="5,0,5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Text="Object Description"
+                       Background="Transparent"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <TextBox Grid.Row="1"
+                     Text="{Binding ObjectDescriptionInput}"
+                     VerticalContentAlignment="Center"/>
         </Grid>
 
-        <userControls:TextboxWithLabel Grid.Row="1" Margin="5,0,5,0" LabelText="Object Description"
-                                       TextboxContent="{Binding ObjectDescription}"/>
         <Grid Grid.Row="2" Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -45,64 +92,68 @@
                 <RowDefinition Height="0.4*"/>
                 <RowDefinition Height="0.6*"/>
             </Grid.RowDefinitions>
+            <!-- Hierarchy 1 -->
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
                        Background="Transparent"
                        Text="Hierarchy 1"
                        FontSize="14"
                        VerticalAlignment="Center"/>
-            <ComboBox Background="White"
-                      Margin="0,0,5,0"
-                      ItemsSource="{Binding Hierarchy1Names}"
+            <ComboBox ItemsSource="{Binding Hierarchy1Names}"
                       Grid.Row="1"
                       Grid.Column="0"
+                      SelectedItem="{Binding SelectedHierarchy1, UpdateSourceTrigger=PropertyChanged}"
+                      Margin="0,0,5,0"
                       VerticalContentAlignment="Center"/>
-            <TextBlock Grid.Row="0"
-                       Grid.Column="1"
-                       Background="Transparent"
+            <!-- Hierarchy 2 -->
+            <TextBlock Grid.Column="1"
                        Text="Hierarchy 2"
                        Margin="5,0,0,0"
                        FontSize="14"
+                       Background="Transparent"
                        VerticalAlignment="Center"/>
-            <ComboBox Background="White"
+            <ComboBox x:Name="cBoxHierarchy2"
+                      ItemsSource="{Binding Hierarchy2Names, UpdateSourceTrigger=PropertyChanged}"
                       Grid.Row="1"
-                      Margin="5,0,0,0"
                       Grid.Column="1"
+                      Margin="5,0,0,0"
                       VerticalContentAlignment="Center"/>
         </Grid>
+        <!-- Row 4 -->
         <Grid Grid.Row="3" Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="51*"/>
+                <ColumnDefinition Width="194*"/>
+                <ColumnDefinition Width="245*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
                 <RowDefinition Height="0.6*"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0"
-                       Grid.Column="0"
+            <!-- Vdu Group -->
+            <TextBlock Grid.Column="0"
                        Background="Transparent"
                        Text="Vdu Group"
                        FontSize="14"
-                       VerticalAlignment="Center"/>
-            <ComboBox Background="White"
-                      ItemsSource="{Binding VduGroupNames}"
+                       VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+            <ComboBox ItemsSource="{Binding VduGroupNames}"
+                      SelectedItem="{Binding SelectedVduGroup}"
                       Margin="0,0,5,0"
                       Grid.Row="1"
                       Grid.Column="0"
-                      VerticalContentAlignment="Center"/>
-            <TextBlock Grid.Row="0"
-                       Grid.Column="1"
+                      VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
+            <!-- Alarm Group -->
+            <TextBlock Grid.Column="2"
                        Background="Transparent"
                        Text="Alarm Group"
                        Margin="5,0,0,0"
                        FontSize="14"
                        VerticalAlignment="Center"/>
-            <ComboBox Background="White"
-                      ItemsSource="{Binding AlarmGroupNames}"
+            <ComboBox ItemsSource="{Binding AlarmGroupNames}"
+                      SelectedItem="{Binding SelectedAlarmGroup}"
                       Grid.Row="1"
                       Margin="5,0,0,0"
-                      Grid.Column="1"
+                      Grid.Column="2"
                       VerticalContentAlignment="Center"/>
         </Grid>
         <Grid Grid.Row="4" Margin="5,0,5,0">
@@ -114,18 +165,20 @@
                 <RowDefinition Height="0.4*"/>
                 <RowDefinition Height="0.6*"/>
             </Grid.RowDefinitions>
+            <!-- Node -->
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
                        Background="Transparent"
                        Text="Node"
                        FontSize="14"
                        VerticalAlignment="Center"/>
-            <ComboBox Background="White"
-                      ItemsSource="{Binding NodeNames}"
+            <ComboBox ItemsSource="{Binding NodeNames}"
+                      SelectedItem="{Binding SelectedNode}"
                       Margin="0,0,5,0"
                       Grid.Row="1"
                       Grid.Column="0"
                       VerticalContentAlignment="Center"/>
+            <!-- Cabinet -->
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
                        Background="Transparent"
@@ -133,13 +186,14 @@
                        FontSize="14"
                        Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
-            <ComboBox Background="White"
-                      ItemsSource="{Binding CabinetNames}"
+            <ComboBox ItemsSource="{Binding CabinetNames}"
+                      SelectedItem="{Binding SelectedCabinet}"
                       Grid.Row="1"
                       Margin="5,0,0,0"
                       Grid.Column="1"
                       VerticalContentAlignment="Center"/>
         </Grid>
+        <!-- Otd -->
         <Grid Grid.Row="5" Margin="5,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
@@ -150,11 +204,12 @@
                        Text="OTD"
                        FontSize="14"
                        VerticalAlignment="Center"/>
-            <ComboBox Background="White"
-                      ItemsSource="{Binding OtdNames}"
+            <ComboBox ItemsSource="{Binding OtdNames}"
+                      SelectedItem="{Binding SelectedOtd}"
                       Grid.Row="1"
                       VerticalContentAlignment="Center"/>
         </Grid>
+        <!-- Acknowledge Allowed -->
         <Grid Grid.Row="6" Margin="5,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
@@ -165,11 +220,13 @@
                        Text="Acknowledge Allowed"
                        FontSize="14"
                        VerticalAlignment="Center"/>
-            <ComboBox Background="White"
-                      ItemsSource="{Binding AcknowledgeAllowedLocations}"
+            <ComboBox ItemsSource="{Binding AcknowledgeAllowedLocations}"
+                      SelectedItem="{Binding SelectedAcknowledgeAllowed}"
                       Grid.Row="1"
                       VerticalContentAlignment="Center"/>
         </Grid>
+        
+        <!-- Always Visible -->
         <Grid Grid.Row="7" Margin="5,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
@@ -180,14 +237,29 @@
                        Text="Always Visible"
                        FontSize="14"
                        VerticalAlignment="Center"/>
-            <ComboBox Background="White"
-                      ItemsSource="{Binding AlwaysVisibleLocations}"
+            <ComboBox ItemsSource="{Binding AlwaysVisibleLocations}"
+                      SelectedItem="{Binding SelectedAlwaysVisible}"
                       Grid.Row="1"
                       VerticalContentAlignment="Center"/>
         </Grid>
 
-        <userControls:TextboxWithLabel Grid.Row="8" Margin="5,0,5,0" LabelText="Data block"
-                                       TextboxContent="{Binding DataBlockName}"/>
+        <!-- Data block -->
+        <Grid Grid.Row="8" Margin="5,0,5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Text="Data block"
+                       Background="Transparent"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <TextBox Grid.Row="1"
+                     Text="{Binding DataBlockInput}"
+                     VerticalContentAlignment="Center"/>
+        </Grid>     
+
+        <!-- Buttons -->
         <Grid Grid.Row="9">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -195,7 +267,7 @@
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="btnAdd" Grid.Column="2" Content="Add" Margin="5"/>
+            <Button x:Name="btnAdd" Grid.Column="2" Content="Add" Margin="5" Click="btnAdd_Click"/>
             <Button x:Name="btnCancel" Grid.Column="3" Content="Cancel"  Margin="5"/>
         </Grid>
     </Grid>

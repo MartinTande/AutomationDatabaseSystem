@@ -25,6 +25,16 @@ namespace AutomationSystemLibrary.Data
             return category;
         }
 
+        public List<string> GetHierarchy2Category(string hierarchy1Name)
+        {
+            // Anonymous object, object with no name type
+            // No parameters, but need an object
+            var p = new { Hierarchy1Name = hierarchy1Name};
+
+            List<string> hierarchy2Category = _sqlConnector.LoadData<string, dynamic>("GetHierarchy2Data", p);
+            return hierarchy2Category;
+        }
+
         public List<string> GetHierarchy1Category()
         {
             return GetCategory("HIERARCHY_1", "Hierarchy1Name");

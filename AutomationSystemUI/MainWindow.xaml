@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AutomationSystemUI"
         xmlns:userControls="clr-namespace:AutomationSystemUI.Views.UserControls" 
         mc:Ignorable="d"
-        Title="Automation IO-Tracker" Height="800" Width="1600">
+        Title="Automation IO-Tracker" Height="800" Width="1400">
     <Grid>
         <TabControl>
             <!-- IO List tab -->
@@ -23,6 +23,7 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="13*"/>
                         </Grid.ColumnDefinitions>
+                        <!-- Data Grid -->
                         <DataGrid ItemsSource="{Binding TagObjects}"
                                   AutoGenerateColumns="False"
                                   Grid.ColumnSpan="2"
