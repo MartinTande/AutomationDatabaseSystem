@@ -14,6 +14,18 @@ namespace AutomationSystemUI
             InitializeComponent();
             MainWindowViewModel mainWindowViewModel = new MainWindowViewModel();
             this.DataContext = mainWindowViewModel;
+            Activated += MainWindow_Activated;
+        }
+
+        private void MainWindow_Activated(object sender, System.EventArgs e)
+        {
+            if (DataContext is ICloseable viewModel)
+            {
+                viewModel.Close += () =>
+                {
+                    this.Close();
+                };
+            }
         }
     }
 }

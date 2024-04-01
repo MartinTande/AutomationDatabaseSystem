@@ -4,35 +4,83 @@ using AutomationSystemLibrary.Data;
 using System.Windows.Input;
 using AutomationSystemUI.Commands;
 using AutomationSystemUI.Views;
+using AutomationSystemUI.MVVM;
+using System;
+using System.ComponentModel;
+using System.Windows;
 
 
 namespace AutomationSystemUI.ViewModels
 {
 
-    internal class MainWindowViewModel
+    internal class MainWindowViewModel : ViewModelBase
     {
+        ObjectDataManager dataManager;
+        private ObservableCollection<TagObjectModel> _tagObjects;
+        public ObservableCollection<TagObjectModel> TagObjects
+        {
+            get { return _tagObjects; }
+            set
+            {
+                if (_tagObjects != value && _tagObjects != null)
+                {
+                    _tagObjects = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        public ObservableCollection<TagObjectModel> TagObjects { get; set; }
+        private TagObjectModel _selectedTagObject;
+        public TagObjectModel SelectedTagObject
+        {
+            get { return _selectedTagObject; }
+            set
+            {
+                _selectedTagObject = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public ICommand ShowAddObjectWindowCommand { get; set; }
+        // Commands
+        public ICommand ShowAddObjectWindowCommand => new RelayCommand(execute => ShowAddObjectWindow());
+        public ICommand ShowEditObjectWindowCommand => new RelayCommand(execute => ShowEditObjectWindow(), canExecute => SelectedTagObject != null);
+        public ICommand DeleteObjectCommand => new RelayCommand(execute => DeleteObject(), canExecute => SelectedTagObject != null);
 
         public MainWindowViewModel()
         {
-            ObjectDataManager dataManager = new ObjectDataManager();
-            TagObjects = new ObservableCollection<TagObjectModel>(dataManager.GetTagObjects());
-            
-            ShowAddObjectWindowCommand = new RelayCommand(ShowAddObjectWindow, CanShowAddObjectWindow);
+            // Getting objects for populating datagrid
+            dataManager = new ObjectDataManager();
+            _tagObjects = new ObservableCollection<TagObjectModel>(dataManager.GetTagObjects());
         }
 
-        private bool CanShowAddObjectWindow(object obj)
-        {
-            return true;
-        }
-
-        private void ShowAddObjectWindow(object obj)
+        private void ShowAddObjectWindow()
         {
             AddObjectWindow addObjectWindow = new AddObjectWindow();
             addObjectWindow.Show();
+            addObjectWindow.Closed += AddObjectWindow_Closed;
+        }
+
+        private void AddObjectWindow_Closed(object sender, EventArgs e)
+        {
+            UpdateTagObjects();
+        }
+
+        private void ShowEditObjectWindow()
+        {
+            EditObjectWindow editObjectWindow = new EditObjectWindow(SelectedTagObject);
+            MessageBox.Show(SelectedTagObject.ObjectDescription);
+            editObjectWindow.Show();
+        }
+
+        private void DeleteObject()
+        {
+
+            UpdateTagObjects();
+        }
+
+        private void UpdateTagObjects()
+        {
+            TagObjects = new ObservableCollection<TagObjectModel>(dataManager.GetTagObjects());
         }
     } 
 }

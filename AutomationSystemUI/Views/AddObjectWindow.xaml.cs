@@ -1,7 +1,7 @@
-﻿using AutomationSystemUI.ViewModels;
-using System.Collections.Generic;
+﻿using AutomationSystemUI.Commands;
+using AutomationSystemUI.ViewModels;
 using System.Windows;
-using System.Windows.Documents;
+using System.Windows.Input;
 
 namespace AutomationSystemUI.Views
 {
@@ -10,15 +10,24 @@ namespace AutomationSystemUI.Views
     /// </summary>
     public partial class AddObjectWindow : Window
     {
+
         public AddObjectWindow()
         {
             InitializeComponent();
             AddObjectViewModel addObjectViewModel = new AddObjectViewModel();
             this.DataContext = addObjectViewModel;
+            Loaded += AddObjectWindow_Loaded;
         }
 
-        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        private void AddObjectWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            if (DataContext is ICloseable viewModel)
+            {
+                viewModel.Close += () =>
+                {
+                    this.Close();
+                };
+            }
         }
     }
 }

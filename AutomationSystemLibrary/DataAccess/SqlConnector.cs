@@ -38,8 +38,7 @@ namespace AutomationSystemLibrary.DataAccess
                 connection.Execute(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
             }
         }
-
-        
+                
         public List<ICategory> GetCategoryValues<T>(string columnName, string tableName, T category) where T : ICategory
         {
             string connectionString = GetConnectionString();

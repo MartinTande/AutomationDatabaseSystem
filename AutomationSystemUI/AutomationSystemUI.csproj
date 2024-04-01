@@ -103,13 +103,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="MVVM\RelayCommand.cs" />
     <Compile Include="Models\TagObjectController.cs" />
     <Compile Include="MVVM\ViewModelBase.cs" />
     <Compile Include="ViewModels\AddObjectViewModel.cs" />
+    <Compile Include="ViewModels\EditObjectViewModel.cs" />
+    <Compile Include="ViewModels\ICloseable.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\AddObjectWindow.xaml.cs">
       <DependentUpon>AddObjectWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditObjectWindow.xaml.cs">
+      <DependentUpon>EditObjectWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ButtonBar.xaml.cs">
       <DependentUpon>ButtonBar.xaml</DependentUpon>
@@ -136,6 +141,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\AddObjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditObjectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -9,10 +9,11 @@ using System.Windows.Input;
 
 namespace AutomationSystemUI.ViewModels
 {
-    internal class AddObjectViewModel : ViewModelBase, ICloseable
+    internal class EditObjectViewModel : ViewModelBase, ICloseable
     {
-        public ICommand AddObjectCommand => new RelayCommand(execute => AddObject(), canExecute => CanAddObject());
+        public ICommand UpdateObjectCommand => new RelayCommand(execute => UpdateObject(), canExecute => CanUpdateObject());
         public ICommand CloseWindowCommand => new RelayCommand(execute => CloseWindow());
+
         CategoryDataManager categoryDataManager;
 
         // Lists of category names retrieved from database
@@ -62,8 +63,8 @@ namespace AutomationSystemUI.ViewModels
         public string SelectedHierarchy2
         {
             get { return _selectedHierarchy2; }
-            set 
-            { 
+            set
+            {
                 _selectedHierarchy2 = value;
                 OnPropertyChanged();
             }
@@ -73,9 +74,9 @@ namespace AutomationSystemUI.ViewModels
         public string SelectedVduGroup
         {
             get { return _selectedVduGroup; }
-            set 
-            { 
-                _selectedVduGroup = value; 
+            set
+            {
+                _selectedVduGroup = value;
                 OnPropertyChanged();
             }
         }
@@ -83,9 +84,9 @@ namespace AutomationSystemUI.ViewModels
         public string SelectedAlarmGroup
         {
             get { return _selectedAlarmGroup; }
-            set 
-            { 
-                _selectedAlarmGroup = value; 
+            set
+            {
+                _selectedAlarmGroup = value;
                 OnPropertyChanged();
             }
         }
@@ -93,8 +94,8 @@ namespace AutomationSystemUI.ViewModels
         public string SelectedOtd
         {
             get { return _selectedOtd; }
-            set 
-            { 
+            set
+            {
                 _selectedOtd = value;
                 OnPropertyChanged();
             }
@@ -103,9 +104,9 @@ namespace AutomationSystemUI.ViewModels
         public string SelectedAcknowledgeAllowed
         {
             get { return _selectedAcknowledgeAllowed; }
-            set 
-            { 
-                _selectedAcknowledgeAllowed = value; 
+            set
+            {
+                _selectedAcknowledgeAllowed = value;
                 OnPropertyChanged();
             }
         }
@@ -113,9 +114,9 @@ namespace AutomationSystemUI.ViewModels
         public string SelectedAlwaysVisible
         {
             get { return _selectedAlwaysVisible; }
-            set 
-            { 
-                _selectedAlwaysVisible = value; 
+            set
+            {
+                _selectedAlwaysVisible = value;
                 OnPropertyChanged();
             }
         }
@@ -123,9 +124,9 @@ namespace AutomationSystemUI.ViewModels
         public string SelectedNode
         {
             get { return _selectedNode; }
-            set 
-            { 
-                _selectedNode = value; 
+            set
+            {
+                _selectedNode = value;
                 OnPropertyChanged();
             }
         }
@@ -133,9 +134,9 @@ namespace AutomationSystemUI.ViewModels
         public string SelectedCabinet
         {
             get { return _selectedCabinet; }
-            set 
-            { 
-                _selectedCabinet = value; 
+            set
+            {
+                _selectedCabinet = value;
                 OnPropertyChanged();
             }
         }
@@ -188,15 +189,16 @@ namespace AutomationSystemUI.ViewModels
         public string DataBlockInput
         {
             get { return _dataBlockInput; }
-            set 
-            { 
-                _dataBlockInput = value; 
+            set
+            {
+                _dataBlockInput = value;
                 OnPropertyChanged();
             }
         }
 
-        public AddObjectViewModel()
+        public EditObjectViewModel(TagObjectModel selectedTagObject)
         {
+            InputSelectedTagObject(selectedTagObject);
             categoryDataManager = new CategoryDataManager();
 
             Hierarchy1Names = new ObservableCollection<string>(categoryDataManager.GetHierarchy1Category());
@@ -210,32 +212,51 @@ namespace AutomationSystemUI.ViewModels
             CabinetNames = new ObservableCollection<string>(categoryDataManager.GetCabinetCategory());
         }
 
-        private bool CanAddObject()
+        private void InputSelectedTagObject(TagObjectModel selectedTagObject)
+        {
+            _sfiNumberInput = selectedTagObject.SfiNumber;
+            _mainEqNumberInput = selectedTagObject.MainEqNumber;
+            _eqNumberInput = selectedTagObject.EqNumber;
+            _objectDescriptionInput = selectedTagObject.ObjectDescription;
+            _selectedHierarchy1 = selectedTagObject.Hierarchy1Name;
+            _selectedHierarchy2 = selectedTagObject.Hierarchy2Name;
+            _selectedVduGroup = selectedTagObject.VduGroupName;
+            _selectedAlarmGroup = selectedTagObject.AlarmGroupName;
+            _selectedOtd = selectedTagObject.OtdName;
+            _selectedAcknowledgeAllowed = selectedTagObject.AcknowledgeAllowedLocation;
+            _selectedAlwaysVisible = selectedTagObject.AlwaysVisibleLocation;
+            _selectedNode = selectedTagObject.NodeName;
+            _selectedCabinet = selectedTagObject.CabinetName;
+            _dataBlockInput = selectedTagObject.DataBlockName;
+        }
+
+        private bool CanUpdateObject()
         {
             return true;
         }
 
-        private void AddObject()
+        private void UpdateObject()
         {
             ObjectDataManager dataManager = new ObjectDataManager();
-            TagObjectModel newTagObject = new TagObjectModel();
+            TagObjectModel updatedTagObject = new TagObjectModel();
 
-            newTagObject.SfiNumber = SfiNumberInput;
-            newTagObject.MainEqNumber = MainEqNumberInput;
-            newTagObject.EqNumber = EqNumberInput;
-            newTagObject.ObjectDescription = ObjectDescriptionInput;
-            newTagObject.Hierarchy1Name = SelectedHierarchy1;
-            newTagObject.Hierarchy2Name = SelectedHierarchy2;
-            newTagObject.VduGroupName = SelectedVduGroup;
-            newTagObject.AlarmGroupName = SelectedAlarmGroup;
-            newTagObject.OtdName = SelectedOtd;
-            newTagObject.AlwaysVisibleLocation = SelectedAlwaysVisible;
-            newTagObject.AcknowledgeAllowedLocation = SelectedAcknowledgeAllowed;
-            newTagObject.NodeName = SelectedNode;
-            newTagObject.CabinetName = SelectedCabinet;
-            newTagObject.DataBlockName = DataBlockInput;
+            updatedTagObject.SfiNumber = SfiNumberInput;
+            updatedTagObject.MainEqNumber = MainEqNumberInput;
+            updatedTagObject.EqNumber = EqNumberInput;
+            updatedTagObject.ObjectDescription = ObjectDescriptionInput;
+            updatedTagObject.Hierarchy1Name = SelectedHierarchy1;
+            updatedTagObject.Hierarchy2Name = SelectedHierarchy2;
+            updatedTagObject.VduGroupName = SelectedVduGroup;
+            updatedTagObject.AlarmGroupName = SelectedAlarmGroup;
+            updatedTagObject.OtdName = SelectedOtd;
+            updatedTagObject.AlwaysVisibleLocation = SelectedAlwaysVisible;
+            updatedTagObject.AcknowledgeAllowedLocation = SelectedAcknowledgeAllowed;
+            updatedTagObject.NodeName = SelectedNode;
+            updatedTagObject.CabinetName = SelectedCabinet;
+            updatedTagObject.DataBlockName = DataBlockInput;
 
-            dataManager.InsertTagObject(newTagObject);
+            dataManager.UpdateTagObject(updatedTagObject);
+            MessageBox.Show(updatedTagObject.ObjectDescription);
             CloseWindow();
         }
 

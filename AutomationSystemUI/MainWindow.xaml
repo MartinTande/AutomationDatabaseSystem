@@ -1,4 +1,5 @@
 ﻿<Window x:Class="AutomationSystemUI.MainWindow"
+        WindowStartupLocation="CenterScreen"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -24,8 +25,9 @@
                             <ColumnDefinition Width="13*"/>
                         </Grid.ColumnDefinitions>
                         <!-- Data Grid -->
-                        <DataGrid ItemsSource="{Binding TagObjects}"
+                        <DataGrid ItemsSource="{Binding TagObjects, UpdateSourceTrigger=PropertyChanged}"
                                   AutoGenerateColumns="False"
+                                  SelectedItem="{Binding SelectedTagObject}"
                                   Grid.ColumnSpan="2"
                                   SelectionMode="Extended"
                                   SelectionUnit="FullRow">

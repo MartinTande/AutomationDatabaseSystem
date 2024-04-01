@@ -13,18 +13,21 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="btnAddObject" 
-                Grid.Column="1"
+        <Button Grid.Column="1"
                 Command="{Binding ShowAddObjectWindowCommand}"
                 Content="Add Object" 
                 Width="100" 
                 Margin="5"/>
-        <Button x:Name="btnEditObject" 
+        <Button Command="{Binding ShowEditObjectWindowCommand}"
                 Grid.Column="2"            
                 Content="Edit Object" 
                 Width="100"  
                 Margin="5"/>
-        <Button x:Name="btnDeleteObject" Grid.Column="3" Content="Delete Object" Width="100" Margin="5"/>
+        <Button Grid.Column="3" 
+                Content="Delete Object" 
+                Command="{Binding DeleteObject}"
+                Width="100" 
+                Margin="5"/>
         <TextBlock/>
     </Grid>
 </UserControl>

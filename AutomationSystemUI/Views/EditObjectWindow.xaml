@@ -1,4 +1,4 @@
-﻿<Window x:Class="AutomationSystemUI.Views.AddObjectWindow"
+﻿<Window x:Class="AutomationSystemUI.Views.EditObjectWindow"
         WindowStartupLocation="CenterScreen"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -227,7 +227,7 @@
                       Grid.Row="1"
                       VerticalContentAlignment="Center"/>
         </Grid>
-        
+
         <!-- Always Visible -->
         <Grid Grid.Row="7" Margin="5,0,5,0">
             <Grid.RowDefinitions>
@@ -259,7 +259,7 @@
             <TextBox Grid.Row="1"
                      Text="{Binding DataBlockInput}"
                      VerticalContentAlignment="Center"/>
-        </Grid>     
+        </Grid>
 
         <!-- Buttons -->
         <Grid Grid.Row="9">
@@ -270,9 +270,9 @@
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="2" 
-                    Content="Add" 
+                    Content="Update" 
                     Margin="5" 
-                    Command="{Binding AddObjectCommand}"/>
+                    Command="{Binding UpdateObjectCommand}"/>
             <Button Grid.Column="3" 
                     Content="Cancel"  
                     Margin="5"

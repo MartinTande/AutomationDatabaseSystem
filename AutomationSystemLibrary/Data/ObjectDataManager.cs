@@ -39,7 +39,6 @@ namespace AutomationSystemLibrary.Data
         public void InsertTagObject(TagObjectModel tagObject)
         {
             // Anonymous object, object with no name type
-            // No parameters, but need an object
             var p = new { 
                 tagObject.SfiNumber,
                 tagObject.MainEqNumber,
@@ -50,14 +49,39 @@ namespace AutomationSystemLibrary.Data
                 tagObject.VduGroupName,
                 tagObject.AlarmGroupName,
                 tagObject.OtdName,
-                tagObject.AlwaysVisibleLocation,
                 tagObject.AcknowledgeAllowedLocation,
+                tagObject.AlwaysVisibleLocation,
                 tagObject.NodeName,
                 tagObject.CabinetName,
                 tagObject.DataBlockName
             };
 
-            _sqlConnector.SaveData<TagObjectModel>("UpdateObject", tagObject);
+            _sqlConnector.SaveData("CreateObject", p);
+        }
+
+        public void UpdateTagObject(TagObjectModel tagObject)
+        {
+            // Anonymous object, object with no name type
+            var p = new
+            {
+                tagObject.ObjectId,
+                tagObject.SfiNumber,
+                tagObject.MainEqNumber,
+                tagObject.EqNumber,
+                tagObject.ObjectDescription,
+                tagObject.Hierarchy1Name,
+                tagObject.Hierarchy2Name,
+                tagObject.VduGroupName,
+                tagObject.AlarmGroupName,
+                tagObject.OtdName,
+                tagObject.AcknowledgeAllowedLocation,
+                tagObject.AlwaysVisibleLocation,
+                tagObject.NodeName,
+                tagObject.CabinetName,
+                tagObject.DataBlockName
+            };
+
+            _sqlConnector.SaveData("UpdateObject", p);
         }
     }
 }
