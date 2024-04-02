@@ -11,10 +11,10 @@ namespace AutomationSystemUI.Views
     {
         public EditObjectWindow(TagObjectModel selectedTagObject)
         {
-            InitializeComponent();
             EditObjectViewModel editObjectViewModel = new EditObjectViewModel(selectedTagObject);
             this.DataContext = editObjectViewModel;
             Loaded += EditObjectWindow_Loaded;
+            InitializeComponent();
         }
 
         private void EditObjectWindow_Loaded(object sender, RoutedEventArgs e)

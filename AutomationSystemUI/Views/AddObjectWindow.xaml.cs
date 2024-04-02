@@ -13,10 +13,10 @@ namespace AutomationSystemUI.Views
 
         public AddObjectWindow()
         {
-            InitializeComponent();
             AddObjectViewModel addObjectViewModel = new AddObjectViewModel();
             this.DataContext = addObjectViewModel;
             Loaded += AddObjectWindow_Loaded;
+            InitializeComponent();
         }
 
         private void AddObjectWindow_Loaded(object sender, RoutedEventArgs e)

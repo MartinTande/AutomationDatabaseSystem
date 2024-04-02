@@ -11,10 +11,10 @@ namespace AutomationSystemUI
     {
         public MainWindow()
         {
-            InitializeComponent();
             MainWindowViewModel mainWindowViewModel = new MainWindowViewModel();
             this.DataContext = mainWindowViewModel;
             Activated += MainWindow_Activated;
+            InitializeComponent();
         }
 
         private void MainWindow_Activated(object sender, System.EventArgs e)
