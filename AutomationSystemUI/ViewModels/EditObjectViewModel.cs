@@ -142,6 +142,16 @@ namespace AutomationSystemUI.ViewModels
         }
 
         // User input parameters
+        private int _objectId;
+        public int ObjectId
+        {
+            get { return _objectId; }
+            set
+            {
+                _objectId = value;
+                OnPropertyChanged();
+            }
+        }
         private int _sfiNumberInput;
         public int SfiNumberInput
         {
@@ -214,6 +224,7 @@ namespace AutomationSystemUI.ViewModels
 
         private void InputSelectedTagObject(TagObjectModel selectedTagObject)
         {
+            _objectId = selectedTagObject.ObjectId;
             _sfiNumberInput = selectedTagObject.SfiNumber;
             _mainEqNumberInput = selectedTagObject.MainEqNumber;
             _eqNumberInput = selectedTagObject.EqNumber;
@@ -240,6 +251,7 @@ namespace AutomationSystemUI.ViewModels
             ObjectDataManager dataManager = new ObjectDataManager();
             TagObjectModel updatedTagObject = new TagObjectModel();
 
+            updatedTagObject.ObjectId = _objectId;
             updatedTagObject.SfiNumber = SfiNumberInput;
             updatedTagObject.MainEqNumber = MainEqNumberInput;
             updatedTagObject.EqNumber = EqNumberInput;

@@ -70,11 +70,18 @@ namespace AutomationSystemUI.ViewModels
             EditObjectWindow editObjectWindow = new EditObjectWindow(SelectedTagObject);
             MessageBox.Show(SelectedTagObject.ObjectDescription);
             editObjectWindow.Show();
+            editObjectWindow.Closed += EditObjectWindow_Closed;
+        }
+
+        private void EditObjectWindow_Closed(object sender, EventArgs e)
+        {
+            UpdateTagObjects();
         }
 
         private void DeleteObject()
         {
-
+            dataManager.DeleteTagObject(SelectedTagObject.ObjectId);
+            MessageBox.Show(SelectedTagObject.ObjectId.ToString());
             UpdateTagObjects();
         }
 

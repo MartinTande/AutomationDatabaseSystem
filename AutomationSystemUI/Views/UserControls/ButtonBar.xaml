@@ -25,7 +25,7 @@
                 Margin="5"/>
         <Button Grid.Column="3" 
                 Content="Delete Object" 
-                Command="{Binding DeleteObject}"
+                Command="{Binding DeleteObjectCommand}"
                 Width="100" 
                 Margin="5"/>
         <TextBlock/>

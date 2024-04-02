@@ -2,10 +2,6 @@
 using AutomationSystemLibrary.Models;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutomationSystemLibrary.Data
 {
@@ -20,7 +16,7 @@ namespace AutomationSystemLibrary.Data
         {
             // Anonymous object, object with no name type
             // Id is parameter of object, id is input to that parameter
-            var p = new { Id = id };
+            var p = new { ObjectId = id };
 
             var tagObjectList = _sqlConnector.LoadData<TagObjectModel, dynamic>("GetObjectById", p);
             return tagObjectList;
@@ -39,7 +35,8 @@ namespace AutomationSystemLibrary.Data
         public void InsertTagObject(TagObjectModel tagObject)
         {
             // Anonymous object, object with no name type
-            var p = new { 
+            var p = new 
+            { 
                 tagObject.SfiNumber,
                 tagObject.MainEqNumber,
                 tagObject.EqNumber,
@@ -61,27 +58,47 @@ namespace AutomationSystemLibrary.Data
 
         public void UpdateTagObject(TagObjectModel tagObject)
         {
-            // Anonymous object, object with no name type
-            var p = new
+           // Anonymous object, object with no name type
+           var p = new
+           {
+               tagObject.ObjectId,
+               tagObject.SfiNumber,
+               tagObject.MainEqNumber,
+               tagObject.EqNumber,
+               tagObject.ObjectDescription,
+               tagObject.Hierarchy1Name,
+               tagObject.Hierarchy2Name,
+               tagObject.VduGroupName,
+               tagObject.AlarmGroupName,
+               tagObject.OtdName,
+               tagObject.AcknowledgeAllowedLocation,
+               tagObject.AlwaysVisibleLocation,
+               tagObject.NodeName,
+               tagObject.CabinetName,
+               tagObject.DataBlockName
+           };
+            Console.WriteLine(tagObject.ObjectDescription);
+            Console.WriteLine(tagObject.ObjectId);
+            try
             {
-                tagObject.ObjectId,
-                tagObject.SfiNumber,
-                tagObject.MainEqNumber,
-                tagObject.EqNumber,
-                tagObject.ObjectDescription,
-                tagObject.Hierarchy1Name,
-                tagObject.Hierarchy2Name,
-                tagObject.VduGroupName,
-                tagObject.AlarmGroupName,
-                tagObject.OtdName,
-                tagObject.AcknowledgeAllowedLocation,
-                tagObject.AlwaysVisibleLocation,
-                tagObject.NodeName,
-                tagObject.CabinetName,
-                tagObject.DataBlockName
-            };
+                _sqlConnector.SaveData("UpdateObject", p);
+            }
+            catch (Exception)
+            {
 
-            _sqlConnector.SaveData("UpdateObject", p);
+                throw;
+            }
+            
         }
+
+        public void DeleteTagObject(int id)
+        {
+            // Anonymous object, object with no name type
+            // Id is parameter of object, id is input to that parameter
+            var p = new { ObjectId = id };
+
+            _sqlConnector.SaveData("DeleteObject", p);
+        }
+
     }
 }
