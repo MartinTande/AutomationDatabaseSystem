@@ -25,7 +25,7 @@
                             <ColumnDefinition Width="13*"/>
                         </Grid.ColumnDefinitions>
                         <!-- Data Grid -->
-                        <DataGrid ItemsSource="{Binding TagObjects, UpdateSourceTrigger=PropertyChanged}"
+                        <DataGrid ItemsSource="{Binding TagObjects}"
                                   AutoGenerateColumns="False"
                                   SelectedItem="{Binding SelectedTagObject}"
                                   Grid.ColumnSpan="2"
@@ -54,9 +54,72 @@
             </TabItem>
 
             <!-- Picture Hierarchy tab -->
-            <TabItem Header="Picture Hierarchy"/>
+            <TabItem Header="Picture Hierarchy">
+                <StackPanel Orientation='Horizontal'>
+                    <DataGrid ItemsSource="{Binding BilgeCollection}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Bilge" Binding="{Binding hierarchy2Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid ItemsSource="{Binding CoolingCollection}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Cooling" Binding="{Binding hierarchy2Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid ItemsSource="{Binding FireSystemCollection}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Fire System" Binding="{Binding hierarchy2Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid ItemsSource="{Binding UtilitySystemsCollection}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Utility Systems" Binding="{Binding hierarchy2Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid ItemsSource="{Binding EnginesCollection}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Engines" Binding="{Binding hierarchy2Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid ItemsSource="{Binding SystemCollection}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="System" Binding="{Binding hierarchy2Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid ItemsSource="{Binding FuelAndLubeOilCollection}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Fuel and Lube Oil" Binding="{Binding hierarchy2Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid ItemsSource="{Binding HVACCollection}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="HVAC" Binding="{Binding hierarchy2Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid ItemsSource="{Binding MiscCollection}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Misc" Binding="{Binding hierarchy2Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid ItemsSource="{Binding PropulsionCollection}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Propulsion" Binding="{Binding hierarchy2Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid ItemsSource="{Binding SwitchboardCollection}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Switchboard" Binding="{Binding hierarchy2Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid ItemsSource="{Binding TanksCollection}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tanks" Binding="{Binding hierarchy2Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
 
-            <!-- Alarm Groups tab -->
+                <!-- Alarm Groups tab -->
             <TabItem Header="Alarm Groups"/>
 
             <!-- OTD tab-->

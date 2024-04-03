@@ -1,9 +1,6 @@
-﻿using AutomationSystem.Categories;
-using AutomationSystemLibrary.Categories;
-using AutomationSystemLibrary.DataAccess;
-using AutomationSystemLibrary.Models;
+﻿using AutomationSystemLibrary.DataAccess;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+
 
 namespace AutomationSystemLibrary.Data
 {
@@ -33,6 +30,15 @@ namespace AutomationSystemLibrary.Data
 
             List<string> hierarchy2Category = _sqlConnector.LoadData<string, dynamic>("GetHierarchy2Data", p);
             return hierarchy2Category;
+        }
+
+        public void AddHierarchy2Category(string hierarchy1Name, string newHierarchy2)
+        {
+            // Anonymous object, object with no name type
+            // No parameters, but need an object
+            var p = new { Hierarchy1Name = hierarchy1Name, Hierarchy2Name = newHierarchy2 };
+
+            _sqlConnector.LoadData<string, dynamic>("AddHierarchy2", p);
         }
 
         public List<string> GetHierarchy1Category()

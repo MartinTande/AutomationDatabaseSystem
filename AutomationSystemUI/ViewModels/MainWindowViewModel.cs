@@ -6,8 +6,9 @@ using AutomationSystemUI.Commands;
 using AutomationSystemUI.Views;
 using AutomationSystemUI.MVVM;
 using System;
-using System.ComponentModel;
 using System.Windows;
+using AutomationSystemUI.Models;
+using AutomationSystemLibrary.Categories;
 
 
 namespace AutomationSystemUI.ViewModels
@@ -16,6 +17,21 @@ namespace AutomationSystemUI.ViewModels
     internal class MainWindowViewModel : ViewModelBase
     {
         ObjectDataManager dataManager;
+        CategoryDataManager categoryDataManager;
+        
+        public ObservableCollection<HierarchyModel> BilgeCollection {  get; set; } = new ObservableCollection<HierarchyModel>();
+        public ObservableCollection<HierarchyModel> CoolingCollection {  get; set; } = new ObservableCollection<HierarchyModel> { };
+        public ObservableCollection<HierarchyModel> FireSystemCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
+        public ObservableCollection<HierarchyModel> UtilitySystemsCollection {  get; set; } = new ObservableCollection<HierarchyModel> { };
+        public ObservableCollection<HierarchyModel> EnginesCollection {  get; set; } = new ObservableCollection<HierarchyModel> { };
+        public ObservableCollection<HierarchyModel> SystemCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
+        public ObservableCollection<HierarchyModel> FuelAndLubeOilCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
+        public ObservableCollection<HierarchyModel> HVACCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
+        public ObservableCollection<HierarchyModel> MiscCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
+        public ObservableCollection<HierarchyModel> PropulsionCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
+        public ObservableCollection<HierarchyModel> SwitchboardCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
+        public ObservableCollection<HierarchyModel> TanksCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
+
         private ObservableCollection<TagObjectModel> _tagObjects;
         public ObservableCollection<TagObjectModel> TagObjects
         {
@@ -50,7 +66,34 @@ namespace AutomationSystemUI.ViewModels
         {
             // Getting objects for populating datagrid
             dataManager = new ObjectDataManager();
+            categoryDataManager = new CategoryDataManager();
             _tagObjects = new ObservableCollection<TagObjectModel>(dataManager.GetTagObjects());
+            PopulateHierarchyCollections();
+        }
+
+        private void PopulateHierarchyCollections()
+        {
+            BilgeCollection = PopulateHierarchyCollection(BilgeCollection, "Bilge");
+            CoolingCollection = PopulateHierarchyCollection(CoolingCollection, "Cooling");
+            FireSystemCollection = PopulateHierarchyCollection(FireSystemCollection, "Fire System");
+            UtilitySystemsCollection = PopulateHierarchyCollection(UtilitySystemsCollection, "Utility Systems");
+            EnginesCollection = PopulateHierarchyCollection(EnginesCollection, "Engines");
+            SystemCollection = PopulateHierarchyCollection(SystemCollection, "System");
+            FuelAndLubeOilCollection = PopulateHierarchyCollection(FuelAndLubeOilCollection, "Fuel and Lube Oil");
+            HVACCollection = PopulateHierarchyCollection(HVACCollection, "HVAC");
+            MiscCollection = PopulateHierarchyCollection(MiscCollection, "Misc");
+            PropulsionCollection = PopulateHierarchyCollection(PropulsionCollection, "Propulsion");
+            SwitchboardCollection = PopulateHierarchyCollection(SwitchboardCollection, "Switchboard");
+            TanksCollection = PopulateHierarchyCollection(TanksCollection, "Tanks");
+        }
+
+        private ObservableCollection<HierarchyModel> PopulateHierarchyCollection(ObservableCollection<HierarchyModel> hierarchyollection, string hierarchy1)
+        {
+            foreach (string hierarchy2 in categoryDataManager.GetHierarchy2Category(hierarchy1))
+            {
+                hierarchyollection.Add(new HierarchyModel { hierarchy1Name = hierarchy1, hierarchy2Name = hierarchy2 });
+            }
+            return hierarchyollection;
         }
 
         private void ShowAddObjectWindow()

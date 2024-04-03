@@ -85,7 +85,6 @@ namespace AutomationSystemLibrary.Data
             }
             catch (Exception)
             {
-
                 throw;
             }
             
@@ -99,6 +98,5 @@ namespace AutomationSystemLibrary.Data
 
             _sqlConnector.SaveData("DeleteObject", p);
         }
-
     }
 }
