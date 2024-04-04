@@ -18,6 +18,18 @@ namespace AutomationSystemUI.ViewModels
     {
         ObjectDataManager dataManager;
         CategoryDataManager categoryDataManager;
+        private ObservableCollection<string> _hierarchy1Names;
+
+        public ObservableCollection<string> Hierarchy1Names
+        {
+            get { return _hierarchy1Names; }
+            set 
+            {
+                _hierarchy1Names = value;
+                OnPropertyChanged();    
+            }
+        }
+
         
         public ObservableCollection<HierarchyModel> BilgeCollection {  get; set; } = new ObservableCollection<HierarchyModel>();
         public ObservableCollection<HierarchyModel> CoolingCollection {  get; set; } = new ObservableCollection<HierarchyModel> { };
@@ -68,6 +80,7 @@ namespace AutomationSystemUI.ViewModels
             dataManager = new ObjectDataManager();
             categoryDataManager = new CategoryDataManager();
             _tagObjects = new ObservableCollection<TagObjectModel>(dataManager.GetTagObjects());
+            _hierarchy1Names = new ObservableCollection<string>(categoryDataManager.GetHierarchy1Category());
             PopulateHierarchyCollections();
         }
 
