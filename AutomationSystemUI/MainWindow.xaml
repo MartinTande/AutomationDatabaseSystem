@@ -57,8 +57,8 @@
             <TabItem Header="Picture Hierarchy">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="0.5*"/>
-                        <RowDefinition Height="0.5*"/>
+                        <RowDefinition Height="0.33*"/>
+                        <RowDefinition Height="0.33*"/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation='Horizontal' Grid.Row="0">
                         <DataGrid ItemsSource="{Binding BilgeCollection}" AutoGenerateColumns="False">
@@ -136,6 +136,25 @@
                             </ItemsPanelTemplate>
                         </ListView.ItemsPanel>
                     </ListView>
+                    <TreeView ItemsSource="{Binding PictureHierarchy}" SelectedValuePath="{Binding SelectedItem}">
+                        <TreeView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </TreeView.ItemsPanel>
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding PictureHierarchy}">
+                                <TextBlock Text="{Binding HierarchyName}"/>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
 
                 </Grid>
 

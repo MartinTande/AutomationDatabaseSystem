@@ -103,6 +103,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Hierarchy.cs" />
+    <Compile Include="Models\IHierarchy.cs" />
     <Compile Include="MVVM\RelayCommand.cs" />
     <Compile Include="Models\TagObjectController.cs" />
     <Compile Include="MVVM\ViewModelBase.cs" />

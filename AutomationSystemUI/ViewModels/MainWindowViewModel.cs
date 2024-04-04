@@ -9,6 +9,8 @@ using System;
 using System.Windows;
 using AutomationSystemUI.Models;
 using AutomationSystemLibrary.Categories;
+using System.Collections.Generic;
+using System.Windows.Controls;
 
 
 namespace AutomationSystemUI.ViewModels
@@ -29,8 +31,20 @@ namespace AutomationSystemUI.ViewModels
                 OnPropertyChanged();    
             }
         }
+        private string _selectedItem;
 
-        
+        public string SelectedItem
+        {
+            get { return _selectedItem; }
+            set 
+            { 
+                _selectedItem = value;
+                OnPropertyChanged();
+                MessageBox.Show(value);
+            }
+        }
+
+
         public ObservableCollection<HierarchyModel> BilgeCollection {  get; set; } = new ObservableCollection<HierarchyModel>();
         public ObservableCollection<HierarchyModel> CoolingCollection {  get; set; } = new ObservableCollection<HierarchyModel> { };
         public ObservableCollection<HierarchyModel> FireSystemCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
@@ -81,8 +95,45 @@ namespace AutomationSystemUI.ViewModels
             categoryDataManager = new CategoryDataManager();
             _tagObjects = new ObservableCollection<TagObjectModel>(dataManager.GetTagObjects());
             _hierarchy1Names = new ObservableCollection<string>(categoryDataManager.GetHierarchy1Category());
-            PopulateHierarchyCollections();
+            //PopulateHierarchyCollections();
+
+            m_folders = new List<IHierarchy>();
+            PopulateHierarchyTreeView();
         }
+
+        private List<IHierarchy> m_folders;
+        public List<IHierarchy> PictureHierarchy
+        {
+            get { return m_folders; }
+            set
+            {
+                m_folders = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void PopulateHierarchyTreeView()
+        {
+            //add Root items
+            foreach (string hierarchy1 in Hierarchy1Names)
+            {
+                PictureHierarchy.Add(new Hierarchy { HierarchyName = hierarchy1 });
+
+            }
+
+            //add sub items
+            for (int i = 0 ; i < m_folders.Count ; i++)
+            {
+                string hierarchy1Name = PictureHierarchy[i].HierarchyName;
+                List<string> hierarchy2Names = categoryDataManager.GetHierarchy2Category(hierarchy1Name);
+                foreach (string name in hierarchy2Names)
+                {
+                    PictureHierarchy[i].PictureHierarchy.Add(new Hierarchy { HierarchyName = name });
+                }
+            }
+        }
+
+
 
         private void PopulateHierarchyCollections()
         {
