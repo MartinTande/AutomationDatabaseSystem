@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace AutomationSystemUI.Models
 {
-    internal class Hierarchy : IHierarchy
+    internal class Hierarchy : IItem
     {
 
-        public string HierarchyName { get; set; }
+        public string Name { get; set; }
 
-        public List<IHierarchy> PictureHierarchy { get; set; }
-
+        public List<IItem> SubItem { get; set; }
         public Hierarchy()
         {
-            PictureHierarchy = new List<IHierarchy>();
+            SubItem = new List<IItem>();
         }
     }
 }

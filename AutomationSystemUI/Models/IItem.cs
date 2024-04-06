@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AutomationSystemUI.Models
 {
-    public interface IHierarchy
+    public interface IItem
     {
-        string HierarchyName { get; }
-        List<IHierarchy> PictureHierarchy { get; }
+        string Name { get; }
+        List<IItem> SubItem { get; }
     }
 }

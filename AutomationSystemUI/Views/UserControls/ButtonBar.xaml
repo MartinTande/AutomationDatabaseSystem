@@ -16,17 +16,14 @@
         <Button Grid.Column="1"
                 Command="{Binding ShowAddObjectWindowCommand}"
                 Content="Add Object" 
-                Width="100" 
                 Margin="5"/>
         <Button Command="{Binding ShowEditObjectWindowCommand}"
                 Grid.Column="2"            
                 Content="Edit Object" 
-                Width="100"  
                 Margin="5"/>
         <Button Grid.Column="3" 
                 Content="Delete Object" 
                 Command="{Binding DeleteObjectCommand}"
-                Width="100" 
                 Margin="5"/>
         <TextBlock/>
     </Grid>

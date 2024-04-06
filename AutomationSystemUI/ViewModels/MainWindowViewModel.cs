@@ -8,9 +8,7 @@ using AutomationSystemUI.MVVM;
 using System;
 using System.Windows;
 using AutomationSystemUI.Models;
-using AutomationSystemLibrary.Categories;
 using System.Collections.Generic;
-using System.Windows.Controls;
 
 
 namespace AutomationSystemUI.ViewModels
@@ -20,8 +18,9 @@ namespace AutomationSystemUI.ViewModels
     {
         ObjectDataManager dataManager;
         CategoryDataManager categoryDataManager;
-        private ObservableCollection<string> _hierarchy1Names;
 
+        // Properties
+        private ObservableCollection<string> _hierarchy1Names;
         public ObservableCollection<string> Hierarchy1Names
         {
             get { return _hierarchy1Names; }
@@ -40,23 +39,53 @@ namespace AutomationSystemUI.ViewModels
             { 
                 _selectedItem = value;
                 OnPropertyChanged();
-                MessageBox.Show(value);
+            }
+        }
+
+        private IItem _selectedHierarchyItem;
+
+        public IItem SelectedHierarchyItem
+        {
+            get { return _selectedHierarchyItem; }
+            set 
+            { 
+                _selectedHierarchyItem = value;  
+                OnPropertyChanged(); 
+                MessageBox.Show(value.Name);
+                _selectedHierarchyName = value.Name;
+            }
+        }
+
+        private string _selectedHierarchyName;
+
+        public string SelectedHierarchyName
+        {
+            get { return _selectedHierarchyName; }
+            set 
+            {
+                if (_selectedHierarchyName != value)
+                {
+                    _selectedHierarchyName = value;
+                }
+                OnPropertyChanged();
             }
         }
 
 
-        public ObservableCollection<HierarchyModel> BilgeCollection {  get; set; } = new ObservableCollection<HierarchyModel>();
-        public ObservableCollection<HierarchyModel> CoolingCollection {  get; set; } = new ObservableCollection<HierarchyModel> { };
-        public ObservableCollection<HierarchyModel> FireSystemCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
-        public ObservableCollection<HierarchyModel> UtilitySystemsCollection {  get; set; } = new ObservableCollection<HierarchyModel> { };
-        public ObservableCollection<HierarchyModel> EnginesCollection {  get; set; } = new ObservableCollection<HierarchyModel> { };
-        public ObservableCollection<HierarchyModel> SystemCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
-        public ObservableCollection<HierarchyModel> FuelAndLubeOilCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
-        public ObservableCollection<HierarchyModel> HVACCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
-        public ObservableCollection<HierarchyModel> MiscCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
-        public ObservableCollection<HierarchyModel> PropulsionCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
-        public ObservableCollection<HierarchyModel> SwitchboardCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
-        public ObservableCollection<HierarchyModel> TanksCollection { get; set; } = new ObservableCollection<HierarchyModel> { };
+
+        private List<IItem> _pictureHierarchy;
+        public List<IItem> PictureHierarchy
+        {
+            get { return _pictureHierarchy; }
+            set
+            {
+                if (value != null)
+                {
+                    _pictureHierarchy = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         private ObservableCollection<TagObjectModel> _tagObjects;
         public ObservableCollection<TagObjectModel> TagObjects
@@ -87,6 +116,12 @@ namespace AutomationSystemUI.ViewModels
         public ICommand ShowAddObjectWindowCommand => new RelayCommand(execute => ShowAddObjectWindow());
         public ICommand ShowEditObjectWindowCommand => new RelayCommand(execute => ShowEditObjectWindow(), canExecute => SelectedTagObject != null);
         public ICommand DeleteObjectCommand => new RelayCommand(execute => DeleteObject(), canExecute => SelectedTagObject != null);
+        public ICommand AddHierarchyItemCommand => new RelayCommand(execute => AddHierarchyItem());
+
+        private void AddHierarchyItem()
+        {
+            _selectedHierarchyName = "set from code";
+        }
 
         public MainWindowViewModel()
         {
@@ -95,69 +130,28 @@ namespace AutomationSystemUI.ViewModels
             categoryDataManager = new CategoryDataManager();
             _tagObjects = new ObservableCollection<TagObjectModel>(dataManager.GetTagObjects());
             _hierarchy1Names = new ObservableCollection<string>(categoryDataManager.GetHierarchy1Category());
-            //PopulateHierarchyCollections();
-
-            m_folders = new List<IHierarchy>();
-            PopulateHierarchyTreeView();
+            _pictureHierarchy = new List<IItem>();
+            GetPictureHierarchy();
         }
 
-        private List<IHierarchy> m_folders;
-        public List<IHierarchy> PictureHierarchy
-        {
-            get { return m_folders; }
-            set
-            {
-                m_folders = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private void PopulateHierarchyTreeView()
+        private void GetPictureHierarchy()
         {
             //add Root items
             foreach (string hierarchy1 in Hierarchy1Names)
             {
-                PictureHierarchy.Add(new Hierarchy { HierarchyName = hierarchy1 });
-
+                PictureHierarchy.Add(new Hierarchy { Name = hierarchy1 });
             }
 
             //add sub items
-            for (int i = 0 ; i < m_folders.Count ; i++)
+            for (int i = 0 ; i < _pictureHierarchy.Count ; i++)
             {
-                string hierarchy1Name = PictureHierarchy[i].HierarchyName;
+                string hierarchy1Name = PictureHierarchy[i].Name;
                 List<string> hierarchy2Names = categoryDataManager.GetHierarchy2Category(hierarchy1Name);
                 foreach (string name in hierarchy2Names)
                 {
-                    PictureHierarchy[i].PictureHierarchy.Add(new Hierarchy { HierarchyName = name });
+                    PictureHierarchy[i].SubItem.Add(new Hierarchy { Name = name });
                 }
             }
-        }
-
-
-
-        private void PopulateHierarchyCollections()
-        {
-            BilgeCollection = PopulateHierarchyCollection(BilgeCollection, "Bilge");
-            CoolingCollection = PopulateHierarchyCollection(CoolingCollection, "Cooling");
-            FireSystemCollection = PopulateHierarchyCollection(FireSystemCollection, "Fire System");
-            UtilitySystemsCollection = PopulateHierarchyCollection(UtilitySystemsCollection, "Utility Systems");
-            EnginesCollection = PopulateHierarchyCollection(EnginesCollection, "Engines");
-            SystemCollection = PopulateHierarchyCollection(SystemCollection, "System");
-            FuelAndLubeOilCollection = PopulateHierarchyCollection(FuelAndLubeOilCollection, "Fuel and Lube Oil");
-            HVACCollection = PopulateHierarchyCollection(HVACCollection, "HVAC");
-            MiscCollection = PopulateHierarchyCollection(MiscCollection, "Misc");
-            PropulsionCollection = PopulateHierarchyCollection(PropulsionCollection, "Propulsion");
-            SwitchboardCollection = PopulateHierarchyCollection(SwitchboardCollection, "Switchboard");
-            TanksCollection = PopulateHierarchyCollection(TanksCollection, "Tanks");
-        }
-
-        private ObservableCollection<HierarchyModel> PopulateHierarchyCollection(ObservableCollection<HierarchyModel> hierarchyollection, string hierarchy1)
-        {
-            foreach (string hierarchy2 in categoryDataManager.GetHierarchy2Category(hierarchy1))
-            {
-                hierarchyollection.Add(new HierarchyModel { hierarchy1Name = hierarchy1, hierarchy2Name = hierarchy2 });
-            }
-            return hierarchyollection;
         }
 
         private void ShowAddObjectWindow()

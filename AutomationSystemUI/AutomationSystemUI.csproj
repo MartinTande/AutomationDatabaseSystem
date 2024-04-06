@@ -103,8 +103,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ExtendedTreeView.cs" />
     <Compile Include="Models\Hierarchy.cs" />
-    <Compile Include="Models\IHierarchy.cs" />
+    <Compile Include="Models\IItem.cs" />
     <Compile Include="MVVM\RelayCommand.cs" />
     <Compile Include="Models\TagObjectController.cs" />
     <Compile Include="MVVM\ViewModelBase.cs" />
@@ -142,6 +143,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Styles\ButtonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\CustomTreeViewItemStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\TextBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AddObjectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
