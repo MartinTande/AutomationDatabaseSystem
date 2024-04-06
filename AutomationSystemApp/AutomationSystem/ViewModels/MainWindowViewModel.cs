@@ -186,7 +186,7 @@ internal class MainWindowViewModel : ViewModelBase
     private void ShowEditObjectWindow()
     {
         EditObjectWindow editObjectWindow = new EditObjectWindow(_dataConnector, SelectedTagObject);
-        MessageBox.Show(SelectedTagObject.ObjectDescription);
+        MessageBox.Show(SelectedTagObject.Description);
         editObjectWindow.Show();
         editObjectWindow.Closed += EditObjectWindow_Closed;
     }

@@ -17,7 +17,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
     // Commands
     public ICommand AddObjectCommand => new RelayCommand(execute => AddObject(), canExecute => CanAddObject());
     public ICommand CloseWindowCommand => new RelayCommand(execute => CloseWindow());
-    
+
 
     // Lists of category names retrieved from database
     public ObservableCollection<string> Hierarchy1Names { get; set; }
@@ -25,7 +25,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
     public ObservableCollection<string> VduGroupNames { get; set; }
     public ObservableCollection<string> AlarmGroupNames { get; set; }
     public ObservableCollection<string> OtdNames { get; set; }
-    public ObservableCollection<string> AcknowledgeAllowedLocations { get; set; }
+    public ObservableCollection<string> AcknowledgeAllowedNames { get; set; }
     public ObservableCollection<string> AlwaysVisibleLocations { get; set; }
     public ObservableCollection<string> NodeNames { get; set; }
     public ObservableCollection<string> CabinetNames { get; set; }
@@ -209,7 +209,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         VduGroupNames = new ObservableCollection<string>(categoryDataManager.GetVduGroupCategory());
         AlarmGroupNames = new ObservableCollection<string>(categoryDataManager.GetAlarmGroupCategory());
         OtdNames = new ObservableCollection<string>(categoryDataManager.GetOtdCategory());
-        AcknowledgeAllowedLocations = new ObservableCollection<string>(categoryDataManager.GetAckAllowedCategory());
+        AcknowledgeAllowedNames = new ObservableCollection<string>(categoryDataManager.GetAckAllowedCategory());
         AlwaysVisibleLocations = new ObservableCollection<string>(categoryDataManager.GetAlwaysVisibleCategory());
         NodeNames = new ObservableCollection<string>(categoryDataManager.GetNodeCategory());
         CabinetNames = new ObservableCollection<string>(categoryDataManager.GetCabinetCategory());
@@ -228,14 +228,14 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         newTagObject.SfiNumber = SfiNumberInput;
         newTagObject.MainEqNumber = MainEqNumberInput;
         newTagObject.EqNumber = EqNumberInput;
-        newTagObject.ObjectDescription = ObjectDescriptionInput;
+        newTagObject.Description = ObjectDescriptionInput;
         newTagObject.Hierarchy1Name = SelectedHierarchy1;
         newTagObject.Hierarchy2Name = SelectedHierarchy2;
         newTagObject.VduGroupName = SelectedVduGroup;
         newTagObject.AlarmGroupName = SelectedAlarmGroup;
         newTagObject.OtdName = SelectedOtd;
-        newTagObject.AlwaysVisibleLocation = SelectedAlwaysVisible;
-        newTagObject.AcknowledgeAllowedLocation = SelectedAcknowledgeAllowed;
+        newTagObject.AlwaysVisibleName = SelectedAlwaysVisible;
+        newTagObject.AcknowledgeAllowedName = SelectedAcknowledgeAllowed;
         newTagObject.NodeName = SelectedNode;
         newTagObject.CabinetName = SelectedCabinet;
         newTagObject.DataBlockName = DataBlockInput;

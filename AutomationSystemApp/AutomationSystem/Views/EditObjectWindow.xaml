@@ -222,7 +222,7 @@
                        Text="Acknowledge Allowed"
                        FontSize="14"
                        VerticalAlignment="Center"/>
-            <ComboBox ItemsSource="{Binding AcknowledgeAllowedLocations}"
+            <ComboBox ItemsSource="{Binding AcknowledgeAllowedNames}"
                       SelectedItem="{Binding SelectedAcknowledgeAllowed}"
                       Grid.Row="1"
                       VerticalContentAlignment="Center"/>

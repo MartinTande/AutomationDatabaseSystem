@@ -42,7 +42,7 @@
                                 <DataGridTextColumn Header="VDU Group" Binding="{Binding VduGroupName}" />
                                 <DataGridTextColumn Header="Alarm Group" Binding="{Binding AlarmGroupName}" />
                                 <DataGridTextColumn Header="OTD" Binding="{Binding OtdName}" />
-                                <DataGridTextColumn Header="Acknowledge Allowed" Binding="{Binding AcknowledgeAllowedLocation}"/>
+                                <DataGridTextColumn Header="Acknowledge Allowed" Binding="{Binding AcknowledgeAllowedName}"/>
                                 <DataGridTextColumn Header="Always Visible" Binding="{Binding AlwaysVisibleLocation}"/>
                                 <DataGridTextColumn Header="Node" Binding="{Binding NodeName}"/>
                                 <DataGridTextColumn Header="Cabinet" Binding="{Binding CabinetName}"/>

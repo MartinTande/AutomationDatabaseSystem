@@ -39,14 +39,14 @@ public class ObjectDataManager
             tagObject.SfiNumber,
             tagObject.MainEqNumber,
             tagObject.EqNumber,
-            tagObject.ObjectDescription,
+            tagObject.Description,
             tagObject.Hierarchy1Name,
             tagObject.Hierarchy2Name,
             tagObject.VduGroupName,
             tagObject.AlarmGroupName,
             tagObject.OtdName,
-            tagObject.AcknowledgeAllowedLocation,
-            tagObject.AlwaysVisibleLocation,
+            tagObject.AcknowledgeAllowedName,
+            tagObject.AlwaysVisibleName,
             tagObject.NodeName,
             tagObject.CabinetName,
             tagObject.DataBlockName
@@ -64,19 +64,19 @@ public class ObjectDataManager
             tagObject.SfiNumber,
             tagObject.MainEqNumber,
             tagObject.EqNumber,
-            tagObject.ObjectDescription,
+            tagObject.Description,
             tagObject.Hierarchy1Name,
             tagObject.Hierarchy2Name,
             tagObject.VduGroupName,
             tagObject.AlarmGroupName,
             tagObject.OtdName,
-            tagObject.AcknowledgeAllowedLocation,
-            tagObject.AlwaysVisibleLocation,
+            tagObject.AcknowledgeAllowedName,
+            tagObject.AlwaysVisibleName,
             tagObject.NodeName,
             tagObject.CabinetName,
             tagObject.DataBlockName
         };
-        Console.WriteLine(tagObject.ObjectDescription);
+        Console.WriteLine(tagObject.Description);
         Console.WriteLine(tagObject.Id);
         try
         {

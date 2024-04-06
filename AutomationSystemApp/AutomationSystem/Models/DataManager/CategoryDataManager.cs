@@ -52,7 +52,7 @@ public class CategoryDataManager
 
     public List<string> GetAckAllowedCategory()
     {
-        return GetCategory("ACKNOWLEDGE_ALLOWED", "AcknowledgeAllowedLocation");
+        return GetCategory("ACKNOWLEDGE_ALLOWED", "AcknowledgeAllowedName");
     }
 
     public List<string> GetAlwaysVisibleCategory()

@@ -23,7 +23,7 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
     public ObservableCollection<string>? VduGroupNames { get; set; }
     public ObservableCollection<string>? AlarmGroupNames { get; set; }
     public ObservableCollection<string>? OtdNames { get; set; }
-    public ObservableCollection<string>? AcknowledgeAllowedLocations { get; set; }
+    public ObservableCollection<string>? AcknowledgeAllowedNames { get; set; }
     public ObservableCollection<string>? AlwaysVisibleLocations { get; set; }
     public ObservableCollection<string>? NodeNames { get; set; }
     public ObservableCollection<string>? CabinetNames { get; set; }
@@ -218,7 +218,7 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
         VduGroupNames = new ObservableCollection<string>(categoryDataManager.GetVduGroupCategory());
         AlarmGroupNames = new ObservableCollection<string>(categoryDataManager.GetAlarmGroupCategory());
         OtdNames = new ObservableCollection<string>(categoryDataManager.GetOtdCategory());
-        AcknowledgeAllowedLocations = new ObservableCollection<string>(categoryDataManager.GetAckAllowedCategory());
+        AcknowledgeAllowedNames = new ObservableCollection<string>(categoryDataManager.GetAckAllowedCategory());
         AlwaysVisibleLocations = new ObservableCollection<string>(categoryDataManager.GetAlwaysVisibleCategory());
         NodeNames = new ObservableCollection<string>(categoryDataManager.GetNodeCategory());
         CabinetNames = new ObservableCollection<string>(categoryDataManager.GetCabinetCategory());
@@ -230,14 +230,14 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
         _sfiNumberInput = selectedTagObject.SfiNumber;
         _mainEqNumberInput = selectedTagObject.MainEqNumber;
         _eqNumberInput = selectedTagObject.EqNumber;
-        _objectDescriptionInput = selectedTagObject.ObjectDescription;
+        _objectDescriptionInput = selectedTagObject.Description;
         _selectedHierarchy1 = selectedTagObject.Hierarchy1Name;
         _selectedHierarchy2 = selectedTagObject.Hierarchy2Name;
         _selectedVduGroup = selectedTagObject.VduGroupName;
         _selectedAlarmGroup = selectedTagObject.AlarmGroupName;
         _selectedOtd = selectedTagObject.OtdName;
-        _selectedAcknowledgeAllowed = selectedTagObject.AcknowledgeAllowedLocation;
-        _selectedAlwaysVisible = selectedTagObject.AlwaysVisibleLocation;
+        _selectedAcknowledgeAllowed = selectedTagObject.AcknowledgeAllowedName;
+        _selectedAlwaysVisible = selectedTagObject.AlwaysVisibleName;
         _selectedNode = selectedTagObject.NodeName;
         _selectedCabinet = selectedTagObject.CabinetName;
         _dataBlockInput = selectedTagObject.DataBlockName;
@@ -257,20 +257,20 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
         updatedTagObject.SfiNumber = SfiNumberInput;
         updatedTagObject.MainEqNumber = MainEqNumberInput;
         updatedTagObject.EqNumber = EqNumberInput;
-        updatedTagObject.ObjectDescription = ObjectDescriptionInput;
+        updatedTagObject.Description = ObjectDescriptionInput;
         updatedTagObject.Hierarchy1Name = SelectedHierarchy1;
         updatedTagObject.Hierarchy2Name = SelectedHierarchy2;
         updatedTagObject.VduGroupName = SelectedVduGroup;
         updatedTagObject.AlarmGroupName = SelectedAlarmGroup;
         updatedTagObject.OtdName = SelectedOtd;
-        updatedTagObject.AlwaysVisibleLocation = SelectedAlwaysVisible;
-        updatedTagObject.AcknowledgeAllowedLocation = SelectedAcknowledgeAllowed;
+        updatedTagObject.AlwaysVisibleName = SelectedAlwaysVisible;
+        updatedTagObject.AcknowledgeAllowedName = SelectedAcknowledgeAllowed;
         updatedTagObject.NodeName = SelectedNode;
         updatedTagObject.CabinetName = SelectedCabinet;
         updatedTagObject.DataBlockName = DataBlockInput;
 
         dataManager.UpdateObject(updatedTagObject);
-        MessageBox.Show(updatedTagObject.ObjectDescription);
+        MessageBox.Show(updatedTagObject.Description);
         CloseWindow();
     }
 
