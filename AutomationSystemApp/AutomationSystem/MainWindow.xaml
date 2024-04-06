@@ -104,13 +104,17 @@
                                 Orientation="Horizontal">
                         <TextBox Text="{Binding SelectedHierarchyName, UpdateSourceTrigger=PropertyChanged}" 
                                  Width="150"/>
+                        <Button Content="Add Hierarchy Sub Item"
+                                Command="{Binding AddHierarchyItemCommand}"
+                                Width="140"/>
                         <Button Content="Add Hierarchy Item"
-                                Command="{Binding AddHierarchyItemCommand}"/>
+                                Command="{Binding AddHierarchyItemCommand}"
+                                Width="140"/>
                         <Button Grid.Row="2"                 
-                                Content="Edit Hierarchy Item"       
+                                Content="Edit Item"       
                                 Command="{Binding EditHierarchyItemCommand}"/>
                         <Button Grid.Row="2"                 
-                                Content="Delete Hierarchy Item"       
+                                Content="Delete Item"       
                                 Command="{Binding DeleteHierarchyItemCommand}"/>
                     </StackPanel>
 
