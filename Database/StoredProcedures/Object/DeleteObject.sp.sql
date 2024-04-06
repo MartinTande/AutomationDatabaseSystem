@@ -9,11 +9,11 @@ GO
 -- Stored Procedure
 CREATE PROCEDURE DeleteObject
 	-- Input parameters
-    @ObjectId int
+    @Id int
 AS
 
 DELETE 
 FROM TAG_OBJECT 
-WHERE ObjectId=@ObjectId
+WHERE Id=@Id
 
 GO

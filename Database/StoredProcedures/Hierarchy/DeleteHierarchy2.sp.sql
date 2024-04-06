@@ -9,11 +9,11 @@ GO
 -- Stored Procedure
 CREATE PROCEDURE DeleteHierarchy2
 	-- Input parameters
-    @Hierarchy2Id int
+    @Id int
 AS
 
-DELETE 
+DELETE
 FROM HIERARCHY_2
-WHERE Hierarchy2Id=@Hierarchy2Id
+WHERE Id=@Id
 
 GO

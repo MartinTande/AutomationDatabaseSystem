@@ -14,8 +14,7 @@ BEGIN
     DECLARE @SQLString nvarchar(MAX)
 
     -- Construct the dynamic SQL statement
-    SET @SQLString = 'DELETE FROM ' + QUOTENAME(@TableName) 
-    + 'WHERE ' + QUOTENAME(Id) +'=' + QUOTENAME(@Id)
+    SET @SQLString = 'DELETE FROM ' + QUOTENAME(@TableName) + ' WHERE Id=' + QUOTENAME(@Id)
 
     -- Execute the dynamic SQL
     EXEC sp_executesql @SQLString

@@ -207,7 +207,7 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
         }
     }
 
-    public EditObjectViewModel(IDataConnector dataConnector, TagObjectModel selectedTagObject)
+    public EditObjectViewModel(IDataConnector dataConnector, ObjectModel selectedTagObject)
     {
         _dataConnector = dataConnector;
         InputSelectedTagObject(selectedTagObject);
@@ -224,9 +224,9 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
         CabinetNames = new ObservableCollection<string>(categoryDataManager.GetCabinetCategory());
     }
 
-    private void InputSelectedTagObject(TagObjectModel selectedTagObject)
+    private void InputSelectedTagObject(ObjectModel selectedTagObject)
     {
-        _objectId = selectedTagObject.ObjectId;
+        _objectId = selectedTagObject.Id;
         _sfiNumberInput = selectedTagObject.SfiNumber;
         _mainEqNumberInput = selectedTagObject.MainEqNumber;
         _eqNumberInput = selectedTagObject.EqNumber;
@@ -251,9 +251,9 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
     private void UpdateObject()
     {
         ObjectDataManager dataManager = new ObjectDataManager(_dataConnector);
-        TagObjectModel updatedTagObject = new TagObjectModel();
+        ObjectModel updatedTagObject = new ObjectModel();
 
-        updatedTagObject.ObjectId = _objectId;
+        updatedTagObject.Id = _objectId;
         updatedTagObject.SfiNumber = SfiNumberInput;
         updatedTagObject.MainEqNumber = MainEqNumberInput;
         updatedTagObject.EqNumber = EqNumberInput;
@@ -269,7 +269,7 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
         updatedTagObject.CabinetName = SelectedCabinet;
         updatedTagObject.DataBlockName = DataBlockInput;
 
-        dataManager.UpdateTagObject(updatedTagObject);
+        dataManager.UpdateObject(updatedTagObject);
         MessageBox.Show(updatedTagObject.ObjectDescription);
         CloseWindow();
     }

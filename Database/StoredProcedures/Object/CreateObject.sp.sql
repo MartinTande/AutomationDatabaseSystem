@@ -12,7 +12,7 @@ CREATE PROCEDURE CreateObject
 	@SfiNumber int,
 	@MainEqNumber varchar(100),
 	@EqNumber varchar(100),
-	@ObjectDescription varchar(100),
+	@Description varchar(100),
 	@Hierarchy1Name varchar(50),
 	@Hierarchy2Name varchar(50),
 	@VduGroupName varchar(50),
@@ -38,20 +38,20 @@ DECLARE
 	@CabinetId int,
 	@DataBlockId int
 
-SELECT @Hierarchy1Id=Hierarchy1Id FROM HIERARCHY_1 WHERE Hierarchy1Name=@Hierarchy1Name
-SELECT @Hierarchy2Id=Hierarchy2Id FROM HIERARCHY_2 WHERE Hierarchy2Name=@Hierarchy2Name
-SELECT @VduGroupId=VduGroupId FROM VDU_GROUP WHERE VduGroupName=@VduGroupName
-SELECT @AlarmGroupId=AlarmGroupId FROM ALARM_GROUP WHERE AlarmGroupName=@AlarmGroupName
-SELECT @OtdId=OtdId FROM OTD WHERE OtdName=@OtdName
-SELECT @AcknowledgeAllowedId=AcknowledgeAllowedId FROM ACKNOWLEDGE_ALLOWED WHERE AcknowledgeAllowedLocation=@AcknowledgeAllowedLocation
-SELECT @AlwaysVisibleId=AlwaysVisibleId FROM ALWAYS_VISIBLE WHERE AlwaysVisibleLocation=@AlwaysVisibleLocation
-SELECT @NodeId=NodeId FROM NODE WHERE NodeName=@NodeName
-SELECT @CabinetId=CabinetId FROM CABINET WHERE CabinetName=@CabinetName
-IF NOT EXISTS (SELECT * FROM DATA_BLOCK WHERE DataBlockName = @DataBlockName)
-INSERT INTO DATA_BLOCK (DataBlockName) VALUES (@DataBlockName)
+SELECT @Hierarchy1Id=Id FROM HIERARCHY_1 WHERE Name=@Hierarchy1Name
+SELECT @Hierarchy2Id=Id FROM HIERARCHY_2 WHERE Name=@Hierarchy2Name
+SELECT @VduGroupId=Id FROM VDU_GROUP WHERE Name=@VduGroupName
+SELECT @AlarmGroupId=Id FROM ALARM_GROUP WHERE Name=@AlarmGroupName
+SELECT @OtdId=Id FROM OTD WHERE Name=@OtdName
+SELECT @AcknowledgeAllowedId=Id FROM ACKNOWLEDGE_ALLOWED WHERE Name=@AcknowledgeAllowedLocation
+SELECT @AlwaysVisibleId=Id FROM ALWAYS_VISIBLE WHERE Name=@AlwaysVisibleLocation
+SELECT @NodeId=Id FROM NODE WHERE Name=@NodeName
+SELECT @CabinetId=Id FROM CABINET WHERE Name=@CabinetName
+IF NOT EXISTS (SELECT * FROM DATA_BLOCK WHERE Name = @DataBlockName)
+INSERT INTO DATA_BLOCK (Name) VALUES (@DataBlockName)
 
-INSERT INTO TAG_OBJECT (SfiNumber, MainEqNumber, EqNumber, ObjectDescription, Hierarchy1Id, Hierarchy2Id, VduGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId, DataBlockId) 
-VALUES (@SfiNumber, @MainEqNumber, @EqNumber, @ObjectDescription, @Hierarchy1Id, @Hierarchy2Id, @VduGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId, 
-		(SELECT DataBlockId FROM DATA_BLOCK WHERE DataBlockName=@DataBlockName))
+INSERT INTO TAG_OBJECT (SfiNumber, MainEqNumber, EqNumber, Description, Hierarchy1Id, Hierarchy2Id, VduGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId, DataBlockId) 
+VALUES (@SfiNumber, @MainEqNumber, @EqNumber, @Description, @Hierarchy1Id, @Hierarchy2Id, @VduGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId, 
+		(SELECT Id FROM DATA_BLOCK WHERE Name=@DataBlockName))
 
 GO

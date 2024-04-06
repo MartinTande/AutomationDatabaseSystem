@@ -223,7 +223,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
     private void AddObject()
     {
         ObjectDataManager dataManager = new ObjectDataManager(_dataConnector);
-        TagObjectModel newTagObject = new TagObjectModel();
+        ObjectModel newTagObject = new ObjectModel();
 
         newTagObject.SfiNumber = SfiNumberInput;
         newTagObject.MainEqNumber = MainEqNumberInput;
@@ -240,7 +240,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         newTagObject.CabinetName = SelectedCabinet;
         newTagObject.DataBlockName = DataBlockInput;
 
-        dataManager.InsertTagObject(newTagObject);
+        dataManager.InsertObject(newTagObject);
         CloseWindow();
     }
 

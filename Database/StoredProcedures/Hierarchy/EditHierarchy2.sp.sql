@@ -15,7 +15,7 @@ CREATE PROCEDURE EditHierarchy2
 AS
 
 UPDATE HIERARCHY_2 SET
-Hierarchy2Name = @Hierarchy2Name,
+Name = @Hierarchy2Name,
 Hierarchy1Id = (SELECT Hierarchy1Id FROM HIERARCHY_1 WHERE Hierarchy1Name=@Hierarchy1Name)
 
 WHERE Hierarchy2Id = @Hierarchy2Id

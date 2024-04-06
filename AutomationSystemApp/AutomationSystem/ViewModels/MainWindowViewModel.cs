@@ -91,8 +91,8 @@ internal class MainWindowViewModel : ViewModelBase
         }
     }
 
-    private ObservableCollection<TagObjectModel> _tagObjects;
-    public ObservableCollection<TagObjectModel> TagObjects
+    private ObservableCollection<ObjectModel> _tagObjects;
+    public ObservableCollection<ObjectModel> TagObjects
     {
         get { return _tagObjects; }
         set
@@ -105,8 +105,8 @@ internal class MainWindowViewModel : ViewModelBase
         }
     }
 
-    private TagObjectModel? _selectedTagObject;
-    public TagObjectModel? SelectedTagObject
+    private ObjectModel? _selectedTagObject;
+    public ObjectModel? SelectedTagObject
     {
         get { return _selectedTagObject; }
         set
@@ -145,7 +145,7 @@ internal class MainWindowViewModel : ViewModelBase
         _dataConnector = dataConnector;
         dataManager = new ObjectDataManager(_dataConnector);
         categoryDataManager = new CategoryDataManager(_dataConnector);
-        _tagObjects = new ObservableCollection<TagObjectModel>(dataManager.GetTagObjects());
+        _tagObjects = new ObservableCollection<ObjectModel>(dataManager.GetObjects());
         _hierarchy1Names = new ObservableCollection<string>(categoryDataManager.GetHierarchy1Category());
         _pictureHierarchy = new List<IItem>();
         GetPictureHierarchy();
@@ -198,13 +198,13 @@ internal class MainWindowViewModel : ViewModelBase
 
     private void DeleteObject()
     {
-        dataManager.DeleteTagObject(SelectedTagObject.ObjectId);
-        MessageBox.Show(SelectedTagObject.ObjectId.ToString());
+        dataManager.DeleteObject(SelectedTagObject.Id);
+        MessageBox.Show(SelectedTagObject.Id.ToString());
         UpdateTagObjects();
     }
 
     private void UpdateTagObjects()
     {
-        TagObjects = new ObservableCollection<TagObjectModel>(dataManager.GetTagObjects());
+        TagObjects = new ObservableCollection<ObjectModel>(dataManager.GetObjects());
     }
 }

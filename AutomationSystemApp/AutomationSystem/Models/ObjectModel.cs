@@ -1,8 +1,8 @@
 ﻿namespace AutomationSystem.Models;
 
-public class TagObjectModel
+public class ObjectModel
 {
-    public int ObjectId { get; set; }
+    public int Id { get; set; }
     public int SfiNumber { get; set; }
     public string? MainEqNumber { get; set; }
     public string? EqNumber { get; set; }

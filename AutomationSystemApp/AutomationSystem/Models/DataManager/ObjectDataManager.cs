@@ -11,27 +11,27 @@ public class ObjectDataManager
     {
         _sqlConnector = sqlConnector;
     }
-    public List<TagObjectModel> GetTagObjectById(int id)
+    public List<ObjectModel> GetObjectById(int id)
     {
         // Anonymous object, object with no name type
         // Id is parameter of object, id is input to that parameter
-        var p = new { ObjectId = id };
+        var p = new { Id = id };
 
-        var tagObjectList = _sqlConnector.LoadData<TagObjectModel, dynamic>("GetObjectById", p);
+        var tagObjectList = _sqlConnector.LoadData<ObjectModel, dynamic>("GetObjectById", p);
         return tagObjectList;
     }
 
-    public List<TagObjectModel> GetTagObjects()
+    public List<ObjectModel> GetObjects()
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
         var p = new { };
 
-        List<TagObjectModel> tagObjectList = _sqlConnector.LoadData<TagObjectModel, dynamic>("GetAllObjects", p);
+        List<ObjectModel> tagObjectList = _sqlConnector.LoadData<ObjectModel, dynamic>("GetAllObjects", p);
         return tagObjectList;
     }
 
-    public void InsertTagObject(TagObjectModel tagObject)
+    public void InsertObject(ObjectModel tagObject)
     {
         // Anonymous object, object with no name type
         var p = new
@@ -55,12 +55,12 @@ public class ObjectDataManager
         _sqlConnector.SaveData("CreateObject", p);
     }
 
-    public void UpdateTagObject(TagObjectModel tagObject)
+    public void UpdateObject(ObjectModel tagObject)
     {
         // Anonymous object, object with no name type
         var p = new
         {
-            tagObject.ObjectId,
+            tagObject.Id,
             tagObject.SfiNumber,
             tagObject.MainEqNumber,
             tagObject.EqNumber,
@@ -77,7 +77,7 @@ public class ObjectDataManager
             tagObject.DataBlockName
         };
         Console.WriteLine(tagObject.ObjectDescription);
-        Console.WriteLine(tagObject.ObjectId);
+        Console.WriteLine(tagObject.Id);
         try
         {
             _sqlConnector.SaveData("UpdateObject", p);
@@ -89,7 +89,7 @@ public class ObjectDataManager
 
     }
 
-    public void DeleteTagObject(int id)
+    public void DeleteObject(int id)
     {
         // Anonymous object, object with no name type
         // Id is parameter of object, id is input to that parameter

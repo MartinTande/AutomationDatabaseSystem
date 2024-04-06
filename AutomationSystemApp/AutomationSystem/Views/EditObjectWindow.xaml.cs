@@ -10,7 +10,7 @@ namespace AutomationSystem.Views;
 /// </summary>
 public partial class EditObjectWindow : Window
 {
-    public EditObjectWindow(IDataConnector dataConnector, TagObjectModel selectedTagObject)
+    public EditObjectWindow(IDataConnector dataConnector, ObjectModel selectedTagObject)
     {
         EditObjectViewModel editObjectViewModel = new EditObjectViewModel(dataConnector, selectedTagObject);
         this.DataContext = editObjectViewModel;
