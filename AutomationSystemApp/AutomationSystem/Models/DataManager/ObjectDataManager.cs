@@ -93,7 +93,7 @@ public class ObjectDataManager
     {
         // Anonymous object, object with no name type
         // Id is parameter of object, id is input to that parameter
-        var p = new { ObjectId = id };
+        var p = new { Id = id };
 
         _sqlConnector.SaveData("DeleteObject", p);
     }

@@ -80,7 +80,7 @@
                        FontSize="14"
                        VerticalAlignment="Center"/>
             <TextBox Grid.Row="1"
-                     Text="{Binding ObjectDescriptionInput}"
+                     Text="{Binding DescriptionInput}"
                      VerticalContentAlignment="Center"/>
         </Grid>
 
@@ -239,7 +239,7 @@
                        Text="Always Visible"
                        FontSize="14"
                        VerticalAlignment="Center"/>
-            <ComboBox ItemsSource="{Binding AlwaysVisibleLocations}"
+            <ComboBox ItemsSource="{Binding AlwaysVisibleNames}"
                       SelectedItem="{Binding SelectedAlwaysVisible}"
                       Grid.Row="1"
                       VerticalContentAlignment="Center"/>

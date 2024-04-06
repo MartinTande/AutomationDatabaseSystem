@@ -12,6 +12,6 @@ AS
 
 SELECT Hierarchy2Name
 FROM HIERARCHY_2
-WHERE Hierarchy1Id = (SELECT Hierarchy1Id FROM HIERARCHY_1 WHERE Hierarchy1Name = @Hierarchy1Name);
+WHERE Hierarchy1Id = (SELECT Id FROM HIERARCHY_1 WHERE Hierarchy1Name = @Hierarchy1Name);
 
 GO

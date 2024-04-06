@@ -25,7 +25,7 @@ CREATE PROCEDURE UpdateObject
 	@DataBlockName varchar(100)
 AS
 
-UPDATE TAG_OBJECT SET
+UPDATE OBJECT SET
 SfiNumber = @SfiNumber,
 MainEqNumber = @MainEqNumber,
 EqNumber = @EqNumber,

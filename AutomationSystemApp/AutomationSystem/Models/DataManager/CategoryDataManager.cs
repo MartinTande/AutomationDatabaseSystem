@@ -57,7 +57,7 @@ public class CategoryDataManager
 
     public List<string> GetAlwaysVisibleCategory()
     {
-        return GetCategory("ALWAYS_VISIBLE", "AlwaysVisibleLocation");
+        return GetCategory("ALWAYS_VISIBLE", "AlwaysVisibleName");
     }
 
     public List<string> GetCabinetCategory()

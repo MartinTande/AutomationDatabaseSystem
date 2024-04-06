@@ -26,7 +26,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
     public ObservableCollection<string> AlarmGroupNames { get; set; }
     public ObservableCollection<string> OtdNames { get; set; }
     public ObservableCollection<string> AcknowledgeAllowedNames { get; set; }
-    public ObservableCollection<string> AlwaysVisibleLocations { get; set; }
+    public ObservableCollection<string> AlwaysVisibleNames { get; set; }
     public ObservableCollection<string> NodeNames { get; set; }
     public ObservableCollection<string> CabinetNames { get; set; }
 
@@ -179,7 +179,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
     }
 
     private string? _objectDescriptionInput;
-    public string? ObjectDescriptionInput
+    public string? DescriptionInput
     {
         get { return _objectDescriptionInput; }
         set
@@ -210,7 +210,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         AlarmGroupNames = new ObservableCollection<string>(categoryDataManager.GetAlarmGroupCategory());
         OtdNames = new ObservableCollection<string>(categoryDataManager.GetOtdCategory());
         AcknowledgeAllowedNames = new ObservableCollection<string>(categoryDataManager.GetAckAllowedCategory());
-        AlwaysVisibleLocations = new ObservableCollection<string>(categoryDataManager.GetAlwaysVisibleCategory());
+        AlwaysVisibleNames = new ObservableCollection<string>(categoryDataManager.GetAlwaysVisibleCategory());
         NodeNames = new ObservableCollection<string>(categoryDataManager.GetNodeCategory());
         CabinetNames = new ObservableCollection<string>(categoryDataManager.GetCabinetCategory());
     }
@@ -228,7 +228,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         newTagObject.SfiNumber = SfiNumberInput;
         newTagObject.MainEqNumber = MainEqNumberInput;
         newTagObject.EqNumber = EqNumberInput;
-        newTagObject.Description = ObjectDescriptionInput;
+        newTagObject.Description = DescriptionInput;
         newTagObject.Hierarchy1Name = SelectedHierarchy1;
         newTagObject.Hierarchy2Name = SelectedHierarchy2;
         newTagObject.VduGroupName = SelectedVduGroup;

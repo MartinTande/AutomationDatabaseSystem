@@ -50,7 +50,7 @@ SELECT @CabinetId=Id FROM CABINET WHERE CabinetName=@CabinetName
 IF NOT EXISTS (SELECT * FROM DATA_BLOCK WHERE DataBlockName = @DataBlockName)
 INSERT INTO DATA_BLOCK (DataBlockName) VALUES (@DataBlockName)
 
-INSERT INTO TAG_OBJECT (SfiNumber, MainEqNumber, EqNumber, Description, Hierarchy1Id, Hierarchy2Id, VduGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId, DataBlockId) 
+INSERT INTO OBJECT (SfiNumber, MainEqNumber, EqNumber, Description, Hierarchy1Id, Hierarchy2Id, VduGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId, DataBlockId) 
 VALUES (@SfiNumber, @MainEqNumber, @EqNumber, @Description, @Hierarchy1Id, @Hierarchy2Id, @VduGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId, 
 		(SELECT Id FROM DATA_BLOCK WHERE DataBlockName=@DataBlockName))
 

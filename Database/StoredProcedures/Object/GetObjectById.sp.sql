@@ -14,6 +14,6 @@ BEGIN
 
 SELECT *
 FROM ObjectData
-WHERE ObjectId=@Id;
+WHERE Id=@Id;
 
 END;
