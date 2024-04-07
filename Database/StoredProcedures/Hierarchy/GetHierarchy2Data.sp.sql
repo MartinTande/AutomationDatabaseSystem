@@ -1,17 +1,17 @@
 -- Check if Stored Procedure exists and deletes it if it does
 IF EXISTS (SELECT name
 	FROM sysobjects
-	WHERE name = 'GetHierarchy2Data'
+	WHERE name = 'GetHierarchy2ByGroup'
 	AND type = 'P')
-DROP PROCEDURE GetHierarchy2Data
+DROP PROCEDURE GetHierarchy2ByGroup
 GO
 
-CREATE PROCEDURE GetHierarchy2Data
-	@Hierarchy1Name varchar(50)
+CREATE PROCEDURE GetHierarchy2ByGroup
+	@Name varchar(50)
 AS
 
-SELECT Id, Hierarchy2Name
+SELECT Id, Name
 FROM HIERARCHY_2
-WHERE Hierarchy1Id = (SELECT Id FROM HIERARCHY_1 WHERE Hierarchy1Name = @Hierarchy1Name);
+WHERE Hierarchy1Id = (SELECT Id FROM HIERARCHY_1 WHERE Name = @Name);
 
 GO

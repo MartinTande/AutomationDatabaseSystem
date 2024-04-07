@@ -3,17 +3,6 @@
 public class AlarmGroup : ICategory
 {
     public int Id { get; set; }
-    public string? AlarmGroupName { get; set; }
-    public string? Name
-    {
-        get
-        {
-            return AlarmGroupName;
-        }
+    public string? Name { get; set; }
 
-        set
-        {
-            Name = AlarmGroupName;
-        }
-    }
 }

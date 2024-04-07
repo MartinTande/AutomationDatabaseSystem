@@ -187,7 +187,7 @@ internal class MainWindowViewModel : ViewModelBase
         //add Root items
         foreach (Hierarchy1 hierarchy1 in Hierarchy1Names)
         {
-            PictureHierarchy.Add(new HierarchyModel { Id = hierarchy1.Id, Name = hierarchy1.Hierarchy1Name });
+            PictureHierarchy.Add(new HierarchyModel { Id = hierarchy1.Id, Name = hierarchy1.Name });
         }
 
         //add sub items

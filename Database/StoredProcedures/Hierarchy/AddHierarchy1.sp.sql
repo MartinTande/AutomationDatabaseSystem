@@ -9,10 +9,10 @@ GO
 -- Stored Procedure
 CREATE PROCEDURE AddHierarchy1
 	-- Input parameters
-	@Hierarchy1Name varchar(50)
+	@Name varchar(50)
 AS
 
-INSERT INTO HIERARCHY_1 (Hierarchy1Name)
-VALUES (@Hierarchy1Name)
+INSERT INTO HIERARCHY_1 (Name)
+VALUES (@Name)
 
 GO

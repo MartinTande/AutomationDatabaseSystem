@@ -17,16 +17,16 @@ OBJECT.SfiNumber,
 OBJECT.MainEqNumber,
 OBJECT.EqNumber,
 OBJECT.Description,
-HIERARCHY_1.Hierarchy1Name,
-HIERARCHY_2.Hierarchy2Name,
-VDU_GROUP.VduGroupName,
-ALARM_GROUP.AlarmGroupName,
-OTD.OtdName,
-ACKNOWLEDGE_ALLOWED.AcknowledgeAllowedName,
-ALWAYS_VISIBLE.AlwaysVisibleName,
-NODE.NodeName,
-CABINET.CabinetName,
-DATA_BLOCK.DataBlockName
+HIERARCHY_1.Name Hierarchy1Name,
+HIERARCHY_2.Name Hierarchy2Name,
+VDU_GROUP.Name VduGroupName,
+ALARM_GROUP.Name AlarmGroupName,
+OTD.Name OtdName,
+ACKNOWLEDGE_ALLOWED.Name AcknowledgeAllowedName,
+ALWAYS_VISIBLE.Name AlwaysVisibleName,
+NODE.Name NodeName,
+CABINET.Name CabinetName,
+DATA_BLOCK.Name DataBlockName
 
 FROM OBJECT
 INNER JOIN HIERARCHY_1 ON OBJECT.Hierarchy1Id = HIERARCHY_1.Id

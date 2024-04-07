@@ -10,11 +10,11 @@ GO
 CREATE PROCEDURE EditHierarchy1
 	-- Input parameters
     @Id int,
-	@Hierarchy1Name varchar(50)
+	@Name varchar(50)
 AS
 
 UPDATE HIERARCHY_1 SET
-Hierarchy1Name = @Hierarchy1Name
+Name = @Name
 
 WHERE Id = @Id
 

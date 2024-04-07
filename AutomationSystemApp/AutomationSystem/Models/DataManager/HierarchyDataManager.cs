@@ -17,10 +17,10 @@ public class HierarchyDataManager
         // No parameters, but need an object
         var p = new
         {
-            Hierarchy1Name = hierarchy1Name
+            Name = hierarchy1Name
         };
 
-        List<Hierarchy2> hierarchy2Category = _sqlConnector.LoadData<Hierarchy2, dynamic>("GetHierarchy2Data", p);
+        List<Hierarchy2> hierarchy2Category = _sqlConnector.LoadData<Hierarchy2, dynamic>("GetHierarchy2ByGroup", p);
         return hierarchy2Category;
     }
 
@@ -43,7 +43,7 @@ public class HierarchyDataManager
         // No parameters, but need an object
         var p = new
         {
-            Hierarchy1Name = hierarchy1Name
+            Name = hierarchy1Name
         };
 
         _sqlConnector.LoadData<string, dynamic>("AddHierarchy1", p);
@@ -78,7 +78,7 @@ public class HierarchyDataManager
         var p = new
         {
             Id = id,
-            Hierarchy1Name = updatedHierarchy1Name
+            Name = updatedHierarchy1Name
         };
 
         _sqlConnector.LoadData<string, dynamic>("EditHierarchy1", p);
@@ -89,7 +89,7 @@ public class HierarchyDataManager
         var p = new
         {
             Id = id,
-            Hierarchy2Name = updatedHierarchy2Name
+            Name = updatedHierarchy2Name
         };
 
         _sqlConnector.LoadData<string, dynamic>("EditHierarchy2", p);
@@ -100,7 +100,7 @@ public class HierarchyDataManager
         var p = new
         {
             TableName = "HIERARCHY_1",
-            TableColumn = "Hierarchy1Name"
+            TableColumn = "Name"
         };
 
         return _sqlConnector.LoadData<Hierarchy1, dynamic>("GetCategory", p);

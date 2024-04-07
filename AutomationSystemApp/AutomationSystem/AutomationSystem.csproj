@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Categories\" />
     <Folder Include="MVVM\" />
     <Folder Include="Styles\" />
     <Folder Include="Views\" />
