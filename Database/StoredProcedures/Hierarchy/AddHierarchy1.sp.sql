@@ -1,21 +1,18 @@
 -- Check if Stored Procedure exists and deletes it if it does
 IF EXISTS (SELECT name
 	FROM sysobjects
-	WHERE name = 'EditHierarchy1'
+	WHERE name = 'AddHierarchy1'
 	AND type = 'P')
-DROP PROCEDURE EditHierarchy1
+DROP PROCEDURE AddHierarchy1
 GO
 
 -- Stored Procedure
-CREATE PROCEDURE EditHierarchy1
+CREATE PROCEDURE AddHierarchy1
 	-- Input parameters
-    @Id int,
 	@Hierarchy1Name varchar(50)
 AS
 
-UPDATE HIERARCHY_1 SET
-Hierarchy1Name = @Hierarchy1Name
-
-WHERE Id = @Id
+INSERT INTO HIERARCHY_1 (Hierarchy1Name)
+VALUES (@Hierarchy1Name)
 
 GO

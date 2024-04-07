@@ -62,7 +62,7 @@
                         <RowDefinition Height="0.2*"/>
                     </Grid.RowDefinitions>
                     <TreeView Grid.Row="1"
-                                ItemsSource="{Binding PictureHierarchy}" 
+                                ItemsSource="{Binding PictureHierarchy, Mode=TwoWay}" 
                                 SelectedItemChanged="TreeView_SelectedItemChanged">
                         <TreeView.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -70,8 +70,8 @@
                             </ItemsPanelTemplate>
                         </TreeView.ItemsPanel>
                         <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding SubItem}">
-                                <TextBlock Text="{Binding Name}"/>
+                            <HierarchicalDataTemplate ItemsSource="{Binding SubItem, Mode=TwoWay}">
+                                <TextBlock Text="{Binding Name, Mode=OneWay}"/>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
@@ -80,7 +80,7 @@
                         <TextBox Text="{Binding SelectedHierarchyName, UpdateSourceTrigger=PropertyChanged}" 
                                  Width="150"/>
                         <Button Content="Add Hierarchy Sub Item"
-                                Command="{Binding AddHierarchyItemCommand}"
+                                Command="{Binding AddHierarchySubItemCommand}"
                                 Width="140"/>
                         <Button Content="Add Hierarchy Item"
                                 Command="{Binding AddHierarchyItemCommand}"
@@ -92,9 +92,7 @@
                                 Content="Delete Item"       
                                 Command="{Binding DeleteHierarchyItemCommand}"/>
                     </StackPanel>
-
                 </Grid>
-
             </TabItem>
 
             <!-- Alarm Groups tab -->

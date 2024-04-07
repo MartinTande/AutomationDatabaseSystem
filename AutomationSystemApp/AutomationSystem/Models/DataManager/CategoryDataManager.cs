@@ -1,6 +1,7 @@
-﻿using AutomationSystem.Models.DataAccess;
+﻿using AutomationSystem.Models;
+using AutomationSystem.Models.DataAccess;
 
-namespace AutomationSystem.DataManager;
+namespace AutomationSystem.Models.DataManager;
 
 public class CategoryDataManager
 {
@@ -11,82 +12,80 @@ public class CategoryDataManager
         _sqlConnector = sqlConnector;
     }
 
-    private List<string> GetCategory(string tableName, string tableColumn)
+    public List<Node> GetNodeCategory()
     {
-        // Anonymous object, object with no name type
-        // No parameters, but need an object
-        var p = new { TableName = tableName, TableColumn = tableColumn };
+        var p = new
+        {
+            TableName = "NODE",
+            TableColumn = "NodeName"
+        };
 
-        List<string> category = _sqlConnector.LoadData<string, dynamic>("GetCategory", p);
-        return category;
+        return _sqlConnector.LoadData<Node, dynamic>("GetCategory", p);
     }
 
-    public List<string> GetHierarchy2Category(string hierarchy1Name)
+    public List<AcknowledgeAllowed> GetAckAllowedCategory()
     {
-        // Anonymous object, object with no name type
-        // No parameters, but need an object
-        var p = new { Hierarchy1Name = hierarchy1Name };
+        var p = new
+        {
+            TableName = "ACKNOWLEDGE_ALLOWED",
+            TableColumn = "AcknowledgeAllowedName"
+        };
 
-        List<string> hierarchy2Category = _sqlConnector.LoadData<string, dynamic>("GetHierarchy2Data", p);
-        return hierarchy2Category;
+        return _sqlConnector.LoadData<AcknowledgeAllowed, dynamic>("GetCategory", p);
     }
 
-    public void AddHierarchy2Category(string hierarchy1Name, string newHierarchy2)
+    public List<AlwaysVisible> GetAlwaysVisibleCategory()
     {
-        // Anonymous object, object with no name type
-        // No parameters, but need an object
-        var p = new { Hierarchy1Name = hierarchy1Name, Hierarchy2Name = newHierarchy2 };
+        var p = new
+        {
+            TableName = "ALWAYS_VISIBLE",
+            TableColumn = "AlwaysVisibleName"
+        };
 
-        _sqlConnector.LoadData<string, dynamic>("AddHierarchy2", p);
+        return _sqlConnector.LoadData<AlwaysVisible, dynamic>("GetCategory", p);
     }
 
-    public List<string> GetHierarchy1Category()
+    public List<Cabinet> GetCabinetCategory()
     {
-        return GetCategory("HIERARCHY_1", "Hierarchy1Name");
+        var p = new
+        {
+            TableName = "CABINET",
+            TableColumn = "CabinetName"
+        };
+
+        return _sqlConnector.LoadData<Cabinet, dynamic>("GetCategory", p);
     }
 
-    public List<string> GetNodeCategory()
+    public List<Otd> GetOtdCategory()
     {
-        return GetCategory("NODE", "NodeName");
+        var p = new
+        {
+            TableName = "OTD",
+            TableColumn = "OtdName"
+        };
+
+        return _sqlConnector.LoadData<Otd, dynamic>("GetCategory", p);
     }
 
-    public List<string> GetAckAllowedCategory()
+    public List<VduGroup> GetVduGroupCategory()
     {
-        return GetCategory("ACKNOWLEDGE_ALLOWED", "AcknowledgeAllowedName");
+        var p = new
+        {
+            TableName = "VDU_GROUP",
+            TableColumn = "VduGroupName"
+        };
+
+        return _sqlConnector.LoadData<VduGroup, dynamic>("GetCategory", p);
     }
 
-    public List<string> GetAlwaysVisibleCategory()
+    public List<AlarmGroup> GetAlarmGroupCategory()
     {
-        return GetCategory("ALWAYS_VISIBLE", "AlwaysVisibleName");
-    }
+        var p = new
+        {
+            TableName = "ALARM_GROUP",
+            TableColumn = "AlarmGroupName"
+        };
 
-    public List<string> GetCabinetCategory()
-    {
-        return GetCategory("CABINET", "CabinetName");
-    }
-
-    public List<string> GetOtdCategory()
-    {
-        return GetCategory("OTD", "OtdName");
-    }
-
-    public List<string> GetVduGroupCategory()
-    {
-        return GetCategory("VDU_GROUP", "VduGroupName");
-    }
-
-    public List<string> GetAlarmGroupCategory()
-    {
-        return GetCategory("ALARM_GROUP", "AlarmGroupName");
-    }
-
-    public List<string> GetHierarchy2CategoryNames(int id)
-    {
-        // Anonymous object, object with no name type
-        // No parameters, but need an object
-        var p = new { Id = id };
-
-        List<string> category = _sqlConnector.LoadData<string, dynamic>("GetHierarchy2Data", p);
-        return category;
+        return _sqlConnector.LoadData<AlarmGroup, dynamic>("GetCategory", p);
     }
 }

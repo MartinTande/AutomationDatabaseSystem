@@ -1,5 +1,5 @@
 ﻿using AutomationSystem.Commands;
-using AutomationSystem.DataManager;
+using AutomationSystem.Models.DataManager;
 using AutomationSystem.Models;
 using AutomationSystem.Models.DataAccess;
 using AutomationSystem.MVVM;
@@ -16,17 +16,18 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
     public ICommand CloseWindowCommand => new RelayCommand(execute => CloseWindow());
 
     CategoryDataManager categoryDataManager;
+    HierarchyDataManager hierarchyDataManager;
 
     // Lists of category names retrieved from database
-    public ObservableCollection<string>? Hierarchy1Names { get; set; }
-    public ObservableCollection<string>? Hierarchy2Names { get; set; }
-    public ObservableCollection<string>? VduGroupNames { get; set; }
-    public ObservableCollection<string>? AlarmGroupNames { get; set; }
-    public ObservableCollection<string>? OtdNames { get; set; }
-    public ObservableCollection<string>? AcknowledgeAllowedNames { get; set; }
-    public ObservableCollection<string>? AlwaysVisibleNames { get; set; }
-    public ObservableCollection<string>? NodeNames { get; set; }
-    public ObservableCollection<string>? CabinetNames { get; set; }
+    public ObservableCollection<Hierarchy1>? Hierarchy1Names { get; set; }
+    public ObservableCollection<ICategory>? Hierarchy2Names { get; set; }
+    public ObservableCollection<ICategory>? VduGroupNames { get; set; }
+    public ObservableCollection<ICategory>? AlarmGroupNames { get; set; }
+    public ObservableCollection<ICategory>? OtdNames { get; set; }
+    public ObservableCollection<ICategory>? AcknowledgeAllowedNames { get; set; }
+    public ObservableCollection<ICategory>? AlwaysVisibleNames { get; set; }
+    public ObservableCollection<ICategory>? NodeNames { get; set; }
+    public ObservableCollection<ICategory>? CabinetNames { get; set; }
 
     // Selected category names by user 
     private string? _selectedHierarchy1;
@@ -48,7 +49,7 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
             {
                 Hierarchy2Names.Clear();
             }
-            var update = new ObservableCollection<string>(categoryDataManager.GetHierarchy2Category(SelectedHierarchy1));
+            var update = new ObservableCollection<ICategory>(hierarchyDataManager.GetHierarchy2Category(SelectedHierarchy1));
             foreach (var item in update)
             {
                 Hierarchy2Names.Add(item);
@@ -212,16 +213,17 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
         _dataConnector = dataConnector;
         InputSelectedTagObject(selectedTagObject);
         categoryDataManager = new CategoryDataManager(_dataConnector);
+        hierarchyDataManager = new HierarchyDataManager(_dataConnector);
 
-        Hierarchy1Names = new ObservableCollection<string>(categoryDataManager.GetHierarchy1Category());
-        Hierarchy2Names = new ObservableCollection<string>();
-        VduGroupNames = new ObservableCollection<string>(categoryDataManager.GetVduGroupCategory());
-        AlarmGroupNames = new ObservableCollection<string>(categoryDataManager.GetAlarmGroupCategory());
-        OtdNames = new ObservableCollection<string>(categoryDataManager.GetOtdCategory());
-        AcknowledgeAllowedNames = new ObservableCollection<string>(categoryDataManager.GetAckAllowedCategory());
-        AlwaysVisibleNames = new ObservableCollection<string>(categoryDataManager.GetAlwaysVisibleCategory());
-        NodeNames = new ObservableCollection<string>(categoryDataManager.GetNodeCategory());
-        CabinetNames = new ObservableCollection<string>(categoryDataManager.GetCabinetCategory());
+        Hierarchy1Names = new ObservableCollection<Hierarchy1>(hierarchyDataManager.GetHierarchy1Category());
+        Hierarchy2Names = new ObservableCollection<ICategory>();
+        VduGroupNames = new ObservableCollection<ICategory>(categoryDataManager.GetVduGroupCategory());
+        AlarmGroupNames = new ObservableCollection<ICategory>(categoryDataManager.GetAlarmGroupCategory());
+        OtdNames = new ObservableCollection<ICategory>(categoryDataManager.GetOtdCategory());
+        AcknowledgeAllowedNames = new ObservableCollection<ICategory>(categoryDataManager.GetAckAllowedCategory());
+        AlwaysVisibleNames = new ObservableCollection<ICategory>(categoryDataManager.GetAlwaysVisibleCategory());
+        NodeNames = new ObservableCollection<ICategory>(categoryDataManager.GetNodeCategory());
+        CabinetNames = new ObservableCollection<ICategory>(categoryDataManager.GetCabinetCategory());
     }
 
     private void InputSelectedTagObject(ObjectModel selectedTagObject)

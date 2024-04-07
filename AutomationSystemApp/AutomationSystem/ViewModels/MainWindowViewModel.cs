@@ -5,8 +5,8 @@ using AutomationSystem.Views;
 using AutomationSystem.MVVM;
 using System.Windows;
 using AutomationSystem.Models;
-using AutomationSystem.DataManager;
 using AutomationSystem.Models.DataAccess;
+using AutomationSystem.Models.DataManager;
 
 
 namespace AutomationSystem.ViewModels;
@@ -17,26 +17,16 @@ internal class MainWindowViewModel : ViewModelBase
     private readonly IDataConnector _dataConnector;
     ObjectDataManager dataManager;
     CategoryDataManager categoryDataManager;
+    HierarchyDataManager hierarchyDataManger;
 
     // Properties
-    private ObservableCollection<string> _hierarchy1Names;
-    public ObservableCollection<string> Hierarchy1Names
+    private ObservableCollection<Hierarchy1> _hierarchy1Names;
+    public ObservableCollection<Hierarchy1> Hierarchy1Names
     {
         get { return _hierarchy1Names; }
         set
         {
             _hierarchy1Names = value;
-            OnPropertyChanged();
-        }
-    }
-    private string? _selectedItem;
-
-    public string? SelectedItem
-    {
-        get { return _selectedItem; }
-        set
-        {
-            _selectedItem = value;
             OnPropertyChanged();
         }
     }
@@ -69,16 +59,8 @@ internal class MainWindowViewModel : ViewModelBase
         }
     }
 
-    private string textBound;
-
-    public string TextBound
-    {
-        get { return textBound; }
-        set { textBound = value; OnPropertyChanged(); }
-    }
-
-    private List<IItem> _pictureHierarchy;
-    public List<IItem> PictureHierarchy
+    private ObservableCollection<IItem> _pictureHierarchy;
+    public ObservableCollection<IItem> PictureHierarchy
     {
         get { return _pictureHierarchy; }
         set
@@ -120,24 +102,66 @@ internal class MainWindowViewModel : ViewModelBase
     public ICommand ShowAddObjectWindowCommand => new RelayCommand(execute => ShowAddObjectWindow());
     public ICommand ShowEditObjectWindowCommand => new RelayCommand(execute => ShowEditObjectWindow(), canExecute => SelectedTagObject != null);
     public ICommand DeleteObjectCommand => new RelayCommand(execute => DeleteObject(), canExecute => SelectedTagObject != null);
+    public ICommand AddHierarchySubItemCommand => new RelayCommand(execute => AddHierarchySubItem(), canExecute => CanAddSubItem());
     public ICommand AddHierarchyItemCommand => new RelayCommand(execute => AddHierarchyItem());
-    public ICommand EditHierarchyItemCommand => new RelayCommand(execute => EditHierarchyItem());
-    public ICommand DeleteHierarchyItemCommand => new RelayCommand(execute => DeleteHierarchyItem());
+    public ICommand EditHierarchyItemCommand => new RelayCommand(execute => EditHierarchyItem(), canExecute => SelectedHierarchyItem != null);
+    public ICommand DeleteHierarchyItemCommand => new RelayCommand(execute => DeleteHierarchyItem(), canExecute => SelectedHierarchyItem != null);
 
+    private bool CanAddSubItem()
+    {
+        if (SelectedHierarchyItem == null)
+        {
+            return false;
+        }
+        return isHierarchy1Item(SelectedHierarchyItem.Name);
+    }
     private void EditHierarchyItem()
     {
-        throw new NotImplementedException();
+        //bool isHierarchy1 = Hierarchy1Names.Any(item => item.Name == SelectedHierarchyItem.Name);
+        if (isHierarchy1Item(SelectedHierarchyItem.Name))
+        {
+            hierarchyDataManger.EditHierarchy1Category(SelectedHierarchyItem.Id, SelectedHierarchyName);
+        }
+        else
+        {
+            hierarchyDataManger.EditHierarchy2Category(SelectedHierarchyItem.Id, SelectedHierarchyName);
+        }
+        GetPictureHierarchy();
     }
 
-
+    private bool isHierarchy1Item(string selectedItem)
+    {
+        if (selectedItem == null)
+        {
+            return false;
+        }
+        return Hierarchy1Names.Any(item => item.Name == selectedItem);
+    }
     private void DeleteHierarchyItem()
     {
-        throw new NotImplementedException();
+        bool isHierarchy1 = Hierarchy1Names.Any(item => item.Name == SelectedHierarchyItem.Name);
+        if (isHierarchy1)
+        {
+            hierarchyDataManger.DeleteHierarchy1Category(SelectedHierarchyItem.Id);
+        }
+        else
+        {
+            hierarchyDataManger.DeleteHierarchy2Category(SelectedHierarchyItem.Id);
+        }
+        GetPictureHierarchy();
+        SelectedHierarchyName = null;
+    }
+
+    private void AddHierarchySubItem()
+    {
+        hierarchyDataManger.AddHierarchy2Category(SelectedHierarchyItem.Name, SelectedHierarchyName);
+        GetPictureHierarchy();
     }
 
     private void AddHierarchyItem()
     {
-        SelectedHierarchyName = SelectedHierarchyItem.Name;
+        hierarchyDataManger.AddHierarchy1Category(SelectedHierarchyName);
+        GetPictureHierarchy();
     }
 
     public MainWindowViewModel(IDataConnector dataConnector)
@@ -145,28 +169,35 @@ internal class MainWindowViewModel : ViewModelBase
         _dataConnector = dataConnector;
         dataManager = new ObjectDataManager(_dataConnector);
         categoryDataManager = new CategoryDataManager(_dataConnector);
+        hierarchyDataManger = new HierarchyDataManager(_dataConnector);
         _tagObjects = new ObservableCollection<ObjectModel>(dataManager.GetObjects());
-        _hierarchy1Names = new ObservableCollection<string>(categoryDataManager.GetHierarchy1Category());
-        _pictureHierarchy = new List<IItem>();
+        _hierarchy1Names = new ObservableCollection<Hierarchy1>(hierarchyDataManger.GetHierarchy1Category());
+        _pictureHierarchy = new ObservableCollection<IItem>();
         GetPictureHierarchy();
     }
 
     private void GetPictureHierarchy()
     {
-        //add Root items
-        foreach (string hierarchy1 in Hierarchy1Names)
+        if (PictureHierarchy != null)
         {
-            PictureHierarchy.Add(new Hierarchy { Name = hierarchy1 });
+            PictureHierarchy.Clear();
+        }
+        Hierarchy1Names = new ObservableCollection<Hierarchy1>(hierarchyDataManger.GetHierarchy1Category());
+
+        //add Root items
+        foreach (Hierarchy1 hierarchy1 in Hierarchy1Names)
+        {
+            PictureHierarchy.Add(new HierarchyModel { Id = hierarchy1.Id, Name = hierarchy1.Hierarchy1Name });
         }
 
         //add sub items
         for (int i = 0; i < PictureHierarchy.Count; i++)
         {
             string? hierarchy1Name = PictureHierarchy[i].Name;
-            List<string> hierarchy2Names = categoryDataManager.GetHierarchy2Category(hierarchy1Name);
-            foreach (string name in hierarchy2Names)
+            List<Hierarchy2> hierarchy2Category = hierarchyDataManger.GetHierarchy2Category(hierarchy1Name);
+            foreach (Hierarchy2 hierarchy2 in hierarchy2Category)
             {
-                PictureHierarchy[i].SubItem.Add(new Hierarchy { Name = name });
+                PictureHierarchy[i].SubItem.Add(new HierarchyModel { Id = hierarchy2.Id, Name = hierarchy2.Name });
             }
         }
     }

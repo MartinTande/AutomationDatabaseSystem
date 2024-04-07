@@ -1,7 +1,7 @@
 ﻿using AutomationSystem.Models;
 using AutomationSystem.Models.DataAccess;
 
-namespace AutomationSystem.DataManager;
+namespace AutomationSystem.Models.DataManager;
 
 public class ObjectDataManager
 {

@@ -1,15 +1,14 @@
 -- Check if View exists and deletes it if yes
 IF EXISTS (SELECT name
 	FROM sysobjects
-	WHERE name = 'GetCategory'
+	WHERE name = 'EditCategoryItem'
 	AND type = 'P')
-DROP PROCEDURE GetCategory
+DROP PROCEDURE EditCategoryItem
 GO
 
-CREATE PROCEDURE GetCategory
+CREATE PROCEDURE EditCategoryItem
     @TableName nvarchar(128),
-    @Name nvarchar(128),
-    @Id int
+    @Name nvarchar(128)
 AS
 BEGIN
     DECLARE @SQLString nvarchar(MAX)

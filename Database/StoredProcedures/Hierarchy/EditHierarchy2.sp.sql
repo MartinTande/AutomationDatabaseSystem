@@ -9,15 +9,13 @@ GO
 -- Stored Procedure
 CREATE PROCEDURE EditHierarchy2
 	-- Input parameters
-    @Hierarchy2Id int,
-	@Hierarchy1Name varchar(50),
-	@Hierarchy2Name varchar(50)
+    @Id int,
+	@Hierarchy2Name varchar(100)
 AS
 
 UPDATE HIERARCHY_2 SET
-Name = @Hierarchy2Name,
-Hierarchy1Id = (SELECT Hierarchy1Id FROM HIERARCHY_1 WHERE Hierarchy1Name=@Hierarchy1Name)
+Name = @Hierarchy2Name
 
-WHERE Hierarchy2Id = @Hierarchy2Id
+WHERE Id = @Id
 
 GO

@@ -1,7 +1,15 @@
-﻿namespace AutomationSystem.Models;
+﻿using System.Collections.ObjectModel;
 
-public class HierarchyModel
+namespace AutomationSystem.Models;
+
+public class HierarchyModel : IItem
 {
-    public string? hierarchy1Name {  get; set; }
-    public string? hierarchy2Name { get; set; }
+    public int Id { get; set; }
+    public string? Name { get; set; }
+
+    public ObservableCollection<IItem> SubItem { get; set; }
+    public HierarchyModel()
+    {
+        SubItem = new ObservableCollection<IItem>();
+    }
 }

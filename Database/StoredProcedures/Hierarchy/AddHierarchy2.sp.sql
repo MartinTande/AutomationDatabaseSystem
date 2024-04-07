@@ -17,9 +17,9 @@ DECLARE
 	-- Internal variables
 	@Hierarchy1Id int
 
-SELECT @Hierarchy1Id=Id FROM HIERARCHY_1 WHERE Name=@Hierarchy1Name
+SELECT @Hierarchy1Id=Id FROM HIERARCHY_1 WHERE Hierarchy1Name=@Hierarchy1Name
 
-INSERT INTO HIERARCHY_2 (Id, Name)
+INSERT INTO HIERARCHY_2 (Hierarchy1Id, Hierarchy2Name)
 VALUES (@Hierarchy1Id, @Hierarchy2Name)
 
 GO
