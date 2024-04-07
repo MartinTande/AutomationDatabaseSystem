@@ -75,31 +75,6 @@
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
-                    <ListView Grid.Row="2" 
-                              ItemsSource="{Binding Items}">
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
-                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Top"/>
-                                    <ListView ItemsSource="{Binding SubItems}" VerticalAlignment="Bottom">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackPanel VerticalAlignment="Top">
-                                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Top"/>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
                     <StackPanel Grid.Row="0" 
                                 Orientation="Horizontal">
                         <TextBox Text="{Binding SelectedHierarchyName, UpdateSourceTrigger=PropertyChanged}" 
