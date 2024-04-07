@@ -184,3 +184,15 @@ INSERT INTO ACKNOWLEDGE_ALLOWED (AcknowledgeAllowedName) VALUES ('Battery Room')
 -- Insert sample data into ALWAYS_VISIBLE
 INSERT INTO ALWAYS_VISIBLE (AlwaysVisibleName) VALUES ('ECR')
 INSERT INTO ALWAYS_VISIBLE (AlwaysVisibleName) VALUES ('Bridge')
+
+-- Insert sample data into SIGNAL_TYPE
+INSERT INTO SIGNAL_TYPE (SignalTypeName) VALUES ('DI')
+INSERT INTO SIGNAL_TYPE (SignalTypeName) VALUES ('DO')
+INSERT INTO SIGNAL_TYPE (SignalTypeName) VALUES ('AI')
+INSERT INTO SIGNAL_TYPE (SignalTypeName) VALUES ('AO')
+INSERT INTO SIGNAL_TYPE (SignalTypeName) VALUES ('SDI')
+INSERT INTO SIGNAL_TYPE (SignalTypeName) VALUES ('SAI')
+
+-- Insert sample data into IO_TYPE
+INSERT INTO IO_TYPE (IoTypeName) VALUES ('Analog')
+INSERT INTO IO_TYPE (IoTypeName) VALUES ('Digital')
