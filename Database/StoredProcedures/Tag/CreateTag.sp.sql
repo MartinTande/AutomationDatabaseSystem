@@ -14,10 +14,10 @@ CREATE PROCEDURE CreateTag
 	@Description varchar(100),
 	@SignalTypeName varchar(50),
 	@IoTypeName varchar(50),
-	@LowLimit varchar(50),
-	@LowLowLimit varchar(50),
-	@HighLimit varchar(50),
-	@HighHighLimit varchar(100)
+	@LowLimit int,
+	@LowLowLimit int,
+	@HighLimit int,
+	@HighHighLimit int
 AS
 BEGIN
 	DECLARE
