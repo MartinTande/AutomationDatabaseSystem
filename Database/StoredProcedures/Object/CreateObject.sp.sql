@@ -38,20 +38,20 @@ DECLARE
 	@CabinetId int,
 	@DataBlockId int
 
-SELECT @Hierarchy1Id=Id FROM HIERARCHY_1 WHERE Hierarchy1Name=@Hierarchy1Name
-SELECT @Hierarchy2Id=Id FROM HIERARCHY_2 WHERE Hierarchy2Name=@Hierarchy2Name
-SELECT @VduGroupId=Id FROM VDU_GROUP WHERE VduGroupName=@VduGroupName
-SELECT @AlarmGroupId=Id FROM ALARM_GROUP WHERE AlarmGroupName=@AlarmGroupName
-SELECT @OtdId=Id FROM OTD WHERE OtdName=@OtdName
-SELECT @AcknowledgeAllowedId=Id FROM ACKNOWLEDGE_ALLOWED WHERE AcknowledgeAllowedName=@AcknowledgeAllowedName
-SELECT @AlwaysVisibleId=Id FROM ALWAYS_VISIBLE WHERE AlwaysVisibleName=@AlwaysVisibleName
-SELECT @NodeId=Id FROM NODE WHERE NodeName=@NodeName
-SELECT @CabinetId=Id FROM CABINET WHERE CabinetName=@CabinetName
-IF NOT EXISTS (SELECT * FROM DATA_BLOCK WHERE DataBlockName = @DataBlockName)
-INSERT INTO DATA_BLOCK (DataBlockName) VALUES (@DataBlockName)
+SELECT @Hierarchy1Id=Id FROM HIERARCHY_1 WHERE Name=@Hierarchy1Name
+SELECT @Hierarchy2Id=Id FROM HIERARCHY_2 WHERE Name=@Hierarchy2Name
+SELECT @VduGroupId=Id FROM VDU_GROUP WHERE Name=@VduGroupName
+SELECT @AlarmGroupId=Id FROM ALARM_GROUP WHERE Name=@AlarmGroupName
+SELECT @OtdId=Id FROM OTD WHERE Name=@OtdName
+SELECT @AcknowledgeAllowedId=Id FROM ACKNOWLEDGE_ALLOWED WHERE Name=@AcknowledgeAllowedName
+SELECT @AlwaysVisibleId=Id FROM ALWAYS_VISIBLE WHERE Name=@AlwaysVisibleName
+SELECT @NodeId=Id FROM NODE WHERE Name=@NodeName
+SELECT @CabinetId=Id FROM CABINET WHERE Name=@CabinetName
+IF NOT EXISTS (SELECT * FROM DATA_BLOCK WHERE Name = @DataBlockName)
+INSERT INTO DATA_BLOCK (Name) VALUES (@DataBlockName)
 
 INSERT INTO OBJECT (SfiNumber, MainEqNumber, EqNumber, Description, Hierarchy1Id, Hierarchy2Id, VduGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId, DataBlockId) 
 VALUES (@SfiNumber, @MainEqNumber, @EqNumber, @Description, @Hierarchy1Id, @Hierarchy2Id, @VduGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId, 
-		(SELECT Id FROM DATA_BLOCK WHERE DataBlockName=@DataBlockName))
+		(SELECT Id FROM DATA_BLOCK WHERE Name=@DataBlockName))
 
 GO
