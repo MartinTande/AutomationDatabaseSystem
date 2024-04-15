@@ -218,7 +218,7 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
         hierarchyDataManager = new HierarchyDataManager(_dataConnector);
 
         Hierarchy1Names = new ObservableCollection<string>(hierarchyDataManager.GetHierarchy1Names());
-        Hierarchy2Names = new ObservableCollection<string>();
+        Hierarchy2Names = new ObservableCollection<string>(hierarchyDataManager.GetHierarchy2Names(SelectedHierarchy1));
         VduGroupNames = new ObservableCollection<string>(categoryDataManager.GetVduGroupNames());
         AlarmGroupNames = new ObservableCollection<string>(categoryDataManager.GetAlarmGroupNames());
         OtdNames = new ObservableCollection<string>(categoryDataManager.GetOtdNames());
