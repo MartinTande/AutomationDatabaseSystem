@@ -96,30 +96,40 @@
             <!-- Hierarchy 1 -->
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
-                       Background="Transparent"
-                       Text="Hierarchy 1"
-                       FontSize="14"
-                       VerticalAlignment="Center"/>
+                       Text="Hierarchy 1"/>
             <ComboBox ItemsSource="{Binding Hierarchy1Names}"
                       Grid.Row="1"
                       Grid.Column="0"
-                      SelectedItem="{Binding SelectedHierarchy1, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding SelectedHierarchy1}"
                       Margin="0,0,5,0"
-                      VerticalContentAlignment="Center"/>
+                      VerticalContentAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <!-- Hierarchy 2 -->
             <TextBlock Grid.Column="1"
                        Text="Hierarchy 2"
-                       Margin="5,0,0,0"
-                       FontSize="14"
-                       Background="Transparent"
-                       VerticalAlignment="Center"/>
+                       Margin="5,0,0,0"/>
             <ComboBox x:Name="cBoxHierarchy2"
-                      ItemsSource="{Binding Hierarchy2Names, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding Hierarchy2Names}"
                       SelectedItem="{Binding SelectedHierarchy2}"
                       Grid.Row="1"
                       Grid.Column="1"
                       Margin="5,0,0,0"
-                      VerticalContentAlignment="Center"/>
+                      VerticalContentAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
         <!-- Row 4 -->
         <Grid Grid.Row="3" Margin="5,0,5,0">
@@ -134,10 +144,8 @@
             </Grid.RowDefinitions>
             <!-- Vdu Group -->
             <TextBlock Grid.Column="0"
-                       Background="Transparent"
                        Text="Vdu Group"
-                       FontSize="14"
-                       VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                       Grid.ColumnSpan="2"/>
             <ComboBox ItemsSource="{Binding VduGroupNames}"
                       SelectedItem="{Binding SelectedVduGroup}"
                       Margin="0,0,5,0"
@@ -146,11 +154,8 @@
                       VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
             <!-- Alarm Group -->
             <TextBlock Grid.Column="2"
-                       Background="Transparent"
                        Text="Alarm Group"
-                       Margin="5,0,0,0"
-                       FontSize="14"
-                       VerticalAlignment="Center"/>
+                       Margin="5,0,0,0"/>
             <ComboBox ItemsSource="{Binding AlarmGroupNames}"
                       SelectedItem="{Binding SelectedAlarmGroup}"
                       Grid.Row="1"
@@ -170,10 +175,7 @@
             <!-- Node -->
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
-                       Background="Transparent"
-                       Text="Node"
-                       FontSize="14"
-                       VerticalAlignment="Center"/>
+                       Text="Node"/>
             <ComboBox ItemsSource="{Binding NodeNames}"
                       SelectedItem="{Binding SelectedNode}"
                       Margin="0,0,5,0"
@@ -183,11 +185,8 @@
             <!-- Cabinet -->
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
-                       Background="Transparent"
                        Text="Cabinet"
-                       FontSize="14"
-                       Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
+                       Margin="5,0,0,0"/>
             <ComboBox ItemsSource="{Binding CabinetNames}"
                       SelectedItem="{Binding SelectedCabinet}"
                       Grid.Row="1"
@@ -202,10 +201,7 @@
                 <RowDefinition Height="0.6*"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0"
-                       Background="Transparent"
-                       Text="OTD"
-                       FontSize="14"
-                       VerticalAlignment="Center"/>
+                       Text="OTD"/>
             <ComboBox ItemsSource="{Binding OtdNames}"
                       SelectedItem="{Binding SelectedOtd}"
                       Grid.Row="1"
@@ -218,10 +214,7 @@
                 <RowDefinition Height="0.6*"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0"
-                       Background="Transparent"
-                       Text="Acknowledge Allowed"
-                       FontSize="14"
-                       VerticalAlignment="Center"/>
+                       Text="Acknowledge Allowed"/>
             <ComboBox ItemsSource="{Binding AcknowledgeAllowedNames}"
                       SelectedItem="{Binding SelectedAcknowledgeAllowed}"
                       Grid.Row="1"
@@ -235,10 +228,7 @@
                 <RowDefinition Height="0.6*"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0"
-                       Background="Transparent"
-                       Text="Always Visible"
-                       FontSize="14"
-                       VerticalAlignment="Center"/>
+                       Text="Always Visible"/>
             <ComboBox ItemsSource="{Binding AlwaysVisibleNames}"
                       SelectedItem="{Binding SelectedAlwaysVisible}"
                       Grid.Row="1"
@@ -252,10 +242,7 @@
                 <RowDefinition Height="0.6*"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0"
-                       Text="Data block"
-                       Background="Transparent"
-                       FontSize="14"
-                       VerticalAlignment="Center"/>
+                       Text="Data block"/>
             <TextBox Grid.Row="1"
                      Text="{Binding DataBlockInput}"
                      VerticalContentAlignment="Center"/>
