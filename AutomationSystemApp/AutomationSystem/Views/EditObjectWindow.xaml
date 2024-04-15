@@ -100,36 +100,20 @@
             <ComboBox ItemsSource="{Binding Hierarchy1Names}"
                       Grid.Row="1"
                       Grid.Column="0"
-                      SelectedItem="{Binding SelectedHierarchy1}"
+                      SelectedItem="{Binding SelectedHierarchy1, UpdateSourceTrigger=PropertyChanged}"
                       Margin="0,0,5,0"
-                      VerticalContentAlignment="Center">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Name}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                      VerticalContentAlignment="Center"/>
             <!-- Hierarchy 2 -->
             <TextBlock Grid.Column="1"
                        Text="Hierarchy 2"
                        Margin="5,0,0,0"/>
             <ComboBox x:Name="cBoxHierarchy2"
                       ItemsSource="{Binding Hierarchy2Names}"
-                      SelectedItem="{Binding SelectedHierarchy2}"
+                      SelectedItem="{Binding SelectedHierarchy2, UpdateSourceTrigger=PropertyChanged}"
                       Grid.Row="1"
                       Grid.Column="1"
                       Margin="5,0,0,0"
-                      VerticalContentAlignment="Center">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Name}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                      VerticalContentAlignment="Center"/>
         </Grid>
         <!-- Row 4 -->
         <Grid Grid.Row="3" Margin="5,0,5,0">
