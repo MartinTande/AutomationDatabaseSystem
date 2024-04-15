@@ -1,5 +1,4 @@
-﻿using AutomationSystem.Models;
-using AutomationSystem.Models.DataAccess;
+﻿using AutomationSystem.Models.DataAccess;
 
 namespace AutomationSystem.Models.DataManager;
 

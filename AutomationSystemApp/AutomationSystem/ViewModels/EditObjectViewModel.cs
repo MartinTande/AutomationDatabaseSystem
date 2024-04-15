@@ -19,7 +19,7 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
     HierarchyDataManager hierarchyDataManager;
 
     // Lists of category names retrieved from database
-    public ObservableCollection<Hierarchy1>? Hierarchy1Names { get; set; }
+    public ObservableCollection<ICategory>? Hierarchy1Names { get; set; }
     public ObservableCollection<ICategory>? Hierarchy2Names { get; set; }
     public ObservableCollection<ICategory>? VduGroupNames { get; set; }
     public ObservableCollection<ICategory>? AlarmGroupNames { get; set; }
@@ -215,7 +215,7 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
         categoryDataManager = new CategoryDataManager(_dataConnector);
         hierarchyDataManager = new HierarchyDataManager(_dataConnector);
 
-        Hierarchy1Names = new ObservableCollection<Hierarchy1>(hierarchyDataManager.GetHierarchy1Category());
+        Hierarchy1Names = new ObservableCollection<ICategory>(hierarchyDataManager.GetHierarchy1Category());
         Hierarchy2Names = new ObservableCollection<ICategory>();
         VduGroupNames = new ObservableCollection<ICategory>(categoryDataManager.GetVduGroupCategory());
         AlarmGroupNames = new ObservableCollection<ICategory>(categoryDataManager.GetAlarmGroupCategory());
