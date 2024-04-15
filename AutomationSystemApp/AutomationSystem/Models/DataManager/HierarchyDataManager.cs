@@ -104,4 +104,27 @@ public class HierarchyDataManager
 
         return _sqlConnector.LoadData<Hierarchy1, dynamic>("GetCategory", p);
     }
+
+    public List<string> GetHierarchy1Names()
+    {
+        var p = new
+        {
+            TableName = "HIERARCHY_1"
+        };
+
+        return _sqlConnector.LoadData<string, dynamic>("GetCategoryNames", p);
+    }
+
+    public List<string> GetHierarchy2Names(string hierarchy1Name)
+    {
+        // Anonymous object, object with no name type
+        // No parameters, but need an object
+        var p = new
+        {
+            Name = hierarchy1Name
+        };
+
+        List<string> hierarchy2Category = _sqlConnector.LoadData<string, dynamic>("GetHierarchy2NamesByGroup", p);
+        return hierarchy2Category;
+    }
 }

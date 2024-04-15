@@ -80,4 +80,22 @@ public class CategoryDataManager
 
         return _sqlConnector.LoadData<AlarmGroup, dynamic>("GetCategory", p);
     }
+
+    public List<string> GetCategoryNames(string tableName)
+    {
+        var p = new
+        {
+            TableName = tableName
+        };
+
+        return _sqlConnector.LoadData<string, dynamic>("GetCategoryNames", p);
+    }
+
+    public List<string> GetAlarmGroupNames()    { return GetCategoryNames("ALARM_GROUP"); }
+    public List<string> GetNodeNames()    { return GetCategoryNames("NODE"); }
+    public List<string> GetAlwaysVisibleNames()    { return GetCategoryNames("ALWAYS_VISIBLE"); }
+    public List<string> GetAckowledgeAllowedNames()    { return GetCategoryNames("ACKNOWLEDGE_ALLOWED"); }
+    public List<string> GetVduGroupNames()    { return GetCategoryNames("VDU_GROUP"); }
+    public List<string> GetOtdNames()    { return GetCategoryNames("OTD"); }
+    public List<string> GetCabinetNames()    { return GetCategoryNames("CABINET"); }
 }
