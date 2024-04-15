@@ -64,8 +64,8 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         }
     }
 
-    private string? _selectedHierarchy2;
-    public string? SelectedHierarchy2
+    private ICategory? _selectedHierarchy2;
+    public ICategory? SelectedHierarchy2
     {
         get { return _selectedHierarchy2; }
         set
@@ -75,8 +75,8 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         }
     }
 
-    private string? _selectedVduGroup;
-    public string? SelectedVduGroup
+    private ICategory? _selectedVduGroup;
+    public ICategory? SelectedVduGroup
     {
         get { return _selectedVduGroup; }
         set
@@ -85,8 +85,8 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             OnPropertyChanged();
         }
     }
-    private string? _selectedAlarmGroup;
-    public string? SelectedAlarmGroup
+    private ICategory? _selectedAlarmGroup;
+    public ICategory? SelectedAlarmGroup
     {
         get { return _selectedAlarmGroup; }
         set
@@ -95,8 +95,8 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             OnPropertyChanged();
         }
     }
-    private string? _selectedOtd;
-    public string? SelectedOtd
+    private ICategory? _selectedOtd;
+    public ICategory? SelectedOtd
     {
         get { return _selectedOtd; }
         set
@@ -105,8 +105,8 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             OnPropertyChanged();
         }
     }
-    private string? _selectedAcknowledgeAllowed;
-    public string? SelectedAcknowledgeAllowed
+    private ICategory? _selectedAcknowledgeAllowed;
+    public ICategory? SelectedAcknowledgeAllowed
     {
         get { return _selectedAcknowledgeAllowed; }
         set
@@ -115,8 +115,8 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             OnPropertyChanged();
         }
     }
-    private string? _selectedAlwaysVisible;
-    public string? SelectedAlwaysVisible
+    private ICategory? _selectedAlwaysVisible;
+    public ICategory? SelectedAlwaysVisible
     {
         get { return _selectedAlwaysVisible; }
         set
@@ -125,8 +125,8 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             OnPropertyChanged();
         }
     }
-    private string? _selectedNode;
-    public string? SelectedNode
+    private ICategory? _selectedNode;
+    public ICategory? SelectedNode
     {
         get { return _selectedNode; }
         set
@@ -135,8 +135,8 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             OnPropertyChanged();
         }
     }
-    private string? _selectedCabinet;
-    public string? SelectedCabinet
+    private ICategory? _selectedCabinet;
+    public ICategory? SelectedCabinet
     {
         get { return _selectedCabinet; }
         set
@@ -233,14 +233,14 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         newTagObject.EqNumber = EqNumberInput;
         newTagObject.Description = DescriptionInput;
         newTagObject.Hierarchy1Name = SelectedHierarchy1.Name;
-        newTagObject.Hierarchy2Name = SelectedHierarchy2;
-        newTagObject.VduGroupName = SelectedVduGroup;
-        newTagObject.AlarmGroupName = SelectedAlarmGroup;
-        newTagObject.OtdName = SelectedOtd;
-        newTagObject.AlwaysVisibleName = SelectedAlwaysVisible;
-        newTagObject.AcknowledgeAllowedName = SelectedAcknowledgeAllowed;
-        newTagObject.NodeName = SelectedNode;
-        newTagObject.CabinetName = SelectedCabinet;
+        newTagObject.Hierarchy2Name = SelectedHierarchy2.Name;
+        newTagObject.VduGroupName = SelectedVduGroup.Name;
+        newTagObject.AlarmGroupName = SelectedAlarmGroup.Name;
+        newTagObject.OtdName = SelectedOtd.Name;
+        newTagObject.AlwaysVisibleName = SelectedAlwaysVisible.Name;
+        newTagObject.AcknowledgeAllowedName = SelectedAcknowledgeAllowed.Name;
+        newTagObject.NodeName = SelectedNode.Name;
+        newTagObject.CabinetName = SelectedCabinet.Name;
         newTagObject.DataBlockName = DataBlockInput;
 
         dataManager.InsertObject(newTagObject);
