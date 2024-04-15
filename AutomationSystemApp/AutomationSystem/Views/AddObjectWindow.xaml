@@ -105,7 +105,15 @@
                       Grid.Column="0"
                       SelectedItem="{Binding SelectedHierarchy1, UpdateSourceTrigger=PropertyChanged}"
                       Margin="0,0,5,0"
-                      VerticalContentAlignment="Center"/>
+                      VerticalContentAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <!-- Hierarchy 2 -->
             <TextBlock Grid.Column="1"
                        Text="Hierarchy 2"
@@ -119,7 +127,15 @@
                       Grid.Row="1"
                       Grid.Column="1"
                       Margin="5,0,0,0"
-                      VerticalContentAlignment="Center"/>
+                      VerticalContentAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
         <!-- Row 4 -->
         <Grid Grid.Row="3" Margin="5,0,5,0">
@@ -143,7 +159,15 @@
                       Margin="0,0,5,0"
                       Grid.Row="1"
                       Grid.Column="0"
-                      VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
+                      VerticalContentAlignment="Center" Grid.ColumnSpan="2">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <!-- Alarm Group -->
             <TextBlock Grid.Column="2"
                        Background="Transparent"
@@ -156,7 +180,15 @@
                       Grid.Row="1"
                       Margin="5,0,0,0"
                       Grid.Column="2"
-                      VerticalContentAlignment="Center"/>
+                      VerticalContentAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
         <Grid Grid.Row="4" Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
@@ -179,7 +211,15 @@
                       Margin="0,0,5,0"
                       Grid.Row="1"
                       Grid.Column="0"
-                      VerticalContentAlignment="Center"/>
+                      VerticalContentAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <!-- Cabinet -->
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
@@ -193,7 +233,15 @@
                       Grid.Row="1"
                       Margin="5,0,0,0"
                       Grid.Column="1"
-                      VerticalContentAlignment="Center"/>
+                      VerticalContentAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
         <!-- Otd -->
         <Grid Grid.Row="5" Margin="5,0,5,0">
@@ -209,7 +257,15 @@
             <ComboBox ItemsSource="{Binding OtdNames}"
                       SelectedItem="{Binding SelectedOtd}"
                       Grid.Row="1"
-                      VerticalContentAlignment="Center"/>
+                      VerticalContentAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
         <!-- Acknowledge Allowed -->
         <Grid Grid.Row="6" Margin="5,0,5,0">
@@ -225,7 +281,15 @@
             <ComboBox ItemsSource="{Binding AcknowledgeAllowedNames}"
                       SelectedItem="{Binding SelectedAcknowledgeAllowed}"
                       Grid.Row="1"
-                      VerticalContentAlignment="Center"/>
+                      VerticalContentAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
         
         <!-- Always Visible -->
@@ -242,7 +306,15 @@
             <ComboBox ItemsSource="{Binding AlwaysVisibleNames}"
                       SelectedItem="{Binding SelectedAlwaysVisible}"
                       Grid.Row="1"
-                      VerticalContentAlignment="Center"/>
+                      VerticalContentAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
 
         <!-- Data block -->

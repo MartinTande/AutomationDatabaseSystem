@@ -33,8 +33,8 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
     public ObservableCollection<ICategory> CabinetNames { get; set; }
 
     // Selected category names by user 
-    private string? _selectedHierarchy1;
-    public string? SelectedHierarchy1
+    private ICategory? _selectedHierarchy1;
+    public ICategory? SelectedHierarchy1
     {
         get { return _selectedHierarchy1; }
         set
@@ -52,7 +52,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             {
                 Hierarchy2Names.Clear();
             }
-            var updatedHierarchyName = new ObservableCollection<ICategory>(hierarchyDataManager.GetHierarchy2Category(SelectedHierarchy1));
+            var updatedHierarchyName = new ObservableCollection<ICategory>(hierarchyDataManager.GetHierarchy2Category(SelectedHierarchy1.Name));
             foreach (ICategory item in updatedHierarchyName)
             {
                 Hierarchy2Names.Add(item);
@@ -232,7 +232,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         newTagObject.MainEqNumber = MainEqNumberInput;
         newTagObject.EqNumber = EqNumberInput;
         newTagObject.Description = DescriptionInput;
-        newTagObject.Hierarchy1Name = SelectedHierarchy1;
+        newTagObject.Hierarchy1Name = SelectedHierarchy1.Name;
         newTagObject.Hierarchy2Name = SelectedHierarchy2;
         newTagObject.VduGroupName = SelectedVduGroup;
         newTagObject.AlarmGroupName = SelectedAlarmGroup;
