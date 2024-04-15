@@ -99,8 +99,7 @@ public class HierarchyDataManager
     {
         var p = new
         {
-            TableName = "HIERARCHY_1",
-            TableColumn = "Name"
+            TableName = "HIERARCHY_1"
         };
 
         return _sqlConnector.LoadData<Hierarchy1, dynamic>("GetCategory", p);

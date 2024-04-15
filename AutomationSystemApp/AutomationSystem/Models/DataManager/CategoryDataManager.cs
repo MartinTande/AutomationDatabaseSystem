@@ -16,8 +16,7 @@ public class CategoryDataManager
     {
         var p = new
         {
-            TableName = "NODE",
-            TableColumn = "NodeName"
+            TableName = "NODE"
         };
 
         return _sqlConnector.LoadData<Node, dynamic>("GetCategory", p);
@@ -27,8 +26,7 @@ public class CategoryDataManager
     {
         var p = new
         {
-            TableName = "ACKNOWLEDGE_ALLOWED",
-            TableColumn = "AcknowledgeAllowedName"
+            TableName = "ACKNOWLEDGE_ALLOWED"
         };
 
         return _sqlConnector.LoadData<AcknowledgeAllowed, dynamic>("GetCategory", p);
@@ -38,8 +36,7 @@ public class CategoryDataManager
     {
         var p = new
         {
-            TableName = "ALWAYS_VISIBLE",
-            TableColumn = "AlwaysVisibleName"
+            TableName = "ALWAYS_VISIBLE"
         };
 
         return _sqlConnector.LoadData<AlwaysVisible, dynamic>("GetCategory", p);
@@ -49,8 +46,7 @@ public class CategoryDataManager
     {
         var p = new
         {
-            TableName = "CABINET",
-            TableColumn = "CabinetName"
+            TableName = "CABINET"
         };
 
         return _sqlConnector.LoadData<Cabinet, dynamic>("GetCategory", p);
@@ -60,8 +56,7 @@ public class CategoryDataManager
     {
         var p = new
         {
-            TableName = "OTD",
-            TableColumn = "OtdName"
+            TableName = "OTD"
         };
 
         return _sqlConnector.LoadData<Otd, dynamic>("GetCategory", p);
@@ -71,8 +66,7 @@ public class CategoryDataManager
     {
         var p = new
         {
-            TableName = "VDU_GROUP",
-            TableColumn = "VduGroupName"
+            TableName = "VDU_GROUP"
         };
 
         return _sqlConnector.LoadData<VduGroup, dynamic>("GetCategory", p);
@@ -82,8 +76,7 @@ public class CategoryDataManager
     {
         var p = new
         {
-            TableName = "ALARM_GROUP",
-            TableColumn = "AlarmGroupName"
+            TableName = "ALARM_GROUP"
         };
 
         return _sqlConnector.LoadData<AlarmGroup, dynamic>("GetCategory", p);
