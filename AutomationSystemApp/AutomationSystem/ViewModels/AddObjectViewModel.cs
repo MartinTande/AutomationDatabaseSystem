@@ -13,7 +13,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
 {
     private readonly IDataConnector _dataConnector;
     CategoryDataManager categoryDataManager;
-    HierarchyDataManager hierarchyDataManager;
+    SubCategoryDataManager hierarchyDataManager;
 
 
     // Commands
@@ -207,9 +207,9 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
     {
         _dataConnector = dataConnector;
         categoryDataManager = new CategoryDataManager(_dataConnector);
-        hierarchyDataManager = new HierarchyDataManager(_dataConnector);
+        hierarchyDataManager = new SubCategoryDataManager(_dataConnector);
 
-        Hierarchy1Names = new ObservableCollection<ICategory>(hierarchyDataManager.GetHierarchy1Category());
+        Hierarchy1Names = new ObservableCollection<ICategory>(categoryDataManager.GetHierarchy1Category());
         Hierarchy2Names = new ObservableCollection<ICategory>();
         VduGroupNames = new ObservableCollection<ICategory>(categoryDataManager.GetVduGroupCategory());
         AlarmGroupNames = new ObservableCollection<ICategory>(categoryDataManager.GetAlarmGroupCategory());
@@ -228,22 +228,23 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
     private void AddObject()
     {
         ObjectDataManager dataManager = new ObjectDataManager(_dataConnector);
-        ObjectModel newTagObject = new ObjectModel();
-
-        newTagObject.SfiNumber = SfiNumberInput;
-        newTagObject.MainEqNumber = MainEqNumberInput;
-        newTagObject.EqNumber = EqNumberInput;
-        newTagObject.Description = DescriptionInput;
-        newTagObject.Hierarchy1Name = SelectedHierarchy1.Name;
-        newTagObject.Hierarchy2Name = SelectedHierarchy2.Name;
-        newTagObject.VduGroupName = SelectedVduGroup.Name;
-        newTagObject.AlarmGroupName = SelectedAlarmGroup.Name;
-        newTagObject.OtdName = SelectedOtd.Name;
-        newTagObject.AlwaysVisibleName = SelectedAlwaysVisible.Name;
-        newTagObject.AcknowledgeAllowedName = SelectedAcknowledgeAllowed.Name;
-        newTagObject.NodeName = SelectedNode.Name;
-        newTagObject.CabinetName = SelectedCabinet.Name;
-        newTagObject.DataBlockName = DataBlockInput;
+        ObjectModel newTagObject = new ObjectModel
+        {
+            SfiNumber = SfiNumberInput,
+            MainEqNumber = MainEqNumberInput,
+            EqNumber = EqNumberInput,
+            Description = DescriptionInput,
+            Hierarchy1Name = SelectedHierarchy1.Name,
+            Hierarchy2Name = SelectedHierarchy2.Name,
+            VduGroupName = SelectedVduGroup.Name,
+            AlarmGroupName = SelectedAlarmGroup.Name,
+            OtdName = SelectedOtd.Name,
+            AlwaysVisibleName = SelectedAlwaysVisible.Name,
+            AcknowledgeAllowedName = SelectedAcknowledgeAllowed.Name,
+            NodeName = SelectedNode.Name,
+            CabinetName = SelectedCabinet.Name,
+            DataBlockName = DataBlockInput
+        };
 
         dataManager.InsertObject(newTagObject);
         CloseWindow();

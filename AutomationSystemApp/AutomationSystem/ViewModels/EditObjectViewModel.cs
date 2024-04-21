@@ -16,7 +16,7 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
     public ICommand CloseWindowCommand => new RelayCommand(execute => CloseWindow());
 
     CategoryDataManager categoryDataManager;
-    HierarchyDataManager hierarchyDataManager;
+    SubCategoryDataManager subCategoryDataManager;
 
     // Lists of category names retrieved from database
     public ObservableCollection<string>? Hierarchy1Names { get; set; }
@@ -49,7 +49,7 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
             {
                 Hierarchy2Names.Clear();
             }
-            var update = new ObservableCollection<string>(hierarchyDataManager.GetHierarchy2Names(SelectedHierarchy1));
+            var update = new ObservableCollection<string>(subCategoryDataManager.GetHierarchy2Names(SelectedHierarchy1));
             foreach (var item in update)
             {
                 Hierarchy2Names.Add(item);
@@ -215,10 +215,10 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
         _dataConnector = dataConnector;
         InputSelectedTagObject(selectedTagObject);
         categoryDataManager = new CategoryDataManager(_dataConnector);
-        hierarchyDataManager = new HierarchyDataManager(_dataConnector);
+        subCategoryDataManager = new SubCategoryDataManager(_dataConnector);
 
-        Hierarchy1Names = new ObservableCollection<string>(hierarchyDataManager.GetHierarchy1Names());
-        Hierarchy2Names = new ObservableCollection<string>(hierarchyDataManager.GetHierarchy2Names(SelectedHierarchy1));
+        Hierarchy1Names = new ObservableCollection<string>(categoryDataManager.GetHierarchy1Names());
+        Hierarchy2Names = new ObservableCollection<string>(subCategoryDataManager.GetHierarchy2Names(SelectedHierarchy1));
         VduGroupNames = new ObservableCollection<string>(categoryDataManager.GetVduGroupNames());
         AlarmGroupNames = new ObservableCollection<string>(categoryDataManager.GetAlarmGroupNames());
         OtdNames = new ObservableCollection<string>(categoryDataManager.GetOtdNames());

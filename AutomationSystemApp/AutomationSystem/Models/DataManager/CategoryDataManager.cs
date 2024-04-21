@@ -81,6 +81,26 @@ public class CategoryDataManager
         return _sqlConnector.LoadData<AlarmGroup, dynamic>("GetCategory", p);
     }
 
+    public List<Hierarchy1> GetHierarchy1Category()
+    {
+        var p = new
+        {
+            TableName = "HIERARCHY_1"
+        };
+
+        return _sqlConnector.LoadData<Hierarchy1, dynamic>("GetCategory", p);
+    }
+
+    public List<IoType> GetIoType()
+    {
+        var p = new
+        {
+            TableName = "IO_TYPE"
+        };
+
+        return _sqlConnector.LoadData<IoType, dynamic>("GetCategory", p);
+    }
+
     public List<string> GetCategoryNames(string tableName)
     {
         var p = new
@@ -98,4 +118,50 @@ public class CategoryDataManager
     public List<string> GetVduGroupNames()    { return GetCategoryNames("VDU_GROUP"); }
     public List<string> GetOtdNames()    { return GetCategoryNames("OTD"); }
     public List<string> GetCabinetNames()    { return GetCategoryNames("CABINET"); }
+    public List<string> GetHierarchy1Names()    { return GetCategoryNames("HIERARCHY_1"); }
+    public List<string> GetIoTypeNames()    { return GetCategoryNames("IO_TYPE"); }
+
+    private void DeleteCategoryItem(string tableName, int id)
+    {
+        // Anonymous object, object with no name type
+        // No parameters, but need an object
+        var p = new
+        {
+            TableName = tableName,
+            Id = id
+        };
+
+        _sqlConnector.LoadData<string, dynamic>("DeleteCategoryItem", p);
+    }
+
+    private void EditCategoryItem(string tableName, int id, string updatedName)
+    {
+        var p = new
+        {
+            TableName = tableName,
+            Id = id,
+            Name = updatedName
+        };
+
+        _sqlConnector.LoadData<string, dynamic>("EditCategoryItem", p);
+    }
+
+    private void AddCategoryItem(string tableName, string name)
+    {
+        // Anonymous object, object with no name type
+        // No parameters, but need an object
+        var p = new
+        {
+            TableName = tableName,
+            Name = name
+        };
+
+        _sqlConnector.LoadData<string, dynamic>("AddCategoryItem", p);
+    }
+
+    public void DeleteHierarchy1Category(int id)    { DeleteCategoryItem("HIERARCHY_1", id); }
+    
+    public void EditHierarchy1Category(int id, string updatedHierarchy1Name)    {  EditCategoryItem("HIERARCHY_1", id, updatedHierarchy1Name);  }
+
+    public void AddHierarchy1Category(string hierarchy1Name)    { AddCategoryItem("HIERARCHY_1", hierarchy1Name); }
 }

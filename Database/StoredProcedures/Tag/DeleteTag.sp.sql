@@ -12,11 +12,12 @@ CREATE PROCEDURE DeleteTag
     @Id int
 AS
 
+-- Need to delete reference of Tag in connection table first
 DELETE
 FROM OBJECT_TAG
 WHERE TagId=@Id
 
-DELETE 
+DELETE
 FROM TAG 
 WHERE Id=@Id
 

@@ -21,7 +21,7 @@ BEGIN
 
     -- Retrieve the corresponding tags from the TAG table
     SELECT *
-    FROM TAG
+    FROM TagData
     WHERE Id IN (SELECT TagId FROM #TempTagIds)
 
     -- Clean up: drop the temporary table
