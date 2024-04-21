@@ -1,5 +1,4 @@
-﻿using AutomationSystem.Models;
-using AutomationSystem.Models.DataAccess;
+﻿using AutomationSystem.Models.DataAccess;
 
 namespace AutomationSystem.Models.DataManager;
 
@@ -86,7 +85,6 @@ public class ObjectDataManager
         {
             throw;
         }
-
     }
 
     public void DeleteObject(int id)

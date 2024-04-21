@@ -32,7 +32,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
     public ObservableCollection<ICategory> NodeNames { get; set; }
     public ObservableCollection<ICategory> CabinetNames { get; set; }
 
-    // Selected category names by user 
+    #region Selected category names by user 
     private ICategory? _selectedHierarchy1;
     public ICategory? SelectedHierarchy1
     {
@@ -145,8 +145,9 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             OnPropertyChanged();
         }
     }
+    #endregion
 
-    // User input parameters
+    #region User input parameters
     private int _sfiNumberInput;
     public int SfiNumberInput
     {
@@ -200,6 +201,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             OnPropertyChanged();
         }
     }
+    #endregion
 
     public AddObjectViewModel(IDataConnector dataConnector)
     {

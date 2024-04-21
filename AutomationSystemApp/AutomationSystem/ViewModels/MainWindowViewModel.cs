@@ -16,7 +16,7 @@ internal class MainWindowViewModel : ViewModelBase
 {
     private readonly IDataConnector _dataConnector;
     ObjectDataManager dataManager;
-    CategoryDataManager categoryDataManager;
+    TagDataManager tagDataManager;
     HierarchyDataManager hierarchyDataManger;
 
     // Properties
@@ -27,6 +27,18 @@ internal class MainWindowViewModel : ViewModelBase
         set
         {
             _hierarchy1Names = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private TagModel _selectedTag;
+
+    public TagModel SelectedTag
+    {
+        get { return _selectedTag; }
+        set 
+        { 
+            _selectedTag = value;
             OnPropertyChanged();
         }
     }
@@ -73,39 +85,94 @@ internal class MainWindowViewModel : ViewModelBase
         }
     }
 
-    private ObservableCollection<ObjectModel> _tagObjects;
-    public ObservableCollection<ObjectModel> TagObjects
+    private ObservableCollection<ObjectModel> _objects;
+    public ObservableCollection<ObjectModel> Objects
     {
-        get { return _tagObjects; }
+        get { return _objects; }
         set
         {
-            if (_tagObjects != value && _tagObjects != null)
+            if (_objects != value && _objects != null)
             {
-                _tagObjects = value;
+                _objects = value;
                 OnPropertyChanged();
             }
         }
     }
 
-    private ObjectModel? _selectedTagObject;
-    public ObjectModel? SelectedTagObject
+    private ObservableCollection<TagModel> _tags;
+    public ObservableCollection<TagModel> Tags
     {
-        get { return _selectedTagObject; }
+        get { return _tags; }
+        set 
+        {
+            if (_tags != value && _tags != null)
+            {
+                _tags = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    private ObjectModel? _selectedObject;
+    public ObjectModel? SelectedObject
+    {
+        get { return _selectedObject; }
         set
         {
-            _selectedTagObject = value;
+            _selectedObject = value;
             OnPropertyChanged();
+            if (value != null)
+            {
+                UpdateTags(SelectedObject.FullObjectName);
+            }
+        }
+    }
+
+    private void UpdateTags(string? objectName)
+    {
+        try
+        {
+            Tags = new ObservableCollection<TagModel>(tagDataManager.GetTagsByObjectId(SelectedObject.Id));
+            foreach (TagModel tag in Tags)
+            {
+                tag.ObjectName = objectName; 
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error updating Tags: {ex.Message}");
         }
     }
 
     // Commands
     public ICommand ShowAddObjectWindowCommand => new RelayCommand(execute => ShowAddObjectWindow());
-    public ICommand ShowEditObjectWindowCommand => new RelayCommand(execute => ShowEditObjectWindow(), canExecute => SelectedTagObject != null);
-    public ICommand DeleteObjectCommand => new RelayCommand(execute => DeleteObject(), canExecute => SelectedTagObject != null);
+    public ICommand ShowEditObjectWindowCommand => new RelayCommand(execute => ShowEditObjectWindow(), canExecute => SelectedObject != null);
+    public ICommand DeleteObjectCommand => new RelayCommand(execute => DeleteObject(), canExecute => SelectedObject != null);
     public ICommand AddHierarchySubItemCommand => new RelayCommand(execute => AddHierarchySubItem(), canExecute => CanAddSubItem());
     public ICommand AddHierarchyItemCommand => new RelayCommand(execute => AddHierarchyItem());
     public ICommand EditHierarchyItemCommand => new RelayCommand(execute => EditHierarchyItem(), canExecute => SelectedHierarchyItem != null);
     public ICommand DeleteHierarchyItemCommand => new RelayCommand(execute => DeleteHierarchyItem(), canExecute => SelectedHierarchyItem != null);
+    public ICommand ShowAddTagWindowCommand => new RelayCommand(execute => ShowAddTagWindow());
+
+    private void ShowAddTagWindow()
+    {
+        tagDataManager.InsertTag()
+    }
+
+    public ICommand ShowEditTagWindowCommand => new RelayCommand(execute => ShowEditTagWindow(), canExecute => SelectedTag != null);
+
+    private void ShowEditTagWindow()
+    {
+        throw new NotImplementedException();
+    }
+
+    public ICommand DeleteTagCommand => new RelayCommand(execute => DeleteTag(), canExecute => SelectedTag != null);
+
+    private void DeleteTag()
+    {
+        tagDataManager.DeleteTag(SelectedTag.Id);
+        UpdateTags(SelectedObject.FullObjectName);
+    }
 
     private bool CanAddSubItem()
     {
@@ -117,15 +184,15 @@ internal class MainWindowViewModel : ViewModelBase
     }
     private void EditHierarchyItem()
     {
-        //bool isHierarchy1 = Hierarchy1Names.Any(item => item.Name == SelectedHierarchyItem.Name);
-        if (isHierarchy1Item(SelectedHierarchyItem.Name))
-        {
-            hierarchyDataManger.EditHierarchy1Category(SelectedHierarchyItem.Id, SelectedHierarchyName);
-        }
-        else
-        {
-            hierarchyDataManger.EditHierarchy2Category(SelectedHierarchyItem.Id, SelectedHierarchyName);
-        }
+        bool isHierarchy1 = Hierarchy1Names.Any(item => item.Name == SelectedHierarchyItem.Name);
+        //if (isHierarchy1Item(SelectedHierarchyItem.Name))
+        //{
+        //    hierarchyDataManger.EditHierarchy1Category(SelectedHierarchyItem.Id, SelectedHierarchyName);
+        //}
+        //else
+        //{
+        //    hierarchyDataManger.EditHierarchy2Category(SelectedHierarchyItem.Id, SelectedHierarchyName);
+        //}
         GetPictureHierarchy();
     }
 
@@ -168,9 +235,10 @@ internal class MainWindowViewModel : ViewModelBase
     {
         _dataConnector = dataConnector;
         dataManager = new ObjectDataManager(_dataConnector);
-        categoryDataManager = new CategoryDataManager(_dataConnector);
+        tagDataManager = new TagDataManager(_dataConnector);
         hierarchyDataManger = new HierarchyDataManager(_dataConnector);
-        _tagObjects = new ObservableCollection<ObjectModel>(dataManager.GetObjects());
+        _objects = new ObservableCollection<ObjectModel>(dataManager.GetObjects());
+        _tags = new ObservableCollection<TagModel>();
         _hierarchy1Names = new ObservableCollection<Hierarchy1>(hierarchyDataManger.GetHierarchy1Category());
         _pictureHierarchy = new ObservableCollection<IItem>();
         GetPictureHierarchy();
@@ -211,31 +279,30 @@ internal class MainWindowViewModel : ViewModelBase
 
     private void AddObjectWindow_Closed(object sender, EventArgs e)
     {
-        UpdateTagObjects();
+        UpdateObjects();
     }
 
     private void ShowEditObjectWindow()
     {
-        EditObjectWindow editObjectWindow = new EditObjectWindow(_dataConnector, SelectedTagObject);
-        MessageBox.Show(SelectedTagObject.Description);
+        EditObjectWindow editObjectWindow = new EditObjectWindow(_dataConnector, SelectedObject);
+        MessageBox.Show(SelectedObject.Description);
         editObjectWindow.Show();
         editObjectWindow.Closed += EditObjectWindow_Closed;
     }
 
     private void EditObjectWindow_Closed(object sender, EventArgs e)
     {
-        UpdateTagObjects();
+        UpdateObjects();
     }
 
     private void DeleteObject()
     {
-        dataManager.DeleteObject(SelectedTagObject.Id);
-        MessageBox.Show(SelectedTagObject.Id.ToString());
-        UpdateTagObjects();
+        dataManager.DeleteObject(SelectedObject.Id);
+        UpdateObjects();
     }
 
-    private void UpdateTagObjects()
+    private void UpdateObjects()
     {
-        TagObjects = new ObservableCollection<ObjectModel>(dataManager.GetObjects());
+        Objects = new ObservableCollection<ObjectModel>(dataManager.GetObjects());
     }
 }

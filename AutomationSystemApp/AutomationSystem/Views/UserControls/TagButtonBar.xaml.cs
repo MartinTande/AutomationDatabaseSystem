@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace AutomationSystem.Views.UserControls
 {
     /// <summary>
-    /// Interaction logic for ButtonBar.xaml
+    /// Interaction logic for TagButtonBar.xaml
     /// </summary>
-    public partial class ButtonBar : UserControl
+    public partial class TagButtonBar : UserControl
     {
-        public ButtonBar()
+        public TagButtonBar()
         {
             InitializeComponent();
         }

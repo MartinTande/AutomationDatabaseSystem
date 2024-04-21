@@ -2,6 +2,7 @@
 
 public class TagModel
 {
+    public int Id { get; set; }
     public int Suffix { get; set; }
     public string? Description { get; set; }
     public string? SignalType { get; set; }
@@ -11,4 +12,13 @@ public class TagModel
     public string? HighLimit { get; set; }
     public string? HighHighLimit { get; set; }
     public string? SWPath { get; set; }
+    public string? ObjectName { get; set; }
+
+    public string FullTagName
+    {
+        get 
+        { 
+            return $"{ObjectName}_{Suffix}"; 
+        }
+    }
 }

@@ -24,4 +24,6 @@ public class ObjectModel
             return $"{SfiNumber}_{MainEqNumber}_{EqNumber}";
         }
     }
+
+    public List<TagModel>? Tags { get; set; }
 }
