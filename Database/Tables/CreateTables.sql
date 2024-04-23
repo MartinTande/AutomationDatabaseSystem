@@ -141,6 +141,12 @@ CREATE TABLE TAG
 	LowLowLimit int,
 	HighLimit int,
 	HighHighLimit int,
+	RangeHigh int,
+	RangeLow int,
+	Slot int,
+	AbsoluteAddress varchar(100),
+	ModbusAddress int,
+	ModbusBit int,
 )
 GO
 
