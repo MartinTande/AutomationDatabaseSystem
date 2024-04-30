@@ -37,7 +37,6 @@ public class SubCategoryDataManager
         _sqlConnector.LoadData<string, dynamic>("AddHierarchy2", p);
     }
 
-
     public void DeleteHierarchy2Category(int id)
     {
         // Anonymous object, object with no name type
@@ -49,8 +48,6 @@ public class SubCategoryDataManager
 
         _sqlConnector.LoadData<string, dynamic>("DeleteHierarchy2", p);
     }
-
-
 
     public void EditHierarchy2Category(int id, string updatedHierarchy2Name)
     {

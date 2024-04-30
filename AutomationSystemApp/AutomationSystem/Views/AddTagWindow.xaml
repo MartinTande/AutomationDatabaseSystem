@@ -1,4 +1,5 @@
 ﻿<Window x:Class="AutomationSystem.Views.AddTagWindow"
+        WindowStartupLocation="CenterScreen"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -83,10 +84,10 @@
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
                        Text="IO Type"/>
-            <ComboBox ItemsSource="{Binding Hierarchy1Names}"
+            <ComboBox ItemsSource="{Binding IOTypeNames}"
                       Grid.Row="1"
                       Grid.Column="0"
-                      SelectedItem="{Binding SelectedHierarchy1, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding SelectedIOType, UpdateSourceTrigger=PropertyChanged}"
                       Margin="0,0,5,0"
                       VerticalContentAlignment="Center">
                 <ComboBox.ItemTemplate>
@@ -102,8 +103,8 @@
                        Text="Signal Type"
                        Margin="5,0,0,0"/>
             <ComboBox x:Name="cBoxHierarchy2"
-                      ItemsSource="{Binding Hierarchy2Names, UpdateSourceTrigger=PropertyChanged}"
-                      SelectedItem="{Binding SelectedHierarchy2}"
+                      ItemsSource="{Binding SignalTypeNames, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding SelectedSignalType}"
                       Grid.Row="1"
                       Grid.Column="1"
                       Margin="5,0,0,0"
@@ -160,7 +161,7 @@
             <!-- Low low -->
             <TextBlock Grid.Row="0"
                        Grid.Column="3"
-                       Text="Low"/>
+                       Text="Low Low"/>
             <TextBox Grid.Row="2"
                      Grid.Column="3"
                      Text="{Binding LowLowLimitInput}"
@@ -177,20 +178,33 @@
             <TextBlock Grid.Row="0"
                        Text="SW Path"/>
             <TextBox Grid.Row="1"
-                     Text="{Binding DataBlockInput}"
+                     Text="{Binding SWPathInput}"
                      VerticalContentAlignment="Center"/>
         </Grid>
 
         <!-- Modbus Address -->
         <Grid Grid.Row="5" Margin="5,0,5,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
                 <RowDefinition Height="0.6*"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0"
+                       Grid.Column="0"
                        Text="Modbus Address"/>
             <TextBox Grid.Row="1"
-                     Text="{Binding DataBlockInput}"
+                     Grid.Column="0"
+                     Text="{Binding ModbusAddressInput}"
+                     VerticalContentAlignment="Center"/>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Text="Modbus Bit"/>
+            <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     Text="{Binding ModbusBitInput}"
                      VerticalContentAlignment="Center"/>
         </Grid>
 

@@ -15,11 +15,10 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
     CategoryDataManager categoryDataManager;
     SubCategoryDataManager hierarchyDataManager;
 
-
-    // Commands
+    #region Commands
     public ICommand AddObjectCommand => new RelayCommand(execute => AddObject(), canExecute => CanAddObject());
     public ICommand CloseWindowCommand => new RelayCommand(execute => CloseWindow());
-
+    #endregion
 
     // Lists of category names retrieved from database
     public ObservableCollection<ICategory> Hierarchy1Names { get; set; }

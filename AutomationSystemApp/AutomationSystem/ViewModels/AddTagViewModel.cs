@@ -24,6 +24,6 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
             //Description = DescriptionInput,
         };
     }
-    public Action Close { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public int SuffixInput { get; private set; }
+    public Action Close { get; set; }
+    public int SuffixInput { get; set; }
 }
