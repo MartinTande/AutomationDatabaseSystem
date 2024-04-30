@@ -11,6 +11,18 @@ public class SubCategoryDataManager
         _sqlConnector = sqlConnector;
     }
 
+    public List<SignalType> GetSignalTypeCategory(string ioType)
+    {
+        // Anonymous object, object with no name type
+        // No parameters, but need an object
+        var p = new
+        {
+            Name = ioType
+        };
+
+        return _sqlConnector.LoadData<SignalType, dynamic>("GetSignalTypeByGroup", p);
+    }
+
     public List<Hierarchy2> GetHierarchy2Category(string hierarchy1Name)
     {
         // Anonymous object, object with no name type

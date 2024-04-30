@@ -36,7 +36,7 @@ public class TagDataManager
             tag.Suffix,
             tag.Description,
             tag.SignalType,
-            tag.IOType,
+            tag.IoType,
             tag.LowLimit,
             tag.LowLowLimit,
             tag.HighLimit,

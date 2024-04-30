@@ -91,7 +91,7 @@ public class CategoryDataManager
         return _sqlConnector.LoadData<Hierarchy1, dynamic>("GetCategory", p);
     }
 
-    public List<IoType> GetIoType()
+    public List<IoType> GetIoTypeCategory()
     {
         var p = new
         {
@@ -111,15 +111,15 @@ public class CategoryDataManager
         return _sqlConnector.LoadData<string, dynamic>("GetCategoryNames", p);
     }
 
-    public List<string> GetAlarmGroupNames()    { return GetCategoryNames("ALARM_GROUP"); }
-    public List<string> GetNodeNames()    { return GetCategoryNames("NODE"); }
-    public List<string> GetAlwaysVisibleNames()    { return GetCategoryNames("ALWAYS_VISIBLE"); }
-    public List<string> GetAckowledgeAllowedNames()    { return GetCategoryNames("ACKNOWLEDGE_ALLOWED"); }
-    public List<string> GetVduGroupNames()    { return GetCategoryNames("VDU_GROUP"); }
-    public List<string> GetOtdNames()    { return GetCategoryNames("OTD"); }
-    public List<string> GetCabinetNames()    { return GetCategoryNames("CABINET"); }
-    public List<string> GetHierarchy1Names()    { return GetCategoryNames("HIERARCHY_1"); }
-    public List<string> GetIoTypeNames()    { return GetCategoryNames("IO_TYPE"); }
+    public List<string> GetAlarmGroupNames() { return GetCategoryNames("ALARM_GROUP"); }
+    public List<string> GetNodeNames() { return GetCategoryNames("NODE"); }
+    public List<string> GetAlwaysVisibleNames() { return GetCategoryNames("ALWAYS_VISIBLE"); }
+    public List<string> GetAckowledgeAllowedNames() { return GetCategoryNames("ACKNOWLEDGE_ALLOWED"); }
+    public List<string> GetVduGroupNames() { return GetCategoryNames("VDU_GROUP"); }
+    public List<string> GetOtdNames() { return GetCategoryNames("OTD"); }
+    public List<string> GetCabinetNames() { return GetCategoryNames("CABINET"); }
+    public List<string> GetHierarchy1Names() { return GetCategoryNames("HIERARCHY_1"); }
+    public List<string> GetIoTypeNames() { return GetCategoryNames("IO_TYPE"); }
 
     private void DeleteCategoryItem(string tableName, int id)
     {
@@ -159,9 +159,9 @@ public class CategoryDataManager
         _sqlConnector.LoadData<string, dynamic>("AddCategoryItem", p);
     }
 
-    public void DeleteHierarchy1Category(int id)    { DeleteCategoryItem("HIERARCHY_1", id); }
-    
-    public void EditHierarchy1Category(int id, string updatedHierarchy1Name)    {  EditCategoryItem("HIERARCHY_1", id, updatedHierarchy1Name);  }
+    public void DeleteHierarchy1Category(int id) { DeleteCategoryItem("HIERARCHY_1", id); }
 
-    public void AddHierarchy1Category(string hierarchy1Name)    { AddCategoryItem("HIERARCHY_1", hierarchy1Name); }
+    public void EditHierarchy1Category(int id, string updatedHierarchy1Name) { EditCategoryItem("HIERARCHY_1", id, updatedHierarchy1Name); }
+
+    public void AddHierarchy1Category(string hierarchy1Name) { AddCategoryItem("HIERARCHY_1", hierarchy1Name); }
 }
