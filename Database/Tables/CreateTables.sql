@@ -116,7 +116,7 @@ CREATE TABLE OBJECT
 	SfiNumber int NOT NULL,
 	MainEqNumber varchar(50) NOT NULL,
 	EqNumber varchar(50),
-	Description varchar(50) NOT NULL UNIQUE,
+	Description varchar(150) NOT NULL UNIQUE,
 	Hierarchy1Id int NOT NULL FOREIGN KEY REFERENCES HIERARCHY_1(Id),
 	Hierarchy2Id int NOT NULL FOREIGN KEY REFERENCES HIERARCHY_2(Id),
 	VduGroupId int NOT NULL FOREIGN KEY REFERENCES VDU_GROUP(Id),
@@ -126,7 +126,6 @@ CREATE TABLE OBJECT
 	AlwaysVisibleId int FOREIGN KEY REFERENCES ALWAYS_VISIBLE(Id),
 	NodeId int NOT NULL FOREIGN KEY REFERENCES NODE(Id),
 	CabinetId int NOT NULL FOREIGN KEY REFERENCES CABINET(Id),
-	DataBlockId int FOREIGN KEY REFERENCES DATA_BLOCK(Id),
 )
 GO
 
@@ -134,7 +133,9 @@ CREATE TABLE TAG
 (
 	Id int PRIMARY KEY IDENTITY (1,1),
 	Suffix int NOT NULL,
-	Description varchar(50) NOT NULL,
+	Description varchar(150) NOT NULL,
+	SWPath varchar(150),
+	DataBlockId int FOREIGN KEY REFERENCES DATA_BLOCK(Id),
 	SignalTypeId int NOT NULL FOREIGN KEY REFERENCES SIGNAL_TYPE(Id),
 	IoTypeId int NOT NULL FOREIGN KEY REFERENCES IO_TYPE(Id),
 	LowLimit int,
@@ -144,9 +145,11 @@ CREATE TABLE TAG
 	RangeHigh int,
 	RangeLow int,
 	Slot int,
-	AbsoluteAddress varchar(100),
+	AbsoluteAddress varchar(50),
 	ModbusAddress int,
 	ModbusBit int,
+	IsE0 boolean,
+	IsVDR boolean
 )
 GO
 
