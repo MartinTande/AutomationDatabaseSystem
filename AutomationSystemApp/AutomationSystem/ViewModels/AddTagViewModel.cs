@@ -139,6 +139,16 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
         get { return _modbusBitInput; }
         set { _modbusBitInput = value; OnPropertyChanged(); }
     }
+    private string? _dataBlockInput;
+    public string? DataBlockInput
+    {
+        get { return _dataBlockInput; }
+        set
+        {
+            _dataBlockInput = value;
+            OnPropertyChanged();
+        }
+    }
     #endregion
 
     public void AddTag()

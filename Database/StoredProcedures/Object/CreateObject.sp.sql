@@ -21,8 +21,7 @@ CREATE PROCEDURE CreateObject
 	@AcknowledgeAllowedName varchar(100),
 	@AlwaysVisibleName varchar(100),
 	@NodeName varchar(100),
-	@CabinetName varchar(100),
-	@DataBlockName varchar(100)
+	@CabinetName varchar(100)
 AS
 
 DECLARE
@@ -35,8 +34,7 @@ DECLARE
 	@AcknowledgeAllowedId int,
 	@AlwaysVisibleId int,
 	@NodeId int,
-	@CabinetId int,
-	@DataBlockId int
+	@CabinetId int
 
 SELECT @Hierarchy1Id=Id FROM HIERARCHY_1 WHERE Name=@Hierarchy1Name
 SELECT @Hierarchy2Id=Id FROM HIERARCHY_2 WHERE Name=@Hierarchy2Name
@@ -47,11 +45,8 @@ SELECT @AcknowledgeAllowedId=Id FROM ACKNOWLEDGE_ALLOWED WHERE Name=@Acknowledge
 SELECT @AlwaysVisibleId=Id FROM ALWAYS_VISIBLE WHERE Name=@AlwaysVisibleName
 SELECT @NodeId=Id FROM NODE WHERE Name=@NodeName
 SELECT @CabinetId=Id FROM CABINET WHERE Name=@CabinetName
-IF NOT EXISTS (SELECT * FROM DATA_BLOCK WHERE Name = @DataBlockName)
-INSERT INTO DATA_BLOCK (Name) VALUES (@DataBlockName)
 
-INSERT INTO OBJECT (SfiNumber, MainEqNumber, EqNumber, Description, Hierarchy1Id, Hierarchy2Id, VduGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId, DataBlockId) 
-VALUES (@SfiNumber, @MainEqNumber, @EqNumber, @Description, @Hierarchy1Id, @Hierarchy2Id, @VduGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId, 
-		(SELECT Id FROM DATA_BLOCK WHERE Name=@DataBlockName))
+INSERT INTO OBJECT (SfiNumber, MainEqNumber, EqNumber, Description, Hierarchy1Id, Hierarchy2Id, VduGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId) 
+VALUES (@SfiNumber, @MainEqNumber, @EqNumber, @Description, @Hierarchy1Id, @Hierarchy2Id, @VduGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId)
 
 GO

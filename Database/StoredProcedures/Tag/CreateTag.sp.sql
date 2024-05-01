@@ -10,28 +10,44 @@ GO
 CREATE PROCEDURE CreateTag
 	-- Input parameters
 	@ObjectId int,
-	@Suffix int,
+	@EqSuffix int,
 	@Description varchar(100),
-	@SignalTypeName varchar(50),
-	@IoTypeName varchar(50),
+	@IoType varchar(50),
+	@SignalType varchar(50),
+	@EngUnit varchar(50),
 	@LowLimit int,
 	@LowLowLimit int,
 	@HighLimit int,
-	@HighHighLimit int
+	@HighHighLimit int,
+	@RangeLow int,
+	@RangeHigh int,
+	@Slot int,
+	@AbsoluteAddress varchar(50),
+	@SWPath varchar(150),
+	@DBName varchar(150),
+	@ModbusAddress int,
+	@ModbusBit int,
+	@IsE0 bit,
+	@IsVDR bit
 AS
 BEGIN
 	DECLARE
 		-- Internal variables
-		@SignalTypeId int,
 		@IoTypeId int,
+		@SignalTypeId int,
+		@EngUnitId int,
 		@InsertedTagId int; -- Scalar variable to store the inserted tag's ID
 
-	SELECT @SignalTypeId = Id FROM SIGNAL_TYPE WHERE Name = @SignalTypeName;
-	SELECT @IoTypeId = Id FROM IO_TYPE WHERE Name = @IoTypeName;
+	SELECT @IoTypeId = Id FROM IO_TYPE WHERE Name = @IoType;
+	SELECT @SignalTypeId = Id FROM SIGNAL_TYPE WHERE Name = @SignalType;
+	SELECT @EngUnitId = Id FROM ENG_UNIT WHERE Name = @EngUnit;
 
 	-- Insert the tag
-	INSERT INTO TAG (Suffix, Description, SignalTypeId, IoTypeId, LowLimit, LowLowLimit, HighLimit, HighHighLimit) 
-	VALUES (@Suffix, @Description, @SignalTypeId, @IoTypeId, @LowLimit, @LowLowLimit, @HighLimit, @HighHighLimit);
+	INSERT INTO TAG (EqSuffix, Description, IoTypeId, SignalTypeId, EngUnitId, RangeLow, RangeHigh, LowLowLimit, LowLimit,  HighLimit, HighHighLimit, 
+					Slot, AbsoluteAddress, SWPath, DBName, ModbusAddress, ModbusBit, IsE0, IsVDR) 
+	VALUES (@EqSuffix, @Description, @IoTypeId, @SignalTypeId, @EngUnitId, @RangeLow, @RangeHigh, @LowLowLimit, @LowLimit,  @HighLimit, @HighHighLimit, 
+			@Slot, @AbsoluteAddress, @SWPath, @DBName, @ModbusAddress, @ModbusBit,
+			@IsE0, @IsVDR);
 
 	-- Get the inserted tag's ID
 	SELECT @InsertedTagId=IDENT_CURRENT('TAG')

@@ -12,8 +12,9 @@ DROP TABLE IF EXISTS NODE;
 DROP TABLE IF EXISTS LOCATION;
 DROP TABLE IF EXISTS CABINET;
 DROP TABLE IF EXISTS DATA_BLOCK;
-DROP TABLE IF EXISTS IO_TYPE;
 DROP TABLE IF EXISTS SIGNAL_TYPE;
+DROP TABLE IF EXISTS IO_TYPE;
+DROP TABLE IF EXISTS ENG_UNIT;
 
 
 CREATE TABLE HIERARCHY_1
@@ -87,13 +88,6 @@ CREATE TABLE CABINET
 )
 GO
 
-CREATE TABLE DATA_BLOCK
-(
-	Id int PRIMARY KEY IDENTITY (1,1),
-	Name varchar(50) NOT NULL UNIQUE
-)
-GO
-
 CREATE TABLE IO_TYPE
 (
 	Id int PRIMARY KEY IDENTITY (1,1),
@@ -104,8 +98,16 @@ GO
 CREATE TABLE SIGNAL_TYPE
 (
 	Id int PRIMARY KEY IDENTITY (1,1),
-	Name varchar(50) NOT NULL UNIQUE,
+	Name varchar(50),
 	IoTypeId int NOT NULL FOREIGN KEY REFERENCES IO_TYPE(Id)
+)
+GO
+
+CREATE TABLE ENG_UNIT
+(
+	Id int PRIMARY KEY IDENTITY (1,1),
+	Name varchar(50) UNIQUE,
+	UnitId int UNIQUE
 )
 GO
 
@@ -132,24 +134,25 @@ GO
 CREATE TABLE TAG
 (
 	Id int PRIMARY KEY IDENTITY (1,1),
-	Suffix int NOT NULL,
+	EqSuffix int NOT NULL,
 	Description varchar(150) NOT NULL,
-	SWPath varchar(150),
-	DataBlockId int FOREIGN KEY REFERENCES DATA_BLOCK(Id),
 	SignalTypeId int NOT NULL FOREIGN KEY REFERENCES SIGNAL_TYPE(Id),
 	IoTypeId int NOT NULL FOREIGN KEY REFERENCES IO_TYPE(Id),
-	LowLimit int,
+	EngUnitId int FOREIGN KEY REFERENCES ENG_UNIT(Id),
+	RangeLow int,
+	RangeHigh int,
 	LowLowLimit int,
+	LowLimit int,
 	HighLimit int,
 	HighHighLimit int,
-	RangeHigh int,
-	RangeLow int,
 	Slot int,
 	AbsoluteAddress varchar(50),
+	SWPath varchar(150),
+	DBName varchar(150),
 	ModbusAddress int,
 	ModbusBit int,
-	IsE0 boolean,
-	IsVDR boolean
+	IsE0 bit,
+	IsVDR bit
 )
 GO
 

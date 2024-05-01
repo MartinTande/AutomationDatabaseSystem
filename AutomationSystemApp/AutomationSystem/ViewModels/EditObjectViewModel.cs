@@ -198,16 +198,6 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
             OnPropertyChanged();
         }
     }
-    private string? _dataBlockInput;
-    public string? DataBlockInput
-    {
-        get { return _dataBlockInput; }
-        set
-        {
-            _dataBlockInput = value;
-            OnPropertyChanged();
-        }
-    }
     #endregion
 
     public EditObjectViewModel(IDataConnector dataConnector, ObjectModel selectedTagObject)
@@ -244,7 +234,6 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
         _selectedAlwaysVisible = selectedTagObject.AlwaysVisibleName;
         _selectedNode = selectedTagObject.NodeName;
         _selectedCabinet = selectedTagObject.CabinetName;
-        _dataBlockInput = selectedTagObject.DataBlockName;
     }
 
     private bool CanUpdateObject()
@@ -271,7 +260,6 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
         updatedTagObject.AcknowledgeAllowedName = SelectedAcknowledgeAllowed;
         updatedTagObject.NodeName = SelectedNode;
         updatedTagObject.CabinetName = SelectedCabinet;
-        updatedTagObject.DataBlockName = DataBlockInput;
 
         dataManager.UpdateObject(updatedTagObject);
         MessageBox.Show(updatedTagObject.Description);

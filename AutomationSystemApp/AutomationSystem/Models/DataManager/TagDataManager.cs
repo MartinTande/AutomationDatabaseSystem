@@ -40,7 +40,15 @@ public class TagDataManager
             tag.LowLimit,
             tag.LowLowLimit,
             tag.HighLimit,
-            tag.HighHighLimit
+            tag.HighHighLimit,
+            tag.AbsoluteAddress,
+            tag.Slot,
+            tag.SWPath,
+            tag.DataBlockName,
+            tag.ModbusAddress,
+            tag.ModbusBit,
+            tag.IsE0,
+            tag.IsVDR
         };
 
         _sqlConnector.SaveData("CreateTag", p);

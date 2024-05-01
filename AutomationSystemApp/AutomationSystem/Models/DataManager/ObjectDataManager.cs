@@ -47,8 +47,7 @@ public class ObjectDataManager
             tagObject.AcknowledgeAllowedName,
             tagObject.AlwaysVisibleName,
             tagObject.NodeName,
-            tagObject.CabinetName,
-            tagObject.DataBlockName
+            tagObject.CabinetName
         };
 
         _sqlConnector.SaveData("CreateObject", p);
@@ -72,8 +71,7 @@ public class ObjectDataManager
             tagObject.AcknowledgeAllowedName,
             tagObject.AlwaysVisibleName,
             tagObject.NodeName,
-            tagObject.CabinetName,
-            tagObject.DataBlockName
+            tagObject.CabinetName
         };
         Console.WriteLine(tagObject.Description);
         Console.WriteLine(tagObject.Id);

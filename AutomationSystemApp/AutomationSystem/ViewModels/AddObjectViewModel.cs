@@ -190,16 +190,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             OnPropertyChanged();
         }
     }
-    private string? _dataBlockInput;
-    public string? DataBlockInput
-    {
-        get { return _dataBlockInput; }
-        set
-        {
-            _dataBlockInput = value;
-            OnPropertyChanged();
-        }
-    }
+
     #endregion
 
     public AddObjectViewModel(IDataConnector dataConnector)
@@ -242,7 +233,6 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             AcknowledgeAllowedName = SelectedAcknowledgeAllowed.Name,
             NodeName = SelectedNode.Name,
             CabinetName = SelectedCabinet.Name,
-            DataBlockName = DataBlockInput
         };
 
         dataManager.InsertObject(newTagObject);

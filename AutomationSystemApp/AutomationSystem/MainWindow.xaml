@@ -39,7 +39,7 @@
                                 <DataGridTextColumn Header="Name" Binding="{Binding FullObjectName, Mode=OneWay}" />
                                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
                                 <DataGridTextColumn Header="Hierarchy 1" Binding="{Binding Hierarchy1Name}" />
-                                <DataGridTextColumn Header="Hierarchy 2" Binding="{Binding Hierarchy1Name}" />
+                                <DataGridTextColumn Header="Hierarchy 2" Binding="{Binding Hierarchy2Name}" />
                                 <DataGridTextColumn Header="VDU Group" Binding="{Binding VduGroupName}" />
                                 <DataGridTextColumn Header="Alarm Group" Binding="{Binding AlarmGroupName}" />
                                 <DataGridTextColumn Header="OTD" Binding="{Binding OtdName}" />

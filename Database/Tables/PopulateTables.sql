@@ -250,3 +250,10 @@ INSERT INTO SIGNAL_TYPE (Name, IoTypeId) VALUES ('Real', @SAIId);
 INSERT INTO SIGNAL_TYPE (Name, IoTypeId) VALUES ('Float', @SAIId);
 INSERT INTO SIGNAL_TYPE (Name, IoTypeId) VALUES ('Word', @SAIId);
 INSERT INTO SIGNAL_TYPE (Name, IoTypeId) VALUES ('Double', @SAIId);
+
+-- Insert sample data into ENG_UNIT
+INSERT INTO ENG_UNIT (Name, UnitId) VALUES ('V', 1000)
+INSERT INTO ENG_UNIT (Name, UnitId) VALUES ('deg C', 1001)
+INSERT INTO ENG_UNIT (Name, UnitId) VALUES ('bar', 1002)
+INSERT INTO ENG_UNIT (Name, UnitId) VALUES ('rpm', 1003)
+INSERT INTO ENG_UNIT (Name, UnitId) VALUES ('%', 1004)

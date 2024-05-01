@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="AddObjectWindow" Height="600" Width="500">
-    <Grid>
+    <Grid Height="584" VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
@@ -219,26 +219,13 @@
                       VerticalContentAlignment="Center"/>
         </Grid>
 
-        <!-- Data block -->
-        <Grid Grid.Row="8" Margin="5,0,5,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.4*"/>
-                <RowDefinition Height="0.6*"/>
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0"
-                       Text="Data block"/>
-            <TextBox Grid.Row="1"
-                     Text="{Binding DataBlockInput}"
-                     VerticalContentAlignment="Center"/>
-        </Grid>
-
         <!-- Buttons -->
         <Grid Grid.Row="9">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="2" 
                     Content="Update" 
