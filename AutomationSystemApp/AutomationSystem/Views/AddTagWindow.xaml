@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AutomationSystem.Views"
         mc:Ignorable="d"
-        Title="AddObjectWindow" Height="600" Width="500">
+        Title="AddTagWindow" Height="600" Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -119,8 +119,39 @@
             </ComboBox>
         </Grid>
         
-        <!-- Alarm limits -->
+        <!-- Range limits -->
         <Grid Grid.Row="3" Margin="5,0,5,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <!-- Range High -->
+            <TextBlock Grid.Row="0"
+               Grid.Column="0"
+               Text="Range high"/>
+            <TextBox Grid.Row="1"
+             Grid.Column="0"
+             Text="{Binding RangeHighInput}"
+             Margin="0,0,5,0"
+             VerticalContentAlignment="Center"/>
+            <!-- Range High -->
+            <TextBlock Grid.Row="0"
+               Grid.Column="1"
+               Text="Range Low"/>
+            <TextBox Grid.Row="1"
+             Grid.Column="1"
+             Text="{Binding RangeLowInput}"
+             Margin="0,0,5,0"
+             VerticalContentAlignment="Center"/>
+        </Grid>
+        <!-- Alarm limits -->
+        <Grid Grid.Row="4" Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -170,7 +201,7 @@
         </Grid>
 
         <!-- SW Path -->
-        <Grid Grid.Row="4" Margin="5,0,5,0">
+        <Grid Grid.Row="5" Margin="5,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
                 <RowDefinition Height="0.6*"/>
@@ -183,7 +214,7 @@
         </Grid>
         
         <!-- Data block -->
-        <Grid Grid.Row="5" Margin="5,0,5,0">
+        <Grid Grid.Row="6" Margin="5,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
                 <RowDefinition Height="0.6*"/>
@@ -195,8 +226,37 @@
                      VerticalContentAlignment="Center"/>
         </Grid>
         
+        <!--  -->
+        <Grid Grid.Row="7" Margin="5,0,5,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <!-- Slot -->
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Text="Slot"/>
+            <TextBox Grid.Row="1"
+                     Grid.Column="0"
+                     Text="{Binding SlotInput}"
+                     Margin="0,0,5,0"
+                     VerticalContentAlignment="Center"/>
+            <!-- Absolute Address -->
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Text="Absolute Address"/>
+            <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     Text="{Binding AbsoluteAddressInput}"
+                     VerticalContentAlignment="Center"/>
+        </Grid> 
+        
         <!-- Modbus Address -->
-        <Grid Grid.Row="6" Margin="5,0,5,0">
+        <Grid Grid.Row="8" Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -210,6 +270,7 @@
                        Text="Modbus Address"/>
             <TextBox Grid.Row="1"
                      Grid.Column="0"
+                     Margin="0,0,5,0"
                      Text="{Binding ModbusAddressInput}"
                      VerticalContentAlignment="Center"/>
             <TextBlock Grid.Row="0"
@@ -229,10 +290,10 @@
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="2" 
+            <Button Grid.Column="2"
                     Content="Add" 
                     Margin="5" 
-                    Command="{Binding AddObjectCommand}"/>
+                    Command="{Binding AddTagCommand}"/>
             <Button Grid.Column="3" 
                     Content="Cancel"  
                     Margin="5"

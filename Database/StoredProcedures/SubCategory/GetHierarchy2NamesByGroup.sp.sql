@@ -1,7 +1,7 @@
 -- Check if Stored Procedure exists and deletes it if it does
 IF EXISTS (SELECT name
 	FROM sysobjects
-	WHERE name = 'GetHierarchyNames2ByGroup'
+	WHERE name = 'GetHierarchy2NamesByGroup'
 	AND type = 'P')
 DROP PROCEDURE GetHierarchy2NamesByGroup
 GO

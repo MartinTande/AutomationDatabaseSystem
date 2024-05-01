@@ -47,7 +47,6 @@
                                 <DataGridTextColumn Header="Always Visible" Binding="{Binding AlwaysVisibleName}"/>
                                 <DataGridTextColumn Header="Node" Binding="{Binding NodeName}"/>
                                 <DataGridTextColumn Header="Cabinet" Binding="{Binding CabinetName}"/>
-                                <DataGridTextColumn Header="Datablock" Binding="{Binding DataBlockName}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
@@ -60,16 +59,23 @@
                                   SelectionMode="Extended"
                                   SelectionUnit="FullRow">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Tag Name" Binding="{Binding FullTagName}"/>
-                                <DataGridTextColumn Header="Eq Suffix" Binding="{Binding Suffix}" />
+                                <DataGridTextColumn Header="Tag Name" Binding="{Binding FullTagName, Mode=OneWay}"/>
+                                <DataGridTextColumn Header="Eq Suffix" Binding="{Binding EqSuffix}" />
                                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
                                 <DataGridTextColumn Header="IO Type" Binding="{Binding IoType}"/>
-                                <DataGridTextColumn Header="IO Type" Binding="{Binding SignalType}"/>
-                                <DataGridTextColumn Header="Low Limit" Binding="{Binding LowLimit}"/>
+                                <DataGridTextColumn Header="Signal Type" Binding="{Binding SignalType}"/>
+                                <DataGridTextColumn Header="Range Low" Binding="{Binding RangeLow}"/>
+                                <DataGridTextColumn Header="Range High" Binding="{Binding RangeHigh}"/>
                                 <DataGridTextColumn Header="Low Low Limit" Binding="{Binding LowLowLimit}"/>
+                                <DataGridTextColumn Header="Low Limit" Binding="{Binding LowLimit}"/>
                                 <DataGridTextColumn Header="High Limit" Binding="{Binding HighLimit}"/>
                                 <DataGridTextColumn Header="High High Limit" Binding="{Binding HighHighLimit}"/>
                                 <DataGridTextColumn Header="SW Path" Binding="{Binding SWPath}"/>
+                                <DataGridTextColumn Header="DataBlock" Binding="{Binding DBName}"/>
+                                <DataGridTextColumn Header="ModbusAddress" Binding="{Binding ModbusAddress}"/>
+                                <DataGridTextColumn Header="ModbusBit" Binding="{Binding ModbusBit}"/>
+                                <DataGridTextColumn Header="IsE0" Binding="{Binding IsE0}"/>
+                                <DataGridTextColumn Header="IsVDR" Binding="{Binding IsVDR}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>

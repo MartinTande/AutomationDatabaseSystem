@@ -98,6 +98,35 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
         set { _swPathInput = value; OnPropertyChanged(); }
     }
 
+    private string? _engUnitInput;
+
+    public string? EngUnitInput
+    {
+        get { return _engUnitInput; }
+        set { _engUnitInput = value; OnPropertyChanged(); }
+    }
+
+    private string? _dbNameInput;
+    public string? DBNameInput
+    {
+        get { return _dbNameInput; }
+        set { _dbNameInput = value; OnPropertyChanged(); }
+    }
+
+    private int _rangeLowInput;
+    public int RangeLowInput
+    {
+        get { return _rangeLowInput; }
+        set { _rangeLowInput = value; OnPropertyChanged(); }
+    }
+
+    private int _rangeHighInput;
+    public int RangeHighInput
+    {
+        get { return _rangeHighInput; }
+        set { _rangeHighInput = value; OnPropertyChanged(); }
+    }
+
     private int _highHighLimitInput;
     public int HighHighLimitInput
     {
@@ -139,15 +168,19 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
         get { return _modbusBitInput; }
         set { _modbusBitInput = value; OnPropertyChanged(); }
     }
-    private string? _dataBlockInput;
-    public string? DataBlockInput
+    private string? _absoluteAddressInput;
+
+    public string? AbsoluteAddressInput
     {
-        get { return _dataBlockInput; }
-        set
-        {
-            _dataBlockInput = value;
-            OnPropertyChanged();
-        }
+        get { return _absoluteAddressInput; }
+        set { _absoluteAddressInput = value; OnPropertyChanged(); }
+    }
+    private int _slotInput;
+
+    public int SlotInput
+    {
+        get { return _slotInput; }
+        set { _slotInput = value; OnPropertyChanged(); }
     }
     #endregion
 
@@ -155,7 +188,7 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
     {
         TagModel newTag = new TagModel
         {
-            Suffix = EqSuffixInput,
+            EqSuffix = EqSuffixInput,
             IsE0 = E0Input,
             IsVDR = VDRInput,
             Description = DescriptionInput,
