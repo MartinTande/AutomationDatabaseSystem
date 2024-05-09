@@ -46,7 +46,7 @@
             <CheckBox Grid.Row="1"
                      Grid.Column="1"
                      Margin="0,0,5,0"
-                     Content="{Binding IsE0Input}"
+                     Content="{Binding E0Input}"
                      VerticalContentAlignment="Center"
                      HorizontalAlignment="Center"/>
             <TextBlock Grid.Row="0"
@@ -56,7 +56,7 @@
             <CheckBox Grid.Row="1"
                       Grid.Column="2"
                       Margin="0,0,5,0"
-                      Content="{Binding IsVDRInput}"
+                      Content="{Binding VDRInput}"
                       VerticalContentAlignment="Center"
                       HorizontalAlignment="Center"/>
         </Grid>
@@ -104,8 +104,7 @@
             <TextBlock Grid.Column="1"
                        Text="Signal Type"
                        Margin="5,0,0,0"/>
-            <ComboBox x:Name="cBoxHierarchy2"
-                      ItemsSource="{Binding SignalTypes, UpdateSourceTrigger=PropertyChanged}"
+            <ComboBox ItemsSource="{Binding SignalTypes, UpdateSourceTrigger=PropertyChanged}"
                       SelectedItem="{Binding SelectedSignalType}"
                       Grid.Row="1"
                       Grid.Column="1"
@@ -124,10 +123,9 @@
         <!-- Range limits -->
         <Grid Grid.Row="3" Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="0.25*"/>
+                <ColumnDefinition Width="0.25*"/>
+                <ColumnDefinition Width="0.50*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
@@ -135,20 +133,39 @@
             </Grid.RowDefinitions>
             <!-- Range High -->
             <TextBlock Grid.Row="0"
-               Grid.Column="0"
-               Text="Range high"/>
+                       Grid.Column="0"
+                       Text="Range high"/>
             <TextBox Grid.Row="1"
-             Grid.Column="0"
-             Text="{Binding RangeHighInput}"
-             Margin="0,0,5,0"/>
+                     Grid.Column="0"
+                     Text="{Binding RangeHighInput}"
+                     Margin="0,0,5,0"/>
             <!-- Range High -->
             <TextBlock Grid.Row="0"
-               Grid.Column="1"
-               Text="Range Low"/>
+                       Grid.Column="1"
+                       Text="Range Low"/>
             <TextBox Grid.Row="1"
-             Grid.Column="1"
-             Text="{Binding RangeLowInput}"
-             Margin="0,0,5,0"/>
+                     Grid.Column="1"
+                     Text="{Binding RangeLowInput}"
+                     Margin="0,0,5,0"/>
+            <!-- IO Type -->
+            <TextBlock Grid.Row="0"
+                       Grid.Column="3"
+                       Text="Eng Unit"
+                       Margin="5,0,0,0"/>
+            <ComboBox ItemsSource="{Binding EngUnits}"
+                      Grid.Row="1"
+                      Grid.Column="3"
+                      SelectedItem="{Binding SelectedEngUnit, UpdateSourceTrigger=PropertyChanged}"
+                      Margin="5,0,0,0"
+                      VerticalContentAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
         <!-- Alarm limits -->
         <Grid Grid.Row="4" Margin="5,0,5,0">

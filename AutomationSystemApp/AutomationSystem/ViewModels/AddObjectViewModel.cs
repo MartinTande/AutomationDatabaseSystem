@@ -14,6 +14,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
     private readonly IDataConnector _dataConnector;
     CategoryDataManager categoryDataManager;
     SubCategoryDataManager hierarchyDataManager;
+    ObjectDataManager objectDataManager;
 
     #region Commands
     public ICommand AddObjectCommand => new RelayCommand(execute => AddObject(), canExecute => CanAddObject());
@@ -198,6 +199,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         _dataConnector = dataConnector;
         categoryDataManager = new CategoryDataManager(_dataConnector);
         hierarchyDataManager = new SubCategoryDataManager(_dataConnector);
+        objectDataManager = new ObjectDataManager(_dataConnector);
 
         Hierarchy1Names = new ObservableCollection<ICategory>(categoryDataManager.GetHierarchy1Category());
         Hierarchy2Names = new ObservableCollection<ICategory>();
@@ -217,8 +219,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
 
     private void AddObject()
     {
-        ObjectDataManager dataManager = new ObjectDataManager(_dataConnector);
-        ObjectModel newTagObject = new ObjectModel
+        ObjectModel newObject = new ObjectModel
         {
             SfiNumber = SfiNumberInput,
             MainEqNumber = MainEqNumberInput,
@@ -235,7 +236,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             CabinetName = SelectedCabinet.Name,
         };
 
-        dataManager.InsertObject(newTagObject);
+        objectDataManager.InsertObject(newObject);
         CloseWindow();
     }
 

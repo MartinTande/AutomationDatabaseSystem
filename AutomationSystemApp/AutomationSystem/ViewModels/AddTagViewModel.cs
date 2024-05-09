@@ -25,6 +25,7 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
     // Lists of category names retrieved from database
     public ObservableCollection<ICategory> IoTypes{ get; set; }
     public ObservableCollection<ICategory> SignalTypes { get; set; }
+    public ObservableCollection<ICategory> EngUnits{ get; set; }
 
     public AddTagViewModel(IDataConnector dataConnector, int objectId)
     {
@@ -36,6 +37,7 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
         _objectId = objectId;
         IoTypes = new ObservableCollection<ICategory>(categoryDataManager.GetIoTypeCategory());
         SignalTypes = new ObservableCollection<ICategory>();
+        EngUnits = new ObservableCollection<ICategory>(categoryDataManager.GetEngUnitCategory());
     }
 
     #region Selected category names by user
@@ -61,6 +63,15 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
             OnPropertyChanged();
         }
     }
+
+    private ICategory? _selectedEngUnit;
+
+    public ICategory? SelectedEngUnit
+    {
+        get { return _selectedEngUnit; }
+        set { _selectedEngUnit = value; OnPropertyChanged(); }
+    }
+
     #endregion
 
     #region User input parameters
@@ -195,6 +206,7 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
             Description = DescriptionInput,
             IoType = SelectedIoType.Name,
             SignalType = SelectedSignalType.Name,
+            EngUnit = SelectedEngUnit.Name,
             HighHighLimit = HighHighLimitInput,
             HighLimit = HighLimitInput,
             LowLimit = LowLimitInput,

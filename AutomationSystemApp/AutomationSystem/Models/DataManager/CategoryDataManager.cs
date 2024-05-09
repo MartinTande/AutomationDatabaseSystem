@@ -1,4 +1,5 @@
-﻿using AutomationSystem.Models.DataAccess;
+﻿using AutomationSystem.Models.Categories;
+using AutomationSystem.Models.DataAccess;
 
 namespace AutomationSystem.Models.DataManager;
 
@@ -10,96 +11,26 @@ public class CategoryDataManager
     {
         _sqlConnector = sqlConnector;
     }
-
-    public List<Node> GetNodeCategory()
+    public List<T> GetCategory<T>(string tableName)
     {
         var p = new
         {
-            TableName = "NODE"
+            TableName = tableName
         };
 
-        return _sqlConnector.LoadData<Node, dynamic>("GetCategory", p);
+        return _sqlConnector.LoadData<T, dynamic>("GetCategory", p);
     }
 
-    public List<AcknowledgeAllowed> GetAckAllowedCategory()
-    {
-        var p = new
-        {
-            TableName = "ACKNOWLEDGE_ALLOWED"
-        };
-
-        return _sqlConnector.LoadData<AcknowledgeAllowed, dynamic>("GetCategory", p);
-    }
-
-    public List<AlwaysVisible> GetAlwaysVisibleCategory()
-    {
-        var p = new
-        {
-            TableName = "ALWAYS_VISIBLE"
-        };
-
-        return _sqlConnector.LoadData<AlwaysVisible, dynamic>("GetCategory", p);
-    }
-
-    public List<Cabinet> GetCabinetCategory()
-    {
-        var p = new
-        {
-            TableName = "CABINET"
-        };
-
-        return _sqlConnector.LoadData<Cabinet, dynamic>("GetCategory", p);
-    }
-
-    public List<Otd> GetOtdCategory()
-    {
-        var p = new
-        {
-            TableName = "OTD"
-        };
-
-        return _sqlConnector.LoadData<Otd, dynamic>("GetCategory", p);
-    }
-
-    public List<VduGroup> GetVduGroupCategory()
-    {
-        var p = new
-        {
-            TableName = "VDU_GROUP"
-        };
-
-        return _sqlConnector.LoadData<VduGroup, dynamic>("GetCategory", p);
-    }
-
-    public List<AlarmGroup> GetAlarmGroupCategory()
-    {
-        var p = new
-        {
-            TableName = "ALARM_GROUP"
-        };
-
-        return _sqlConnector.LoadData<AlarmGroup, dynamic>("GetCategory", p);
-    }
-
-    public List<Hierarchy1> GetHierarchy1Category()
-    {
-        var p = new
-        {
-            TableName = "HIERARCHY_1"
-        };
-
-        return _sqlConnector.LoadData<Hierarchy1, dynamic>("GetCategory", p);
-    }
-
-    public List<IoType> GetIoTypeCategory()
-    {
-        var p = new
-        {
-            TableName = "IO_TYPE"
-        };
-
-        return _sqlConnector.LoadData<IoType, dynamic>("GetCategory", p);
-    }
+    public List<Node> GetNodeCategory() { return GetCategory<Node>("NODE"); }
+    public List<AcknowledgeAllowed> GetAckAllowedCategory() { return GetCategory<AcknowledgeAllowed>("ACKNOWLEDGE_ALLOWED"); }
+    public List<AlwaysVisible> GetAlwaysVisibleCategory() { return GetCategory<AlwaysVisible>("ALWAYS_VISIBLE"); }
+    public List<Cabinet> GetCabinetCategory() { return GetCategory<Cabinet>("CABINET"); }
+    public List<Otd> GetOtdCategory() { return GetCategory<Otd>("OTD"); }
+    public List<VduGroup> GetVduGroupCategory() { return GetCategory<VduGroup>("VDU_GROUP"); }
+    public List<AlarmGroup> GetAlarmGroupCategory() { return GetCategory<AlarmGroup>("ALARM_GROUP"); }
+    public List<Hierarchy1> GetHierarchy1Category()  {  return GetCategory<Hierarchy1>("HIERARCHY_1");  }
+    public List<EngUnit> GetEngUnitCategory() { return GetCategory<EngUnit>("ENG_UNIT"); }
+    public List<IoType> GetIoTypeCategory() { return GetCategory<IoType>("IO_TYPE"); }
 
     public List<string> GetCategoryNames(string tableName)
     {
@@ -120,6 +51,7 @@ public class CategoryDataManager
     public List<string> GetCabinetNames() { return GetCategoryNames("CABINET"); }
     public List<string> GetHierarchy1Names() { return GetCategoryNames("HIERARCHY_1"); }
     public List<string> GetIoTypeNames() { return GetCategoryNames("IO_TYPE"); }
+    public List<string> GetEngUnitNames() { return GetCategoryNames("ENG_UNIT"); }
 
     private void DeleteCategoryItem(string tableName, int id)
     {
