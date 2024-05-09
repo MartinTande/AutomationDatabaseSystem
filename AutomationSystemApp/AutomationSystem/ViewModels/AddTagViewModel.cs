@@ -6,7 +6,6 @@ using System.Windows.Input;
 using AutomationSystem.Models.DataManager;
 using AutomationSystem.Models;
 using AutomationSystem.Models.DataAccess;
-using System.Data;
 
 namespace AutomationSystem.ViewModels;
 
@@ -16,6 +15,7 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
     TagDataManager tagDataManager;
     CategoryDataManager categoryDataManager;
     SubCategoryDataManager subCategoryDataManager;
+    private readonly int _objectId;
 
     #region Commands
     public ICommand AddTagCommand => new RelayCommand(execute => AddTag(), canExecute => CanAddTag());
@@ -23,18 +23,19 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
     #endregion
 
     // Lists of category names retrieved from database
-    public ObservableCollection<ICategory> IoTypeNames { get; set; }
-    public ObservableCollection<ICategory> SignalTypeNames { get; set; }
+    public ObservableCollection<ICategory> IoTypes{ get; set; }
+    public ObservableCollection<ICategory> SignalTypes { get; set; }
 
-    public AddTagViewModel(IDataConnector dataConnector)
+    public AddTagViewModel(IDataConnector dataConnector, int objectId)
     {
         _dataConnector = dataConnector;
         tagDataManager = new TagDataManager(dataConnector);
         categoryDataManager = new CategoryDataManager(_dataConnector);
         subCategoryDataManager = new SubCategoryDataManager(_dataConnector);
 
-        IoTypeNames = new ObservableCollection<ICategory>(categoryDataManager.GetIoTypeCategory());
-        SignalTypeNames = new ObservableCollection<ICategory>();
+        _objectId = objectId;
+        IoTypes = new ObservableCollection<ICategory>(categoryDataManager.GetIoTypeCategory());
+        SignalTypes = new ObservableCollection<ICategory>();
     }
 
     #region Selected category names by user
@@ -63,8 +64,8 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
     #endregion
 
     #region User input parameters
-    private int _eqSuffixInput;
-    public int EqSuffixInput
+    private int? _eqSuffixInput;
+    public int? EqSuffixInput
     {
         get { return _eqSuffixInput; }
         set { _eqSuffixInput = value; }
@@ -113,57 +114,57 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
         set { _dbNameInput = value; OnPropertyChanged(); }
     }
 
-    private int _rangeLowInput;
-    public int RangeLowInput
+    private int? _rangeLowInput;
+    public int? RangeLowInput
     {
         get { return _rangeLowInput; }
         set { _rangeLowInput = value; OnPropertyChanged(); }
     }
 
-    private int _rangeHighInput;
-    public int RangeHighInput
+    private int? _rangeHighInput;
+    public int? RangeHighInput
     {
         get { return _rangeHighInput; }
         set { _rangeHighInput = value; OnPropertyChanged(); }
     }
 
-    private int _highHighLimitInput;
-    public int HighHighLimitInput
+    private int? _highHighLimitInput;
+    public int? HighHighLimitInput
     {
         get { return _highHighLimitInput; }
         set { _highHighLimitInput = value; OnPropertyChanged(); }
     }
 
-    private int _highLimitInput;
-    public int HighLimitInput
+    private int? _highLimitInput;
+    public int? HighLimitInput
     {
         get { return _highLimitInput; }
         set { _highLimitInput = value; OnPropertyChanged(); }
     }
 
-    private int _lowLimitInput;
-    public int LowLimitInput
+    private int? _lowLimitInput;
+    public int? LowLimitInput
     {
         get { return _lowLimitInput; }
         set { _lowLimitInput = value; OnPropertyChanged(); }
     }
 
-    private int _lowLowLimitInput;
-    public int LowLowLimitInput
+    private int? _lowLowLimitInput;
+    public int? LowLowLimitInput
     {
         get { return _lowLowLimitInput; }
         set { _lowLowLimitInput = value; OnPropertyChanged(); }
     }
 
-    private int _modbusAddressInput;
-    public int ModbusAddressInput
+    private int? _modbusAddressInput;
+    public int? ModbusAddressInput
     {
         get { return _modbusAddressInput; }
         set { _modbusAddressInput = value; OnPropertyChanged(); }
     }
 
-    private int _modbusBitInput;
-    public int ModbusBitInput
+    private int? _modbusBitInput;
+    public int? ModbusBitInput
     {
         get { return _modbusBitInput; }
         set { _modbusBitInput = value; OnPropertyChanged(); }
@@ -175,9 +176,9 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
         get { return _absoluteAddressInput; }
         set { _absoluteAddressInput = value; OnPropertyChanged(); }
     }
-    private int _slotInput;
+    private int? _slotInput;
 
-    public int SlotInput
+    public int? SlotInput
     {
         get { return _slotInput; }
         set { _slotInput = value; OnPropertyChanged(); }
@@ -199,11 +200,12 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
             LowLimit = LowLimitInput,
             LowLowLimit = LowLimitInput,
             SWPath = SWPathInput,
+            DBName = DBNameInput,
             ModbusAddress = ModbusAddressInput,
             ModbusBit = ModbusBitInput
         };
 
-        tagDataManager.InsertTag(newTag);
+        tagDataManager.InsertTag(_objectId, newTag);
         CloseWindow();
     }
 
@@ -216,14 +218,14 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
     {
         try
         {
-            if (SignalTypeNames != null)
+            if (SignalTypes != null)
             {
-                SignalTypeNames.Clear();
+                SignalTypes.Clear();
             }
             var updatedHierarchyName = new ObservableCollection<ICategory>(subCategoryDataManager.GetSignalTypeCategory(SelectedIoType.Name));
             foreach (ICategory item in updatedHierarchyName)
             {
-                SignalTypeNames.Add(item);
+                SignalTypes.Add(item);
             }
         }
         catch (Exception ex)

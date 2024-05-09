@@ -28,11 +28,12 @@ public class TagDataManager
         _sqlConnector.SaveData("DeleteTag", p);
     }
 
-    public void InsertTag(TagModel tag)
+    public void InsertTag(int objectId, TagModel tag)
     {
         // Anonymous object, object with no name type
         var p = new
         {
+            ObjectId = objectId,
             tag.EqSuffix,
             tag.Description,
             tag.IoType,

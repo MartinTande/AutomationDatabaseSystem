@@ -36,7 +36,7 @@
                        Text="Eq Suffix"/>
             <TextBox Grid.Row="1"
                      Grid.Column="0"
-                     Text="{Binding SuffixInput}"
+                     Text="{Binding EqSuffixInput, StringFormat=d2}"
                      Margin="0,0,5,0"
                      VerticalContentAlignment="Center"/>
             <TextBlock Grid.Row="0"
@@ -46,6 +46,7 @@
             <CheckBox Grid.Row="1"
                      Grid.Column="1"
                      Margin="0,0,5,0"
+                     Content="{Binding IsE0Input}"
                      VerticalContentAlignment="Center"
                      HorizontalAlignment="Center"/>
             <TextBlock Grid.Row="0"
@@ -53,10 +54,11 @@
                        Text="VDR"
                        HorizontalAlignment="Center"/>
             <CheckBox Grid.Row="1"
-                     Grid.Column="2"
-                     Margin="0,0,5,0"
-                     VerticalContentAlignment="Center"
-                     HorizontalAlignment="Center"/>
+                      Grid.Column="2"
+                      Margin="0,0,5,0"
+                      Content="{Binding IsVDRInput}"
+                      VerticalContentAlignment="Center"
+                      HorizontalAlignment="Center"/>
         </Grid>
         <!-- Tag Description -->
         <Grid Grid.Row="1" Margin="5,0,5,0">
@@ -84,10 +86,10 @@
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
                        Text="IO Type"/>
-            <ComboBox ItemsSource="{Binding IOTypeNames}"
+            <ComboBox ItemsSource="{Binding IoTypes}"
                       Grid.Row="1"
                       Grid.Column="0"
-                      SelectedItem="{Binding SelectedIOType, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding SelectedIoType, UpdateSourceTrigger=PropertyChanged}"
                       Margin="0,0,5,0"
                       VerticalContentAlignment="Center">
                 <ComboBox.ItemTemplate>
@@ -103,7 +105,7 @@
                        Text="Signal Type"
                        Margin="5,0,0,0"/>
             <ComboBox x:Name="cBoxHierarchy2"
-                      ItemsSource="{Binding SignalTypeNames, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding SignalTypes, UpdateSourceTrigger=PropertyChanged}"
                       SelectedItem="{Binding SelectedSignalType}"
                       Grid.Row="1"
                       Grid.Column="1"
@@ -138,8 +140,7 @@
             <TextBox Grid.Row="1"
              Grid.Column="0"
              Text="{Binding RangeHighInput}"
-             Margin="0,0,5,0"
-             VerticalContentAlignment="Center"/>
+             Margin="0,0,5,0"/>
             <!-- Range High -->
             <TextBlock Grid.Row="0"
                Grid.Column="1"
@@ -147,8 +148,7 @@
             <TextBox Grid.Row="1"
              Grid.Column="1"
              Text="{Binding RangeLowInput}"
-             Margin="0,0,5,0"
-             VerticalContentAlignment="Center"/>
+             Margin="0,0,5,0"/>
         </Grid>
         <!-- Alarm limits -->
         <Grid Grid.Row="4" Margin="5,0,5,0">
@@ -169,8 +169,7 @@
             <TextBox Grid.Row="1"
                      Grid.Column="0"
                      Text="{Binding HighHighLimitInput}"
-                     Margin="0,0,5,0"
-                     VerticalContentAlignment="Center"/>
+                     Margin="0,0,5,0"/>
             <!-- High -->
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
@@ -178,8 +177,7 @@
             <TextBox Grid.Row="1"
                      Grid.Column="1"
                      Text="{Binding HighLimitInput}"
-                     Margin="0,0,5,0"
-                     VerticalContentAlignment="Center"/>
+                     Margin="0,0,5,0"/>
             <!-- Low -->
             <TextBlock Grid.Row="0"
                        Grid.Column="2"
@@ -187,8 +185,7 @@
             <TextBox Grid.Row="2"
                      Grid.Column="2"
                      Text="{Binding LowLimitInput}"
-                     Margin="0,0,5,0"
-                     VerticalContentAlignment="Center"/>
+                     Margin="0,0,5,0"/>
             <!-- Low low -->
             <TextBlock Grid.Row="0"
                        Grid.Column="3"
@@ -196,8 +193,7 @@
             <TextBox Grid.Row="2"
                      Grid.Column="3"
                      Text="{Binding LowLowLimitInput}"
-                     Margin="0,0,5,0"
-                     VerticalContentAlignment="Center"/>
+                     Margin="0,0,5,0"/>
         </Grid>
 
         <!-- SW Path -->
@@ -209,8 +205,7 @@
             <TextBlock Grid.Row="0"
                        Text="SW Path"/>
             <TextBox Grid.Row="1"
-                     Text="{Binding SWPathInput}"
-                     VerticalContentAlignment="Center"/>
+                     Text="{Binding SWPathInput}"/>
         </Grid>
         
         <!-- Data block -->
@@ -222,8 +217,7 @@
             <TextBlock Grid.Row="0"
                        Text="Data block"/>
             <TextBox Grid.Row="1"
-                     Text="{Binding DataBlockInput}"
-                     VerticalContentAlignment="Center"/>
+                     Text="{Binding DBNameInput}"/>
         </Grid>
         
         <!--  -->
@@ -243,16 +237,14 @@
             <TextBox Grid.Row="1"
                      Grid.Column="0"
                      Text="{Binding SlotInput}"
-                     Margin="0,0,5,0"
-                     VerticalContentAlignment="Center"/>
+                     Margin="0,0,5,0"/>
             <!-- Absolute Address -->
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
                        Text="Absolute Address"/>
             <TextBox Grid.Row="1"
                      Grid.Column="1"
-                     Text="{Binding AbsoluteAddressInput}"
-                     VerticalContentAlignment="Center"/>
+                     Text="{Binding AbsoluteAddressInput}"/>
         </Grid> 
         
         <!-- Modbus Address -->
@@ -278,8 +270,7 @@
                        Text="Modbus Bit"/>
             <TextBox Grid.Row="1"
                      Grid.Column="1"
-                     Text="{Binding ModbusBitInput}"
-                     VerticalContentAlignment="Center"/>
+                     Text="{Binding ModbusBitInput}"/>
         </Grid>
 
         <!-- Buttons -->
@@ -287,8 +278,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="2"
                     Content="Add" 

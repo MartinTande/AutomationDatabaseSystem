@@ -21,9 +21,9 @@ namespace AutomationSystem.Views
     /// </summary>
     public partial class AddTagWindow : Window
     {
-        public AddTagWindow(IDataConnector dataConnector)
+        public AddTagWindow(IDataConnector dataConnector, int objectId)
         {
-            AddTagViewModel addTagViewModel = new AddTagViewModel(dataConnector);
+            AddTagViewModel addTagViewModel = new AddTagViewModel(dataConnector, objectId);
             this.DataContext = addTagViewModel;
             Loaded += AddTagWindow_Loaded;
             InitializeComponent();

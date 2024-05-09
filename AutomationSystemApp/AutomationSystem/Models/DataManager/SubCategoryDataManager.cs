@@ -20,7 +20,7 @@ public class SubCategoryDataManager
             Name = ioType
         };
 
-        return _sqlConnector.LoadData<SignalType, dynamic>("GetSignalTypeByGroup", p);
+        return _sqlConnector.LoadData<SignalType, dynamic>("GetSignalTypesByGroup", p);
     }
 
     public List<Hierarchy2> GetHierarchy2Category(string hierarchy1Name)

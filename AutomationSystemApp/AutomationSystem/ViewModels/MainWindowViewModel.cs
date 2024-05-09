@@ -152,7 +152,7 @@ internal class MainWindowViewModel : ViewModelBase
     public ICommand AddHierarchyItemCommand => new RelayCommand(execute => AddHierarchyItem());
     public ICommand EditHierarchyItemCommand => new RelayCommand(execute => EditHierarchyItem(), canExecute => SelectedHierarchyItem != null);
     public ICommand DeleteHierarchyItemCommand => new RelayCommand(execute => DeleteHierarchyItem(), canExecute => SelectedHierarchyItem != null);
-    public ICommand ShowAddTagWindowCommand => new RelayCommand(execute => ShowAddTagWindow());
+    public ICommand ShowAddTagWindowCommand => new RelayCommand(execute => ShowAddTagWindow(), canExecute => SelectedObject != null);
     public ICommand ShowEditTagWindowCommand => new RelayCommand(execute => ShowEditTagWindow(), canExecute => SelectedTag != null);
     public ICommand DeleteTagCommand => new RelayCommand(execute => DeleteTag(), canExecute => SelectedTag != null);
     #endregion
@@ -160,14 +160,14 @@ internal class MainWindowViewModel : ViewModelBase
     #region Tag functions
     private void ShowAddTagWindow()
     {
-        AddTagWindow addTagWindow = new AddTagWindow(_dataConnector);
+        AddTagWindow addTagWindow = new AddTagWindow(_dataConnector, SelectedObject.Id);
         addTagWindow.Show();
         addTagWindow.Closed += AddTagWindow_Closed;
     }
 
     private void AddTagWindow_Closed(object sender, EventArgs e)
     {
-        UpdateObjects();
+        UpdateTags(SelectedObject.FullObjectName);
     }
 
     private void EditTagWindow_Closed(object sender, EventArgs e)
