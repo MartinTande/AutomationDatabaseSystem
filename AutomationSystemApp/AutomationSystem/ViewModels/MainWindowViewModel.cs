@@ -15,7 +15,7 @@ namespace AutomationSystem.ViewModels;
 internal class MainWindowViewModel : ViewModelBase
 {
     private readonly IDataConnector _dataConnector;
-    ObjectDataManager dataManager;
+    ObjectDataManager objectDataManager;
     TagDataManager tagDataManager;
     CategoryDataManager categoryDataManager;
     SubCategoryDataManager subCategoryDataManager;
@@ -133,11 +133,11 @@ internal class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel(IDataConnector dataConnector)
     {
         _dataConnector = dataConnector;
-        dataManager = new ObjectDataManager(_dataConnector);
+        objectDataManager = new ObjectDataManager(_dataConnector);
         tagDataManager = new TagDataManager(_dataConnector);
         subCategoryDataManager = new SubCategoryDataManager(_dataConnector);
         categoryDataManager = new CategoryDataManager(_dataConnector);
-        _objects = new ObservableCollection<ObjectModel>(dataManager.GetObjects());
+        _objects = new ObservableCollection<ObjectModel>(objectDataManager.GetObjects());
         _tags = new ObservableCollection<TagModel>();
         _hierarchy1Names = new ObservableCollection<Hierarchy1>(categoryDataManager.GetHierarchy1Category());
         _pictureHierarchy = new ObservableCollection<IItem>();
@@ -352,13 +352,13 @@ internal class MainWindowViewModel : ViewModelBase
 
     private void DeleteObject()
     {
-        dataManager.DeleteObject(SelectedObject.Id);
+        objectDataManager.DeleteObject(SelectedObject.Id);
         UpdateObjects();
     }
 
     private void UpdateObjects()
     {
-        Objects = new ObservableCollection<ObjectModel>(dataManager.GetObjects());
+        Objects = new ObservableCollection<ObjectModel>(objectDataManager.GetObjects());
     }
     private void AddObjectWindow_Closed(object sender, EventArgs e)
     {
