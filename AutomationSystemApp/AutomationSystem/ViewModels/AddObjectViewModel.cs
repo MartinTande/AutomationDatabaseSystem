@@ -15,6 +15,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
     CategoryDataManager categoryDataManager;
     SubCategoryDataManager hierarchyDataManager;
     ObjectDataManager objectDataManager;
+    TagDataManager tagDataManager;
 
     #region Commands
     public ICommand AddObjectCommand => new RelayCommand(execute => AddObject(), canExecute => CanAddObject());
@@ -200,6 +201,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         categoryDataManager = new CategoryDataManager(_dataConnector);
         hierarchyDataManager = new SubCategoryDataManager(_dataConnector);
         objectDataManager = new ObjectDataManager(_dataConnector);
+        tagDataManager = new TagDataManager(_dataConnector);
 
         Hierarchy1Names = new ObservableCollection<ICategory>(categoryDataManager.GetHierarchy1Category());
         Hierarchy2Names = new ObservableCollection<ICategory>();

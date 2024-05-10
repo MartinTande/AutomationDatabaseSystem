@@ -64,18 +64,19 @@
                                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
                                 <DataGridTextColumn Header="IO Type" Binding="{Binding IoType}"/>
                                 <DataGridTextColumn Header="Signal Type" Binding="{Binding SignalType}"/>
-                                <DataGridTextColumn Header="Range Low" Binding="{Binding RangeLow}"/>
-                                <DataGridTextColumn Header="Range High" Binding="{Binding RangeHigh}"/>
-                                <DataGridTextColumn Header="Low Low Limit" Binding="{Binding LowLowLimit}"/>
-                                <DataGridTextColumn Header="Low Limit" Binding="{Binding LowLimit}"/>
-                                <DataGridTextColumn Header="High Limit" Binding="{Binding HighLimit}"/>
-                                <DataGridTextColumn Header="High High Limit" Binding="{Binding HighHighLimit}"/>
                                 <DataGridTextColumn Header="SW Path" Binding="{Binding SWPath}"/>
                                 <DataGridTextColumn Header="DataBlock" Binding="{Binding DBName}"/>
                                 <DataGridTextColumn Header="ModbusAddress" Binding="{Binding ModbusAddress}"/>
                                 <DataGridTextColumn Header="ModbusBit" Binding="{Binding ModbusBit}"/>
                                 <DataGridTextColumn Header="IsE0" Binding="{Binding IsE0}"/>
                                 <DataGridTextColumn Header="IsVDR" Binding="{Binding IsVDR}"/>
+                                <DataGridTextColumn Header="Eng Unit" Binding="{Binding EngUnit}"/>
+                                <DataGridTextColumn Header="Range Low" Binding="{Binding RangeLow}"/>
+                                <DataGridTextColumn Header="Range High" Binding="{Binding RangeHigh}"/>
+                                <DataGridTextColumn Header="Low Low Limit" Binding="{Binding LowLowLimit}"/>
+                                <DataGridTextColumn Header="Low Limit" Binding="{Binding LowLimit}"/>
+                                <DataGridTextColumn Header="High Limit" Binding="{Binding HighLimit}"/>
+                                <DataGridTextColumn Header="High High Limit" Binding="{Binding HighHighLimit}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
