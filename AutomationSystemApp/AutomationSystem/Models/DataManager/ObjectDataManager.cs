@@ -73,8 +73,7 @@ public class ObjectDataManager
             tagObject.NodeName,
             tagObject.CabinetName
         };
-        Console.WriteLine(tagObject.Description);
-        Console.WriteLine(tagObject.Id);
+
         try
         {
             _sqlConnector.SaveData("UpdateObject", p);
@@ -83,6 +82,14 @@ public class ObjectDataManager
         {
             throw;
         }
+    }
+
+    public int GetLastInsertedObjectId()
+    {
+        var p = new { };
+        
+        List<int> lastInsertedObjectIds= _sqlConnector.LoadData<int, dynamic>("GetLastInsertedObjectId", p);
+        return lastInsertedObjectIds.First();
     }
 
     public void DeleteObject(int id)

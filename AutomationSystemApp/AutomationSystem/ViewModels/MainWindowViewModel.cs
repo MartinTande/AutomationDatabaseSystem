@@ -216,11 +216,11 @@ internal class MainWindowViewModel : ViewModelBase
         }
     };
 
-
     private void EditTagWindow_Closed(object sender, EventArgs e)
     {
         UpdateObjects();
     }
+
     private void UpdateTags(string? objectName)
     {
         try
