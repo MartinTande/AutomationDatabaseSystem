@@ -57,4 +57,51 @@ public class TagDataManager
 
         _sqlConnector.SaveData("CreateTag", p);
     }
+
+    // Default tag structure for auto generating object tags based on OTD type
+    public void AddTagsBasedOnOTD(int objectId, string otdName)
+    {
+        if (_otdTagStructure.ContainsKey(otdName))
+        {
+            List<TagModel> tags = _otdTagStructure[otdName];
+            foreach (TagModel tag in tags)
+            {
+                InsertTag(objectId, tag);
+            }
+        }
+
+    }
+
+    Dictionary<string, List<TagModel>> _otdTagStructure = new Dictionary<string, List<TagModel>>()
+    {
+        {
+            "BO_Motor", [
+                new TagModel { EqSuffix = 11, Description = "Running feedback", IoType = "DI", SignalType = "NO" },
+                new TagModel { EqSuffix = 12, Description = "Local selector", IoType = "DI", SignalType = "NO" },
+                new TagModel { EqSuffix = 21, Description = "Start command", IoType = "DO", SignalType = "NO" },
+                new TagModel { EqSuffix = 22, Description = "Stop command", IoType = "DO", SignalType = "NO" },
+                new TagModel { EqSuffix = 18, Description = "Auxiliary fault", IoType = "DI", SignalType = "NC" },
+                ]
+        },
+        {
+            "BO_MotorFC", [
+                new TagModel { EqSuffix = 11, Description = "Running feedback", IoType = "DI", SignalType = "NO" },
+                new TagModel { EqSuffix = 12, Description = "Local selector", IoType = "DI", SignalType = "NO" },
+                new TagModel { EqSuffix = 21, Description = "Start command", IoType = "DO", SignalType = "NO" },
+                new TagModel { EqSuffix = 22, Description = "Stop command", IoType = "DO", SignalType = "NO" },
+                new TagModel { EqSuffix = 18, Description = "Auxiliary fault", IoType = "DI", SignalType = "NC" },
+                new TagModel { EqSuffix = 61, Description = "Speed feedback", IoType = "AI", SignalType = "4-20mA, 2W" },
+                new TagModel { EqSuffix = 62, Description = "Speed setpoint", IoType = "AO", SignalType = "4-20mA, 2W" },
+                ]
+        },
+        {
+            "BO_Valve", [
+                new TagModel { EqSuffix = 01, Description = "Closed feedback", IoType = "DI", SignalType = "NO" },
+                new TagModel { EqSuffix = 02, Description = "Opened feedback", IoType = "DI", SignalType = "NO" },
+                new TagModel { EqSuffix = 03, Description = "Close command", IoType = "DO", SignalType = "NO" },
+                new TagModel { EqSuffix = 04, Description = "Open command", IoType = "DO", SignalType = "NO" },
+                new TagModel { EqSuffix = 07, Description = "Valve - Fault", IoType = "DO", SignalType = "NO" },
+                ]
+        }
+    };
 }
