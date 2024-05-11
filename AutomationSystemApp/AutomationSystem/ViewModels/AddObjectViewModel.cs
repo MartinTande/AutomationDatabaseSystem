@@ -239,6 +239,8 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         };
 
         objectDataManager.InsertObject(newObject);
+        tagDataManager.AddTagsBasedOnOTD(objectDataManager.GetLastInsertedObjectId(), SelectedOtd.Name);
+        
         CloseWindow();
     }
 
