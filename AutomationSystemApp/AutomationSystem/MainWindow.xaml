@@ -26,17 +26,17 @@
                             <ColumnDefinition Width="13*"/>
                         </Grid.ColumnDefinitions>
                         <!-- Data Grid -->
-                        <DataGrid ItemsSource="{Binding Objects}"
-                                  SelectedItem="{Binding SelectedObject}"
+                        <DataGrid ItemsSource="{Binding Objects, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  SelectedItem="{Binding SelectedObject, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   AutoGenerateColumns="False"
                                   Grid.ColumnSpan="2"
                                   SelectionMode="Extended"
                                   SelectionUnit="FullRow">
                             <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name" Binding="{Binding FullObjectName, Mode=OneWay}" />
                                 <DataGridTextColumn Header="Sfi Nr" Binding="{Binding SfiNumber}"  />
                                 <DataGridTextColumn Header="Main Eq Nr" Binding="{Binding MainEqNumber}" />
                                 <DataGridTextColumn Header="Eq Nr" Binding="{Binding EqNumber}" />
-                                <DataGridTextColumn Header="Name" Binding="{Binding FullObjectName, Mode=OneWay}" />
                                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
                                 <DataGridTextColumn Header="Hierarchy 1" Binding="{Binding Hierarchy1Name}" />
                                 <DataGridTextColumn Header="Hierarchy 2" Binding="{Binding Hierarchy2Name}" />
