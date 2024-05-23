@@ -7,6 +7,9 @@ using System.Windows;
 using AutomationSystem.Models;
 using AutomationSystem.Models.DataAccess;
 using AutomationSystem.Models.DataManager;
+using System.Windows.Controls;
+using System.ComponentModel;
+using System.Windows.Data;
 
 
 namespace AutomationSystem.ViewModels;
@@ -19,6 +22,9 @@ internal class MainWindowViewModel : ViewModelBase
     TagDataManager tagDataManager;
     CategoryDataManager categoryDataManager;
     SubCategoryDataManager subCategoryDataManager;
+    public ICollectionView ObjectCollectionView { get; }
+    public RelayCommand CellEditEndingCommand { get; }
+    public RelayCommand RowEditEndingCommand { get; }
 
     #region Properties
     private ObservableCollection<Hierarchy1> _hierarchy1Names;
@@ -28,6 +34,18 @@ internal class MainWindowViewModel : ViewModelBase
         set
         {
             _hierarchy1Names = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private ObservableCollection<IoType> _ioTypeNames;
+
+    public ObservableCollection<IoType> IoTypeNames
+    {
+        get { return _ioTypeNames; }
+        set 
+        { 
+            _ioTypeNames = value;
             OnPropertyChanged();
         }
     }
@@ -68,13 +86,12 @@ internal class MainWindowViewModel : ViewModelBase
             {
                 _selectedHierarchyName = value;
             }
-            MessageBox.Show(SelectedHierarchyItem.Id.ToString());
             OnPropertyChanged();
         }
     }
 
-    private ObservableCollection<IItem> _pictureHierarchy;
-    public ObservableCollection<IItem> PictureHierarchy
+    private ObservableCollection<HierarchyModel> _pictureHierarchy;
+    public ObservableCollection<HierarchyModel> PictureHierarchy
     {
         get { return _pictureHierarchy; }
         set
@@ -86,6 +103,20 @@ internal class MainWindowViewModel : ViewModelBase
             }
         }
     }
+    private ObservableCollection<HierarchyModel> _ioTypeHierarchy;
+
+    public ObservableCollection<HierarchyModel> IoTypeHierarchy
+    {
+        get { return _ioTypeHierarchy; }
+        set 
+        {
+            if (value != null)
+            {
+                _ioTypeHierarchy = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     private ObservableCollection<ObjectModel> _objects;
     public ObservableCollection<ObjectModel> Objects
@@ -93,11 +124,10 @@ internal class MainWindowViewModel : ViewModelBase
         get { return _objects; }
         set
         {
-            OnPropertyChanged();
-            MessageBox.Show(_objects.Count.ToString());
             if (_objects != value && _objects != null)
             {
                 _objects = value;
+                OnPropertyChanged();
             }
         }
     }
@@ -122,15 +152,150 @@ internal class MainWindowViewModel : ViewModelBase
         get { return _selectedObject; }
         set
         {
-            _selectedObject = value;
             if (value != null)
             {
+                _selectedObject = value;
                 OnPropertyChanged();
+
                 UpdateTags(SelectedObject.FullObjectName);
+                MessageBox.Show(value.Description);
             }
         }
     }
+
+    private string _fullNameFilter = string.Empty;
+    public string FullNameFilter
+    {
+        get { return _fullNameFilter; }
+        set 
+        { 
+            _fullNameFilter = value; 
+            OnPropertyChanged();
+            ObjectCollectionView.Refresh();
+        }
+    }
+
+    private string _descriptionFilter = string.Empty;
+    public string DescriptionFilter
+    {
+        get { return _descriptionFilter; }
+        set 
+        { 
+            _descriptionFilter = value;
+            OnPropertyChanged();
+            ObjectCollectionView.Refresh();
+        }
+    }
+
+    private string _hierarchy1Filter = string.Empty;
+    public string Hierarchy1Filter
+    {
+        get { return _hierarchy1Filter; }
+        set
+        {
+            _hierarchy1Filter = value;
+            OnPropertyChanged();
+            ObjectCollectionView.Refresh();
+        }
+    }
+
+    private string _hierarchy2Filter = string.Empty;
+    public string Hierarchy2Filter
+    {
+        get { return _hierarchy2Filter; }
+        set
+        {
+            _hierarchy2Filter = value;
+            OnPropertyChanged();
+            ObjectCollectionView.Refresh();
+        }
+    }
+
+    private string _vduGroupFilter = string.Empty;
+    public string VduGroupFilter
+    {
+        get { return _vduGroupFilter; }
+        set
+        {
+            _vduGroupFilter = value;
+            OnPropertyChanged();
+            ObjectCollectionView.Refresh();
+        }
+    }
+
+    private string _alarmGroupFilter = string.Empty;
+    public string AlarmGroupFilter
+    {
+        get { return _alarmGroupFilter; }
+        set
+        {
+            _alarmGroupFilter = value;
+            OnPropertyChanged();
+            ObjectCollectionView.Refresh();
+        }
+    }
+
+    private string _otdFilter = string.Empty;
+    public string OtdFilter
+    {
+        get { return _otdFilter; }
+        set
+        {
+            _otdFilter = value;
+            OnPropertyChanged();
+            ObjectCollectionView.Refresh();
+        }
+    }
+
+    private string _nodeFilter = string.Empty;
+    public string NodeFilter
+    {
+        get { return _nodeFilter; }
+        set
+        {
+            _nodeFilter = value;
+            OnPropertyChanged();
+            ObjectCollectionView.Refresh();
+        }
+    }
+
+    private string _cabinetFilter = string.Empty;
+    public string CabinetFilter
+    {
+        get { return _cabinetFilter; }
+        set
+        {
+            _cabinetFilter = value;
+            OnPropertyChanged();
+            ObjectCollectionView.Refresh();
+        }
+    }
+
+    private string _acknowledgeAllowedFilter = string.Empty;
+    public string AcknowledgeAllowedFilter
+    {
+        get { return _acknowledgeAllowedFilter; }
+        set
+        {
+            _acknowledgeAllowedFilter = value;
+            OnPropertyChanged();
+            ObjectCollectionView.Refresh();
+        }
+    }
+
+    private string _alwaysVisibleFilter = string.Empty;
+    public string AlwaysVisibleFilter
+    {
+        get { return _alwaysVisibleFilter; }
+        set
+        {
+            _alwaysVisibleFilter = value;
+            OnPropertyChanged();
+            ObjectCollectionView.Refresh();
+        }
+    }
     #endregion
+
     public MainWindowViewModel(IDataConnector dataConnector)
     {
         _dataConnector = dataConnector;
@@ -141,8 +306,36 @@ internal class MainWindowViewModel : ViewModelBase
         _objects = new ObservableCollection<ObjectModel>(objectDataManager.GetObjects());
         _tags = new ObservableCollection<TagModel>();
         _hierarchy1Names = new ObservableCollection<Hierarchy1>(categoryDataManager.GetHierarchy1Category());
-        _pictureHierarchy = new ObservableCollection<IItem>();
+        _pictureHierarchy = new ObservableCollection<HierarchyModel>();
+        _ioTypeHierarchy = new ObservableCollection<HierarchyModel>();
+
+        ObjectCollectionView = CollectionViewSource.GetDefaultView(_objects);
+        ObjectCollectionView.Filter = FilterObjects;
+        
         GetPictureHierarchy();
+        GetIoSignalTypes();
+        CellEditEndingCommand = new RelayCommand(OnCellEditEnding);
+        RowEditEndingCommand = new RelayCommand(OnRowEditEnding);
+    }
+
+    private bool FilterObjects(object obj)
+    {
+        if (obj is ObjectModel objectModel)
+        {
+            return objectModel.FullObjectName.Contains(FullNameFilter, StringComparison.InvariantCultureIgnoreCase) && 
+                    objectModel.Description.Contains(DescriptionFilter, StringComparison.InvariantCultureIgnoreCase) &&
+                    objectModel.Hierarchy1Name.Contains(Hierarchy1Filter, StringComparison.InvariantCultureIgnoreCase) &&
+                    objectModel.Hierarchy2Name.Contains(Hierarchy2Filter, StringComparison.InvariantCultureIgnoreCase) &&
+                    objectModel.AcknowledgeAllowedName.Contains(AcknowledgeAllowedFilter, StringComparison.InvariantCultureIgnoreCase) &&
+                    objectModel.AlwaysVisibleName.Contains(AlwaysVisibleFilter, StringComparison.InvariantCultureIgnoreCase) &&
+                    objectModel.NodeName.Contains(NodeFilter, StringComparison.InvariantCultureIgnoreCase) &&
+                    objectModel.CabinetName.Contains(CabinetFilter, StringComparison.InvariantCultureIgnoreCase) &&
+                    objectModel.OtdName.Contains(OtdFilter, StringComparison.InvariantCultureIgnoreCase) &&
+                    objectModel.VduGroupName.Contains(VduGroupFilter, StringComparison.InvariantCultureIgnoreCase) &&
+                    objectModel.AlarmGroupName.Contains(AlarmGroupFilter, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        return false;
     }
 
     #region Commands
@@ -158,6 +351,41 @@ internal class MainWindowViewModel : ViewModelBase
     public ICommand DeleteTagCommand => new RelayCommand(execute => DeleteTag(), canExecute => SelectedTag != null);
     #endregion
 
+    #region Object functions
+    private void ShowAddObjectWindow()
+    {
+        AddObjectWindow addObjectWindow = new AddObjectWindow(_dataConnector);
+        addObjectWindow.Show();
+        addObjectWindow.Closed += AddObjectWindow_Closed;
+    }
+    private void ShowEditObjectWindow()
+    {
+        EditObjectWindow editObjectWindow = new EditObjectWindow(_dataConnector, SelectedObject);
+        editObjectWindow.Show();
+        editObjectWindow.Closed += EditObjectWindow_Closed;
+    }
+
+    private void DeleteObject()
+    {
+        objectDataManager.DeleteObject(SelectedObject.Id);
+        UpdateObjects();
+    }
+
+    private void UpdateObjects()
+    {
+        Objects = new ObservableCollection<ObjectModel>(objectDataManager.GetObjects());
+    }
+    private void AddObjectWindow_Closed(object sender, EventArgs e)
+    {
+        UpdateObjects();
+    }
+
+    private void EditObjectWindow_Closed(object sender, EventArgs e)
+    {
+        UpdateObjects();
+    }
+    #endregion
+    
     #region Tag functions
     private void ShowAddTagWindow()
     {
@@ -204,7 +432,7 @@ internal class MainWindowViewModel : ViewModelBase
     }
     #endregion
 
-    #region Hierarchy functions
+    #region Picture Hierarchy functions
     private bool CanAddSubItem()
     {
         if (SelectedHierarchyItem == null)
@@ -260,8 +488,10 @@ internal class MainWindowViewModel : ViewModelBase
         {
             return false;
         }
+        
         return Hierarchy1Names.Any(item => item.Name == selectedItem);
     }
+
     private void GetPictureHierarchy()
     {
         if (PictureHierarchy != null)
@@ -287,43 +517,64 @@ internal class MainWindowViewModel : ViewModelBase
             }
         }
     }
+    #endregion
+
+    #region Io/signal hierarchy functions
+
+
+    private void GetIoSignalTypes()
+    {
+        if (IoTypeHierarchy != null)
+        {
+            IoTypeHierarchy.Clear();
+        }
+        IoTypeNames = new ObservableCollection<IoType>(categoryDataManager.GetIoTypeCategory());
+
+        //add Root items
+        foreach (IoType ioType in IoTypeNames)
+        {
+            IoTypeHierarchy.Add(new HierarchyModel { Id = ioType.Id, Name = ioType.Name });
+        }
+
+        //add sub items
+        for (int i = 0; i < IoTypeHierarchy.Count; i++)
+        {
+            string? ioTypeName = IoTypeHierarchy[i].Name;
+            List<SignalType> signalTypeCategory = subCategoryDataManager.GetSignalTypeCategory(ioTypeName);
+            foreach (SignalType signalType in signalTypeCategory)
+            {
+                IoTypeHierarchy[i].SubItem.Add(new HierarchyModel { Id = signalType.Id, Name = signalType.Name });
+            }
+        }
+    }
 
     #endregion
 
-    #region Object functions
-    private void ShowAddObjectWindow()
+    private void OnCellEditEnding(object parameter)
     {
-        AddObjectWindow addObjectWindow = new AddObjectWindow(_dataConnector);
-        addObjectWindow.Show();
-        addObjectWindow.Closed += AddObjectWindow_Closed;
-    }
-    private void ShowEditObjectWindow()
-    {
-        EditObjectWindow editObjectWindow = new EditObjectWindow(_dataConnector, SelectedObject);
-        MessageBox.Show(SelectedObject.Description);
-        editObjectWindow.Show();
-        editObjectWindow.Closed += EditObjectWindow_Closed;
-    }
-
-    private void DeleteObject()
-    {
-        objectDataManager.DeleteObject(SelectedObject.Id);
-        UpdateObjects();
+        // Your logic here
+        // For example:
+        if (parameter is DataGridCellEditEndingEventArgs e)
+        {
+            if (e.Column.SortMemberPath == "EndDate")
+            {
+                // Update properties based on the edited cell
+                // ...
+            }
+        }
+        MessageBox.Show(SelectedObject.Description + "test1");
     }
 
-    private void UpdateObjects()
+    public void OnRowEditEnding(object parameter)
     {
-        Objects = new ObservableCollection<ObjectModel>(objectDataManager.GetObjects());
-    }
-    private void AddObjectWindow_Closed(object sender, EventArgs e)
-    {
-        UpdateObjects();
+        MessageBox.Show(SelectedObject.Description + "test2");
+        objectDataManager.UpdateObject(SelectedObject);
+        ObjectModel test = (ObjectModel)parameter;
+        OnPropertyChanged("SelectedObject");
     }
 
-    private void EditObjectWindow_Closed(object sender, EventArgs e)
+    public void Test()
     {
-        UpdateObjects();
+        MessageBox.Show("Here");
     }
-    #endregion
-
 }

@@ -2,6 +2,7 @@
 using AutomationSystem.Models.DataAccess;
 using AutomationSystem.ViewModels;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace AutomationSystem;
 
@@ -43,4 +44,33 @@ public partial class MainWindow : Window
             mainWindowViewModel.SelectedHierarchyItem = (IItem)e.NewValue;
         }
     }
+
+    private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+        if (e.EditingElement is TextBox textBox) // Assuming you're editing a TextBox
+        {
+            string editedValue = textBox.Text;
+            MessageBox.Show($"Edited value: {editedValue}");
+        }
+    }
+
+    // Row edit trigger event that executes Edit Command in ViewModel
+    private void DataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+        if (e.EditAction == DataGridEditAction.Commit)
+        {
+            mainWindowViewModel.RowEditEndingCommand.Execute(e.Row.DataContext);
+            ObjectModel editedObject = e.Row.DataContext as ObjectModel;
+        }
+    }
+
+    private void TreeView_SelectedSignalItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+        if (e.NewValue is IItem)
+        {
+            mainWindowViewModel.SelectedHierarchyItem = (IItem)e.NewValue; 
+        }
+    }
+
+
 }

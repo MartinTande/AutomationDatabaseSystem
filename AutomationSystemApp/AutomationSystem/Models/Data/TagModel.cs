@@ -1,12 +1,24 @@
-﻿using System.Linq;
+﻿using AutomationSystem.MVVM;
+using System.Linq;
 
 namespace AutomationSystem.Models;
 
-public class TagModel
+public class TagModel : ViewModelBase
 {
     public int Id { get; set; }
     public int? EqSuffix { get; set; }
-    public string? Description { get; set; }
+    private string? _description;
+
+    public string? Description
+    {
+        get { return _description; }
+        set { _description = value;
+            OnPropertyChanged();
+            OnPropertyChanged("Objects");
+        }
+    }
+
+    //public string? Description { get; set; }
     public string? IoType { get; set; }
     public string? SignalType { get; set; }
     public string? EngUnit { get; set; }

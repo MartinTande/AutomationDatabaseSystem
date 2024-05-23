@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:userControls="clr-namespace:AutomationSystem.Views.UserControls" 
+        xmlns:userControls="clr-namespace:AutomationSystem.Views.UserControls" xmlns:viewmodels="clr-namespace:AutomationSystem.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="Automation IO-Tracker" Height="800" Width="1400">
     <Grid>
@@ -14,22 +14,50 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="0.7*"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="0.3*"/>
                     </Grid.RowDefinitions>
-                    <!-- Button panel -->
+                    <!-- Button panel row -->
                     <userControls:ObjectButtonBar Grid.Row="0"/>
-                    <Grid Grid.Row="1">
+                    <!-- Filter panel row-->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <TextBox Text="{Binding FullNameFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="100"/>
+                        <TextBox Text="{Binding DescriptionFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="100"/>
+                        <TextBox Text="{Binding Hierarchy1Filter, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="100"/>
+                        <TextBox Text="{Binding Hierarchy2Filter, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="100"/>
+                        <TextBox Text="{Binding VduGroupFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="100"/>
+                        <TextBox Text="{Binding AlarmGroupFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="100"/>
+                        <TextBox Text="{Binding OtdFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="100"/>
+                        <TextBox Text="{Binding AcknowledgeAllowedFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="100"/>
+                        <TextBox Text="{Binding AlwaysVisibleFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="100"/>
+                        <TextBox Text="{Binding NodeFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="100"/>
+                        <TextBox Text="{Binding CabinetFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="100"/>
+                    </StackPanel>
+                    <!-- Datagrid row -->
+                    <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="13*"/>
                         </Grid.ColumnDefinitions>
                         <!-- Data Grid -->
-                        <DataGrid ItemsSource="{Binding Objects, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        <DataGrid ItemsSource="{Binding ObjectCollectionView, UpdateSourceTrigger=PropertyChanged}"
                                   SelectedItem="{Binding SelectedObject, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   AutoGenerateColumns="False"
                                   Grid.ColumnSpan="2"
+                                  RowEditEnding="DataGrid_RowEditEnding"
                                   SelectionMode="Extended"
                                   SelectionUnit="FullRow">
                             <DataGrid.Columns>
@@ -50,8 +78,8 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
-                    <userControls:TagButtonBar Grid.Row="2"/>
-                    <Grid Grid.Row="3">
+                    <userControls:TagButtonBar Grid.Row="3"/>
+                    <Grid Grid.Row="4">
                         <DataGrid ItemsSource="{Binding Tags, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   SelectedItem="{Binding SelectedTag}"
                                   AutoGenerateColumns="False"
@@ -92,8 +120,8 @@
                         <RowDefinition Height="0.2*"/>
                     </Grid.RowDefinitions>
                     <TreeView Grid.Row="1"
-                                ItemsSource="{Binding PictureHierarchy, Mode=TwoWay}" 
-                                SelectedItemChanged="TreeView_SelectedItemChanged">
+                        ItemsSource="{Binding PictureHierarchy, Mode=TwoWay}" 
+                        SelectedItemChanged="TreeView_SelectedItemChanged">
                         <TreeView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Vertical"/>
@@ -124,7 +152,47 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-
+            <!-- IO/Signal Types tab -->
+            <TabItem Header="IO/Signal Types">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="0.7*"/>
+                        <RowDefinition Height="0.2*"/>
+                    </Grid.RowDefinitions>
+                    <TreeView Grid.Row="1"
+                        ItemsSource="{Binding IoTypeHierarchy, Mode=TwoWay}" 
+                        SelectedItemChanged="TreeView_SelectedSignalItemChanged">
+                        <TreeView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </TreeView.ItemsPanel>
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding SubItem, Mode=TwoWay}">
+                                <TextBlock Text="{Binding Name, Mode=OneWay}"/>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                    <StackPanel Grid.Row="0" 
+                    Orientation="Horizontal">
+                        <TextBox Text="{Binding SelectedHierarchyName, UpdateSourceTrigger=PropertyChanged}" 
+                     Width="150"/>
+                        <Button Content="Add Hierarchy Sub Item"
+                    Command="{Binding AddHierarchySubItemCommand}"
+                    Width="140"/>
+                        <Button Content="Add Hierarchy Item"
+                    Command="{Binding AddHierarchyItemCommand}"
+                    Width="140"/>
+                        <Button Grid.Row="2"                 
+                    Content="Edit Item"       
+                    Command="{Binding EditHierarchyItemCommand}"/>
+                        <Button Grid.Row="2"                 
+                    Content="Delete Item"       
+                    Command="{Binding DeleteHierarchyItemCommand}"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
             <!-- Alarm Groups tab -->
             <TabItem Header="Alarm Groups"/>
 

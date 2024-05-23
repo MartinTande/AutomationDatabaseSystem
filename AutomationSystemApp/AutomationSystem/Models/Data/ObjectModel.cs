@@ -1,12 +1,28 @@
-﻿namespace AutomationSystem.Models;
+﻿using AutomationSystem.MVVM;
+using System.Windows;
 
-public class ObjectModel
+namespace AutomationSystem.Models;
+
+public class ObjectModel : ViewModelBase
 {
     public int Id { get; set; }
     public int SfiNumber { get; set; }
     public string? MainEqNumber { get; set; }
     public string? EqNumber { get; set; }
-    public string? Description { get; set; }
+    private string? _description;
+
+    public string? Description
+    {
+        get { return _description; }
+        set
+        {
+            _description = value;
+            OnPropertyChanged();
+            //MessageBox.Show(value);
+            
+        }
+    }
+    //public string? Description { get; set; }
     public string? Hierarchy1Name { get; set; }
     public string? Hierarchy2Name { get; set; }
     public string? VduGroupName { get; set; }
