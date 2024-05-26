@@ -310,24 +310,30 @@ internal class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel(IDataConnector dataConnector)
     {
         _dataConnector = dataConnector;
+
+        //datamanagers
         objectDataManager = new ObjectDataManager(_dataConnector);
         tagDataManager = new TagDataManager(_dataConnector);
         subCategoryDataManager = new SubCategoryDataManager(_dataConnector);
         categoryDataManager = new CategoryDataManager(_dataConnector);
+        
+        //properties
         _objects = new ObservableCollection<ObjectModel>(objectDataManager.GetObjects());
         _tags = new ObservableCollection<TagModel>();
         _hierarchy1Names = new ObservableCollection<Hierarchy1>(categoryDataManager.GetHierarchy1Category());
         _pictureHierarchy = new ObservableCollection<HierarchyModel>();
         _ioTypeHierarchy = new ObservableCollection<HierarchyModel>();
+        
         objectModel.PropertyChanged += ObjectModel_PropertyChanged;
+        
         ObjectCollectionView = CollectionViewSource.GetDefaultView(_objects);
         ObjectCollectionView.Filter = FilterObjects;
         ObjectCollectionView.SortDescriptions.Add(new SortDescription(nameof(ObjectModel.FullObjectName), ListSortDirection.Ascending));
 
         GetPictureHierarchy();
         GetIoSignalTypes();
-        CellEditEndingCommand = new RelayCommand(OnCellEditEnding);
-        RowEditEndingCommand = new RelayCommand(OnRowEditEnding);
+        //CellEditEndingCommand = new RelayCommand(OnCellEditEnding);
+        //RowEditEndingCommand = new RelayCommand(OnRowEditEnding);
     }
 
     private bool FilterObjects(object obj)
@@ -386,7 +392,9 @@ internal class MainWindowViewModel : ViewModelBase
     private void UpdateObjects()
     {
         _objects = new ObservableCollection<ObjectModel>(objectDataManager.GetObjects());
-        OnPropertyChanged("Objects");
+        OnPropertyChanged(nameof(Objects));
+
+        // Use a collection view for filtering and sorting. even though it is not put as the binded object in XAML, this connects to the itemssource of the datagrid
         ObjectCollectionView = CollectionViewSource.GetDefaultView(_objects);
         ObjectCollectionView.Filter = FilterObjects;
         ObjectCollectionView.SortDescriptions.Add(new SortDescription(nameof(ObjectModel.FullObjectName), ListSortDirection.Ascending));
@@ -578,12 +586,10 @@ internal class MainWindowViewModel : ViewModelBase
                 // ...
             }
         }
-        MessageBox.Show(SelectedObject.Description + " test1");
     }
 
     public void OnRowEditEnding(object parameter)
     {
-        MessageBox.Show(SelectedObject.Description + " test2");
         objectDataManager.UpdateObject(SelectedObject);
         ObjectModel test = (ObjectModel)parameter;
         OnPropertyChanged("SelectedObject");

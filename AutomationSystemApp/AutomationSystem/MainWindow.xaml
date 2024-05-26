@@ -14,7 +14,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="40"/>
                         <RowDefinition Height="0.7*"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="0.3*"/>
@@ -22,30 +22,101 @@
                     <!-- Button panel row -->
                     <userControls:ObjectButtonBar Grid.Row="0"/>
                     <!-- Filter panel row-->
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <TextBox Text="{Binding FullNameFilter, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="100"/>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.4*"/>
+                            <RowDefinition Height="0.6*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Text="Name"/>
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="0"
+                                 Text="{Binding FullNameFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="1"
+                                   Text="Description"/>
                         <TextBox Text="{Binding DescriptionFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Row="1"
+                                 Grid.Column="1"
                                  Width="100"/>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="2"
+                                   Text="Hierarchy 1"/>
                         <TextBox Text="{Binding Hierarchy1Filter, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Column="2"
+                                 Grid.Row="1"
                                  Width="100"/>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="3"
+                                   Text="Hierarchy 2"/>
                         <TextBox Text="{Binding Hierarchy2Filter, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Column="3"
+                                 Grid.Row="1"
                                  Width="100"/>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="4"
+                                   Text="VDU Group"/>
                         <TextBox Text="{Binding VduGroupFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Column="4"
+                                 Grid.Row="1"
                                  Width="100"/>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="5"
+                                   Text="Alarm Group"/>
                         <TextBox Text="{Binding AlarmGroupFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Column="5"
+                                 Grid.Row="1"
                                  Width="100"/>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="6"
+                                   Text="OTD"/>
                         <TextBox Text="{Binding OtdFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Column="6"
+                                 Grid.Row="1"
                                  Width="100"/>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="7"
+                                   Text="Ack Allowed"/>
                         <TextBox Text="{Binding AcknowledgeAllowedFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Column="7"
+                                 Grid.Row="1"
                                  Width="100"/>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="8"
+                                   Text="Always Visible"/>
                         <TextBox Text="{Binding AlwaysVisibleFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Column="8"
+                                 Grid.Row="1"
                                  Width="100"/>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="9"
+                                   Text="Node"/>
                         <TextBox Text="{Binding NodeFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Column="9"
+                                 Grid.Row="1"
                                  Width="100"/>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="10"
+                                   Text="Cabinet"/>
                         <TextBox Text="{Binding CabinetFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Column="10"
+                                 Grid.Row="1"
                                  Width="100"/>
-                    </StackPanel>
+                    </Grid>
                     <!-- Datagrid row -->
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
