@@ -53,7 +53,7 @@
                             <ColumnDefinition Width="13*"/>
                         </Grid.ColumnDefinitions>
                         <!-- Data Grid -->
-                        <DataGrid ItemsSource="{Binding ObjectCollectionView, UpdateSourceTrigger=PropertyChanged}"
+                        <DataGrid ItemsSource="{Binding Objects, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   SelectedItem="{Binding SelectedObject, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   AutoGenerateColumns="False"
                                   Grid.ColumnSpan="2"

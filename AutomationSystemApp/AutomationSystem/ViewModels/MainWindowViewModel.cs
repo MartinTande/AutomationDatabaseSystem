@@ -22,8 +22,8 @@ internal class MainWindowViewModel : ViewModelBase
     TagDataManager tagDataManager;
     CategoryDataManager categoryDataManager;
     SubCategoryDataManager subCategoryDataManager;
-    
-    public ICollectionView ObjectCollectionView { get; }
+
+    public ICollectionView ObjectCollectionView { get; set; }
     public RelayCommand CellEditEndingCommand { get; }
     public RelayCommand RowEditEndingCommand { get; }
 
@@ -44,8 +44,8 @@ internal class MainWindowViewModel : ViewModelBase
     public ObservableCollection<IoType> IoTypeNames
     {
         get { return _ioTypeNames; }
-        set 
-        { 
+        set
+        {
             _ioTypeNames = value;
             OnPropertyChanged();
         }
@@ -56,8 +56,8 @@ internal class MainWindowViewModel : ViewModelBase
     public TagModel SelectedTag
     {
         get { return _selectedTag; }
-        set 
-        { 
+        set
+        {
             _selectedTag = value;
             OnPropertyChanged();
         }
@@ -109,7 +109,7 @@ internal class MainWindowViewModel : ViewModelBase
     public ObservableCollection<HierarchyModel> IoTypeHierarchy
     {
         get { return _ioTypeHierarchy; }
-        set 
+        set
         {
             if (value != null)
             {
@@ -128,18 +128,6 @@ internal class MainWindowViewModel : ViewModelBase
             if (_objects != value && _objects != null)
             {
                 _objects = value;
-                foreach (var oldObject in _objects)
-                {
-                    oldObject.PropertyChanged -= ObjectModel_PropertyChanged;
-                }
-
-                _objects = value;
-
-                // Subscribe to new ObjectModel instances
-                foreach (var newObject in _objects)
-                {
-                    newObject.PropertyChanged += ObjectModel_PropertyChanged;
-                }
                 OnPropertyChanged();
             }
         }
@@ -158,7 +146,7 @@ internal class MainWindowViewModel : ViewModelBase
     public ObservableCollection<TagModel> Tags
     {
         get { return _tags; }
-        set 
+        set
         {
             if (_tags != value && _tags != null)
             {
@@ -180,7 +168,6 @@ internal class MainWindowViewModel : ViewModelBase
                 OnPropertyChanged();
 
                 UpdateTags(SelectedObject.FullObjectName);
-                MessageBox.Show(value.Description);
             }
         }
     }
@@ -189,9 +176,9 @@ internal class MainWindowViewModel : ViewModelBase
     public string FullNameFilter
     {
         get { return _fullNameFilter; }
-        set 
-        { 
-            _fullNameFilter = value; 
+        set
+        {
+            _fullNameFilter = value;
             OnPropertyChanged();
             ObjectCollectionView.Refresh();
         }
@@ -201,8 +188,8 @@ internal class MainWindowViewModel : ViewModelBase
     public string DescriptionFilter
     {
         get { return _descriptionFilter; }
-        set 
-        { 
+        set
+        {
             _descriptionFilter = value;
             OnPropertyChanged();
             ObjectCollectionView.Refresh();
@@ -335,7 +322,8 @@ internal class MainWindowViewModel : ViewModelBase
         objectModel.PropertyChanged += ObjectModel_PropertyChanged;
         ObjectCollectionView = CollectionViewSource.GetDefaultView(_objects);
         ObjectCollectionView.Filter = FilterObjects;
-        
+        ObjectCollectionView.SortDescriptions.Add(new SortDescription(nameof(ObjectModel.FullObjectName), ListSortDirection.Ascending));
+
         GetPictureHierarchy();
         GetIoSignalTypes();
         CellEditEndingCommand = new RelayCommand(OnCellEditEnding);
@@ -346,7 +334,7 @@ internal class MainWindowViewModel : ViewModelBase
     {
         if (obj is ObjectModel objectModel)
         {
-            return objectModel.FullObjectName.Contains(FullNameFilter, StringComparison.InvariantCultureIgnoreCase) && 
+            return objectModel.FullObjectName.Contains(FullNameFilter, StringComparison.InvariantCultureIgnoreCase) &&
                     objectModel.Description.Contains(DescriptionFilter, StringComparison.InvariantCultureIgnoreCase) &&
                     objectModel.Hierarchy1Name.Contains(Hierarchy1Filter, StringComparison.InvariantCultureIgnoreCase) &&
                     objectModel.Hierarchy2Name.Contains(Hierarchy2Filter, StringComparison.InvariantCultureIgnoreCase) &&
@@ -397,7 +385,11 @@ internal class MainWindowViewModel : ViewModelBase
 
     private void UpdateObjects()
     {
-        Objects = new ObservableCollection<ObjectModel>(objectDataManager.GetObjects());
+        _objects = new ObservableCollection<ObjectModel>(objectDataManager.GetObjects());
+        OnPropertyChanged("Objects");
+        ObjectCollectionView = CollectionViewSource.GetDefaultView(_objects);
+        ObjectCollectionView.Filter = FilterObjects;
+        ObjectCollectionView.SortDescriptions.Add(new SortDescription(nameof(ObjectModel.FullObjectName), ListSortDirection.Ascending));
     }
     private void AddObjectWindow_Closed(object sender, EventArgs e)
     {
@@ -409,7 +401,7 @@ internal class MainWindowViewModel : ViewModelBase
         UpdateObjects();
     }
     #endregion
-    
+
     #region Tag functions
     private void ShowAddTagWindow()
     {
@@ -435,7 +427,7 @@ internal class MainWindowViewModel : ViewModelBase
             Tags = new ObservableCollection<TagModel>(tagDataManager.GetTagsByObjectId(SelectedObject.Id));
             foreach (TagModel tag in Tags)
             {
-                tag.ObjectName = objectName; 
+                tag.ObjectName = objectName;
             }
         }
         catch (Exception ex)
@@ -512,7 +504,7 @@ internal class MainWindowViewModel : ViewModelBase
         {
             return false;
         }
-        
+
         return Hierarchy1Names.Any(item => item.Name == selectedItem);
     }
 
