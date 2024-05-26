@@ -279,6 +279,15 @@
             </ComboBox>
         </Grid>
 
+        <!-- Message bar -->
+        <Grid Grid.Row="8" Margin="5,0,5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Text="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+
         <!-- Buttons -->
         <Grid Grid.Row="9">
             <Grid.ColumnDefinitions>

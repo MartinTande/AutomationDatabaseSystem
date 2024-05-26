@@ -193,6 +193,18 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         }
     }
 
+    private string _errorMessage = string.Empty;
+
+    public string ErrorMessage
+    {
+        get { return _errorMessage; }
+        set 
+        { 
+            _errorMessage = value;
+            OnPropertyChanged();
+        }
+    }
+
     #endregion
 
     public AddObjectViewModel(IDataConnector dataConnector)
@@ -238,10 +250,30 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             CabinetName = SelectedCabinet.Name,
         };
 
-        objectDataManager.InsertObject(newObject);
-        tagDataManager.AddTagsBasedOnOTD(objectDataManager.GetLastInsertedObjectId(), SelectedOtd.Name);
+        if (!ObjectNameIsUsed(newObject.FullObjectName))
+        {
+            objectDataManager.InsertObject(newObject);
+            tagDataManager.AddTagsBasedOnOTD(objectDataManager.GetLastInsertedObjectId(), SelectedOtd.Name);
+            CloseWindow();
+        }
+        else
+        {
+            ErrorMessage = "ObjectName is already used";
+        }
         
-        CloseWindow();
+    }
+
+    public bool ObjectNameIsUsed(string objectName)
+    {
+        List<ObjectModel> objects = objectDataManager.GetObjects();
+        foreach (ObjectModel obj in objects)
+        {
+            if (obj.FullObjectName == objectName)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void CloseWindow()

@@ -22,6 +22,7 @@ internal class MainWindowViewModel : ViewModelBase
     TagDataManager tagDataManager;
     CategoryDataManager categoryDataManager;
     SubCategoryDataManager subCategoryDataManager;
+    
     public ICollectionView ObjectCollectionView { get; }
     public RelayCommand CellEditEndingCommand { get; }
     public RelayCommand RowEditEndingCommand { get; }
@@ -127,9 +128,30 @@ internal class MainWindowViewModel : ViewModelBase
             if (_objects != value && _objects != null)
             {
                 _objects = value;
+                foreach (var oldObject in _objects)
+                {
+                    oldObject.PropertyChanged -= ObjectModel_PropertyChanged;
+                }
+
+                _objects = value;
+
+                // Subscribe to new ObjectModel instances
+                foreach (var newObject in _objects)
+                {
+                    newObject.PropertyChanged += ObjectModel_PropertyChanged;
+                }
                 OnPropertyChanged();
             }
         }
+    }
+
+    private void ObjectModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == "Description")
+        {
+            MessageBox.Show("Testing testing");
+        }
+
     }
 
     private ObservableCollection<TagModel> _tags;
@@ -296,6 +318,8 @@ internal class MainWindowViewModel : ViewModelBase
     }
     #endregion
 
+    ObjectModel objectModel { get; set; } = new ObjectModel();
+
     public MainWindowViewModel(IDataConnector dataConnector)
     {
         _dataConnector = dataConnector;
@@ -308,7 +332,7 @@ internal class MainWindowViewModel : ViewModelBase
         _hierarchy1Names = new ObservableCollection<Hierarchy1>(categoryDataManager.GetHierarchy1Category());
         _pictureHierarchy = new ObservableCollection<HierarchyModel>();
         _ioTypeHierarchy = new ObservableCollection<HierarchyModel>();
-
+        objectModel.PropertyChanged += ObjectModel_PropertyChanged;
         ObjectCollectionView = CollectionViewSource.GetDefaultView(_objects);
         ObjectCollectionView.Filter = FilterObjects;
         
@@ -562,19 +586,15 @@ internal class MainWindowViewModel : ViewModelBase
                 // ...
             }
         }
-        MessageBox.Show(SelectedObject.Description + "test1");
+        MessageBox.Show(SelectedObject.Description + " test1");
     }
 
     public void OnRowEditEnding(object parameter)
     {
-        MessageBox.Show(SelectedObject.Description + "test2");
+        MessageBox.Show(SelectedObject.Description + " test2");
         objectDataManager.UpdateObject(SelectedObject);
         ObjectModel test = (ObjectModel)parameter;
         OnPropertyChanged("SelectedObject");
     }
 
-    public void Test()
-    {
-        MessageBox.Show("Here");
-    }
 }

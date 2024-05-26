@@ -1,5 +1,4 @@
 ﻿using AutomationSystem.MVVM;
-using System.Windows;
 
 namespace AutomationSystem.Models;
 
@@ -18,11 +17,9 @@ public class ObjectModel : ViewModelBase
         {
             _description = value;
             OnPropertyChanged();
-            //MessageBox.Show(value);
             
         }
     }
-    //public string? Description { get; set; }
     public string? Hierarchy1Name { get; set; }
     public string? Hierarchy2Name { get; set; }
     public string? VduGroupName { get; set; }
@@ -42,4 +39,6 @@ public class ObjectModel : ViewModelBase
     }
 
     public List<TagModel>? Tags { get; set; }
+
+
 }
