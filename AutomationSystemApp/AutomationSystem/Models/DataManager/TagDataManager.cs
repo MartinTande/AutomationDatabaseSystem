@@ -132,6 +132,34 @@ public class TagDataManager
                 new TagModel { EqSuffix = 04, Description = "Open command", IoType = "DO", SignalType = "NO" },
                 new TagModel { EqSuffix = 07, Description = "Valve - Fault", IoType = "DO", SignalType = "NO" },
                 ]
-        }
+        },
+        {
+            "BO_AnalogIn", [
+                new TagModel { EqSuffix = 41, Description = "Value", IoType = "AI", SignalType = "Int" }
+                ]
+        },
+        {
+            "BO_Value", [
+                new TagModel { EqSuffix = 41, Description = "Value", IoType = "AI", SignalType = "Int" }
+                ]
+        },
+        {
+            "BO_Breaker", [
+                new TagModel { EqSuffix = 32, Description = "Open feedback", IoType = "DI", SignalType = "NO" },
+                new TagModel { EqSuffix = 31, Description = "Close feedback", IoType = "DI", SignalType = "NO" },
+                new TagModel { EqSuffix = 34, Description = "Open command", IoType = "DO", SignalType = "NO" },
+                new TagModel { EqSuffix = 33, Description = "Close command", IoType = "DO", SignalType = "NO" },
+                ]
+        },
+        {
+            "BO_Tank", [
+                new TagModel { EqSuffix = 21, Description = "Level", IoType = "AI", SignalType = "U_AnalogValueLong" }
+                ]
+        },
+        {
+            "BO_1DI", [
+                new TagModel { EqSuffix = 01, Description = "Tag", IoType = "DI", SignalType = "NO" }
+                ]
+        },
     };
 }
