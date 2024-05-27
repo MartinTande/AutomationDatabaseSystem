@@ -20,7 +20,7 @@ public class SubCategoryDataManager
             Name = ioType
         };
 
-        return _sqlConnector.LoadData<SignalType, dynamic>("GetSignalTypesByGroup", p);
+        return _sqlConnector.ReadData<SignalType, dynamic>("GetSignalTypesByGroup", p);
     }
 
     public List<Hierarchy2> GetHierarchy2Category(string hierarchy1Name)
@@ -32,7 +32,7 @@ public class SubCategoryDataManager
             Name = hierarchy1Name
         };
 
-        List<Hierarchy2> hierarchy2Category = _sqlConnector.LoadData<Hierarchy2, dynamic>("GetHierarchy2ByGroup", p);
+        List<Hierarchy2> hierarchy2Category = _sqlConnector.ReadData<Hierarchy2, dynamic>("GetHierarchy2ByGroup", p);
         return hierarchy2Category;
     }
 
@@ -46,7 +46,7 @@ public class SubCategoryDataManager
             Hierarchy2Name = newHierarchy2Name
         };
 
-        _sqlConnector.LoadData<string, dynamic>("AddHierarchy2", p);
+        _sqlConnector.ReadData<string, dynamic>("AddHierarchy2", p);
     }
 
     public void DeleteHierarchy2Category(int id)
@@ -58,7 +58,7 @@ public class SubCategoryDataManager
             Id = id
         };
 
-        _sqlConnector.LoadData<string, dynamic>("DeleteHierarchy2", p);
+        _sqlConnector.ReadData<string, dynamic>("DeleteHierarchy2", p);
     }
 
     public void EditHierarchy2Category(int id, string updatedHierarchy2Name)
@@ -69,7 +69,7 @@ public class SubCategoryDataManager
             Name = updatedHierarchy2Name
         };
 
-        _sqlConnector.LoadData<string, dynamic>("EditHierarchy2", p);
+        _sqlConnector.ReadData<string, dynamic>("EditHierarchy2", p);
     }
 
     public List<string> GetHierarchy2Names(string hierarchy1Name)
@@ -81,7 +81,20 @@ public class SubCategoryDataManager
             Name = hierarchy1Name
         };
 
-        List<string> hierarchy2Category = _sqlConnector.LoadData<string, dynamic>("GetHierarchy2NamesByGroup", p);
+        List<string> hierarchy2Category = _sqlConnector.ReadData<string, dynamic>("GetHierarchy2NamesByGroup", p);
         return hierarchy2Category;
     }
+
+    public List<string> GetSignalTypeNames(string ioType)
+    {
+        // Anonymous object, object with no name type
+        // No parameters, but need an object
+        var p = new
+        {
+            Name = ioType
+        };
+
+        return _sqlConnector.ReadData<string, dynamic>("GetSignalTypeNamesByGroup", p);
+    }
+
 }

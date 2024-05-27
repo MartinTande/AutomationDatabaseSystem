@@ -3,7 +3,7 @@ namespace AutomationSystem.Models.DataAccess
 {
     public interface IDataConnector
     {
-        List<T> LoadData<T, U>(string storedProcedure, U parameters);
-        void SaveData<T>(string storedProcedure, T parameters);
+        List<T> ReadData<T, U>(string storedProcedure, U parameters);
+        void WriteData<T>(string storedProcedure, T parameters);
     }
 }

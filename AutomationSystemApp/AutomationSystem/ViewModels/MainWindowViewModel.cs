@@ -423,10 +423,6 @@ internal class MainWindowViewModel : ViewModelBase
         UpdateTags(SelectedObject.FullObjectName);
     }
 
-    private void EditTagWindow_Closed(object sender, EventArgs e)
-    {
-        UpdateObjects();
-    }
 
     private void UpdateTags(string? objectName)
     {
@@ -446,7 +442,14 @@ internal class MainWindowViewModel : ViewModelBase
 
     private void ShowEditTagWindow()
     {
-        throw new NotImplementedException();
+        EditTagWindow editTagWindow = new EditTagWindow(_dataConnector, SelectedTag);
+        editTagWindow.Show();
+        editTagWindow.Closed += EditTagWindow_Closed;
+    }
+    private void EditTagWindow_Closed(object sender, EventArgs e)
+    {
+        UpdateObjects();
+        UpdateTags(SelectedObject.FullObjectName);
     }
 
     private void DeleteTag()

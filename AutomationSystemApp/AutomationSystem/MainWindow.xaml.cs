@@ -68,7 +68,7 @@ public partial class MainWindow : Window
     {
         if (e.NewValue is IItem)
         {
-            mainWindowViewModel.SelectedHierarchyItem = (IItem)e.NewValue; 
+            mainWindowViewModel.SelectedHierarchyItem = (IItem)e.NewValue;
         }
     }
 

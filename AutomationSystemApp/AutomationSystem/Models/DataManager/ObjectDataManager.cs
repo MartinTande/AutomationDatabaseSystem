@@ -16,7 +16,7 @@ public class ObjectDataManager
         // Id is parameter of object, id is input to that parameter
         var p = new { Id = id };
 
-        var tagObjectList = _sqlConnector.LoadData<ObjectModel, dynamic>("GetObjectById", p);
+        var tagObjectList = _sqlConnector.ReadData<ObjectModel, dynamic>("GetObjectById", p);
         return tagObjectList;
     }
 
@@ -26,7 +26,7 @@ public class ObjectDataManager
         // No parameters, but need an object
         var p = new { };
 
-        List<ObjectModel> tagObjectList = _sqlConnector.LoadData<ObjectModel, dynamic>("GetAllObjects", p);
+        List<ObjectModel> tagObjectList = _sqlConnector.ReadData<ObjectModel, dynamic>("GetAllObjects", p);
         return tagObjectList;
     }
 
@@ -50,7 +50,7 @@ public class ObjectDataManager
             tagObject.CabinetName
         };
 
-        _sqlConnector.SaveData("CreateObject", p);
+        _sqlConnector.WriteData("CreateObject", p);
     }
 
     public void UpdateObject(ObjectModel tagObject)
@@ -76,7 +76,7 @@ public class ObjectDataManager
 
         try
         {
-            _sqlConnector.SaveData("UpdateObject", p);
+            _sqlConnector.WriteData("UpdateObject", p);
         }
         catch (Exception)
         {
@@ -88,7 +88,7 @@ public class ObjectDataManager
     {
         var p = new { };
         
-        List<int> lastInsertedObjectIds= _sqlConnector.LoadData<int, dynamic>("GetLastInsertedObjectId", p);
+        List<int> lastInsertedObjectIds= _sqlConnector.ReadData<int, dynamic>("GetLastInsertedObjectId", p);
         return lastInsertedObjectIds.First();
     }
 
@@ -98,6 +98,6 @@ public class ObjectDataManager
         // Id is parameter of object, id is input to that parameter
         var p = new { Id = id };
 
-        _sqlConnector.SaveData("DeleteObject", p);
+        _sqlConnector.WriteData("DeleteObject", p);
     }
 }

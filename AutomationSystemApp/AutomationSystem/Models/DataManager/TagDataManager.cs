@@ -17,7 +17,7 @@ public class TagDataManager
         // Id is parameter of object, id is input to that parameter
         var p = new { ObjectId = objectId };
 
-        List<TagModel> tagList = _sqlConnector.LoadData<TagModel, dynamic>("GetTagsByObjectId", p);
+        List<TagModel> tagList = _sqlConnector.ReadData<TagModel, dynamic>("GetTagsByObjectId", p);
         return tagList;
     }
 
@@ -25,7 +25,7 @@ public class TagDataManager
     {
         var p = new { Id = tagId };
 
-        _sqlConnector.SaveData("DeleteTag", p);
+        _sqlConnector.WriteData("DeleteTag", p);
     }
 
     public void InsertTag(int objectId, TagModel tag)
@@ -55,7 +55,37 @@ public class TagDataManager
             tag.IsVDR
         };
 
-        _sqlConnector.SaveData("CreateTag", p);
+        _sqlConnector.WriteData("CreateTag", p);
+    }
+
+    public void UpdateTag(TagModel tag)
+    {
+        // Anonymous object, object with no name type
+        var p = new
+        {
+            tag.Id,
+            tag.EqSuffix,
+            tag.Description,
+            tag.IoType,
+            tag.SignalType,
+            tag.EngUnit,
+            tag.RangeLow,
+            tag.RangeHigh,
+            tag.LowLowLimit,
+            tag.LowLimit,
+            tag.HighLimit,
+            tag.HighHighLimit,
+            tag.Slot,
+            tag.AbsoluteAddress,
+            tag.SWPath,
+            tag.DBName,
+            tag.ModbusAddress,
+            tag.ModbusBit,
+            tag.IsE0,
+            tag.IsVDR
+        };
+
+        _sqlConnector.WriteData("UpdateTag", p);
     }
 
     // Default tag structure for auto generating object tags based on OTD type

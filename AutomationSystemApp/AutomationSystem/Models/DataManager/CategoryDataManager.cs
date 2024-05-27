@@ -18,7 +18,7 @@ public class CategoryDataManager
             TableName = tableName
         };
 
-        return _sqlConnector.LoadData<T, dynamic>("GetCategory", p);
+        return _sqlConnector.ReadData<T, dynamic>("GetCategory", p);
     }
 
     public List<Node> GetNodeCategory() { return GetCategory<Node>("NODE"); }
@@ -39,7 +39,7 @@ public class CategoryDataManager
             TableName = tableName
         };
 
-        return _sqlConnector.LoadData<string, dynamic>("GetCategoryNames", p);
+        return _sqlConnector.ReadData<string, dynamic>("GetCategoryNames", p);
     }
 
     public List<string> GetAlarmGroupNames() { return GetCategoryNames("ALARM_GROUP"); }
@@ -63,7 +63,7 @@ public class CategoryDataManager
             Id = id
         };
 
-        _sqlConnector.LoadData<string, dynamic>("DeleteCategoryItem", p);
+        _sqlConnector.ReadData<string, dynamic>("DeleteCategoryItem", p);
     }
 
     private void EditCategoryItem(string tableName, int id, string updatedName)
@@ -75,7 +75,7 @@ public class CategoryDataManager
             Name = updatedName
         };
 
-        _sqlConnector.LoadData<string, dynamic>("EditCategoryItem", p);
+        _sqlConnector.ReadData<string, dynamic>("EditCategoryItem", p);
     }
 
     private void AddCategoryItem(string tableName, string name)
@@ -88,7 +88,7 @@ public class CategoryDataManager
             Name = name
         };
 
-        _sqlConnector.LoadData<string, dynamic>("AddCategoryItem", p);
+        _sqlConnector.ReadData<string, dynamic>("AddCategoryItem", p);
     }
 
     public void DeleteHierarchy1Category(int id) { DeleteCategoryItem("HIERARCHY_1", id); }

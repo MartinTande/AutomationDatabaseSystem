@@ -200,10 +200,10 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
     }
     #endregion
 
-    public EditObjectViewModel(IDataConnector dataConnector, ObjectModel selectedTagObject)
+    public EditObjectViewModel(IDataConnector dataConnector, ObjectModel selectedObject)
     {
         _dataConnector = dataConnector;
-        InputSelectedTagObject(selectedTagObject);
+        InputSelectedObject(selectedObject);
         categoryDataManager = new CategoryDataManager(_dataConnector);
         subCategoryDataManager = new SubCategoryDataManager(_dataConnector);
 
@@ -218,22 +218,22 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
         CabinetNames = new ObservableCollection<string>(categoryDataManager.GetCabinetNames());
     }
 
-    private void InputSelectedTagObject(ObjectModel selectedTagObject)
+    private void InputSelectedObject(ObjectModel selectedObject)
     {
-        _objectId = selectedTagObject.Id;
-        _sfiNumberInput = selectedTagObject.SfiNumber;
-        _mainEqNumberInput = selectedTagObject.MainEqNumber;
-        _eqNumberInput = selectedTagObject.EqNumber;
-        _objectDescriptionInput = selectedTagObject.Description;
-        _selectedHierarchy1 = selectedTagObject.Hierarchy1Name;
-        _selectedHierarchy2 = selectedTagObject.Hierarchy2Name;
-        _selectedVduGroup = selectedTagObject.VduGroupName;
-        _selectedAlarmGroup = selectedTagObject.AlarmGroupName;
-        _selectedOtd = selectedTagObject.OtdName;
-        _selectedAcknowledgeAllowed = selectedTagObject.AcknowledgeAllowedName;
-        _selectedAlwaysVisible = selectedTagObject.AlwaysVisibleName;
-        _selectedNode = selectedTagObject.NodeName;
-        _selectedCabinet = selectedTagObject.CabinetName;
+        _objectId = selectedObject.Id;
+        _sfiNumberInput = selectedObject.SfiNumber;
+        _mainEqNumberInput = selectedObject.MainEqNumber;
+        _eqNumberInput = selectedObject.EqNumber;
+        _objectDescriptionInput = selectedObject.Description;
+        _selectedHierarchy1 = selectedObject.Hierarchy1Name;
+        _selectedHierarchy2 = selectedObject.Hierarchy2Name;
+        _selectedVduGroup = selectedObject.VduGroupName;
+        _selectedAlarmGroup = selectedObject.AlarmGroupName;
+        _selectedOtd = selectedObject.OtdName;
+        _selectedAcknowledgeAllowed = selectedObject.AcknowledgeAllowedName;
+        _selectedAlwaysVisible = selectedObject.AlwaysVisibleName;
+        _selectedNode = selectedObject.NodeName;
+        _selectedCabinet = selectedObject.CabinetName;
     }
 
     private bool CanUpdateObject()
@@ -244,25 +244,24 @@ internal class EditObjectViewModel : ViewModelBase, ICloseable
     private void UpdateObject()
     {
         ObjectDataManager dataManager = new ObjectDataManager(_dataConnector);
-        ObjectModel updatedTagObject = new ObjectModel();
+        ObjectModel updatedObject = new ObjectModel();
 
-        updatedTagObject.Id = _objectId;
-        updatedTagObject.SfiNumber = SfiNumberInput;
-        updatedTagObject.MainEqNumber = MainEqNumberInput;
-        updatedTagObject.EqNumber = EqNumberInput;
-        updatedTagObject.Description = DescriptionInput;
-        updatedTagObject.Hierarchy1Name = SelectedHierarchy1;
-        updatedTagObject.Hierarchy2Name = SelectedHierarchy2;
-        updatedTagObject.VduGroupName = SelectedVduGroup;
-        updatedTagObject.AlarmGroupName = SelectedAlarmGroup;
-        updatedTagObject.OtdName = SelectedOtd;
-        updatedTagObject.AlwaysVisibleName = SelectedAlwaysVisible;
-        updatedTagObject.AcknowledgeAllowedName = SelectedAcknowledgeAllowed;
-        updatedTagObject.NodeName = SelectedNode;
-        updatedTagObject.CabinetName = SelectedCabinet;
+        updatedObject.Id = _objectId;
+        updatedObject.SfiNumber = SfiNumberInput;
+        updatedObject.MainEqNumber = MainEqNumberInput;
+        updatedObject.EqNumber = EqNumberInput;
+        updatedObject.Description = DescriptionInput;
+        updatedObject.Hierarchy1Name = SelectedHierarchy1;
+        updatedObject.Hierarchy2Name = SelectedHierarchy2;
+        updatedObject.VduGroupName = SelectedVduGroup;
+        updatedObject.AlarmGroupName = SelectedAlarmGroup;
+        updatedObject.OtdName = SelectedOtd;
+        updatedObject.AlwaysVisibleName = SelectedAlwaysVisible;
+        updatedObject.AcknowledgeAllowedName = SelectedAcknowledgeAllowed;
+        updatedObject.NodeName = SelectedNode;
+        updatedObject.CabinetName = SelectedCabinet;
 
-        dataManager.UpdateObject(updatedTagObject);
-        MessageBox.Show(updatedTagObject.Description);
+        dataManager.UpdateObject(updatedObject);
         CloseWindow();
     }
 
