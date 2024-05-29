@@ -1,4 +1,4 @@
-﻿using AutomationSystem.Commands;
+using AutomationSystem.Commands;
 using AutomationSystem.MVVM;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -239,15 +239,15 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             MainEqNumber = MainEqNumberInput,
             EqNumber = EqNumberInput,
             Description = DescriptionInput,
-            Hierarchy1Name = SelectedHierarchy1.Name,
-            Hierarchy2Name = SelectedHierarchy2.Name,
-            VduGroupName = SelectedVduGroup.Name,
-            AlarmGroupName = SelectedAlarmGroup.Name,
-            OtdName = SelectedOtd.Name,
-            AlwaysVisibleName = SelectedAlwaysVisible.Name,
-            AcknowledgeAllowedName = SelectedAcknowledgeAllowed.Name,
-            NodeName = SelectedNode.Name,
-            CabinetName = SelectedCabinet.Name,
+            Hierarchy1Name = SelectedHierarchy1?.Name,
+            Hierarchy2Name = SelectedHierarchy2?.Name,
+            VduGroupName = SelectedVduGroup?.Name,
+            AlarmGroupName = SelectedAlarmGroup?.Name,
+            OtdName = SelectedOtd?.Name,
+            AlwaysVisibleName = SelectedAlwaysVisible?.Name,
+            AcknowledgeAllowedName = SelectedAcknowledgeAllowed?.Name,
+            NodeName = SelectedNode?.Name,
+            CabinetName = SelectedCabinet?.Name,
         };
 
         if (!ObjectNameIsUsed(newObject.FullObjectName))

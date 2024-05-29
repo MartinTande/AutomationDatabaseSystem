@@ -5,7 +5,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="AddObjectWindow" Height="600" Width="500">
+        Title="AddObjectWindow"
+        Height="600"
+        Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -19,7 +21,8 @@
             <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="5,0,5,0">
+        <Grid Grid.Row="0"
+              Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -60,7 +63,8 @@
                      VerticalContentAlignment="Center"/>
         </Grid>
         <!-- Object Description -->
-        <Grid Grid.Row="1" Margin="5,0,5,0">
+        <Grid Grid.Row="1"
+              Margin="5,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
                 <RowDefinition Height="0.6*"/>
@@ -72,7 +76,8 @@
                      VerticalContentAlignment="Center"/>
         </Grid>
 
-        <Grid Grid.Row="2" Margin="5,0,5,0">
+        <Grid Grid.Row="2"
+              Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -120,7 +125,8 @@
             </ComboBox>
         </Grid>
         <!-- Row 4 -->
-        <Grid Grid.Row="3" Margin="5,0,5,0">
+        <Grid Grid.Row="3"
+              Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="51*"/>
                 <ColumnDefinition Width="194*"/>
@@ -139,7 +145,8 @@
                       Margin="0,0,5,0"
                       Grid.Row="1"
                       Grid.Column="0"
-                      VerticalContentAlignment="Center" Grid.ColumnSpan="2">
+                      VerticalContentAlignment="Center"
+                      Grid.ColumnSpan="2">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
@@ -167,7 +174,8 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </Grid>
-        <Grid Grid.Row="4" Margin="5,0,5,0">
+        <Grid Grid.Row="4"
+              Margin="5,0,5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -215,7 +223,8 @@
             </ComboBox>
         </Grid>
         <!-- Otd -->
-        <Grid Grid.Row="5" Margin="5,0,5,0">
+        <Grid Grid.Row="5"
+              Margin="5,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
                 <RowDefinition Height="0.6*"/>
@@ -236,7 +245,8 @@
             </ComboBox>
         </Grid>
         <!-- Acknowledge Allowed -->
-        <Grid Grid.Row="6" Margin="5,0,5,0">
+        <Grid Grid.Row="6"
+              Margin="5,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
                 <RowDefinition Height="0.6*"/>
@@ -256,9 +266,10 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </Grid>
-        
+
         <!-- Always Visible -->
-        <Grid Grid.Row="7" Margin="5,0,5,0">
+        <Grid Grid.Row="7"
+              Margin="5,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
                 <RowDefinition Height="0.6*"/>
@@ -280,7 +291,8 @@
         </Grid>
 
         <!-- Message bar -->
-        <Grid Grid.Row="8" Margin="5,0,5,0">
+        <Grid Grid.Row="8"
+              Margin="5,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition/>
             </Grid.RowDefinitions>
@@ -296,12 +308,12 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="2" 
-                    Content="Add" 
-                    Margin="5" 
+            <Button Grid.Column="2"
+                    Content="Add"
+                    Margin="5"
                     Command="{Binding AddObjectCommand}"/>
-            <Button Grid.Column="3" 
-                    Content="Cancel"  
+            <Button Grid.Column="3"
+                    Content="Cancel"
                     Margin="5"
                     Command="{Binding CloseWindowCommand}"/>
         </Grid>

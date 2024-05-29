@@ -253,7 +253,7 @@ internal class EditTagViewModel : ViewModelBase, ICloseable
             DBName = _dbNameInput,
             ModbusAddress = _modbusAddressInput,
             ModbusBit = _modbusBitInput,
-            };
+        };
 
         tagDataManager.UpdateTag(updatedTag);
         CloseWindow();

@@ -38,6 +38,31 @@ public class TagModel : ViewModelBase
     public bool IsVDR { get; set; }
     public string? ObjectName { get; set; }
 
+
+    public bool IsHW
+    {
+        get 
+        {
+            return IoType.StartsWith("S") ? false : true; 
+        }
+    }
+
+    public bool IsInput 
+    {
+        get
+        {
+            return IoType.EndsWith("I") ? true : false;
+        }
+    }
+
+    public bool IsDigital
+    {
+        get
+        {
+            return IoType.Contains("D") ? true : false;
+        }
+    }
+
     public string FullTagName
     {
         get
@@ -48,7 +73,7 @@ public class TagModel : ViewModelBase
 
     private string GetPrefix()
     {
-        string ioPrefix = IoType.Contains("I") ? "x" : "y";
+        string ioPrefix = IsInput ? "x" : "y";
         Dictionary<string, string> signalPrefix = new Dictionary<string, string>()
         {
             { "NC", "bo" },

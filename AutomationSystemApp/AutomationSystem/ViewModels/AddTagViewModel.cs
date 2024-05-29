@@ -198,7 +198,7 @@ internal class AddTagViewModel : ViewModelBase, ICloseable
 
     public void AddTag()
     {
-        TagModel newTag = new TagModel
+        TagModel newTag = new TagModel()
         {
             EqSuffix = EqSuffixInput,
             IsE0 = E0Input,

@@ -342,15 +342,15 @@ internal class MainWindowViewModel : ViewModelBase
         {
             return objectModel.FullObjectName.Contains(FullNameFilter, StringComparison.InvariantCultureIgnoreCase) &&
                     objectModel.Description.Contains(DescriptionFilter, StringComparison.InvariantCultureIgnoreCase) &&
-                    objectModel.Hierarchy1Name.Contains(Hierarchy1Filter, StringComparison.InvariantCultureIgnoreCase) &&
-                    objectModel.Hierarchy2Name.Contains(Hierarchy2Filter, StringComparison.InvariantCultureIgnoreCase) &&
-                    objectModel.AcknowledgeAllowedName.Contains(AcknowledgeAllowedFilter, StringComparison.InvariantCultureIgnoreCase) &&
-                    objectModel.AlwaysVisibleName.Contains(AlwaysVisibleFilter, StringComparison.InvariantCultureIgnoreCase) &&
-                    objectModel.NodeName.Contains(NodeFilter, StringComparison.InvariantCultureIgnoreCase) &&
-                    objectModel.CabinetName.Contains(CabinetFilter, StringComparison.InvariantCultureIgnoreCase) &&
-                    objectModel.OtdName.Contains(OtdFilter, StringComparison.InvariantCultureIgnoreCase) &&
-                    objectModel.VduGroupName.Contains(VduGroupFilter, StringComparison.InvariantCultureIgnoreCase) &&
-                    objectModel.AlarmGroupName.Contains(AlarmGroupFilter, StringComparison.InvariantCultureIgnoreCase);
+                    (objectModel.Hierarchy1Name?.Contains(Hierarchy1Filter, StringComparison.InvariantCultureIgnoreCase) ?? true) &&
+                    (objectModel.Hierarchy2Name?.Contains(Hierarchy2Filter, StringComparison.InvariantCultureIgnoreCase) ?? true) &&
+                    (objectModel.AcknowledgeAllowedName?.Contains(AcknowledgeAllowedFilter, StringComparison.InvariantCultureIgnoreCase) ?? true) &&
+                    (objectModel.AlwaysVisibleName?.Contains(AlwaysVisibleFilter, StringComparison.InvariantCultureIgnoreCase) ?? true) &&
+                    (objectModel.NodeName?.Contains(NodeFilter, StringComparison.InvariantCultureIgnoreCase) ?? true) &&
+                    (objectModel.CabinetName?.Contains(CabinetFilter, StringComparison.InvariantCultureIgnoreCase) ?? true) &&
+                    (objectModel.OtdName?.Contains(OtdFilter, StringComparison.InvariantCultureIgnoreCase) ?? true) &&
+                    (objectModel.VduGroupName?.Contains(VduGroupFilter, StringComparison.InvariantCultureIgnoreCase) ?? true) &&
+                    (objectModel.AlarmGroupName?.Contains(AlarmGroupFilter, StringComparison.InvariantCultureIgnoreCase) ?? true);
         }
 
         return false;
