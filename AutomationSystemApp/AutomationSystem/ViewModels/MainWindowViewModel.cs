@@ -10,6 +10,7 @@ using AutomationSystem.Models.DataManager;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System.Windows.Data;
+using System.Security.AccessControl;
 
 
 namespace AutomationSystem.ViewModels;
@@ -181,6 +182,7 @@ internal class MainWindowViewModel : ViewModelBase
             _fullNameFilter = value;
             OnPropertyChanged();
             ObjectCollectionView.Refresh();
+            UpdateObjectCount();
         }
     }
 
@@ -193,6 +195,7 @@ internal class MainWindowViewModel : ViewModelBase
             _descriptionFilter = value;
             OnPropertyChanged();
             ObjectCollectionView.Refresh();
+            UpdateObjectCount();
         }
     }
 
@@ -205,6 +208,7 @@ internal class MainWindowViewModel : ViewModelBase
             _hierarchy1Filter = value;
             OnPropertyChanged();
             ObjectCollectionView.Refresh();
+            UpdateObjectCount();
         }
     }
 
@@ -217,6 +221,7 @@ internal class MainWindowViewModel : ViewModelBase
             _hierarchy2Filter = value;
             OnPropertyChanged();
             ObjectCollectionView.Refresh();
+            UpdateObjectCount();
         }
     }
 
@@ -229,6 +234,7 @@ internal class MainWindowViewModel : ViewModelBase
             _vduGroupFilter = value;
             OnPropertyChanged();
             ObjectCollectionView.Refresh();
+            UpdateObjectCount();
         }
     }
 
@@ -241,6 +247,7 @@ internal class MainWindowViewModel : ViewModelBase
             _alarmGroupFilter = value;
             OnPropertyChanged();
             ObjectCollectionView.Refresh();
+            UpdateObjectCount();
         }
     }
 
@@ -253,6 +260,7 @@ internal class MainWindowViewModel : ViewModelBase
             _otdFilter = value;
             OnPropertyChanged();
             ObjectCollectionView.Refresh();
+            UpdateObjectCount();
         }
     }
 
@@ -265,6 +273,7 @@ internal class MainWindowViewModel : ViewModelBase
             _nodeFilter = value;
             OnPropertyChanged();
             ObjectCollectionView.Refresh();
+            UpdateObjectCount();
         }
     }
 
@@ -277,6 +286,7 @@ internal class MainWindowViewModel : ViewModelBase
             _cabinetFilter = value;
             OnPropertyChanged();
             ObjectCollectionView.Refresh();
+            UpdateObjectCount();
         }
     }
 
@@ -289,6 +299,7 @@ internal class MainWindowViewModel : ViewModelBase
             _acknowledgeAllowedFilter = value;
             OnPropertyChanged();
             ObjectCollectionView.Refresh();
+            UpdateObjectCount();
         }
     }
 
@@ -301,8 +312,22 @@ internal class MainWindowViewModel : ViewModelBase
             _alwaysVisibleFilter = value;
             OnPropertyChanged();
             ObjectCollectionView.Refresh();
+            UpdateObjectCount();
         }
     }
+
+    private int _objectCount;
+
+    public int ObjectCount
+    {
+        get { return _objectCount; }
+        set 
+        { 
+            _objectCount = value;
+            OnPropertyChanged();
+        }
+    }
+
     #endregion
 
     ObjectModel objectModel { get; set; } = new ObjectModel();
@@ -326,6 +351,7 @@ internal class MainWindowViewModel : ViewModelBase
         
         objectModel.PropertyChanged += ObjectModel_PropertyChanged;
         
+        ObjectCount = _objects.Count();
         ObjectCollectionView = CollectionViewSource.GetDefaultView(_objects);
         ObjectCollectionView.Filter = FilterObjects;
         ObjectCollectionView.SortDescriptions.Add(new SortDescription(nameof(ObjectModel.FullObjectName), ListSortDirection.Ascending));
@@ -370,6 +396,11 @@ internal class MainWindowViewModel : ViewModelBase
     #endregion
 
     #region Object functions
+    private void UpdateObjectCount()
+    {
+        ObjectCount = ObjectCollectionView.Cast<object>().Where(item => item is ObjectModel).Count();
+        OnPropertyChanged(nameof(ObjectCount));
+    }
     private void ShowAddObjectWindow()
     {
         AddObjectWindow addObjectWindow = new AddObjectWindow(_dataConnector);

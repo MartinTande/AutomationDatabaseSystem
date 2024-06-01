@@ -17,9 +17,10 @@
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="0.7*"/>
                         <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
                         <RowDefinition Height="0.3*"/>
                     </Grid.RowDefinitions>
-                    <!-- Button panel row -->
+                    <!-- Object Button panel row -->
                     <userControls:ObjectButtonBar Grid.Row="0"/>
                     <!-- Filter panel row-->
                     <Grid Grid.Row="1">
@@ -117,7 +118,7 @@
                                  Grid.Row="1"
                                  Width="100"/>
                     </Grid>
-                    <!-- Datagrid row -->
+                    <!-- Object Datagrid row -->
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -149,8 +150,22 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
-                    <userControls:TagButtonBar Grid.Row="3"/>
-                    <Grid Grid.Row="4">
+                    <!-- Number of Filtered objects row -->
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                                Grid.Row="0"
+                                Text="Number of Objects:"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding ObjectCount, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                    <!-- Tag button panel row-->
+                    <userControls:TagButtonBar Grid.Row="4"/>
+                    <!-- Tag Datagrid row -->
+                    <Grid Grid.Row="5">
                         <DataGrid ItemsSource="{Binding Tags, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   SelectedItem="{Binding SelectedTag}"
                                   AutoGenerateColumns="False"
