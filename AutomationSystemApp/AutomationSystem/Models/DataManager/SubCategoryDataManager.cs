@@ -1,4 +1,5 @@
-﻿using AutomationSystem.Models.DataAccess;
+﻿using AutomationSystem.Models.Data.Categories;
+using AutomationSystem.Models.DataAccess;
 
 namespace AutomationSystem.Models.DataManager;
 
@@ -21,6 +22,15 @@ public class SubCategoryDataManager
         };
 
         return _sqlConnector.ReadData<SignalType, dynamic>("GetSignalTypesByGroup", p);
+    }
+
+    public List<OtdInterface> GetOtdInterfaces(string otdType)
+    {
+        var p = new
+        {
+            Name = otdType
+        };
+        return _sqlConnector.ReadData<OtdInterface, dynamic>("GetOtdInterfacesByGroup", p);
     }
 
     public List<Hierarchy2> GetHierarchy2Category(string hierarchy1Name)
@@ -96,5 +106,6 @@ public class SubCategoryDataManager
 
         return _sqlConnector.ReadData<string, dynamic>("GetSignalTypeNamesByGroup", p);
     }
+
 
 }

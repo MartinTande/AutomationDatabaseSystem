@@ -161,6 +161,60 @@ INSERT INTO OTD (Name) VALUES ('BO_TwoSensors2')
 INSERT INTO OTD (Name) VALUES ('BO_NetworkMonitor')
 INSERT INTO OTD (Name) VALUES ('NA')
 
+-- Retrieve OtdId for "BO_1DI"
+DECLARE @BO_1DIOtdId INT;
+SET @BO_1DIOtdId = (SELECT Id FROM OTD WHERE Name = 'BO_1DI');
+
+-- Insert subcategories under "BO_1DI"
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xvarInputSignal', @BO_1DIOtdId, '01', 'Variant', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboInputQuality', @BO_1DIOtdId, '01_Q', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboCSF', @BO_1DIOtdId, '01[CSF]', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboBlock', @BO_1DIOtdId, '01[Block]', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xyvarSim', @BO_1DIOtdId, 'Sim', 'Variant', 'Input');
+
+-- Retrieve OtdId for "BO_AnalogIn"
+DECLARE @BO_AnalogInId INT;
+SET @BO_AnalogInId = (SELECT Id FROM OTD WHERE Name = 'BO_AnalogIn');
+
+-- Insert subcategories under "BO_AnalogIn"
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xvarInputValue', @BO_AnalogInId, '41', 'Variant', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboQuality', @BO_AnalogInId, '41_Q', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage1', @BO_AnalogInId, '01', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage2', @BO_AnalogInId, '02', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage3', @BO_AnalogInId, '03', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage4', @BO_AnalogInId, '04', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboCSF', @BO_AnalogInId, '41[CSF]', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboBlock', @BO_AnalogInId, '41[Block]', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xyvarSim', @BO_AnalogInId, 'Sim', 'Variant', 'Input');
+
+-- Retrieve OtdId for "BO_AnalogIn_AllAlarms"
+DECLARE @BO_AnalogIn_AllAlarmsId INT;
+SET @BO_AnalogIn_AllAlarmsId = (SELECT Id FROM OTD WHERE Name = 'BO_AnalogIn_AllAlarms');
+
+-- Insert subcategories under "BO_AnalogInAlarms"
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xvarInputValue', @BO_AnalogIn_AllAlarmsId, '41', 'Variant', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboQuality', @BO_AnalogIn_AllAlarmsId, '41_Q', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage1', @BO_AnalogIn_AllAlarmsId, '01', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage2', @BO_AnalogIn_AllAlarmsId, '02', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage3', @BO_AnalogIn_AllAlarmsId, '03', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage4', @BO_AnalogIn_AllAlarmsId, '04', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboCSF', @BO_AnalogIn_AllAlarmsId, '41[CSF]', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboBlock', @BO_AnalogIn_AllAlarmsId, '41[Block]', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xyvarSim', @BO_AnalogIn_AllAlarmsId, 'Sim', 'Variant', 'Input');
+
+-- Retrieve OtdId for "BO_Valve"
+DECLARE @BO_ValveId INT;
+SET @BO_ValveId = (SELECT Id FROM OTD WHERE Name = 'BO_Valve');
+
+-- Insert subcategories under "BO_Valve"
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xvarOpened', @BO_ValveId, '02', 'Variant', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xvarClosed', @BO_ValveId, '01', 'Variant', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xvarLocal', @BO_ValveId, '05', 'Variant', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboCSF', @BO_ValveId, '01[CSF]', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboBlock', @BO_ValveId, '01[Block]', 'Bool', 'Input');
+INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xyvarSim', @BO_ValveId, 'Sim', 'Variant', 'Input');
+
+
 -- Insert sample data into NODE
 INSERT INTO NODE (Name) VALUES ('PCU1')
 INSERT INTO NODE (Name) VALUES ('PCU2')

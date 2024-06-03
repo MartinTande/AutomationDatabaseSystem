@@ -10,7 +10,7 @@ using AutomationSystem.Models.DataManager;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System.Windows.Data;
-using System.Security.AccessControl;
+using AutomationSystem.Models.Data.Categories;
 
 
 namespace AutomationSystem.ViewModels;
@@ -53,7 +53,6 @@ internal class MainWindowViewModel : ViewModelBase
     }
 
     private TagModel _selectedTag;
-
     public TagModel SelectedTag
     {
         get { return _selectedTag; }
@@ -65,7 +64,6 @@ internal class MainWindowViewModel : ViewModelBase
     }
 
     private IItem _selectedHierarchyItem;
-
     public IItem SelectedHierarchyItem
     {
         get { return _selectedHierarchyItem; }
@@ -78,7 +76,6 @@ internal class MainWindowViewModel : ViewModelBase
     }
 
     private string? _selectedHierarchyName;
-
     public string? SelectedHierarchyName
     {
         get { return _selectedHierarchyName; }
@@ -89,6 +86,18 @@ internal class MainWindowViewModel : ViewModelBase
                 _selectedHierarchyName = value;
             }
             OnPropertyChanged();
+        }
+    }
+
+    private ObservableCollection<Otd> _otds;
+    public ObservableCollection<Otd> Otds
+    {
+        get { return _otds; }
+        set
+        { 
+            _otds = value;
+            OnPropertyChanged();
+
         }
     }
 
@@ -173,6 +182,32 @@ internal class MainWindowViewModel : ViewModelBase
         }
     }
 
+    private Otd _selectedOtd;
+
+    public Otd SelectedOtd
+    {
+        get { return _selectedOtd; }
+        set 
+        { 
+            _selectedOtd = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private int _objectCount;
+
+    public int ObjectCount
+    {
+        get { return _objectCount; }
+        set 
+        { 
+            _objectCount = value;
+            OnPropertyChanged();
+        }
+    }
+    #endregion
+
+    #region Filter
     private string _fullNameFilter = string.Empty;
     public string FullNameFilter
     {
@@ -315,19 +350,6 @@ internal class MainWindowViewModel : ViewModelBase
             UpdateObjectCount();
         }
     }
-
-    private int _objectCount;
-
-    public int ObjectCount
-    {
-        get { return _objectCount; }
-        set 
-        { 
-            _objectCount = value;
-            OnPropertyChanged();
-        }
-    }
-
     #endregion
 
     ObjectModel objectModel { get; set; } = new ObjectModel();
@@ -348,8 +370,10 @@ internal class MainWindowViewModel : ViewModelBase
         _hierarchy1Names = new ObservableCollection<Hierarchy1>(categoryDataManager.GetHierarchy1Category());
         _pictureHierarchy = new ObservableCollection<HierarchyModel>();
         _ioTypeHierarchy = new ObservableCollection<HierarchyModel>();
+        _otds = new ObservableCollection<Otd>(categoryDataManager.GetOtdCategory());
+        _otdInterfaces = new ObservableCollection<OtdInterface>();
         
-        objectModel.PropertyChanged += ObjectModel_PropertyChanged;
+        //objectModel.PropertyChanged += ObjectModel_PropertyChanged;
         
         ObjectCount = _objects.Count();
         ObjectCollectionView = CollectionViewSource.GetDefaultView(_objects);
@@ -357,6 +381,7 @@ internal class MainWindowViewModel : ViewModelBase
         ObjectCollectionView.SortDescriptions.Add(new SortDescription(nameof(ObjectModel.FullObjectName), ListSortDirection.Ascending));
 
         GetPictureHierarchy();
+        GetOtdHierarchy();
         GetIoSignalTypes();
         //CellEditEndingCommand = new RelayCommand(OnCellEditEnding);
         //RowEditEndingCommand = new RelayCommand(OnRowEditEnding);
@@ -603,6 +628,17 @@ internal class MainWindowViewModel : ViewModelBase
             {
                 IoTypeHierarchy[i].SubItem.Add(new HierarchyModel { Id = signalType.Id, Name = signalType.Name });
             }
+        }
+    }
+
+    #endregion
+
+    #region Otd
+    public void GetOtdHierarchy()
+    {
+        foreach (Otd otd in Otds)
+        {
+            otd.Interface = subCategoryDataManager.GetOtdInterfaces(otd.Name);
         }
     }
 

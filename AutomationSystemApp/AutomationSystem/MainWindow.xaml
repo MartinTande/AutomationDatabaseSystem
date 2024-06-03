@@ -4,7 +4,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:userControls="clr-namespace:AutomationSystem.Views.UserControls" xmlns:viewmodels="clr-namespace:AutomationSystem.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
+        xmlns:userControls="clr-namespace:AutomationSystem.Views.UserControls" 
+        xmlns:viewmodels="clr-namespace:AutomationSystem.ViewModels" 
+        xmlns:custom="clr-namespace:DropdownMenuControl;assembly=DropdownMenuControl" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="Automation IO-Tracker" Height="800" Width="1400">
     <Grid>
@@ -157,8 +160,8 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock
-                                Grid.Row="0"
-                                Text="Number of Objects:"/>
+                            Grid.Row="0"
+                            Text="Number of Objects:"/>
                         <TextBlock Grid.Column="1"
                                    Text="{Binding ObjectCount, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
@@ -166,12 +169,13 @@
                     <userControls:TagButtonBar Grid.Row="4"/>
                     <!-- Tag Datagrid row -->
                     <Grid Grid.Row="5">
-                        <DataGrid ItemsSource="{Binding Tags, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                  SelectedItem="{Binding SelectedTag}"
-                                  AutoGenerateColumns="False"
-                                  Grid.ColumnSpan="2"
-                                  SelectionMode="Extended"
-                                  SelectionUnit="FullRow">
+                        <DataGrid 
+                            ItemsSource="{Binding Tags, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            SelectedItem="{Binding SelectedTag}"
+                            AutoGenerateColumns="False"
+                            Grid.ColumnSpan="2"
+                            SelectionMode="Extended"
+                            SelectionUnit="FullRow">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Tag Name" Binding="{Binding FullTagName, Mode=OneWay}"/>
                                 <DataGridTextColumn Header="Eq Suffix" Binding="{Binding EqSuffix}" />
@@ -221,20 +225,25 @@
                     </TreeView>
                     <StackPanel Grid.Row="0" 
                                 Orientation="Horizontal">
-                        <TextBox Text="{Binding SelectedHierarchyName, UpdateSourceTrigger=PropertyChanged}" 
-                                 Width="150"/>
-                        <Button Content="Add Hierarchy Sub Item"
-                                Command="{Binding AddHierarchySubItemCommand}"
-                                Width="140"/>
-                        <Button Content="Add Hierarchy Item"
-                                Command="{Binding AddHierarchyItemCommand}"
-                                Width="140"/>
-                        <Button Grid.Row="2"                 
-                                Content="Edit Item"       
-                                Command="{Binding EditHierarchyItemCommand}"/>
-                        <Button Grid.Row="2"                 
-                                Content="Delete Item"       
-                                Command="{Binding DeleteHierarchyItemCommand}"/>
+                        <TextBox 
+                            Text="{Binding SelectedHierarchyName, UpdateSourceTrigger=PropertyChanged}" 
+                            Width="150"/>
+                        <Button 
+                            Content="Add Hierarchy Sub Item"
+                            Command="{Binding AddHierarchySubItemCommand}"
+                            Width="140"/>
+                        <Button 
+                            Content="Add Hierarchy Item"
+                            Command="{Binding AddHierarchyItemCommand}"
+                            Width="140"/>
+                        <Button 
+                            Grid.Row="2"                 
+                            Content="Edit Item"       
+                            Command="{Binding EditHierarchyItemCommand}"/>
+                        <Button 
+                            Grid.Row="2"                 
+                            Content="Delete Item"       
+                            Command="{Binding DeleteHierarchyItemCommand}"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -246,7 +255,8 @@
                         <RowDefinition Height="0.7*"/>
                         <RowDefinition Height="0.2*"/>
                     </Grid.RowDefinitions>
-                    <TreeView Grid.Row="1"
+                    <TreeView 
+                        Grid.Row="1"
                         ItemsSource="{Binding IoTypeHierarchy, Mode=TwoWay}" 
                         SelectedItemChanged="TreeView_SelectedSignalItemChanged">
                         <TreeView.ItemsPanel>
@@ -255,27 +265,34 @@
                             </ItemsPanelTemplate>
                         </TreeView.ItemsPanel>
                         <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding SubItem, Mode=TwoWay}">
+                            <HierarchicalDataTemplate 
+                                ItemsSource="{Binding SubItem, Mode=TwoWay}">
                                 <TextBlock Text="{Binding Name, Mode=OneWay}"/>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
-                    <StackPanel Grid.Row="0" 
-                    Orientation="Horizontal">
-                        <TextBox Text="{Binding SelectedHierarchyName, UpdateSourceTrigger=PropertyChanged}" 
-                     Width="150"/>
-                        <Button Content="Add Hierarchy Sub Item"
-                    Command="{Binding AddHierarchySubItemCommand}"
-                    Width="140"/>
-                        <Button Content="Add Hierarchy Item"
-                    Command="{Binding AddHierarchyItemCommand}"
-                    Width="140"/>
-                        <Button Grid.Row="2"                 
-                    Content="Edit Item"       
-                    Command="{Binding EditHierarchyItemCommand}"/>
-                        <Button Grid.Row="2"                 
-                    Content="Delete Item"       
-                    Command="{Binding DeleteHierarchyItemCommand}"/>
+                    <StackPanel 
+                        Grid.Row="0" 
+                        Orientation="Horizontal">
+                        <TextBox 
+                            Text="{Binding SelectedHierarchyName, UpdateSourceTrigger=PropertyChanged}" 
+                            Width="150"/>
+                        <Button 
+                            Content="Add Hierarchy Sub Item"
+                            Command="{Binding AddHierarchySubItemCommand}"
+                            Width="140"/>
+                        <Button 
+                            Content="Add Hierarchy Item"
+                            Command="{Binding AddHierarchyItemCommand}"
+                            Width="140"/>
+                        <Button 
+                            Grid.Row="2"                 
+                            Content="Edit Item"       
+                            Command="{Binding EditHierarchyItemCommand}"/>
+                        <Button 
+                            Grid.Row="2"                 
+                            Content="Delete Item"       
+                            Command="{Binding DeleteHierarchyItemCommand}"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -283,8 +300,61 @@
             <TabItem Header="Alarm Groups"/>
 
             <!-- OTD tab-->
-            <TabItem Header="OTD"/>
-        </TabControl>
+            <TabItem Header="OTD">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.4*"/>
+                        <ColumnDefinition Width="0.6*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView 
+                        Grid.Column="0"
+                        ItemsSource="{Binding Otds, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedOtd, UpdateSourceTrigger=PropertyChanged}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style> 
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="1 4">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
 
+                                        <TextBlock Text="{Binding Name}" FontSize="14"/>
+                                        <custom:DropdownMenu Grid.Column="1" Margin="10 0 0 0">
+                                            <Border Background="White" BorderBrush="Gray" BorderThickness="1">
+                                                <StackPanel>
+                                                    <Button Content="Edit"/>
+                                                    <Button Content="Delete"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </custom:DropdownMenu>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+                    <DataGrid
+                        Grid.Column="1"
+                        ItemsSource="{Binding SelectedOtd.Interface, UpdateSourceTrigger=PropertyChanged}"
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="Suffix" Binding="{Binding Suffix}"/>
+                            <DataGridTextColumn Header="DataType" Binding="{Binding DataType}"/>
+                            <DataGridTextColumn Header="Interface Type" Binding="{Binding InterfaceType}"/>
+                            <DataGridCheckBoxColumn Header="Is Optional" Binding="{Binding IsOptional}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
