@@ -101,6 +101,20 @@ internal class MainWindowViewModel : ViewModelBase
         }
     }
 
+    private ObservableCollection<Hierarchy1> _pictureHierarchy2;
+
+    public ObservableCollection<Hierarchy1> PictureHierarchy2
+    {
+        get { return _pictureHierarchy2; }
+        set 
+        { 
+            _pictureHierarchy2 = value; 
+            OnPropertyChanged();
+        }
+    }
+
+
+
     private ObservableCollection<HierarchyModel> _pictureHierarchy;
     public ObservableCollection<HierarchyModel> PictureHierarchy
     {
@@ -179,6 +193,17 @@ internal class MainWindowViewModel : ViewModelBase
 
                 UpdateTags(SelectedObject.FullObjectName);
             }
+        }
+    }
+
+    private Hierarchy1? _selectedProcessArea;
+    public Hierarchy1? SelectedProcessArea
+    {
+        get { return _selectedProcessArea; }
+        set 
+        { 
+            _selectedProcessArea = value; 
+            OnPropertyChanged();
         }
     }
 
@@ -371,10 +396,9 @@ internal class MainWindowViewModel : ViewModelBase
         _pictureHierarchy = new ObservableCollection<HierarchyModel>();
         _ioTypeHierarchy = new ObservableCollection<HierarchyModel>();
         _otds = new ObservableCollection<Otd>(categoryDataManager.GetOtdCategory());
-        _otdInterfaces = new ObservableCollection<OtdInterface>();
-        
+        _pictureHierarchy2 = new ObservableCollection<Hierarchy1>(categoryDataManager.GetHierarchy1Category());
         //objectModel.PropertyChanged += ObjectModel_PropertyChanged;
-        
+
         ObjectCount = _objects.Count();
         ObjectCollectionView = CollectionViewSource.GetDefaultView(_objects);
         ObjectCollectionView.Filter = FilterObjects;
@@ -383,6 +407,7 @@ internal class MainWindowViewModel : ViewModelBase
         GetPictureHierarchy();
         GetOtdHierarchy();
         GetIoSignalTypes();
+        GetPictureHierarchy2();
         //CellEditEndingCommand = new RelayCommand(OnCellEditEnding);
         //RowEditEndingCommand = new RelayCommand(OnRowEditEnding);
     }
@@ -598,6 +623,14 @@ internal class MainWindowViewModel : ViewModelBase
             {
                 PictureHierarchy[i].SubItem.Add(new HierarchyModel { Id = hierarchy2.Id, Name = hierarchy2.Name });
             }
+        }
+    }
+
+    private void GetPictureHierarchy2()
+    {
+        foreach (Hierarchy1 processArea in PictureHierarchy2)
+        {
+            processArea.SubPictures = subCategoryDataManager.GetHierarchy2Category(processArea.Name);
         }
     }
     #endregion

@@ -297,7 +297,79 @@
                 </Grid>
             </TabItem>
             <!-- Alarm Groups tab -->
-            <TabItem Header="Alarm Groups"/>
+            <TabItem Header="Picture hierarchy 2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.4*"/>
+                        <ColumnDefinition Width="0.6*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView 
+                        Grid.Column="0"
+                        ItemsSource="{Binding PictureHierarchy2, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedProcessArea, UpdateSourceTrigger=PropertyChanged}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="5 10">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="{Binding Name}" FontSize="16"/>
+                                        <custom:DropdownMenu Grid.Column="1" Margin="10 0 0 0">
+                                            <Border Background="White" BorderBrush="Gray" BorderThickness="1">
+                                                <StackPanel>
+                                                    <Button Content="Edit"/>
+                                                    <Button Content="Delete"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </custom:DropdownMenu>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+                    <ListView
+                        Grid.Column="1"
+                        ItemsSource="{Binding SelectedProcessArea.SubPictures, UpdateSourceTrigger=PropertyChanged}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="5 10">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="{Binding Name}" FontSize="16"/>
+                                        <custom:DropdownMenu Grid.Column="1" Margin="10 0 0 0">
+                                            <Border Background="White" BorderBrush="Gray" BorderThickness="1">
+                                                <StackPanel>
+                                                    <Button Content="Edit"/>
+                                                    <Button Content="Delete"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </custom:DropdownMenu>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                </Grid>
+            </TabItem>
 
             <!-- OTD tab-->
             <TabItem Header="OTD">
