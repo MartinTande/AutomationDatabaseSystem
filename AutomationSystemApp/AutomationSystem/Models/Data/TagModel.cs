@@ -1,5 +1,6 @@
 ﻿using AutomationSystem.MVVM;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AutomationSystem.Models;
 
@@ -78,12 +79,84 @@ public class TagModel : ViewModelBase
         {
             { "NC", "bo" },
             { "NO", "bo" },
-            { "Int", "in" },
-            { "Real", "re" },
-            { "Word", "wo" },
-            { "UInt", "ui" },
+            { "BYTE", "by" },
+            { "WORD", "wo" },
+            { "DWORD", "dw" },
+            { "LWORD", "lw" },
+            { "SINT", "si" },
+            { "INT", "in" },
+            { "DINT", "di" },
+            { "LINT", "li" },
+            { "USINT", "us" },
+            { "UINT", "ui" },
+            { "UDINT", "ud" },
+            { "ULINT", "ul" },
+            { "REAL", "re" },
+            { "LREAL", "lr" },
+            { "LREAL", "lr" },
+            { "CHAR", "ch" },
+            { "STRING", "sti" },
+
         };
 
-        return ioPrefix + signalPrefix[SignalType];
+        return ioPrefix + signalPrefix[SignalType.ToUpper()];
+    }
+
+    public bool AbsoluteAddressIsValid
+    {
+        get
+        {
+            if (!IsHW)
+            {
+                return false;
+            }
+            string regexPattern = IsInput ? "I" : "Q";
+            switch (SignalType.ToUpper())
+            {
+                case "BYTE":
+                case "SINT":
+                case "USINT":
+                    regexPattern += "B\\d+";
+                    break;
+                case "WORD":
+                case "INT":
+                case "UINT":
+                    regexPattern += "W\\d+";
+                    break;
+                case "DWORD":
+                case "DINT":
+                case "UDINT":
+                case "REAL":
+                    regexPattern += "D\\d+";
+                    break;
+                case "LWORD":
+                case "LINT":
+                case "ULINT":
+                case "LREAL":
+                    regexPattern += "\\d+";
+                    break;
+                case "BOOL":
+                    regexPattern += "\\d+.\\d+";
+                    break;
+            }
+            regexPattern += "$";
+            Regex regex = new Regex(regexPattern);
+            return regex.IsMatch(AbsoluteAddress);
+        }
+    }
+
+    public bool ReadyForSWGeneration
+    {
+        get
+        {
+            bool _hasPath = false;
+            if (!IsHW && (!String.IsNullOrEmpty(SWPath) || !String.IsNullOrEmpty(DBName)))
+            {
+                _hasPath = true;
+            }
+            return !String.IsNullOrEmpty(IoType) &&
+                !String.IsNullOrEmpty(SignalType) &&
+                _hasPath;
+        }
     }
 }
