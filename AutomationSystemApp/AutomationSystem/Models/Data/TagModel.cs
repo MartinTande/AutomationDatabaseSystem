@@ -93,10 +93,8 @@ public class TagModel : ViewModelBase
             { "ULINT", "ul" },
             { "REAL", "re" },
             { "LREAL", "lr" },
-            { "LREAL", "lr" },
             { "CHAR", "ch" },
-            { "STRING", "sti" },
-
+            { "STRING", "sti" }
         };
 
         return ioPrefix + signalPrefix[SignalType.ToUpper()];

@@ -128,19 +128,23 @@
                             <ColumnDefinition Width="13*"/>
                         </Grid.ColumnDefinitions>
                         <!-- Data Grid -->
-                        <DataGrid ItemsSource="{Binding Objects, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                  SelectedItem="{Binding SelectedObject, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                  AutoGenerateColumns="False"
-                                  Grid.ColumnSpan="2"
-                                  RowEditEnding="DataGrid_RowEditEnding"
-                                  SelectionMode="Extended"
-                                  SelectionUnit="FullRow">
+                        <DataGrid 
+                            x:Name="DataGrid"
+                            ItemsSource="{Binding Objects, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            SelectedItem="{Binding SelectedObject, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            AutoGenerateColumns="False"
+                            Grid.ColumnSpan="2"
+                            RowEditEnding="DataGrid_RowEditEnding"
+                            CanUserAddRows="False"
+                            CanUserDeleteRows="False"
+                            SelectionMode="Extended"
+                            SelectionUnit="FullRow">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Name" Binding="{Binding FullObjectName, Mode=OneWay}" />
-                                <DataGridTextColumn Header="Sfi Nr" Binding="{Binding SfiNumber}"  />
-                                <DataGridTextColumn Header="Main Eq Nr" Binding="{Binding MainEqNumber}" />
-                                <DataGridTextColumn Header="Eq Nr" Binding="{Binding EqNumber}" />
-                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
+                                <DataGridTextColumn Header="Name" Binding="{Binding FullObjectName, Mode=OneWay}" FontWeight="Bold"/>
+                                <!--<DataGridTextColumn Header="Sfi Nr" Binding="{Binding SfiNumber}"  />-->
+                                <!--<DataGridTextColumn Header="Main Eq Nr" Binding="{Binding MainEqNumber}" />-->
+                                <!--<DataGridTextColumn Header="Eq Nr" Binding="{Binding EqNumber}" />-->
+                                <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
                                 <DataGridTextColumn Header="Hierarchy 1" Binding="{Binding Hierarchy1Name}" />
                                 <DataGridTextColumn Header="Hierarchy 2" Binding="{Binding Hierarchy2Name}" />
                                 <DataGridTextColumn Header="VDU Group" Binding="{Binding VduGroupName}" />
@@ -150,6 +154,9 @@
                                 <DataGridTextColumn Header="Always Visible" Binding="{Binding AlwaysVisibleName}"/>
                                 <DataGridTextColumn Header="Node" Binding="{Binding NodeName}"/>
                                 <DataGridTextColumn Header="Cabinet" Binding="{Binding CabinetName}"/>
+                                <DataGridCheckBoxColumn Header="Ready For HMI Gen" Binding="{Binding ReadyForHMIGeneration, Mode=OneWay}"/>
+                                <DataGridCheckBoxColumn Header="Ready For PLC Gen" Binding="{Binding ReadyForPLCGeneration, Mode=OneWay}"/>
+                                <DataGridCheckBoxColumn Header="Ready For Prelim PLC Gen" Binding="{Binding ReadyForPreliminaryPLCGeneration, Mode=OneWay}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
@@ -162,8 +169,9 @@
                         <TextBlock
                             Grid.Row="0"
                             Text="Number of Objects:"/>
-                        <TextBlock Grid.Column="1"
-                                   Text="{Binding ObjectCount, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock 
+                            Grid.Column="1"
+                            Text="{Binding ObjectCount, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                     <!-- Tag button panel row-->
                     <userControls:TagButtonBar Grid.Row="4"/>
@@ -178,7 +186,7 @@
                             SelectionUnit="FullRow">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Tag Name" Binding="{Binding FullTagName, Mode=OneWay}"/>
-                                <DataGridTextColumn Header="Eq Suffix" Binding="{Binding EqSuffix}" />
+                                <DataGridTextColumn Header="Eq Suffix" Binding="{Binding EqSuffix}"/>
                                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
                                 <DataGridTextColumn Header="IO Type" Binding="{Binding IoType}"/>
                                 <DataGridTextColumn Header="Signal Type" Binding="{Binding SignalType}"/>
@@ -186,15 +194,15 @@
                                 <DataGridTextColumn Header="DataBlock" Binding="{Binding DBName}"/>
                                 <DataGridTextColumn Header="ModbusAddress" Binding="{Binding ModbusAddress}"/>
                                 <DataGridTextColumn Header="ModbusBit" Binding="{Binding ModbusBit}"/>
-                                <DataGridTextColumn Header="IsE0" Binding="{Binding IsE0}"/>
-                                <DataGridTextColumn Header="IsVDR" Binding="{Binding IsVDR}"/>
+                                <DataGridCheckBoxColumn Header="E0" Binding="{Binding IsE0}"/>
+                                <DataGridCheckBoxColumn Header="VDR" Binding="{Binding IsVDR}"/>
                                 <DataGridTextColumn Header="Eng Unit" Binding="{Binding EngUnit}"/>
-                                <DataGridTextColumn Header="Range Low" Binding="{Binding RangeLow}"/>
-                                <DataGridTextColumn Header="Range High" Binding="{Binding RangeHigh}"/>
-                                <DataGridTextColumn Header="Low Low Limit" Binding="{Binding LowLowLimit}"/>
-                                <DataGridTextColumn Header="Low Limit" Binding="{Binding LowLimit}"/>
-                                <DataGridTextColumn Header="High Limit" Binding="{Binding HighLimit}"/>
-                                <DataGridTextColumn Header="High High Limit" Binding="{Binding HighHighLimit}"/>
+                                <DataGridTextColumn Header="Range LO" Binding="{Binding RangeLow}"/>
+                                <DataGridTextColumn Header="Range HI" Binding="{Binding RangeHigh}"/>
+                                <DataGridTextColumn Header="alarm LOLO" Binding="{Binding LowLowLimit}"/>
+                                <DataGridTextColumn Header="alarm LO" Binding="{Binding LowLimit}"/>
+                                <DataGridTextColumn Header="alarm HI" Binding="{Binding HighLimit}"/>
+                                <DataGridTextColumn Header="alarm HIHI" Binding="{Binding HighHighLimit}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>

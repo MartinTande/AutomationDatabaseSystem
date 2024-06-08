@@ -146,7 +146,7 @@ GO
 CREATE TABLE TAG
 (
 	Id int PRIMARY KEY IDENTITY (1,1),
-	EqSuffix int NOT NULL,
+	EqSuffix varchar(50) NOT NULL,
 	Description varchar(150) NOT NULL,
 	IoTypeId int NOT NULL FOREIGN KEY REFERENCES IO_TYPE(Id),
 	SignalTypeId int FOREIGN KEY REFERENCES SIGNAL_TYPE(Id),

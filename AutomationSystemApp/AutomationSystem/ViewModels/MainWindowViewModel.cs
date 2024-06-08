@@ -113,8 +113,6 @@ internal class MainWindowViewModel : ViewModelBase
         }
     }
 
-
-
     private ObservableCollection<HierarchyModel> _pictureHierarchy;
     public ObservableCollection<HierarchyModel> PictureHierarchy
     {
@@ -128,8 +126,8 @@ internal class MainWindowViewModel : ViewModelBase
             }
         }
     }
-    private ObservableCollection<HierarchyModel> _ioTypeHierarchy;
 
+    private ObservableCollection<HierarchyModel> _ioTypeHierarchy;
     public ObservableCollection<HierarchyModel> IoTypeHierarchy
     {
         get { return _ioTypeHierarchy; }
@@ -377,8 +375,6 @@ internal class MainWindowViewModel : ViewModelBase
     }
     #endregion
 
-    ObjectModel objectModel { get; set; } = new ObjectModel();
-
     public MainWindowViewModel(IDataConnector dataConnector)
     {
         _dataConnector = dataConnector;
@@ -404,6 +400,7 @@ internal class MainWindowViewModel : ViewModelBase
         ObjectCollectionView.Filter = FilterObjects;
         ObjectCollectionView.SortDescriptions.Add(new SortDescription(nameof(ObjectModel.FullObjectName), ListSortDirection.Ascending));
 
+        GetTagsForObjects();
         GetPictureHierarchy();
         GetOtdHierarchy();
         GetIoSignalTypes();
@@ -504,6 +501,13 @@ internal class MainWindowViewModel : ViewModelBase
         UpdateTags(SelectedObject.FullObjectName);
     }
 
+    private void GetTagsForObjects()
+    {
+        foreach (ObjectModel currentObject in Objects)
+        {
+            currentObject.Tags = tagDataManager.GetTagsByObjectId(currentObject.Id);
+        }
+    }
 
     private void UpdateTags(string? objectName)
     {
