@@ -16,7 +16,8 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
     <Grid Background="#eff2f2">
-        <TabControl>
+        <TabControl
+            Background="Transparent">
             <!-- IO List tab -->
             <TabItem Header="IO List">
                 <Grid>
@@ -32,9 +33,6 @@
                     <userControls:ObjectButtonBar Grid.Row="0"/>
                     <!-- Filter panel row-->
                     <Grid Grid.Row="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="100"/>
@@ -167,49 +165,40 @@
                             Style="{StaticResource SearchTextBox}"/>
                     </Grid>
                     <!-- Object Datagrid row -->
-                    <Grid Grid.Row="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="13*"/>
-                        </Grid.ColumnDefinitions>
-                        <!-- Data Grid -->
-                        <DataGrid
-                            x:Name="DataGrid"
-                            ItemsSource="{Binding Objects, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                            SelectedItem="{Binding SelectedObject, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                            AutoGenerateColumns="False"
-                            Grid.ColumnSpan="2"
-                            RowEditEnding="DataGrid_RowEditEnding"
-                            CanUserAddRows="False"
-                            Background="#eff2f2"
-                            CanUserDeleteRows="False"
-                            SelectionMode="Extended"
-                            SelectionUnit="FullRow">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Name" Binding="{Binding FullObjectName, Mode=OneWay}" FontWeight="Bold"/>
-                                <!--<DataGridTextColumn Header="Sfi Nr" Binding="{Binding SfiNumber}"  />-->
-                                <!--<DataGridTextColumn Header="Main Eq Nr" Binding="{Binding MainEqNumber}" />-->
-                                <!--<DataGridTextColumn Header="Eq Nr" Binding="{Binding EqNumber}" />-->
-                                <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
-                                <DataGridTextColumn Header="Hierarchy 1" Binding="{Binding Hierarchy1Name}" />
-                                <DataGridTextColumn Header="Hierarchy 2" Binding="{Binding Hierarchy2Name}" />
-                                <DataGridTextColumn Header="VDU Group" Binding="{Binding VduGroupName}" />
-                                <DataGridTextColumn Header="Alarm Group" Binding="{Binding AlarmGroupName}" />
-                                <DataGridTextColumn Header="OTD" Binding="{Binding OtdName}" />
-                                <DataGridTextColumn Header="Acknowledge Allowed" Binding="{Binding AcknowledgeAllowedName}"/>
-                                <DataGridTextColumn Header="Always Visible" Binding="{Binding AlwaysVisibleName}"/>
-                                <DataGridTextColumn Header="Node" Binding="{Binding NodeName}"/>
-                                <DataGridTextColumn Header="Cabinet" Binding="{Binding CabinetName}"/>
-                                <DataGridCheckBoxColumn Header="Ready For HMI Gen" Binding="{Binding ReadyForHMIGeneration, Mode=OneWay}"/>
-                                <DataGridCheckBoxColumn Header="Ready For PLC Gen" Binding="{Binding ReadyForPLCGeneration, Mode=OneWay}"/>
-                                <DataGridCheckBoxColumn Header="Ready For Prelim PLC Gen" Binding="{Binding ReadyForPreliminaryPLCGeneration, Mode=OneWay}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
+                    <DataGrid 
+                        Grid.Row="2"
+                        x:Name="ObjectsDataGrid"
+                        Style="{DynamicResource DataGridStyle1}" 
+                        CellStyle="{DynamicResource DataGridCellStyle1}" 
+                        ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
+                        RowStyle="{DynamicResource DataGridRowStyle1}"
+                        AutoGenerateColumns="False"
+                        ItemsSource="{Binding Objects, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        SelectedItem="{Binding SelectedObject, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.ColumnSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Binding="{Binding FullObjectName}" FontWeight="SemiBold"/>
+                            <DataGridTextColumn Header="Description"  Binding="{Binding Description}"/>
+                            <DataGridTextColumn Header="Hierarchy 1" Binding="{Binding Hierarchy1Name}" />
+                            <DataGridTextColumn Header="Hierarchy 2" Binding="{Binding Hierarchy2Name}" />
+                            <DataGridTextColumn Header="VDU Group" Binding="{Binding VduGroupName}" />
+                            <DataGridTextColumn Header="Alarm Group" Binding="{Binding AlarmGroupName}"/>
+                            <DataGridTextColumn Header="OTD" Binding="{Binding OtdName}"/>
+                            <DataGridTextColumn Header="Acknowledge Allowed" Binding="{Binding AcknowledgeAllowedName}"/>
+                            <DataGridTextColumn Header="Always Visible" Binding="{Binding AlwaysVisibleName}"/>
+                            <DataGridTextColumn Header="Node" Binding="{Binding NodeName}"/>
+                            <DataGridTextColumn Header="Cabinet" Binding="{Binding CabinetName}"/>
+                            <DataGridCheckBoxColumn Header="Ready For HMI Gen" ElementStyle="{StaticResource CheckBoxStyle1}" Binding="{Binding ReadyForHMIGeneration, Mode=OneWay}"/>
+                            <DataGridCheckBoxColumn Header="Ready For PLC Gen" ElementStyle="{StaticResource CheckBoxStyle1}" Binding="{Binding ReadyForPLCGeneration, Mode=OneWay}"/>
+                            <DataGridCheckBoxColumn Header="Ready For Prelim PLC Gen" ElementStyle="{StaticResource CheckBoxStyle1}" Binding="{Binding ReadyForPreliminaryPLCGeneration, Mode=OneWay}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                     <!-- Number of Filtered objects row -->
-                    <Grid Grid.Row="3">
+                    <Grid 
+                        Grid.Row="3" 
+                        Height="40" 
+                        VerticalAlignment="Bottom">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock
@@ -226,8 +215,10 @@
                         <DataGrid 
                             ItemsSource="{Binding Tags, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                             SelectedItem="{Binding SelectedTag}"
-                            AutoGenerateColumns="False"
-                            Grid.ColumnSpan="2"
+                            Style="{DynamicResource DataGridStyle1}" 
+                            CellStyle="{DynamicResource DataGridCellStyle1}" 
+                            ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
+                            RowStyle="{DynamicResource DataGridRowStyle1}"
                             SelectionMode="Extended"
                             SelectionUnit="FullRow">
                             <DataGrid.Columns>
@@ -240,8 +231,8 @@
                                 <DataGridTextColumn Header="DataBlock" Binding="{Binding DBName}"/>
                                 <DataGridTextColumn Header="ModbusAddress" Binding="{Binding ModbusAddress}"/>
                                 <DataGridTextColumn Header="ModbusBit" Binding="{Binding ModbusBit}"/>
-                                <DataGridCheckBoxColumn Header="E0" Binding="{Binding IsE0}"/>
-                                <DataGridCheckBoxColumn Header="VDR" Binding="{Binding IsVDR}"/>
+                                <DataGridCheckBoxColumn Header="E0" Binding="{Binding IsE0}" ElementStyle="{StaticResource CheckBoxStyle1}"/>
+                                <DataGridCheckBoxColumn Header="VDR" Binding="{Binding IsVDR}" ElementStyle="{StaticResource CheckBoxStyle1}"/>
                                 <DataGridTextColumn Header="Eng Unit" Binding="{Binding EngUnit}"/>
                                 <DataGridTextColumn Header="Range LO" Binding="{Binding RangeLow}"/>
                                 <DataGridTextColumn Header="Range HI" Binding="{Binding RangeHigh}"/>
@@ -263,7 +254,8 @@
                         <RowDefinition Height="0.7*"/>
                         <RowDefinition Height="0.2*"/>
                     </Grid.RowDefinitions>
-                    <TreeView Grid.Row="1"
+                    <TreeView 
+                        Grid.Row="1"
                         ItemsSource="{Binding PictureHierarchy, Mode=TwoWay}" 
                         SelectedItemChanged="TreeView_SelectedItemChanged">
                         <TreeView.ItemsPanel>
@@ -277,8 +269,9 @@
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
-                    <StackPanel Grid.Row="0" 
-                                Orientation="Horizontal">
+                    <StackPanel 
+                        Grid.Row="0" 
+                        Orientation="Horizontal">
                         <TextBox 
                             Text="{Binding SelectedHierarchyName, UpdateSourceTrigger=PropertyChanged}" 
                             Width="150"/>
@@ -350,6 +343,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+
             <!-- Alarm Groups tab -->
             <TabItem Header="Picture hierarchy 2">
                 <Grid>
@@ -429,17 +423,17 @@
             <TabItem Header="OTD">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.4*"/>
-                        <ColumnDefinition Width="0.6*"/>
+                        <ColumnDefinition Width="40*"/>
+                        <ColumnDefinition Width="60*"/>
                     </Grid.ColumnDefinitions>
                     <ListView 
                         Grid.Column="0"
                         ItemsSource="{Binding Otds, UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedOtd, UpdateSourceTrigger=PropertyChanged}">
+                        SelectedItem="{Binding SelectedOtd, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="3" Margin="0,0,836,0">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            </Style> 
+                            </Style>
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -466,10 +460,11 @@
 
                     </ListView>
                     <DataGrid
-                        Grid.Column="1"
+                        Grid.Column="2"
                         ItemsSource="{Binding SelectedOtd.Interface, UpdateSourceTrigger=PropertyChanged}"
                         AutoGenerateColumns="False"
-                        CanUserAddRows="False">
+                        CanUserAddRows="False" 
+                        Margin="0,10,0,0">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                             <DataGridTextColumn Header="Suffix" Binding="{Binding Suffix}"/>
@@ -478,7 +473,7 @@
                             <DataGridCheckBoxColumn Header="Is Optional" Binding="{Binding IsOptional}"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    
+
                 </Grid>
             </TabItem>
         </TabControl>

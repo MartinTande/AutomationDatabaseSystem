@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.ComponentModel;
 using System.Windows.Data;
 using AutomationSystem.Models.Data.Categories;
+using Microsoft.Win32;
 
 
 namespace AutomationSystem.ViewModels;
@@ -407,6 +408,8 @@ internal class MainWindowViewModel : ViewModelBase
         GetPictureHierarchy2();
         //CellEditEndingCommand = new RelayCommand(OnCellEditEnding);
         //RowEditEndingCommand = new RelayCommand(OnRowEditEnding);
+
+
     }
 
     private bool FilterObjects(object obj)
@@ -440,6 +443,30 @@ internal class MainWindowViewModel : ViewModelBase
     public ICommand ShowAddTagWindowCommand => new RelayCommand(execute => ShowAddTagWindow(), canExecute => SelectedObject != null);
     public ICommand ShowEditTagWindowCommand => new RelayCommand(execute => ShowEditTagWindow(), canExecute => SelectedTag != null);
     public ICommand DeleteTagCommand => new RelayCommand(execute => DeleteTag(), canExecute => SelectedTag != null);
+    public ICommand OpenOtdCommand => new RelayCommand(execute => OpenOtds());
+
+    private void OpenOtds()
+    {
+        OpenFileDialog fileDialog = new OpenFileDialog();
+        fileDialog.Filter = "Excel files | *.xlsx";
+        fileDialog.Multiselect = true;
+
+        bool? success = fileDialog.ShowDialog();
+        string[] filePaths;
+        if (success == true)
+        {
+            filePaths = fileDialog.FileNames;
+        }
+        else
+        {
+            MessageBox.Show("Error finding/opening file");
+            return;
+        }
+        
+        ExcelReader excelReader = new ExcelReader();
+        Otds = new ObservableCollection<Otd>(excelReader.ReadOtds(filePaths));
+        OnPropertyChanged(nameof(Otds));
+    }
     #endregion
 
     #region Object functions
@@ -701,5 +728,5 @@ internal class MainWindowViewModel : ViewModelBase
         ObjectModel test = (ObjectModel)parameter;
         OnPropertyChanged("SelectedObject");
     }
-
+    
 }

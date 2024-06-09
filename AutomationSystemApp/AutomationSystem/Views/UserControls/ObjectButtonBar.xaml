@@ -12,6 +12,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Button Grid.Column="1"
                 Command="{Binding ShowAddObjectWindowCommand}"
@@ -24,6 +25,10 @@
         <Button Grid.Column="3" 
                 Content="Delete Object" 
                 Command="{Binding DeleteObjectCommand}"
+                Margin="5"/>
+        <Button Grid.Column="4" 
+                Content="Open OTDs" 
+                Command="{Binding OpenOtdCommand}"
                 Margin="5"/>
         <TextBlock/>
     </Grid>

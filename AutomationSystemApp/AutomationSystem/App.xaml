@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="Styles/DataGridStyles.xaml"/>
                 <ResourceDictionary Source="Assets/Icons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
