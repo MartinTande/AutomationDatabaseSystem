@@ -9,15 +9,20 @@
         xmlns:custom="clr-namespace:DropdownMenuControl;assembly=DropdownMenuControl" 
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="Automation IO-Tracker" Height="800" Width="1400">
-    <Grid>
+        Title="Automation IO-Tracker" 
+        Height="800" 
+        Width="1400">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+    <Grid Background="#eff2f2">
         <TabControl>
             <!-- IO List tab -->
             <TabItem Header="IO List">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="60"/>
                         <RowDefinition Height="0.7*"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
@@ -28,10 +33,10 @@
                     <!-- Filter panel row-->
                     <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="0.4*"/>
-                            <RowDefinition Height="0.6*"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="100"/>
@@ -44,82 +49,122 @@
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="0"
-                                   Text="Name"/>
-                        <TextBox Grid.Row="1"
-                                 Grid.Column="0"
-                                 Text="{Binding FullNameFilter, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="1"
-                                   Text="Description"/>
-                        <TextBox Text="{Binding DescriptionFilter, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Row="1"
-                                 Grid.Column="1"
-                                 Width="100"/>
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="2"
-                                   Text="Hierarchy 1"/>
-                        <TextBox Text="{Binding Hierarchy1Filter, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Column="2"
-                                 Grid.Row="1"
-                                 Width="100"/>
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="3"
-                                   Text="Hierarchy 2"/>
-                        <TextBox Text="{Binding Hierarchy2Filter, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Column="3"
-                                 Grid.Row="1"
-                                 Width="100"/>
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="4"
-                                   Text="VDU Group"/>
-                        <TextBox Text="{Binding VduGroupFilter, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Column="4"
-                                 Grid.Row="1"
-                                 Width="100"/>
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="5"
-                                   Text="Alarm Group"/>
-                        <TextBox Text="{Binding AlarmGroupFilter, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Column="5"
-                                 Grid.Row="1"
-                                 Width="100"/>
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="6"
-                                   Text="OTD"/>
-                        <TextBox Text="{Binding OtdFilter, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Column="6"
-                                 Grid.Row="1"
-                                 Width="100"/>
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="7"
-                                   Text="Ack Allowed"/>
-                        <TextBox Text="{Binding AcknowledgeAllowedFilter, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Column="7"
-                                 Grid.Row="1"
-                                 Width="100"/>
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="8"
-                                   Text="Always Visible"/>
-                        <TextBox Text="{Binding AlwaysVisibleFilter, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Column="8"
-                                 Grid.Row="1"
-                                 Width="100"/>
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="9"
-                                   Text="Node"/>
-                        <TextBox Text="{Binding NodeFilter, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Column="9"
-                                 Grid.Row="1"
-                                 Width="100"/>
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="10"
-                                   Text="Cabinet"/>
-                        <TextBox Text="{Binding CabinetFilter, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Column="10"
-                                 Grid.Row="1"
-                                 Width="100"/>
+                        <TextBlock 
+                            Grid.Column="0"
+                            Text="Filter:   "
+                            FontWeight="SemiBold"
+                            Margin="5 0 5 0"/>
+                        <TextBlock 
+                            Grid.Column="1"
+                            Style="{StaticResource SearchTextBlock}"
+                            Visibility="{Binding ElementName=txtSearchName, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                            Text="Name"/>
+                        <TextBox 
+                            Grid.Column="1"
+                            x:Name="txtSearchName"
+                            Style="{StaticResource SearchTextBox}"
+                            Text="{Binding FullNameFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock 
+                            Grid.Column="2"
+                            Style="{StaticResource SearchTextBlock}"
+                            Visibility="{Binding ElementName=txtSearchDesc, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                            Text="Description"/>
+                        <TextBox 
+                            Grid.Column="2"
+                            Text="{Binding DescriptionFilter, UpdateSourceTrigger=PropertyChanged}"
+                            x:Name="txtSearchDesc"
+                            Style="{StaticResource SearchTextBox}"/>
+                        <TextBlock 
+                            Grid.Column="3"
+                            Style="{StaticResource SearchTextBlock}"
+                            Visibility="{Binding ElementName=txtSearchH1, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                            Text="Hierarchy 1"/>
+                        <TextBox 
+                            Grid.Column="3"
+                            Text="{Binding Hierarchy1Filter, UpdateSourceTrigger=PropertyChanged}"
+                            x:Name="txtSearchH1"
+                            Style="{StaticResource SearchTextBox}"/>
+                        <TextBlock 
+                            Grid.Column="4"
+                            Style="{StaticResource SearchTextBlock}"
+                            Visibility="{Binding ElementName=txtSearchH2, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                            Text="Hierarchy 2"/>
+                        <TextBox 
+                            Grid.Column="4"
+                            Text="{Binding Hierarchy2Filter, UpdateSourceTrigger=PropertyChanged}"
+                            x:Name="txtSearchH2"
+                            Style="{StaticResource SearchTextBox}"/>
+                        <TextBlock 
+                            Grid.Column="5"
+                            Style="{StaticResource SearchTextBlock}"
+                            Visibility="{Binding ElementName=txtSearchVdu, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                            Text="VDU Group"/>
+                        <TextBox 
+                            Grid.Column="5"
+                            Text="{Binding VduGroupFilter, UpdateSourceTrigger=PropertyChanged}"
+                            x:Name="txtSearchVdu"
+                            Style="{StaticResource SearchTextBox}"/>
+                        <TextBlock 
+                            Grid.Column="6"
+                            Style="{StaticResource SearchTextBlock}"
+                            Visibility="{Binding ElementName=txtSearchAlarmgroup, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                            Text="Alarm Group"/>
+                        <TextBox 
+                            Grid.Column="6"
+                            Text="{Binding AlarmGroupFilter, UpdateSourceTrigger=PropertyChanged}"
+                            Grid.Row="1"
+                            x:Name="txtSearchAlarmgroup"
+                            Style="{StaticResource SearchTextBox}"/>
+                        <TextBlock
+                             Grid.Column="7"
+                             Style="{StaticResource SearchTextBlock}"
+                             Visibility="{Binding ElementName=txtSearchOtd, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                             Text="OTD"/>
+                        <TextBox 
+                            Grid.Column="7"
+                            Text="{Binding OtdFilter, UpdateSourceTrigger=PropertyChanged}"
+                            x:Name="txtSearchOtd"
+                            Style="{StaticResource SearchTextBox}"/>
+                        <TextBlock
+                            Grid.Column="8"
+                            Style="{StaticResource SearchTextBlock}"
+                            Visibility="{Binding ElementName=txtSearchAckAll, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                            Text="Ack Allowed"/>
+                        <TextBox 
+                            Grid.Column="8"
+                            Text="{Binding AcknowledgeAllowedFilter, UpdateSourceTrigger=PropertyChanged}"
+                            x:Name="txtSearchAckAll"
+                            Style="{StaticResource SearchTextBox}"/>
+                        <TextBlock 
+                            Grid.Column="9"
+                            Style="{StaticResource SearchTextBlock}"
+                            Visibility="{Binding ElementName=txtSearchAlwVis, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                            Text="Always Visible"/>
+                        <TextBox 
+                            Grid.Column="9"
+                            Text="{Binding AlwaysVisibleFilter, UpdateSourceTrigger=PropertyChanged}"
+                            x:Name="txtSearchAlwVis"
+                            Style="{StaticResource SearchTextBox}"/>
+                        <TextBlock 
+                            Grid.Column="10"
+                            Style="{StaticResource SearchTextBlock}"
+                            Visibility="{Binding ElementName=txtSearchNode, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                            Text="Node"/>
+                        <TextBox 
+                            Grid.Column="10"
+                            Text="{Binding NodeFilter, UpdateSourceTrigger=PropertyChanged}"
+                            x:Name="txtSearchNode"
+                            Style="{StaticResource SearchTextBox}"/>
+                        <TextBlock 
+                            Grid.Column="11"
+                            Style="{StaticResource SearchTextBlock}"
+                            Visibility="{Binding ElementName=txtSearchCabinet, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                            Text="Cabinet"/>
+                        <TextBox 
+                            Grid.Column="11"
+                            x:Name="txtSearchCabinet"
+                            Text="{Binding CabinetFilter, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource SearchTextBox}"/>
                     </Grid>
                     <!-- Object Datagrid row -->
                     <Grid Grid.Row="2">
@@ -128,7 +173,7 @@
                             <ColumnDefinition Width="13*"/>
                         </Grid.ColumnDefinitions>
                         <!-- Data Grid -->
-                        <DataGrid 
+                        <DataGrid
                             x:Name="DataGrid"
                             ItemsSource="{Binding Objects, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                             SelectedItem="{Binding SelectedObject, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -136,6 +181,7 @@
                             Grid.ColumnSpan="2"
                             RowEditEnding="DataGrid_RowEditEnding"
                             CanUserAddRows="False"
+                            Background="#eff2f2"
                             CanUserDeleteRows="False"
                             SelectionMode="Extended"
                             SelectionUnit="FullRow">
