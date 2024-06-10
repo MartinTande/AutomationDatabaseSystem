@@ -1,5 +1,7 @@
 ﻿using AutomationSystem.Models.Categories;
+using AutomationSystem.Models.Data.Categories;
 using AutomationSystem.Models.DataAccess;
+using System.Windows;
 
 namespace AutomationSystem.Models.DataManager;
 
@@ -88,7 +90,7 @@ public class CategoryDataManager
             Name = name
         };
 
-        _sqlConnector.ReadData<string, dynamic>("AddCategoryItem", p);
+        _sqlConnector.WriteData("AddCategoryItem", p);
     }
 
     public void DeleteHierarchy1Category(int id) { DeleteCategoryItem("HIERARCHY_1", id); }
@@ -96,4 +98,31 @@ public class CategoryDataManager
     public void EditHierarchy1Category(int id, string updatedHierarchy1Name) { EditCategoryItem("HIERARCHY_1", id, updatedHierarchy1Name); }
 
     public void AddHierarchy1Category(string hierarchy1Name) { AddCategoryItem("HIERARCHY_1", hierarchy1Name); }
+
+    public void UpdateOtds(List<Otd> otds)
+    {
+        // Delete all Otds and Otd interfaces
+        _sqlConnector.WriteData("DeleteOtdInterfaces", new { });
+
+        // Add Otds and Otd interfaces again
+        foreach (Otd otd in otds)
+        {
+            AddCategoryItem("OTD", otd.Name);
+
+            foreach (OtdInterface otdInterface in otd.Interface)
+            {
+                var p = new
+                {
+                    OtdName = otd.Name,
+                    OtdInterfaceName = otdInterface.Name,
+                    Suffix = otdInterface.Suffix,
+                    DataType = otdInterface.DataType,
+                    InterfaceType = otdInterface.InterfaceType,
+                    IsOptional = otdInterface.IsOptional
+                };
+                _sqlConnector.WriteData("AddOtdInterface", p);
+            }
+        }
+        MessageBox.Show("Done");
+    }
 }

@@ -5,10 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutomationSystem.Views.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="1000">
+             d:DesignHeight="50" d:DesignWidth="1000">
     <Grid Grid.Row="0">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -17,19 +16,14 @@
         <Button Grid.Column="1"
                 Command="{Binding ShowAddObjectWindowCommand}"
                 Content="Add Object" 
-                Margin="5"/>
+                Margin="10"/>
         <Button Command="{Binding ShowEditObjectWindowCommand}"
                 Grid.Column="2"            
                 Content="Edit Object" 
-                Margin="5"/>
+                Margin="10"/>
         <Button Grid.Column="3" 
                 Content="Delete Object" 
                 Command="{Binding DeleteObjectCommand}"
-                Margin="5"/>
-        <Button Grid.Column="4" 
-                Content="Open OTDs" 
-                Command="{Binding OpenOtdCommand}"
-                Margin="5"/>
-        <TextBlock/>
+                Margin="10"/>
     </Grid>
 </UserControl>

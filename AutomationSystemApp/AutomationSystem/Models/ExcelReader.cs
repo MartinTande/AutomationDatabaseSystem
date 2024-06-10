@@ -1,6 +1,5 @@
 ﻿using AutomationSystem.Models.Data.Categories;
 using Microsoft.Office.Interop.Excel;
-using System.Windows;
 using Excel = Microsoft.Office.Interop.Excel;
 
 
@@ -35,8 +34,8 @@ public class ExcelReader
     {
         // the excel reader starts at index 1 instead of 0
 
-        if (_worksheet.Cells[i, j].Value2 != null) 
-        { 
+        if (_worksheet.Cells[i, j].Value2 != null)
+        {
             return _worksheet.Cells[i, j].Value2.ToString();
         }
         else
@@ -49,17 +48,17 @@ public class ExcelReader
     {
         List<Otd> _otds = new List<Otd>();
 
-        foreach(string path in paths)
+        foreach (string path in paths)
         {
             _workbook = _excelReader.Workbooks.Open(path);
-            
+
             // Find Otd type
             _worksheet = _workbook.Worksheets["Metadata"];
 
             string boType = ReadCell(2, 2);
 
             Otd otd = new Otd { Name = boType };
-            
+
             // Get inputs
             _worksheet = _workbook.Worksheets["Inputs"];
 
@@ -105,7 +104,7 @@ public class ExcelReader
 
             _otds.Add(otd);
         }
-
+        _excelReader.Workbooks.Close();
         return _otds;
     }
 }

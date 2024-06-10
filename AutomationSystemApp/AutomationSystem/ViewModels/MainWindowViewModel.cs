@@ -443,30 +443,9 @@ internal class MainWindowViewModel : ViewModelBase
     public ICommand ShowAddTagWindowCommand => new RelayCommand(execute => ShowAddTagWindow(), canExecute => SelectedObject != null);
     public ICommand ShowEditTagWindowCommand => new RelayCommand(execute => ShowEditTagWindow(), canExecute => SelectedTag != null);
     public ICommand DeleteTagCommand => new RelayCommand(execute => DeleteTag(), canExecute => SelectedTag != null);
-    public ICommand OpenOtdCommand => new RelayCommand(execute => OpenOtds());
+    public ICommand UpdateOtdCommand => new RelayCommand(execute => UpdateOtds());
 
-    private void OpenOtds()
-    {
-        OpenFileDialog fileDialog = new OpenFileDialog();
-        fileDialog.Filter = "Excel files | *.xlsx";
-        fileDialog.Multiselect = true;
 
-        bool? success = fileDialog.ShowDialog();
-        string[] filePaths;
-        if (success == true)
-        {
-            filePaths = fileDialog.FileNames;
-        }
-        else
-        {
-            MessageBox.Show("Error finding/opening file");
-            return;
-        }
-        
-        ExcelReader excelReader = new ExcelReader();
-        Otds = new ObservableCollection<Otd>(excelReader.ReadOtds(filePaths));
-        OnPropertyChanged(nameof(Otds));
-    }
     #endregion
 
     #region Object functions
@@ -704,6 +683,30 @@ internal class MainWindowViewModel : ViewModelBase
         {
             otd.Interface = subCategoryDataManager.GetOtdInterfaces(otd.Name);
         }
+    }
+
+    private void UpdateOtds()
+    {
+        OpenFileDialog fileDialog = new OpenFileDialog();
+        fileDialog.Filter = "Excel files | *.xlsx";
+        fileDialog.Multiselect = true;
+
+        bool? success = fileDialog.ShowDialog();
+        string[] filePaths;
+        if (success == true)
+        {
+            filePaths = fileDialog.FileNames;
+        }
+        else
+        {
+            return;
+        }
+
+        ExcelReader excelReader = new ExcelReader();
+        List<Otd> otds = new List<Otd>(excelReader.ReadOtds(filePaths));
+        Otds = new ObservableCollection<Otd>(otds);
+        OnPropertyChanged(nameof(Otds));
+        categoryDataManager.UpdateOtds(otds);
     }
 
     #endregion

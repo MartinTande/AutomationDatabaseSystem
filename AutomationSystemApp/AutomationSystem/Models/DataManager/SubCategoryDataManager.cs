@@ -56,7 +56,7 @@ public class SubCategoryDataManager
             Hierarchy2Name = newHierarchy2Name
         };
 
-        _sqlConnector.ReadData<string, dynamic>("AddHierarchy2", p);
+        _sqlConnector.WriteData("AddHierarchy2", p);
     }
 
     public void DeleteHierarchy2Category(int id)
@@ -68,7 +68,7 @@ public class SubCategoryDataManager
             Id = id
         };
 
-        _sqlConnector.ReadData<string, dynamic>("DeleteHierarchy2", p);
+        _sqlConnector.WriteData("DeleteHierarchy2", p);
     }
 
     public void EditHierarchy2Category(int id, string updatedHierarchy2Name)
@@ -79,7 +79,7 @@ public class SubCategoryDataManager
             Name = updatedHierarchy2Name
         };
 
-        _sqlConnector.ReadData<string, dynamic>("EditHierarchy2", p);
+        _sqlConnector.WriteData("EditHierarchy2", p);
     }
 
     public List<string> GetHierarchy2Names(string hierarchy1Name)

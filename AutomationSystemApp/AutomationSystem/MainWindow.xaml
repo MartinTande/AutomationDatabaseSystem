@@ -22,15 +22,43 @@
             <TabItem Header="IO List">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="60"/>
                         <RowDefinition Height="0.7*"/>
                         <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="0.3*"/>
                     </Grid.RowDefinitions>
                     <!-- Object Button panel row -->
-                    <userControls:ObjectButtonBar Grid.Row="0"/>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button 
+                            Grid.Column="1"
+                            Command="{Binding ShowAddObjectWindowCommand}"
+                            Content="Add Object" 
+                            Margin="10 5"/>
+                        <Button 
+                            Command="{Binding ShowEditObjectWindowCommand}"
+                            Grid.Column="2"            
+                            Content="Edit Object" 
+                            Margin="10 5"/>
+                        <Button 
+                            Grid.Column="3" 
+                            Content="Delete Object" 
+                            Command="{Binding DeleteObjectCommand}"
+                            Margin="10 5"/>
+                        <Button 
+                            Grid.Column="4" 
+                            Content="Duplicate Object" 
+                            Command="{Binding DuplicateObjectCommand}"
+                            Margin="10 5"/>
+                    </Grid>
                     <!-- Filter panel row-->
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
@@ -250,7 +278,7 @@
             <TabItem Header="Picture Hierarchy">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="0.7*"/>
                         <RowDefinition Height="0.2*"/>
                     </Grid.RowDefinitions>
@@ -274,21 +302,22 @@
                         Orientation="Horizontal">
                         <TextBox 
                             Text="{Binding SelectedHierarchyName, UpdateSourceTrigger=PropertyChanged}" 
+                            Margin="5"
                             Width="150"/>
                         <Button 
-                            Content="Add Hierarchy Sub Item"
-                            Command="{Binding AddHierarchySubItemCommand}"
-                            Width="140"/>
+                            Content="Add Process Area"
+                            Margin="10 5"
+                            Command="{Binding AddHierarchySubItemCommand}"/>
                         <Button 
-                            Content="Add Hierarchy Item"
-                            Command="{Binding AddHierarchyItemCommand}"
-                            Width="140"/>
+                            Content="Add Sub Picture"
+                            Margin="10 5"
+                            Command="{Binding AddHierarchyItemCommand}"/>
                         <Button 
-                            Grid.Row="2"                 
-                            Content="Edit Item"       
+                            Margin="10 5"
+                            Content="Edit Item"     
                             Command="{Binding EditHierarchyItemCommand}"/>
                         <Button 
-                            Grid.Row="2"                 
+                            Margin="10 5"
                             Content="Delete Item"       
                             Command="{Binding DeleteHierarchyItemCommand}"/>
                     </StackPanel>
@@ -298,7 +327,7 @@
             <TabItem Header="IO/Signal Types">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="0.7*"/>
                         <RowDefinition Height="0.2*"/>
                     </Grid.RowDefinitions>
@@ -326,18 +355,22 @@
                             Width="150"/>
                         <Button 
                             Content="Add Hierarchy Sub Item"
+                            Margin="10 5"
                             Command="{Binding AddHierarchySubItemCommand}"
                             Width="140"/>
                         <Button 
                             Content="Add Hierarchy Item"
+                            Margin="10 5"
                             Command="{Binding AddHierarchyItemCommand}"
                             Width="140"/>
                         <Button 
                             Grid.Row="2"                 
+                            Margin="10 5"
                             Content="Edit Item"       
                             Command="{Binding EditHierarchyItemCommand}"/>
                         <Button 
                             Grid.Row="2"                 
+                            Margin="10 5"
                             Content="Delete Item"       
                             Command="{Binding DeleteHierarchyItemCommand}"/>
                     </StackPanel>
@@ -347,74 +380,106 @@
             <!-- Alarm Groups tab -->
             <TabItem Header="Picture hierarchy 2">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.4*"/>
-                        <ColumnDefinition Width="0.6*"/>
-                    </Grid.ColumnDefinitions>
-                    <ListView 
-                        Grid.Column="0"
-                        ItemsSource="{Binding PictureHierarchy2, UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedProcessArea, UpdateSourceTrigger=PropertyChanged}">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Border Padding="5 10">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="auto"/>
-                                        </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel 
+                        Grid.Row="0" 
+                        Orientation="Horizontal">
+                        <TextBox 
+                            Text="{Binding SelectedHierarchyName, UpdateSourceTrigger=PropertyChanged}" 
+                            Margin="5"
+                            Width="150"/>
+                        <Button 
+                            Content="Add Process Area"
+                            Margin="10 5"
+                            Command="{Binding AddHierarchySubItemCommand}"/>
+                        <Button 
+                            Content="Add Sub Picture"
+                            Margin="10 5"
+                            Command="{Binding AddHierarchyItemCommand}"/>
+                        <Button 
+                            Margin="10 5"
+                            Content="Edit Item"     
+                            Command="{Binding EditHierarchyItemCommand}"/>
+                        <Button 
+                            Margin="10 5"
+                            Content="Delete Item"       
+                            Command="{Binding DeleteHierarchyItemCommand}"/>
+                    </StackPanel>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.4*"/>
+                            <ColumnDefinition Width="0.6*"/>
+                        </Grid.ColumnDefinitions>
+                        <ListView 
+                            Grid.Column="0"
+                            Margin="20"
+                            ItemsSource="{Binding PictureHierarchy2, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding SelectedProcessArea, UpdateSourceTrigger=PropertyChanged}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="5 10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
 
-                                        <TextBlock Text="{Binding Name}" FontSize="16"/>
-                                        <custom:DropdownMenu Grid.Column="1" Margin="10 0 0 0">
-                                            <Border Background="White" BorderBrush="Gray" BorderThickness="1">
-                                                <StackPanel>
-                                                    <Button Content="Edit"/>
-                                                    <Button Content="Delete"/>
-                                                </StackPanel>
-                                            </Border>
-                                        </custom:DropdownMenu>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
+                                            <TextBlock Text="{Binding Name}" FontSize="16"/>
+                                            <custom:DropdownMenu Grid.Column="1" Margin="10 0 0 0">
+                                                <Border Background="White" BorderBrush="Gray" BorderThickness="1">
+                                                    <StackPanel>
+                                                        <Button Content="Edit"/>
+                                                        <Button Content="Delete"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </custom:DropdownMenu>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
 
-                    </ListView>
-                    <ListView
-                        Grid.Column="1"
-                        ItemsSource="{Binding SelectedProcessArea.SubPictures, UpdateSourceTrigger=PropertyChanged}">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Border Padding="5 10">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="auto"/>
-                                        </Grid.ColumnDefinitions>
+                        </ListView>
+                        <ListView
+                            Grid.Column="1"
+                            Margin="20"
+                            ItemsSource="{Binding SelectedProcessArea.SubPictures, UpdateSourceTrigger=PropertyChanged}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="5 10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
 
-                                        <TextBlock Text="{Binding Name}" FontSize="16"/>
-                                        <custom:DropdownMenu Grid.Column="1" Margin="10 0 0 0">
-                                            <Border Background="White" BorderBrush="Gray" BorderThickness="1">
-                                                <StackPanel>
-                                                    <Button Content="Edit"/>
-                                                    <Button Content="Delete"/>
-                                                </StackPanel>
-                                            </Border>
-                                        </custom:DropdownMenu>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                                            <TextBlock Text="{Binding Name}" FontSize="16"/>
+                                            <custom:DropdownMenu Grid.Column="1" Margin="10 0 0 0">
+                                                <Border Background="White" BorderBrush="Gray" BorderThickness="1">
+                                                    <StackPanel>
+                                                        <Button Content="Edit"/>
+                                                        <Button Content="Delete"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </custom:DropdownMenu>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
 
                 </Grid>
             </TabItem>
@@ -422,57 +487,74 @@
             <!-- OTD tab-->
             <TabItem Header="OTD">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="40*"/>
-                        <ColumnDefinition Width="60*"/>
-                    </Grid.ColumnDefinitions>
-                    <ListView 
-                        Grid.Column="0"
-                        ItemsSource="{Binding Otds, UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedOtd, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="3" Margin="0,0,836,0">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Border Padding="1 4">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="auto"/>
-                                        </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Button 
+                        Grid.Row="0"
+                        Content="Update OTDs"
+                        Margin="15 10"
+                        HorizontalAlignment="Right"
+                        Command="{Binding UpdateOtdCommand}"/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40*"/>
+                            <ColumnDefinition Width="60*"/>
+                        </Grid.ColumnDefinitions>
 
-                                        <TextBlock Text="{Binding Name}" FontSize="14"/>
-                                        <custom:DropdownMenu Grid.Column="1" Margin="10 0 0 0">
-                                            <Border Background="White" BorderBrush="Gray" BorderThickness="1">
-                                                <StackPanel>
-                                                    <Button Content="Edit"/>
-                                                    <Button Content="Delete"/>
-                                                </StackPanel>
-                                            </Border>
-                                        </custom:DropdownMenu>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
+                        <ListView 
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            Margin="10"
+                            ItemsSource="{Binding Otds, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding SelectedOtd, UpdateSourceTrigger=PropertyChanged}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="1 4">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
 
-                    </ListView>
-                    <DataGrid
-                        Grid.Column="2"
-                        ItemsSource="{Binding SelectedOtd.Interface, UpdateSourceTrigger=PropertyChanged}"
-                        AutoGenerateColumns="False"
-                        CanUserAddRows="False" 
-                        Margin="0,10,0,0">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                            <DataGridTextColumn Header="Suffix" Binding="{Binding Suffix}"/>
-                            <DataGridTextColumn Header="DataType" Binding="{Binding DataType}"/>
-                            <DataGridTextColumn Header="Interface Type" Binding="{Binding InterfaceType}"/>
-                            <DataGridCheckBoxColumn Header="Is Optional" Binding="{Binding IsOptional}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                                            <TextBlock Text="{Binding Name}" FontSize="14"/>
+                                            <custom:DropdownMenu Grid.Column="1" Margin="10 0 0 0">
+                                                <Border Background="White" BorderBrush="Gray" BorderThickness="1">
+                                                    <StackPanel>
+                                                        <Button Content="Edit"/>
+                                                        <Button Content="Delete"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </custom:DropdownMenu>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+
+                        </ListView>
+                        <DataGrid
+                            Grid.Column="2"
+                            Grid.Row="1"
+                            ItemsSource="{Binding SelectedOtd.Interface, UpdateSourceTrigger=PropertyChanged}"
+                            AutoGenerateColumns="False"
+                            CanUserAddRows="False" 
+                            Margin="10">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Header="Suffix" Binding="{Binding Suffix}"/>
+                                <DataGridTextColumn Header="DataType" Binding="{Binding DataType}"/>
+                                <DataGridTextColumn Header="Interface Type" Binding="{Binding InterfaceType}"/>
+                                <DataGridCheckBoxColumn Header="Is Optional" Binding="{Binding IsOptional}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                    </Grid>
 
                 </Grid>
             </TabItem>
