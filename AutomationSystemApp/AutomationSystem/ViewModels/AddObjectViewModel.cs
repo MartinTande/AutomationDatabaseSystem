@@ -6,6 +6,7 @@ using System.Windows.Input;
 using AutomationSystem.Models.DataManager;
 using AutomationSystem.Models;
 using AutomationSystem.Models.DataAccess;
+using System.Collections.Generic;
 
 namespace AutomationSystem.ViewModels;
 
@@ -53,7 +54,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
             {
                 Hierarchy2Names.Clear();
             }
-            var updatedHierarchyName = new ObservableCollection<ICategory>(hierarchyDataManager.GetHierarchy2Category(SelectedHierarchy1.Name));
+            var updatedHierarchyName = new ObservableCollection<ICategory>((IEnumerable<ICategory>)hierarchyDataManager.GetHierarchy2Category(SelectedHierarchy1.Name));
             foreach (ICategory item in updatedHierarchyName)
             {
                 Hierarchy2Names.Add(item);
@@ -215,15 +216,15 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
         objectDataManager = new ObjectDataManager(_dataConnector);
         tagDataManager = new TagDataManager(_dataConnector);
 
-        Hierarchy1Names = new ObservableCollection<ICategory>(categoryDataManager.GetHierarchy1Category());
+        Hierarchy1Names = new ObservableCollection<ICategory>((IEnumerable<ICategory>)categoryDataManager.GetHierarchy1Category());
         Hierarchy2Names = new ObservableCollection<ICategory>();
-        VduGroupNames = new ObservableCollection<ICategory>(categoryDataManager.GetVduGroupCategory());
-        AlarmGroupNames = new ObservableCollection<ICategory>(categoryDataManager.GetAlarmGroupCategory());
-        OtdNames = new ObservableCollection<ICategory>(categoryDataManager.GetOtdCategory());
-        AcknowledgeAllowedNames = new ObservableCollection<ICategory>(categoryDataManager.GetAckAllowedCategory());
-        AlwaysVisibleNames = new ObservableCollection<ICategory>(categoryDataManager.GetAlwaysVisibleCategory());
-        NodeNames = new ObservableCollection<ICategory>(categoryDataManager.GetNodeCategory());
-        CabinetNames = new ObservableCollection<ICategory>(categoryDataManager.GetCabinetCategory());
+        VduGroupNames = new ObservableCollection<ICategory>((IEnumerable<ICategory>)categoryDataManager.GetVduGroupCategory());
+        AlarmGroupNames = new ObservableCollection<ICategory>((IEnumerable<ICategory>)categoryDataManager.GetAlarmGroupCategory());
+        OtdNames = new ObservableCollection<ICategory>((IEnumerable<ICategory>)categoryDataManager.GetOtdCategory());
+        AcknowledgeAllowedNames = new ObservableCollection<ICategory>((IEnumerable<ICategory>)categoryDataManager.GetAckAllowedCategory());
+        AlwaysVisibleNames = new ObservableCollection<ICategory>((IEnumerable<ICategory>)categoryDataManager.GetAlwaysVisibleCategory());
+        NodeNames = new ObservableCollection<ICategory>((IEnumerable<ICategory>)categoryDataManager.GetNodeCategory());
+        CabinetNames = new ObservableCollection<ICategory>((IEnumerable<ICategory>)categoryDataManager.GetCabinetCategory());
     }
 
     private bool CanAddObject()
@@ -265,7 +266,7 @@ internal class AddObjectViewModel : ViewModelBase, ICloseable
 
     public bool ObjectNameIsUsed(string objectName)
     {
-        List<ObjectModel> objects = objectDataManager.GetObjects();
+        List<ObjectModel> objects = new List<ObjectModel>().AddRange(objectDataManager.GetObjects());
         foreach (ObjectModel obj in objects)
         {
             if (obj.FullObjectName == objectName)
