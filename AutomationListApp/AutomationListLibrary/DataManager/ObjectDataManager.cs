@@ -1,12 +1,13 @@
-﻿using AutomationSystem.Models.DataAccess;
+﻿using AutomationListLibrary.Data;
+using AutomationListLibrary.DataAccess;
 
-namespace AutomationSystem.Models.DataManager;
+namespace AutomationListLibrary.DataManager;
 
 public class ObjectDataManager
 {
-    private readonly IDataConnector _sqlConnector;
+    private readonly ISqlConnector _sqlConnector;
 
-    public ObjectDataManager(IDataConnector sqlConnector)
+    public ObjectDataManager(ISqlConnector sqlConnector)
     {
         _sqlConnector = sqlConnector;
     }
@@ -21,7 +22,7 @@ public class ObjectDataManager
         return tagObjectList.FirstOrDefault();
     }
 
-    public Task<IEnumerable<ObjectModel>> GetObjects()
+    public Task<List<ObjectModel>> GetObjects()
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object

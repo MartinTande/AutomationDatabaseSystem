@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace AutomationSystem.Models;
+﻿namespace AutomationListLibrary.Data;
 
 public class Hierarchy2 : ICategory
 {

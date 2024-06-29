@@ -1,4 +1,4 @@
-﻿namespace AutomationSystem.Models.Data.Categories;
+﻿namespace AutomationListLibrary.Data;
 
 public class OtdInterface : ICategory
 {

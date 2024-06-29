@@ -1,19 +1,17 @@
-﻿using AutomationSystem.Models.Categories;
-using AutomationSystem.Models.Data.Categories;
-using AutomationSystem.Models.DataAccess;
-using System.Windows;
+﻿using AutomationListLibrary.Data;
+using AutomationListLibrary.DataAccess;
 
-namespace AutomationSystem.Models.DataManager;
+namespace AutomationListLibrary.DataManager;
 
 public class CategoryDataManager
 {
-    private readonly IDataConnector _sqlConnector;
+    private readonly ISqlConnector _sqlConnector;
 
-    public CategoryDataManager(IDataConnector sqlConnector)
+    public CategoryDataManager(ISqlConnector sqlConnector)
     {
         _sqlConnector = sqlConnector;
     }
-    public async Task<IEnumerable<T>> GetCategory<T>(string tableName)
+    public async Task<List<T>> GetCategory<T>(string tableName)
     {
         var p = new
         {
@@ -23,18 +21,18 @@ public class CategoryDataManager
         return await _sqlConnector.ReadDataAsync<T, dynamic>("GetCategory", p);
     }
 
-    public Task<IEnumerable<Node>> GetNodeCategory() { return GetCategory<Node>("NODE"); }
-    public Task<IEnumerable<AcknowledgeAllowed>> GetAckAllowedCategory() { return GetCategory<AcknowledgeAllowed>("ACKNOWLEDGE_ALLOWED"); }
-    public Task<IEnumerable<AlwaysVisible>> GetAlwaysVisibleCategory() { return GetCategory<AlwaysVisible>("ALWAYS_VISIBLE"); }
-    public Task<IEnumerable<Cabinet>> GetCabinetCategory() { return GetCategory<Cabinet>("CABINET"); }
-    public Task<IEnumerable<Otd>> GetOtdCategory() { return GetCategory<Otd>("OTD"); }
-    public Task<IEnumerable<VduGroup>> GetVduGroupCategory() { return GetCategory<VduGroup>("VDU_GROUP"); }
-    public Task<IEnumerable<AlarmGroup>> GetAlarmGroupCategory() { return GetCategory<AlarmGroup>("ALARM_GROUP"); }
-    public Task<IEnumerable<Hierarchy1>> GetHierarchy1Category() { return GetCategory<Hierarchy1>("HIERARCHY_1"); }
-    public Task<IEnumerable<EngUnit>> GetEngUnitCategory() { return GetCategory<EngUnit>("ENG_UNIT"); }
-    public Task<IEnumerable<IoType>> GetIoTypeCategory() { return GetCategory<IoType>("IO_TYPE"); }
+    public Task<List<Node>> GetNodeCategory() { return GetCategory<Node>("NODE"); }
+    public Task<List<AcknowledgeAllowed>> GetAckAllowedCategory() { return GetCategory<AcknowledgeAllowed>("ACKNOWLEDGE_ALLOWED"); }
+    public Task<List<AlwaysVisible>> GetAlwaysVisibleCategory() { return GetCategory<AlwaysVisible>("ALWAYS_VISIBLE"); }
+    public Task<List<Cabinet>> GetCabinetCategory() { return GetCategory<Cabinet>("CABINET"); }
+    public Task<List<Otd>> GetOtdCategory() { return GetCategory<Otd>("OTD"); }
+    public Task<List<VduGroup>> GetVduGroupCategory() { return GetCategory<VduGroup>("VDU_GROUP"); }
+    public Task<List<AlarmGroup>> GetAlarmGroupCategory() { return GetCategory<AlarmGroup>("ALARM_GROUP"); }
+    public Task<List<Hierarchy1>> GetHierarchy1Category() { return GetCategory<Hierarchy1>("HIERARCHY_1"); }
+    public Task<List<EngUnit>> GetEngUnitCategory() { return GetCategory<EngUnit>("ENG_UNIT"); }
+    public Task<List<IoType>> GetIoTypeCategory() { return GetCategory<IoType>("IO_TYPE"); }
 
-    public Task<IEnumerable<string>> GetCategoryNames(string tableName)
+    public Task<List<string>> GetCategoryNames(string tableName)
     {
         var p = new
         {
@@ -44,16 +42,16 @@ public class CategoryDataManager
         return _sqlConnector.ReadDataAsync<string, dynamic>("GetCategoryNames", p);
     }
 
-    public Task<IEnumerable<string>> GetAlarmGroupNames() { return GetCategoryNames("ALARM_GROUP"); }
-    public Task<IEnumerable<string>> GetNodeNames() { return GetCategoryNames("NODE"); }
-    public Task<IEnumerable<string>> GetAlwaysVisibleNames() { return GetCategoryNames("ALWAYS_VISIBLE"); }
-    public Task<IEnumerable<string>> GetAckowledgeAllowedNames() { return GetCategoryNames("ACKNOWLEDGE_ALLOWED"); }
-    public Task<IEnumerable<string>> GetVduGroupNames() { return GetCategoryNames("VDU_GROUP"); }
-    public Task<IEnumerable<string>> GetOtdNames() { return GetCategoryNames("OTD"); }
-    public Task<IEnumerable<string>> GetCabinetNames() { return GetCategoryNames("CABINET"); }
-    public Task<IEnumerable<string>> GetHierarchy1Names() { return GetCategoryNames("HIERARCHY_1"); }
-    public Task<IEnumerable<string>> GetIoTypeNames() { return GetCategoryNames("IO_TYPE"); }
-    public Task<IEnumerable<string>> GetEngUnitNames() { return GetCategoryNames("ENG_UNIT"); }
+    public Task<List<string>> GetAlarmGroupNames() { return GetCategoryNames("ALARM_GROUP"); }
+    public Task<List<string>> GetNodeNames() { return GetCategoryNames("NODE"); }
+    public Task<List<string>> GetAlwaysVisibleNames() { return GetCategoryNames("ALWAYS_VISIBLE"); }
+    public Task<List<string>> GetAckowledgeAllowedNames() { return GetCategoryNames("ACKNOWLEDGE_ALLOWED"); }
+    public Task<List<string>> GetVduGroupNames() { return GetCategoryNames("VDU_GROUP"); }
+    public Task<List<string>> GetOtdNames() { return GetCategoryNames("OTD"); }
+    public Task<List<string>> GetCabinetNames() { return GetCategoryNames("CABINET"); }
+    public Task<List<string>> GetHierarchy1Names() { return GetCategoryNames("HIERARCHY_1"); }
+    public Task<List<string>> GetIoTypeNames() { return GetCategoryNames("IO_TYPE"); }
+    public Task<List<string>> GetEngUnitNames() { return GetCategoryNames("ENG_UNIT"); }
 
     private void DeleteCategoryItem(string tableName, int id)
     {
@@ -123,6 +121,5 @@ public class CategoryDataManager
                 _sqlConnector.WriteDataAsync("AddOtdInterface", p);
             }
         }
-        MessageBox.Show("Done");
     }
 }

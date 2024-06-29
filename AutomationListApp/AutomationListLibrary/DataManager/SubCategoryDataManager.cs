@@ -1,18 +1,18 @@
-﻿using AutomationSystem.Models.Data.Categories;
-using AutomationSystem.Models.DataAccess;
+﻿using AutomationListLibrary.Data;
+using AutomationListLibrary.DataAccess;
 
-namespace AutomationSystem.Models.DataManager;
+namespace AutomationListLibrary.DataManager;
 
 public class SubCategoryDataManager
 {
-    private readonly IDataConnector _sqlConnector;
+    private readonly ISqlConnector _sqlConnector;
 
-    public SubCategoryDataManager(IDataConnector sqlConnector)
+    public SubCategoryDataManager(ISqlConnector sqlConnector)
     {
         _sqlConnector = sqlConnector;
     }
 
-    public async Task<IEnumerable<SignalType>> GetSignalTypeCategory(string ioType)
+    public async Task<List<SignalType>> GetSignalTypeCategory(string ioType)
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
@@ -24,7 +24,7 @@ public class SubCategoryDataManager
         return await _sqlConnector.ReadDataAsync<SignalType, dynamic>("GetSignalTypesByGroup", p);
     }
 
-    public async Task<IEnumerable<OtdInterface>> GetOtdInterfaces(string otdType)
+    public async Task<List<OtdInterface>> GetOtdInterfaces(string otdType)
     {
         var p = new
         {

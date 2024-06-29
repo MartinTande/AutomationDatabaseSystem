@@ -1,23 +1,24 @@
-﻿using AutomationSystem.Models.DataAccess;
+﻿using AutomationListLibrary.Data;
+using AutomationListLibrary.DataAccess;
 
-namespace AutomationSystem.Models.DataManager;
+namespace AutomationListLibrary.DataManager;
 
 public class TagDataManager
 {
-    private readonly IDataConnector _sqlConnector;
+    private readonly ISqlConnector _sqlConnector;
 
-    public TagDataManager(IDataConnector sqlConnector)
+    public TagDataManager(ISqlConnector sqlConnector)
     {
         _sqlConnector = sqlConnector;
     }
 
-    public Task<IEnumerable<TagModel>> GetTagsByObjectId(int objectId)
+    public Task<List<TagModel>> GetTagsByObjectId(int objectId)
     {
         // Anonymous object, object with no name type
         // Id is parameter of object, id is input to that parameter
         var p = new { ObjectId = objectId };
 
-        Task<IEnumerable<TagModel>> tagList = _sqlConnector.ReadDataAsync<TagModel, dynamic>("GetTagsByObjectId", p);
+        Task<List<TagModel>> tagList = _sqlConnector.ReadDataAsync<TagModel, dynamic>("GetTagsByObjectId", p);
         return tagList;
     }
 

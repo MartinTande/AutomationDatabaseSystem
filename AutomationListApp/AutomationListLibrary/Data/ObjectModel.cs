@@ -1,4 +1,4 @@
-﻿namespace AutomationSystem.Models;
+﻿namespace AutomationListLibrary.Data;
 
 public class ObjectModel
 {
@@ -12,7 +12,7 @@ public class ObjectModel
     public string? VduGroupName { get; set; }
     public string? AlarmGroupName { get; set; }
     public string? OtdName { get; set; }
-    public Otd? Otd {  get; set; }
+    public Otd? Otd { get; set; }
     public string? AcknowledgeAllowedName { get; set; }
     public string? AlwaysVisibleName { get; set; }
     public string? NodeName { get; set; }

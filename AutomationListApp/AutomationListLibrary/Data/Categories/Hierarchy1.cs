@@ -1,4 +1,4 @@
-﻿namespace AutomationSystem.Models;
+﻿namespace AutomationListLibrary.Data;
 
 public class Hierarchy1 : ICategory
 {

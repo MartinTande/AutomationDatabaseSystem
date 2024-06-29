@@ -1,4 +1,4 @@
-﻿namespace AutomationSystem.Models;
+﻿namespace AutomationListLibrary.Data;
 
 public interface ICategory
 {

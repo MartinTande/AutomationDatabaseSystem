@@ -1,31 +1,41 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace AutomationSystem.Models.DataAccess;
+namespace AutomationListLibrary.DataAccess;
 
-public class SqlConnector : IDataConnector
+public class SqlConnector : ISqlConnector
 {
-    private readonly string _connectionString;
+    private readonly IConfiguration _configuration;
 
-    public SqlConnector(string connectionString)
+    public string ConnectionStringName { get; set; } = "Default";
+
+    public SqlConnector(IConfiguration configuration)
     {
-        _connectionString = connectionString;
+        _configuration = configuration;
     }
 
-    public async Task<IEnumerable<T>> ReadDataAsync<T, U>(string storedProcedure, U parameters)
+    public async Task<List<T>> ReadDataAsync<T, U>(string storedProcedure, U parameters)
     {
-        using IDbConnection connection = new SqlConnection(_connectionString);
-        // Queries rows of type T into a list of T
-        IEnumerable<T> rows = await connection.QueryAsync<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+        string connectionString = _configuration.GetConnectionString(ConnectionStringName);
 
-        return rows;
+        using (IDbConnection connection = new SqlConnection(connectionString))
+        {
+            // Queries rows of type T into a list of T
+            IEnumerable<T> rows = await connection.QueryAsync<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+
+            return rows.ToList();
+        }
     }
 
     public async Task WriteDataAsync<T>(string storedProcedure, T parameters)
     {
-        using IDbConnection connection = new SqlConnection(_connectionString);
-        
-        await connection.ExecuteAsync(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+        string connectionString = _configuration.GetConnectionString(ConnectionStringName);
+
+        using (IDbConnection connection = new SqlConnection(connectionString))
+        {
+            await connection.ExecuteAsync(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+        }
     }
 }

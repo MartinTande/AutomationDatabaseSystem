@@ -1,7 +1,4 @@
-﻿using AutomationSystem.Models.Data.Categories;
-
-namespace AutomationSystem.Models;
-
+﻿namespace AutomationListLibrary.Data;
 public class Otd : ICategory
 {
 

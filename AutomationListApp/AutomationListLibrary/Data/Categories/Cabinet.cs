@@ -1,5 +1,4 @@
-﻿
-namespace AutomationSystem.Models;
+﻿namespace AutomationListLibrary.Data;
 
 public class Cabinet : ICategory
 {

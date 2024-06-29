@@ -1,25 +1,12 @@
-﻿using AutomationSystem.MVVM;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
-namespace AutomationSystem.Models;
+namespace AutomationListLibrary.Data;
 
-public class TagModel : ViewModelBase
+public class TagModel
 {
     public int Id { get; set; }
     public int? EqSuffix { get; set; }
-    private string? _description;
-
-    public string? Description
-    {
-        get { return _description; }
-        set { _description = value;
-            OnPropertyChanged();
-            OnPropertyChanged("Objects");
-        }
-    }
-
-    //public string? Description { get; set; }
+    public string? Description { get; set; }
     public string? IoType { get; set; }
     public string? SignalType { get; set; }
     public string? EngUnit { get; set; }
@@ -40,29 +27,11 @@ public class TagModel : ViewModelBase
     public string? ObjectName { get; set; }
 
 
-    public bool IsHW
-    {
-        get 
-        {
-            return IoType.StartsWith("S") ? false : true; 
-        }
-    }
+    public bool IsHW => !IoType.StartsWith("S");
 
-    public bool IsInput 
-    {
-        get
-        {
-            return IoType.EndsWith("I") ? true : false;
-        }
-    }
+    public bool IsInput => IoType.EndsWith("I");
 
-    public bool IsDigital
-    {
-        get
-        {
-            return IoType.Contains("D") ? true : false;
-        }
-    }
+    public bool IsDigital => IoType.Contains("D");
 
     public string FullTagName
     {
@@ -152,9 +121,10 @@ public class TagModel : ViewModelBase
             {
                 _hasPath = true;
             }
+
             return !String.IsNullOrEmpty(IoType) &&
-                !String.IsNullOrEmpty(SignalType) &&
-                _hasPath;
+                   !String.IsNullOrEmpty(SignalType) &&
+                   _hasPath;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace AutomationSystem.Models.Categories;
+﻿namespace AutomationListLibrary.Data;
 
 public class EngUnit : ICategory
 {
