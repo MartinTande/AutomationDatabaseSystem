@@ -387,13 +387,13 @@ internal class MainWindowViewModel : ViewModelBase
         categoryDataManager = new CategoryDataManager(_dataConnector);
         
         //properties
-        _objects = new ObservableCollection<ObjectModel>(objectDataManager.GetObjects());
+        _objects = new ObservableCollection<ObjectModel>((IEnumerable<ObjectModel>)objectDataManager.GetObjects());
         _tags = new ObservableCollection<TagModel>();
-        _hierarchy1Names = new ObservableCollection<Hierarchy1>(categoryDataManager.GetHierarchy1Category());
+        _hierarchy1Names = new ObservableCollection<Hierarchy1>((IEnumerable<Hierarchy1>)categoryDataManager.GetHierarchy1Category());
         _pictureHierarchy = new ObservableCollection<HierarchyModel>();
         _ioTypeHierarchy = new ObservableCollection<HierarchyModel>();
-        _otds = new ObservableCollection<Otd>(categoryDataManager.GetOtdCategory());
-        _pictureHierarchy2 = new ObservableCollection<Hierarchy1>(categoryDataManager.GetHierarchy1Category());
+        _otds = new ObservableCollection<Otd>((IEnumerable<Otd>)categoryDataManager.GetOtdCategory());
+        _pictureHierarchy2 = new ObservableCollection<Hierarchy1>((IEnumerable<Hierarchy1>)categoryDataManager.GetHierarchy1Category());
         //objectModel.PropertyChanged += ObjectModel_PropertyChanged;
 
         ObjectCount = _objects.Count();

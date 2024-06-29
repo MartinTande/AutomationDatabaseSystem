@@ -12,7 +12,7 @@ public class SubCategoryDataManager
         _sqlConnector = sqlConnector;
     }
 
-    public List<SignalType> GetSignalTypeCategory(string ioType)
+    public async Task<IEnumerable<SignalType>> GetSignalTypeCategory(string ioType)
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
@@ -21,19 +21,19 @@ public class SubCategoryDataManager
             Name = ioType
         };
 
-        return _sqlConnector.ReadData<SignalType, dynamic>("GetSignalTypesByGroup", p);
+        return await _sqlConnector.ReadDataAsync<SignalType, dynamic>("GetSignalTypesByGroup", p);
     }
 
-    public List<OtdInterface> GetOtdInterfaces(string otdType)
+    public async Task<IEnumerable<OtdInterface>> GetOtdInterfaces(string otdType)
     {
         var p = new
         {
             Name = otdType
         };
-        return _sqlConnector.ReadData<OtdInterface, dynamic>("GetOtdInterfacesByGroup", p);
+        return await _sqlConnector.ReadDataAsync<OtdInterface, dynamic>("GetOtdInterfacesByGroup", p);
     }
 
-    public List<Hierarchy2> GetHierarchy2Category(string hierarchy1Name)
+    public async Task<IEnumerable<Hierarchy2>> GetHierarchy2Category(string hierarchy1Name)
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
@@ -42,11 +42,10 @@ public class SubCategoryDataManager
             Name = hierarchy1Name
         };
 
-        List<Hierarchy2> hierarchy2Category = _sqlConnector.ReadData<Hierarchy2, dynamic>("GetHierarchy2ByGroup", p);
-        return hierarchy2Category;
+        return await _sqlConnector.ReadDataAsync<Hierarchy2, dynamic>("GetHierarchy2ByGroup", p);
     }
 
-    public void AddHierarchy2Category(string hierarchy1Name, string newHierarchy2Name)
+    public async Task AddHierarchy2Category(string hierarchy1Name, string newHierarchy2Name)
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
@@ -56,7 +55,7 @@ public class SubCategoryDataManager
             Hierarchy2Name = newHierarchy2Name
         };
 
-        _sqlConnector.WriteData("AddHierarchy2", p);
+        await _sqlConnector.WriteDataAsync("AddHierarchy2", p);
     }
 
     public void DeleteHierarchy2Category(int id)
@@ -68,7 +67,7 @@ public class SubCategoryDataManager
             Id = id
         };
 
-        _sqlConnector.WriteData("DeleteHierarchy2", p);
+        _sqlConnector.WriteDataAsync("DeleteHierarchy2", p);
     }
 
     public void EditHierarchy2Category(int id, string updatedHierarchy2Name)
@@ -79,10 +78,10 @@ public class SubCategoryDataManager
             Name = updatedHierarchy2Name
         };
 
-        _sqlConnector.WriteData("EditHierarchy2", p);
+        _sqlConnector.WriteDataAsync("EditHierarchy2", p);
     }
 
-    public List<string> GetHierarchy2Names(string hierarchy1Name)
+    public async Task<IEnumerable<string>> GetHierarchy2Names(string hierarchy1Name)
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
@@ -91,11 +90,10 @@ public class SubCategoryDataManager
             Name = hierarchy1Name
         };
 
-        List<string> hierarchy2Category = _sqlConnector.ReadData<string, dynamic>("GetHierarchy2NamesByGroup", p);
-        return hierarchy2Category;
+        return await _sqlConnector.ReadDataAsync<string, dynamic>("GetHierarchy2NamesByGroup", p);
     }
 
-    public List<string> GetSignalTypeNames(string ioType)
+    public async Task<IEnumerable<string>> GetSignalTypeNames(string ioType)
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
@@ -104,7 +102,7 @@ public class SubCategoryDataManager
             Name = ioType
         };
 
-        return _sqlConnector.ReadData<string, dynamic>("GetSignalTypeNamesByGroup", p);
+        return await _sqlConnector.ReadDataAsync<string, dynamic>("GetSignalTypeNamesByGroup", p);
     }
 
 

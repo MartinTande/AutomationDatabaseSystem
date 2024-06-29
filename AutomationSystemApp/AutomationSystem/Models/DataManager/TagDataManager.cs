@@ -11,24 +11,24 @@ public class TagDataManager
         _sqlConnector = sqlConnector;
     }
 
-    public List<TagModel> GetTagsByObjectId(int objectId)
+    public Task<IEnumerable<TagModel>> GetTagsByObjectId(int objectId)
     {
         // Anonymous object, object with no name type
         // Id is parameter of object, id is input to that parameter
         var p = new { ObjectId = objectId };
 
-        List<TagModel> tagList = _sqlConnector.ReadData<TagModel, dynamic>("GetTagsByObjectId", p);
+        Task<IEnumerable<TagModel>> tagList = _sqlConnector.ReadDataAsync<TagModel, dynamic>("GetTagsByObjectId", p);
         return tagList;
     }
 
-    public void DeleteTag(int tagId)
+    public async Task DeleteTag(int tagId)
     {
         var p = new { Id = tagId };
 
-        _sqlConnector.WriteData("DeleteTag", p);
+        await _sqlConnector.WriteDataAsync("DeleteTag", p);
     }
 
-    public void InsertTag(int objectId, TagModel tag)
+    public async Task InsertTag(int objectId, TagModel tag)
     {
         // Anonymous object, object with no name type
         var p = new
@@ -55,10 +55,10 @@ public class TagDataManager
             tag.IsVDR
         };
 
-        _sqlConnector.WriteData("CreateTag", p);
+        await _sqlConnector.WriteDataAsync("CreateTag", p);
     }
 
-    public void UpdateTag(TagModel tag)
+    public async Task UpdateTag(TagModel tag)
     {
         // Anonymous object, object with no name type
         var p = new
@@ -85,18 +85,18 @@ public class TagDataManager
             tag.IsVDR
         };
 
-        _sqlConnector.WriteData("UpdateTag", p);
+        await _sqlConnector.WriteDataAsync("UpdateTag", p);
     }
 
     // Default tag structure for auto generating object tags based on OTD type
-    public void AddTagsBasedOnOTD(int objectId, string otdName)
+    public async Task AddTagsBasedOnOTD(int objectId, string otdName)
     {
         if (_otdTagStructure.ContainsKey(otdName))
         {
             List<TagModel> tags = _otdTagStructure[otdName];
             foreach (TagModel tag in tags)
             {
-                InsertTag(objectId, tag);
+                await InsertTag(objectId, tag);
             }
         }
 
@@ -158,7 +158,7 @@ public class TagDataManager
         },
         {
             "BO_1DI", [
-                new TagModel { EqSuffix = 01, Description = "Tag", IoType = "DI", SignalType = "NO" }
+                new TagModel { EqSuffix = 01, Description = "Alarm", IoType = "DI", SignalType = "NO" }
                 ]
         },
     };

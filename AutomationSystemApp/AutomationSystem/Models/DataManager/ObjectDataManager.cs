@@ -10,27 +10,28 @@ public class ObjectDataManager
     {
         _sqlConnector = sqlConnector;
     }
-    public List<ObjectModel> GetObjectById(int id)
+    public async Task<ObjectModel?> GetObjectById(int id)
     {
         // Anonymous object, object with no name type
         // Id is parameter of object, id is input to that parameter
         var p = new { Id = id };
 
-        var tagObjectList = _sqlConnector.ReadData<ObjectModel, dynamic>("GetObjectById", p);
-        return tagObjectList;
+        // Need to await it before getting first entry
+        var tagObjectList = await _sqlConnector.ReadDataAsync<ObjectModel, dynamic>("GetObjectById", p);
+        return tagObjectList.FirstOrDefault();
     }
 
-    public List<ObjectModel> GetObjects()
+    public Task<IEnumerable<ObjectModel>> GetObjects()
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
         var p = new { };
 
-        List<ObjectModel> tagObjectList = _sqlConnector.ReadData<ObjectModel, dynamic>("GetAllObjects", p);
+        var tagObjectList = _sqlConnector.ReadDataAsync<ObjectModel, dynamic>("GetAllObjects", p);
         return tagObjectList;
     }
 
-    public void InsertObject(ObjectModel tagObject)
+    public async Task InsertObject(ObjectModel tagObject)
     {
         // Anonymous object, object with no name type
         var p = new
@@ -50,33 +51,14 @@ public class ObjectDataManager
             tagObject.CabinetName
         };
 
-        _sqlConnector.WriteData("CreateObject", p);
+        await _sqlConnector.WriteDataAsync("CreateObject", p);
     }
 
-    public void UpdateObject(ObjectModel tagObject)
+    public async Task UpdateObject(ObjectModel tagObject)
     {
-        // Anonymous object, object with no name type
-        var p = new
-        {
-            tagObject.Id,
-            tagObject.SfiNumber,
-            tagObject.MainEqNumber,
-            tagObject.EqNumber,
-            tagObject.Description,
-            tagObject.Hierarchy1Name,
-            tagObject.Hierarchy2Name,
-            tagObject.VduGroupName,
-            tagObject.AlarmGroupName,
-            tagObject.OtdName,
-            tagObject.AcknowledgeAllowedName,
-            tagObject.AlwaysVisibleName,
-            tagObject.NodeName,
-            tagObject.CabinetName
-        };
-
         try
         {
-            _sqlConnector.WriteData("UpdateObject", p);
+            await _sqlConnector.WriteDataAsync("UpdateObject", tagObject);
         }
         catch (Exception)
         {
@@ -84,20 +66,20 @@ public class ObjectDataManager
         }
     }
 
-    public int GetLastInsertedObjectId()
+    public async Task<int> GetLastInsertedObjectId()
     {
         var p = new { };
-        
-        List<int> lastInsertedObjectIds= _sqlConnector.ReadData<int, dynamic>("GetLastInsertedObjectId", p);
-        return lastInsertedObjectIds.First();
+
+        IEnumerable<int> lastInsertedObjectIds = await _sqlConnector.ReadDataAsync<int, dynamic>("GetLastInsertedObjectId", p);
+        return lastInsertedObjectIds.FirstOrDefault();
     }
 
-    public void DeleteObject(int id)
+    public async Task DeleteObject(int id)
     {
         // Anonymous object, object with no name type
         // Id is parameter of object, id is input to that parameter
         var p = new { Id = id };
 
-        _sqlConnector.WriteData("DeleteObject", p);
+        await _sqlConnector.WriteDataAsync("DeleteObject", p);
     }
 }

@@ -13,19 +13,19 @@ public class SqlConnector : IDataConnector
         _connectionString = connectionString;
     }
 
-    public List<T> ReadData<T, U>(string storedProcedure, U parameters)
+    public async Task<IEnumerable<T>> ReadDataAsync<T, U>(string storedProcedure, U parameters)
     {
         using IDbConnection connection = new SqlConnection(_connectionString);
         // Queries rows of type T into a list of T
-        List<T> rows = connection.Query<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure).ToList();
+        IEnumerable<T> rows = await connection.QueryAsync<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+
         return rows;
     }
 
-    public void WriteData<T>(string storedProcedure, T parameters)
+    public async Task WriteDataAsync<T>(string storedProcedure, T parameters)
     {
-        using (IDbConnection connection = new SqlConnection(_connectionString))
-        {
-            connection.Execute(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
-        }
+        using IDbConnection connection = new SqlConnection(_connectionString);
+        
+        await connection.ExecuteAsync(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
     }
 }
