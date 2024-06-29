@@ -1,25 +1,12 @@
-﻿using AutomationSystem.Models.Data.Categories;
-using AutomationSystem.MVVM;
+﻿namespace AutomationSystem.Models;
 
-namespace AutomationSystem.Models;
-
-public class ObjectModel : ViewModelBase
+public class ObjectModel
 {
     public int Id { get; set; }
     public int SfiNumber { get; set; }
     public string? MainEqNumber { get; set; }
     public string? EqNumber { get; set; }
-    private string? _description;
-
-    public string? Description
-    {
-        get { return _description; }
-        set
-        {
-            _description = value;
-            OnPropertyChanged();
-        }
-    }
+    public string? Description { get; set; }
     public string? Hierarchy1Name { get; set; }
     public string? Hierarchy2Name { get; set; }
     public string? VduGroupName { get; set; }
