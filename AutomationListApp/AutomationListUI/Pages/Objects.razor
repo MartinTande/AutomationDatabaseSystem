@@ -1,0 +1,74 @@
+﻿@page "/Objects"
+
+@using AutomationListLibrary
+@using AutomationListLibrary.Data
+@using AutomationListLibrary.DataManager
+@using AutomationListUI.Models
+
+@inject IObjectDataManager _objectDB 
+
+
+<h1>Objects Page</h1>
+
+<h4>Insert new object</h4>
+
+<EditForm Model="@newObject" OnValidSubmit="@InsertObject">
+	<DataAnnotationsValidator/>
+	<ValidationSummary/>
+</EditForm>
+
+<h4>Current Objects</h4>
+
+@if (objects is null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Object Name</th>
+				<th>Description</th>
+				<th>Hierarchy 1</th>
+				<th>Hierarchy 2</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var obj in objects)
+			{
+				<tr>
+					<td>@obj.FullObjectName</td>
+					<td>@obj.Description</td>
+					<td>@obj.Hierarchy1Name</td>
+					<td>@obj.Hierarchy2Name</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+@code {
+	private List<ObjectModel> objects;
+	private DisplayObjectModel newObject = new DisplayObjectModel();
+
+	protected override async Task OnInitializedAsync()
+	{
+		objects = await _objectDB.GetObjects();
+	}
+
+	private async Task InsertObject()
+	{
+		ObjectModel objModel = new ObjectModel
+		{
+			SfiNumber = newObject.SfiNumber,
+			Description = newObject.Description
+		};
+
+		await _objectDB.InsertObject(objModel);
+
+		objects.Add(objModel);
+
+		newObject = new DisplayObjectModel();
+	}
+}

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationListUI", "AutomationListUI\AutomationListUI.csproj", "{244440EA-6024-46AA-9AD4-7C27666848C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationListUI", "AutomationListUI\AutomationListUI.csproj", "{244440EA-6024-46AA-9AD4-7C27666848C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationListLibrary", "AutomationListLibrary\AutomationListLibrary.csproj", "{3C7B7FEF-B71B-4E4C-9694-B7A77CB4D9BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationListLibrary", "AutomationListLibrary\AutomationListLibrary.csproj", "{3C7B7FEF-B71B-4E4C-9694-B7A77CB4D9BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

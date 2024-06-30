@@ -1,3 +1,4 @@
+
 namespace AutomationListUI.Data
 {
     public class WeatherForecast
@@ -9,5 +10,6 @@ namespace AutomationListUI.Data
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 
         public string? Summary { get; set; }
+
     }
 }

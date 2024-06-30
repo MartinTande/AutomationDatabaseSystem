@@ -1,3 +1,5 @@
+using AutomationListLibrary.DataAccess;
+using AutomationListLibrary.DataManager;
 using AutomationListUI.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -8,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddTransient<ISqlConnector, SqlConnector>();
+builder.Services.AddTransient<IObjectDataManager, ObjectDataManager>();
 
 var app = builder.Build();
 
