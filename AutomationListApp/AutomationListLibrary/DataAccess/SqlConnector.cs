@@ -22,10 +22,18 @@ public class SqlConnector : ISqlConnector
 
         using (IDbConnection connection = new SqlConnection(connectionString))
         {
-            // Queries rows of type T into a list of T
-            IEnumerable<T> rows = await connection.QueryAsync<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+            try
+            {
+                // Queries rows of type T into a list of T
+                IEnumerable<T> rows = await connection.QueryAsync<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
 
-            return rows.ToList();
+                return rows.ToList();
+            }
+            catch (Exception ex)
+            {
+				Console.WriteLine(ex.ToString());
+                return null;
+			}
         }
     }
 
@@ -35,7 +43,14 @@ public class SqlConnector : ISqlConnector
 
         using (IDbConnection connection = new SqlConnection(connectionString))
         {
-            await connection.ExecuteAsync(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+            try
+            {
+                await connection.ExecuteAsync(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }
