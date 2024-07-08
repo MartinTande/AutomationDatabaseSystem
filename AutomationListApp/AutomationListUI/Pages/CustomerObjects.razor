@@ -1,0 +1,139 @@
+﻿@page "/customer-objects"
+
+@using AutomationListLibrary
+@using AutomationListLibrary.Data
+@using AutomationListLibrary.DataManager
+@using AutomationListUI.Models
+@using Syncfusion.Blazor.Grids
+
+@inject IObjectDataManager _objectDB
+@inject CategoryDataManager _categoryDB
+
+<h1>Customer Objects Page</h1>
+
+
+<SfGrid 
+	TValue="ObjectModel"
+	AllowFiltering="true"
+	AllowReordering="true"
+	AllowResizing="true"
+	AllowSelection="true"
+	AllowSorting="true"
+	Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update","ExcelExport","Search"})" Height="315">
+	<SfDataManager AdaptorInstance="@typeof(CustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+	<GridEditSettings 
+		AllowAdding="true" 
+		AllowEditing="true" 
+		AllowDeleting="true" 
+		Mode="EditMode.Normal"/>
+	<GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.CheckBox"/>
+	<GridPageSettings PageSizes="true"/>
+	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"/>
+	<GridColumns>
+		<GridColumn Field=@nameof(ObjectModel.Id) HeaderText="ID" IsPrimaryKey="true" ValidationRules="@(new ValidationRules{ Required=true, Number=true})" Width="50"></GridColumn>
+		<GridColumn Field=@nameof(ObjectModel.SfiNumber) HeaderText="Sfi Nr" ValidationRules="@(new ValidationRules{ Required=true, Number=true })" EditType="EditType.DefaultEdit" Width="100" />
+		<GridColumn Field=@nameof(ObjectModel.MainEqNumber) HeaderText="Main Eq Nr" ValidationRules="@(new ValidationRules{ Required=true })" Width="100" />
+		<GridColumn Field=@nameof(ObjectModel.EqNumber) HeaderText="Eq Nr" ValidationRules="@(new ValidationRules{  })" Width="100" />
+		<GridColumn Field=@nameof(ObjectModel.FullObjectName) HeaderText="Object Name" ValidationRules="@(new ValidationRules{ MaxLength=20 })" />
+		<GridColumn Field=@nameof(ObjectModel.Description) HeaderText="Description" ValidationRules="@(new ValidationRules{ Required=true, MaxLength=46 })" />
+		<GridColumn Field=@nameof(ObjectModel.VduGroupName) HeaderText="Vdu Group" ValidationRules="@(new ValidationRules{ Required=true })" />
+		<GridColumn Field=@nameof(ObjectModel.OtdName) HeaderText="OTD" ValidationRules="@(new ValidationRules{ Required=true })" EditType="EditType.DropDownEdit" EditorSettings="@OtdEditParams"/>
+		<GridColumn 
+			Field=@nameof(ObjectModel.CabinetName) 
+			HeaderText="Cabinet" 
+			ValidationRules="@(new ValidationRules{ Required=true })" 
+			EditType="EditType.DropDownEdit" 
+			EditorSettings="@CabinetEditParams"/>
+	</GridColumns>
+</SfGrid>
+
+
+@code {
+	List<string>? Cabinets;
+	List<string>? Otds;
+	public DropDownEditCellParams? CabinetEditParams = new DropDownEditCellParams
+	{
+		Params = new DropDownListModel<object, object>()
+		{
+			DataSource = new List<ObjectModel>()
+		}
+	};
+	public DropDownEditCellParams? OtdEditParams = new DropDownEditCellParams
+	{
+		Params = new DropDownListModel<object, object>()
+		{
+			DataSource = new List<ObjectModel>()
+		}
+	};
+
+	protected override async Task OnInitializedAsync()
+	{
+		Cabinets = new List<string>(await _categoryDB.GetCabinetNames());
+		Otds = new List<string>(await _categoryDB.GetOtdNames());
+		List<ObjectModel> cabinets = Cabinets.Select(cabinetName => new ObjectModel() { CabinetName = cabinetName }).ToList();
+		List<ObjectModel> otds = Otds.Select(otdName => new ObjectModel() { OtdName = otdName }).ToList();
+
+		CabinetEditParams.Params.DataSource = cabinets;
+		OtdEditParams.Params.DataSource = otds;
+	}
+
+
+	// Implementing custom adaptor by extending the DataAdaptor class
+	public class CustomAdaptor : DataAdaptor
+	{
+		public IObjectDataManager _objectDM { get; set; }
+		public static List<ObjectModel>? Objects { get; set; }
+		IEnumerable<ObjectModel> GridData { get; set; }
+
+		public CustomAdaptor(IObjectDataManager _context)
+		{
+			_objectDM = _context;
+		}
+
+		// Performs data Read operation
+		public override async Task<Object> ReadAsync(DataManagerRequest dataManagerRequest, string key = null)
+		{
+			Objects = await _objectDM.GetObjects();
+			GridData = Objects;
+			if (dataManagerRequest.Sorted?.Count > 0) // perform Sorting
+			{
+				GridData = DataOperations.PerformSorting(GridData, dataManagerRequest.Sorted);
+			}
+
+			if (dataManagerRequest.Where != null && dataManagerRequest.Where.Count > 0)
+			{
+				// Filtering
+				GridData = DataOperations.PerformFiltering(GridData, dataManagerRequest.Where, dataManagerRequest.Where[0].Operator);
+			}
+
+			if (dataManagerRequest.Search != null && dataManagerRequest.Search.Count > 0)
+			{
+				// Searching
+				GridData = DataOperations.PerformSearching(GridData, dataManagerRequest.Search);
+			}
+
+			return dataManagerRequest.RequiresCounts ? new DataResult() { Result = GridData, Count = Objects.Count() } : (object)GridData;
+		}
+
+		public override async Task<Object> InsertAsync(DataManager dataManager, object value, string key)
+		{
+			await _objectDM.InsertObject(value as ObjectModel);
+			GridData = await _objectDM.GetObjects();
+			return value;
+		}
+
+		public override async Task<object> RemoveAsync(DataManager dataManager, object value, string keyField, string key)
+		{
+			int objectId = (int)value;
+			await _objectDM.DeleteObject(objectId);
+			return value;
+		}
+
+		public override async Task<object> UpdateAsync(DataManager dataManager, object value, string keyField, string key)
+		{
+			ObjectModel updatedObject = (value as ObjectModel);
+			await _objectDM.UpdateObject(updatedObject);
+			return updatedObject;
+		}
+    }
+}

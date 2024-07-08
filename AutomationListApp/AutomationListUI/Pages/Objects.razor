@@ -1,23 +1,18 @@
-﻿@page "/Objects"
+﻿@page "/objects"
 
 @using AutomationListLibrary
 @using AutomationListLibrary.Data
 @using AutomationListLibrary.DataManager
 @using AutomationListUI.Models
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Navigations
 
 @inject IObjectDataManager _objectDB 
 
 
 <h1>Objects Page</h1>
 
-<h4>Insert new object</h4>
-
-<EditForm Model="@newObject" OnValidSubmit="@InsertObject">
-	<DataAnnotationsValidator/>
-	<ValidationSummary/>
-</EditForm>
-
-<h4>Current Objects</h4>
+<div style="margin-left:280px"><p style="color:red;" id="message">@message</p></div>
 
 @if (objects is null)
 {
@@ -25,44 +20,65 @@
 }
 else
 {
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th>Object Name</th>
-				<th>Description</th>
-				<th>Hierarchy 1</th>
-				<th>Hierarchy 2</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var obj in objects)
-			{
-				<tr>
-					<td>@obj.FullObjectName</td>
-					<td>@obj.Description</td>
-					<td>@obj.Hierarchy1Name</td>
-					<td>@obj.Hierarchy2Name</td>
-				</tr>
-			}
-		</tbody>
-	</table>
+	<SfGrid 
+		DataSource="@objects"
+		AllowFiltering="true" 
+		AllowReordering="true"
+		AllowResizing="true" 
+		AllowExcelExport="true" 
+		AllowSelection="true"
+		AllowSorting="true" 
+		Toolbar=@Toolbaritems Height="315">
+			<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="ObjectModel" />
+			<GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Grids.EditMode.Batch"></GridEditSettings>
+			<GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+			<GridPageSettings PageSizes="true"></GridPageSettings>
+			<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+			<GridColumns>
+				<GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.FullObjectName) HeaderText="Object Name" ValidationRules="@(new ValidationRules{ Required=true, MaxLength=20 })"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.Description) HeaderText="Description" ValidationRules="@(new ValidationRules{ Required=true, MaxLength=46 })"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy1Name) HeaderText="Hierarchy 1"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy2Name) HeaderText="Hierarchy 2"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.AcknowledgeAllowedName) HeaderText="Acknowledge Allowed"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.AlwaysVisibleName) HeaderText="Always Visible"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.Otd) HeaderText="OTD" ValidationRules="@(new ValidationRules{ Required=true })"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.CabinetName) HeaderText="Cabinet" ValidationRules="@(new ValidationRules{ Required=true })"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.NodeName) HeaderText="Node" ValidationRules="@(new ValidationRules{ Required=true,  })"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.VduGroupName) HeaderText="Vdu Group" ValidationRules="@(new ValidationRules{ Required=true })"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.AlarmGroupName) HeaderText="Alarm Group" ValidationRules="@(new ValidationRules{ Required=true })"></GridColumn>
+			</GridColumns>
+	</SfGrid>
 }
 
-@code {
+
+@code{
+	private SfGrid<ObjectModel> Grid;
 	private List<ObjectModel> objects;
+	public string message;
 	private DisplayObjectModel newObject = new DisplayObjectModel();
+	private List<Object> Toolbaritems = new List<Object>() { "Add", "Delete", "Edit", "Update", "Cancel", new ItemModel() { Text = "Duplicate", TooltipText = "Duplicate", PrefixIcon = "e-duplicate", Id = "Duplicate" } };
 
 	protected override async Task OnInitializedAsync()
 	{
 		objects = await _objectDB.GetObjects();
 	}
 
-	private async Task InsertObject()
+	public async Task InsertObject()
 	{
 		ObjectModel objModel = new ObjectModel
 		{
 			SfiNumber = newObject.SfiNumber,
-			Description = newObject.Description
+			Description = newObject.Description,
+			Hierarchy1Name = newObject.Hierarchy1Name,
+			Hierarchy2Name = newObject.Hierarchy1Name,
+			AcknowledgeAllowedName = newObject.AcknowledgeAllowedName,
+			AlwaysVisibleName = newObject.AlwaysVisibleName,
+			Otd = newObject.Otd,
+			VduGroupName = newObject.VduGroupName,
+			AlarmGroupName = newObject.AlarmGroupName,
+			CabinetName = newObject.CabinetName,
+			NodeName = newObject.NodeName
 		};
 
 		await _objectDB.InsertObject(objModel);
@@ -70,5 +86,37 @@ else
 		objects.Add(objModel);
 
 		newObject = new DisplayObjectModel();
+	}
+
+	public async Task ToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+	{
+		if (args.Item.Text == "Add")
+		{
+			//message = "Added";
+		}
+		if (args.Item.Text == "Delete")
+		{
+			message = "Added";
+		}
+		if (args.Item.Text == "Edit")
+		{
+			message = "Added";
+		}
+		if (args.Item.Text == "Update")
+		{
+			message = "Custom Toolbar Clicked";
+			//You can customize your code here.
+		}
+	}
+
+	public class CustomAdaptor : DataAdaptor
+	{
+		public override async Task<object> InsertAsync(DataManager DataManager, object Value, string Key)
+		{
+			// Add your insert logic here
+			// This method will be invoked when inserting new records into the Blazor DataGrid component.
+			
+			return Value;
+		}
 	}
 }
