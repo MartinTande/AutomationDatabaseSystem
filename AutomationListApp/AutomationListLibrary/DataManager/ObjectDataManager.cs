@@ -55,16 +55,27 @@ public class ObjectDataManager : IObjectDataManager
 		await _sqlConnector.WriteDataAsync("CreateObject", p);
 	}
 
-	public async Task UpdateObject(ObjectModel tagObject)
+	public async Task UpdateObject(ObjectModel updatedObject)
 	{
-		try
+		var p = new
 		{
-			await _sqlConnector.WriteDataAsync("UpdateObject", tagObject);
-		}
-		catch (Exception)
-		{
-			throw;
-		}
+			updatedObject.Id,
+			updatedObject.SfiNumber,
+			updatedObject.MainEqNumber,
+			updatedObject.EqNumber,
+			updatedObject.Description,
+			updatedObject.Hierarchy1Name,
+			updatedObject.Hierarchy2Name,
+			updatedObject.VduGroupName,
+			updatedObject.AlarmGroupName,
+			updatedObject.OtdName,
+			updatedObject.AcknowledgeAllowedName,
+			updatedObject.AlwaysVisibleName,
+			updatedObject.NodeName,
+			updatedObject.CabinetName
+		};
+
+		await _sqlConnector.WriteDataAsync("UpdateObject", p);
 	}
 
 	public async Task<int> GetLastInsertedObjectId()

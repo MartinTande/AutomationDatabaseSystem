@@ -1,7 +1,10 @@
-﻿namespace AutomationListLibrary.Data;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AutomationListLibrary.Data;
 
 public class ObjectModel
 {
+    [Key]
     public int Id { get; set; }
     public int SfiNumber { get; set; }
     public string? MainEqNumber { get; set; }
