@@ -16,18 +16,18 @@ public class DisplayObjectModel
     [Required]
     [StringLength(46, ErrorMessage = "Description is too long")]
     public string? Description { get; set; }
-    public string? Hierarchy1Name { get; set; }
-    public string? Hierarchy2Name { get; set; }
+    public string? Hierarchy1 { get; set; }
+    public string? Hierarchy2 { get; set; }
     [Required]
-    public string? VduGroupName { get; set; }
-    public string? AlarmGroupName { get; set; }
-    public string? OtdName { get; set; }
-    public Otd? Otd { get; set; }
-    public string? AcknowledgeAllowedName { get; set; }
-    public string? AlwaysVisibleName { get; set; }
-    public string? NodeName { get; set; }
+    public string? VduGroup { get; set; }
+    public string? AlarmGroup { get; set; }
+    public string? Otd { get; set; }
+    public Otd? OtdInterface { get; set; }
+    public string? AcknowledgeAllowed { get; set; }
+    public string? AlwaysVisible { get; set; }
+    public string? Node { get; set; }
     [Required]
-    public string? CabinetName { get; set; }
+    public string? Cabinet { get; set; }
 
     [Required]
     [StringLength(20, ErrorMessage = "Object name is too long")]
@@ -50,7 +50,7 @@ public class DisplayObjectModel
             {
                 return false;
             }
-            foreach (OtdInterface currentInterface in Otd.Interface)
+            foreach (OtdInterface currentInterface in OtdInterface.Interface)
             {
                 if (currentInterface.IsOptional)
                 {
@@ -58,9 +58,9 @@ public class DisplayObjectModel
                 }
                 _mandatoryConnectionsResolved = LookupTagSuffixesAgaintOtdInterface(currentInterface.Suffix);
             }
-            return !String.IsNullOrEmpty(Hierarchy1Name) &&
-                    !String.IsNullOrEmpty(OtdName) &&
-                    !String.IsNullOrEmpty(NodeName) &&
+            return !String.IsNullOrEmpty(Hierarchy1) &&
+                    !String.IsNullOrEmpty(Otd) &&
+                    !String.IsNullOrEmpty(Node) &&
                     _mandatoryConnectionsResolved;
         }
     }
@@ -69,10 +69,10 @@ public class DisplayObjectModel
     {
         get
         {
-            return !String.IsNullOrEmpty(Hierarchy1Name) &&
-                    !String.IsNullOrEmpty(Hierarchy2Name) &&
-                    !String.IsNullOrEmpty(OtdName) &&
-                    !String.IsNullOrEmpty(NodeName);
+            return !String.IsNullOrEmpty(Hierarchy1) &&
+                    !String.IsNullOrEmpty(Hierarchy2) &&
+                    !String.IsNullOrEmpty(Otd) &&
+                    !String.IsNullOrEmpty(Node);
         }
     }
 
@@ -80,7 +80,7 @@ public class DisplayObjectModel
     {
         get
         {
-            return !String.IsNullOrEmpty(OtdName) && !String.IsNullOrEmpty(NodeName);
+            return !String.IsNullOrEmpty(Otd) && !String.IsNullOrEmpty(Node);
         }
     }
 

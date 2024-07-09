@@ -38,19 +38,14 @@
 	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"/>
 	<GridColumns>
 		<GridColumn Field=@nameof(ObjectModel.Id) HeaderText="ID" IsPrimaryKey="true" ValidationRules="@(new ValidationRules{ Required=true, Number=true})" Width="50"></GridColumn>
-		<GridColumn Field=@nameof(ObjectModel.SfiNumber) HeaderText="Sfi Nr" ValidationRules="@(new ValidationRules{ Required=true, Number=true })" EditType="EditType.DefaultEdit" Width="100" />
-		<GridColumn Field=@nameof(ObjectModel.MainEqNumber) HeaderText="Main Eq Nr" ValidationRules="@(new ValidationRules{ Required=true })" Width="100" />
-		<GridColumn Field=@nameof(ObjectModel.EqNumber) HeaderText="Eq Nr" ValidationRules="@(new ValidationRules{  })" Width="100" />
+		<GridColumn Field=@nameof(ObjectModel.SfiNumber) HeaderText="Sfi Nr" ValidationRules="@(new ValidationRules{ Required=true, Number=true })" EditType="EditType.DefaultEdit" Width="120" />
+		<GridColumn Field=@nameof(ObjectModel.MainEqNumber) HeaderText="Main Eq Nr" ValidationRules="@(new ValidationRules{ Required=true })" Width="120" />
+		<GridColumn Field=@nameof(ObjectModel.EqNumber) HeaderText="Eq Nr" ValidationRules="@(new ValidationRules{  })" Width="120" />
 		<GridColumn Field=@nameof(ObjectModel.FullObjectName) HeaderText="Object Name" ValidationRules="@(new ValidationRules{ MaxLength=20 })" />
 		<GridColumn Field=@nameof(ObjectModel.Description) HeaderText="Description" ValidationRules="@(new ValidationRules{ Required=true, MaxLength=46 })" />
-		<GridColumn Field=@nameof(ObjectModel.VduGroupName) HeaderText="Vdu Group" ValidationRules="@(new ValidationRules{ Required=true })" />
-		<GridColumn Field=@nameof(ObjectModel.OtdName) HeaderText="OTD" ValidationRules="@(new ValidationRules{ Required=true })" EditType="EditType.DropDownEdit" EditorSettings="@OtdEditParams"/>
-		<GridColumn 
-			Field=@nameof(ObjectModel.CabinetName) 
-			HeaderText="Cabinet" 
-			ValidationRules="@(new ValidationRules{ Required=true })" 
-			EditType="EditType.DropDownEdit" 
-			EditorSettings="@CabinetEditParams"/>
+		<GridColumn Field=@nameof(ObjectModel.VduGroup) HeaderText="Vdu Group" ValidationRules="@(new ValidationRules{ Required=true })" />
+		<GridColumn Field=@nameof(ObjectModel.Otd) HeaderText="OTD" ValidationRules="@(new ValidationRules{ Required=true })" EditType="EditType.DropDownEdit" EditorSettings="@OtdEditParams"/>
+		<GridColumn Field=@nameof(ObjectModel.Cabinet) HeaderText="Cabinet" ValidationRules="@(new ValidationRules{ Required=true })" EditType="EditType.DropDownEdit" EditorSettings="@CabinetEditParams"/>
 	</GridColumns>
 </SfGrid>
 
@@ -168,8 +163,8 @@
 	{
 		Cabinets = new List<string>(await _categoryDB.GetCabinetNames());
 		Otds = new List<string>(await _categoryDB.GetOtdNames());
-		List<ObjectModel> cabinets = Cabinets.Select(cabinetName => new ObjectModel() { CabinetName = cabinetName }).ToList();
-		List<ObjectModel> otds = Otds.Select(otdName => new ObjectModel() { OtdName = otdName }).ToList();
+		List<ObjectModel> cabinets = Cabinets.Select(cabinetName => new ObjectModel() { Cabinet = cabinetName }).ToList();
+		List<ObjectModel> otds = Otds.Select(otdName => new ObjectModel() { Otd = otdName }).ToList();
 
 		CabinetEditParams.Params.DataSource = cabinets;
 		OtdEditParams.Params.DataSource = otds;

@@ -10,16 +10,17 @@ public class ObjectModel
     public string? MainEqNumber { get; set; }
     public string? EqNumber { get; set; }
     public string? Description { get; set; }
-    public string? Hierarchy1Name { get; set; }
-    public string? Hierarchy2Name { get; set; }
-    public string? VduGroupName { get; set; }
-    public string? AlarmGroupName { get; set; }
-    public string? OtdName { get; set; }
-    public Otd? Otd { get; set; }
-    public string? AcknowledgeAllowedName { get; set; }
-    public string? AlwaysVisibleName { get; set; }
-    public string? NodeName { get; set; }
-    public string? CabinetName { get; set; }
+    public string? Hierarchy1 { get; set; }
+    public string? Hierarchy2 { get; set; }
+    public string? VduGroup { get; set; }
+    public string? AlarmGroup { get; set; }
+    public string? EasGroup { get; set; }
+    public string? Otd { get; set; }
+    public Otd? OtdInterface { get; set; }
+    public string? AcknowledgeAllowed { get; set; }
+    public string? AlwaysVisible { get; set; }
+    public string? Node { get; set; }
+    public string? Cabinet { get; set; }
 
     public string? FullObjectName
     {
@@ -35,7 +36,7 @@ public class ObjectModel
     {
         get
         {
-            return (!String.IsNullOrEmpty(Description)) && (Description.Length <= 46);
+            return (!string.IsNullOrEmpty(Description)) && (Description.Length <= 46);
         }
     }
 
@@ -43,7 +44,7 @@ public class ObjectModel
     {
         get
         {
-            return (!String.IsNullOrEmpty(FullObjectName)) && (FullObjectName.Length <= 20);
+            return (!string.IsNullOrEmpty(FullObjectName)) && (FullObjectName.Length <= 20);
         }
     }
 
@@ -56,7 +57,7 @@ public class ObjectModel
             {
                 return false;
             }
-            foreach (OtdInterface currentInterface in Otd.Interface)
+            foreach (OtdInterface currentInterface in OtdInterface.Interface)
             {
                 if (currentInterface.IsOptional)
                 {
@@ -66,9 +67,9 @@ public class ObjectModel
             }
             return NameIsValid &&
                 DescriptionIsValid &&
-                !String.IsNullOrEmpty(Hierarchy1Name) &&
-                !String.IsNullOrEmpty(OtdName) &&
-                !String.IsNullOrEmpty(NodeName) &&
+                !string.IsNullOrEmpty(Hierarchy1) &&
+                !string.IsNullOrEmpty(Otd) &&
+                !string.IsNullOrEmpty(Node) &&
                 _mandatoryConnectionsResolved;
         }
     }
@@ -78,10 +79,10 @@ public class ObjectModel
         get
         {
             return NameIsValid &&
-                !String.IsNullOrEmpty(Hierarchy1Name) &&
-                !String.IsNullOrEmpty(Hierarchy2Name) &&
-                !String.IsNullOrEmpty(OtdName) &&
-                !String.IsNullOrEmpty(NodeName);
+                !string.IsNullOrEmpty(Hierarchy1) &&
+                !string.IsNullOrEmpty(Hierarchy2) &&
+                !string.IsNullOrEmpty(Otd) &&
+                !string.IsNullOrEmpty(Node);
         }
     }
 
@@ -89,7 +90,7 @@ public class ObjectModel
     {
         get
         {
-            return NameIsValid && !String.IsNullOrEmpty(OtdName) && !String.IsNullOrEmpty(NodeName);
+            return NameIsValid && !string.IsNullOrEmpty(Otd) && !string.IsNullOrEmpty(Node);
         }
     }
 

@@ -41,15 +41,16 @@ public class ObjectDataManager : IObjectDataManager
 			tagObject.MainEqNumber,
 			tagObject.EqNumber,
 			tagObject.Description,
-			tagObject.Hierarchy1Name,
-			tagObject.Hierarchy2Name,
-			tagObject.VduGroupName,
-			tagObject.AlarmGroupName,
-			tagObject.OtdName,
-			tagObject.AcknowledgeAllowedName,
-			tagObject.AlwaysVisibleName,
-			tagObject.NodeName,
-			tagObject.CabinetName
+			tagObject.VduGroup,
+			tagObject.Hierarchy1,
+			tagObject.Hierarchy2,
+			tagObject.EasGroup,
+			tagObject.AlarmGroup,
+			tagObject.Otd,
+			tagObject.AcknowledgeAllowed,
+			tagObject.AlwaysVisible,
+			tagObject.Node,
+			tagObject.Cabinet
 		};
 
 		await _sqlConnector.WriteDataAsync("CreateObject", p);
@@ -64,15 +65,16 @@ public class ObjectDataManager : IObjectDataManager
 			updatedObject.MainEqNumber,
 			updatedObject.EqNumber,
 			updatedObject.Description,
-			updatedObject.Hierarchy1Name,
-			updatedObject.Hierarchy2Name,
-			updatedObject.VduGroupName,
-			updatedObject.AlarmGroupName,
-			updatedObject.OtdName,
-			updatedObject.AcknowledgeAllowedName,
-			updatedObject.AlwaysVisibleName,
-			updatedObject.NodeName,
-			updatedObject.CabinetName
+			updatedObject.VduGroup,
+			updatedObject.Hierarchy1,
+			updatedObject.Hierarchy2,
+			updatedObject.EasGroup,
+			updatedObject.AlarmGroup,
+			updatedObject.Otd,
+			updatedObject.AcknowledgeAllowed,
+			updatedObject.AlwaysVisible,
+			updatedObject.Node,
+			updatedObject.Cabinet
 		};
 
 		await _sqlConnector.WriteDataAsync("UpdateObject", p);

@@ -1,3 +1,5 @@
+SET NOCOUNT ON
+
 -- Insert sample data into HIERARCHY_1
 INSERT INTO HIERARCHY_1 (Name) VALUES ('Bilge')
 INSERT INTO HIERARCHY_1 (Name) VALUES ('Engines')
@@ -111,19 +113,19 @@ SET @EnginesHierarchyId = (SELECT Id FROM HIERARCHY_1 WHERE Name = 'Engines');
 INSERT INTO HIERARCHY_2 (Name, Hierarchy1Id) VALUES ('Engine 1', @EnginesHierarchyId);
 INSERT INTO HIERARCHY_2 (Name, Hierarchy1Id) VALUES ('Engine 2', @EnginesHierarchyId);
 
--- Insert sample data into VDU_GROUP
-INSERT INTO VDU_GROUP (Name) VALUES ('Cooling')
-INSERT INTO VDU_GROUP (Name) VALUES ('Bilge')
-INSERT INTO VDU_GROUP (Name) VALUES ('Fire System')
-INSERT INTO VDU_GROUP (Name) VALUES ('Utility Systems')
-INSERT INTO VDU_GROUP (Name) VALUES ('Engines')
-INSERT INTO VDU_GROUP (Name) VALUES ('System')
-INSERT INTO VDU_GROUP (Name) VALUES ('Fuel and Lube Oil')
-INSERT INTO VDU_GROUP (Name) VALUES ('HVAC')
-INSERT INTO VDU_GROUP (Name) VALUES ('Misc')
-INSERT INTO VDU_GROUP (Name) VALUES ('Propulsion')
-INSERT INTO VDU_GROUP (Name) VALUES ('Switchboard')
-INSERT INTO VDU_GROUP (Name) VALUES ('Tanks')
+-- Insert sample data into EAS_GROUP
+INSERT INTO EAS_GROUP (Name) VALUES ('Cooling')
+INSERT INTO EAS_GROUP (Name) VALUES ('Bilge')
+INSERT INTO EAS_GROUP (Name) VALUES ('Fire System')
+INSERT INTO EAS_GROUP (Name) VALUES ('Utility Systems')
+INSERT INTO EAS_GROUP (Name) VALUES ('Engines')
+INSERT INTO EAS_GROUP (Name) VALUES ('System')
+INSERT INTO EAS_GROUP (Name) VALUES ('Fuel and Lube Oil')
+INSERT INTO EAS_GROUP (Name) VALUES ('HVAC')
+INSERT INTO EAS_GROUP (Name) VALUES ('Misc')
+INSERT INTO EAS_GROUP (Name) VALUES ('Propulsion')
+INSERT INTO EAS_GROUP (Name) VALUES ('Switchboard')
+INSERT INTO EAS_GROUP (Name) VALUES ('Tanks')
 
 -- Insert sample data into ALARM_GROUP
 INSERT INTO ALARM_GROUP (Name) VALUES ('Shutdown')

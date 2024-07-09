@@ -38,15 +38,15 @@ else
 				<GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
 				<GridColumn Field=@nameof(DisplayObjectModel.FullObjectName) HeaderText="Object Name" ValidationRules="@(new ValidationRules{ Required=true, MaxLength=20 })"></GridColumn>
 				<GridColumn Field=@nameof(DisplayObjectModel.Description) HeaderText="Description" ValidationRules="@(new ValidationRules{ Required=true, MaxLength=46 })"></GridColumn>
-				<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy1Name) HeaderText="Hierarchy 1"></GridColumn>
-				<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy2Name) HeaderText="Hierarchy 2"></GridColumn>
-				<GridColumn Field=@nameof(DisplayObjectModel.AcknowledgeAllowedName) HeaderText="Acknowledge Allowed"></GridColumn>
-				<GridColumn Field=@nameof(DisplayObjectModel.AlwaysVisibleName) HeaderText="Always Visible"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy1) HeaderText="Hierarchy 1"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy2) HeaderText="Hierarchy 2"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.AcknowledgeAllowed) HeaderText="Acknowledge Allowed"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.AlwaysVisible) HeaderText="Always Visible"></GridColumn>
 				<GridColumn Field=@nameof(DisplayObjectModel.Otd) HeaderText="OTD" ValidationRules="@(new ValidationRules{ Required=true })"></GridColumn>
-				<GridColumn Field=@nameof(DisplayObjectModel.CabinetName) HeaderText="Cabinet" ValidationRules="@(new ValidationRules{ Required=true })"></GridColumn>
-				<GridColumn Field=@nameof(DisplayObjectModel.NodeName) HeaderText="Node" ValidationRules="@(new ValidationRules{ Required=true,  })"></GridColumn>
-				<GridColumn Field=@nameof(DisplayObjectModel.VduGroupName) HeaderText="Vdu Group" ValidationRules="@(new ValidationRules{ Required=true })"></GridColumn>
-				<GridColumn Field=@nameof(DisplayObjectModel.AlarmGroupName) HeaderText="Alarm Group" ValidationRules="@(new ValidationRules{ Required=true })"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.Cabinet) HeaderText="Cabinet" ValidationRules="@(new ValidationRules{ Required=true })"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.Node) HeaderText="Node" ValidationRules="@(new ValidationRules{ Required=true,  })"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.VduGroup) HeaderText="Vdu Group" ValidationRules="@(new ValidationRules{ Required=true })"></GridColumn>
+				<GridColumn Field=@nameof(DisplayObjectModel.AlarmGroup) HeaderText="Alarm Group" ValidationRules="@(new ValidationRules{ Required=true })"></GridColumn>
 			</GridColumns>
 	</SfGrid>
 }
@@ -70,15 +70,15 @@ else
 		{
 			SfiNumber = newObject.SfiNumber,
 			Description = newObject.Description,
-			Hierarchy1Name = newObject.Hierarchy1Name,
-			Hierarchy2Name = newObject.Hierarchy1Name,
-			AcknowledgeAllowedName = newObject.AcknowledgeAllowedName,
-			AlwaysVisibleName = newObject.AlwaysVisibleName,
+			Hierarchy1 = newObject.Hierarchy1,
+			Hierarchy2 = newObject.Hierarchy1,
+			AcknowledgeAllowed = newObject.AcknowledgeAllowed,
+			AlwaysVisible = newObject.AlwaysVisible,
 			Otd = newObject.Otd,
-			VduGroupName = newObject.VduGroupName,
-			AlarmGroupName = newObject.AlarmGroupName,
-			CabinetName = newObject.CabinetName,
-			NodeName = newObject.NodeName
+			VduGroup = newObject.VduGroup,
+			AlarmGroup = newObject.AlarmGroup,
+			Cabinet = newObject.Cabinet,
+			Node = newObject.Node
 		};
 
 		await _objectDB.InsertObject(objModel);

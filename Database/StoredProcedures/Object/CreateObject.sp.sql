@@ -6,6 +6,7 @@ IF EXISTS (SELECT name
 DROP PROCEDURE CreateObject
 GO
 
+
 -- Stored Procedure
 CREATE PROCEDURE CreateObject
 	-- Input parameters
@@ -13,22 +14,23 @@ CREATE PROCEDURE CreateObject
 	@MainEqNumber varchar(100),
 	@EqNumber varchar(100),
 	@Description varchar(100),
-	@Hierarchy1Name varchar(50),
-	@Hierarchy2Name varchar(50),
-	@VduGroupName varchar(50),
-	@AlarmGroupName varchar(50),
-	@OtdName varchar(50),
-	@AcknowledgeAllowedName varchar(100),
-	@AlwaysVisibleName varchar(100),
-	@NodeName varchar(100),
-	@CabinetName varchar(100)
+	@VduGroup varchar(100),
+	@Hierarchy1 varchar(50),
+	@Hierarchy2 varchar(50),
+	@EasGroup varchar(50),
+	@AlarmGroup varchar(50),
+	@Otd varchar(50),
+	@AcknowledgeAllowed varchar(100),
+	@AlwaysVisible varchar(100),
+	@Node varchar(100),
+	@Cabinet varchar(100)
 AS
 
 DECLARE
 	-- Internal variables
 	@Hierarchy1Id int,
 	@Hierarchy2Id int,
-	@VduGroupId int,
+	@EasGroupId int,
 	@AlarmGroupId int,
 	@OtdId int,
 	@AcknowledgeAllowedId int,
@@ -36,17 +38,17 @@ DECLARE
 	@NodeId int,
 	@CabinetId int
 
-SELECT @Hierarchy1Id=Id FROM HIERARCHY_1 WHERE Name=@Hierarchy1Name
-SELECT @Hierarchy2Id=Id FROM HIERARCHY_2 WHERE Name=@Hierarchy2Name
-SELECT @VduGroupId=Id FROM VDU_GROUP WHERE Name=@VduGroupName
-SELECT @AlarmGroupId=Id FROM ALARM_GROUP WHERE Name=@AlarmGroupName
-SELECT @OtdId=Id FROM OTD WHERE Name=@OtdName
-SELECT @AcknowledgeAllowedId=Id FROM ACKNOWLEDGE_ALLOWED WHERE Name=@AcknowledgeAllowedName
-SELECT @AlwaysVisibleId=Id FROM ALWAYS_VISIBLE WHERE Name=@AlwaysVisibleName
-SELECT @NodeId=Id FROM NODE WHERE Name=@NodeName
-SELECT @CabinetId=Id FROM CABINET WHERE Name=@CabinetName
+SELECT @Hierarchy1Id=Id FROM HIERARCHY_1 WHERE Name=@Hierarchy1
+SELECT @Hierarchy2Id=Id FROM HIERARCHY_2 WHERE Name=@Hierarchy2
+SELECT @EasGroupId=Id FROM EAS_GROUP WHERE Name=@EasGroup
+SELECT @AlarmGroupId=Id FROM ALARM_GROUP WHERE Name=@AlarmGroup
+SELECT @OtdId=Id FROM OTD WHERE Name=@Otd
+SELECT @AcknowledgeAllowedId=Id FROM ACKNOWLEDGE_ALLOWED WHERE Name=@AcknowledgeAllowed
+SELECT @AlwaysVisibleId=Id FROM ALWAYS_VISIBLE WHERE Name=@AlwaysVisible
+SELECT @NodeId=Id FROM NODE WHERE Name=@Node
+SELECT @CabinetId=Id FROM CABINET WHERE Name=@Cabinet
 
-INSERT INTO OBJECT (SfiNumber, MainEqNumber, EqNumber, Description, Hierarchy1Id, Hierarchy2Id, VduGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId) 
-VALUES (@SfiNumber, @MainEqNumber, @EqNumber, @Description, @Hierarchy1Id, @Hierarchy2Id, @VduGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId)
+INSERT INTO OBJECT (SfiNumber, MainEqNumber, EqNumber, Description, VduGroup, Hierarchy1Id, Hierarchy2Id, EasGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId) 
+VALUES (@SfiNumber, @MainEqNumber, @EqNumber, @Description, @VduGroup, @Hierarchy1Id, @Hierarchy2Id, @EasGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId)
 
 GO
