@@ -5,21 +5,28 @@
 @using AutomationListLibrary.DataManager
 @using AutomationListUI.Models
 @using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Navigations
 
 @inject IObjectDataManager _objectDB
+@inject TagDataManager _tagDB
 @inject CategoryDataManager _categoryDB
 
 <h1>Customer Objects Page</h1>
+<h2>Objects</h2>
+
+<div style="margin-left:280px"><p style="color:red;" id="message">@message</p></div>
 
 
 <SfGrid 
 	TValue="ObjectModel"
+	@ref="@ObjectGrid"
 	AllowFiltering="true"
 	AllowReordering="true"
 	AllowResizing="true"
 	AllowSelection="true"
 	AllowSorting="true"
 	Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update","ExcelExport","Search"})" Height="315">
+	<GridEvents RowSelected="GetSelectedObject" TValue="ObjectModel"></GridEvents>
 	<SfDataManager AdaptorInstance="@typeof(CustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
 	<GridEditSettings 
 		AllowAdding="true" 
@@ -28,7 +35,7 @@
 		Mode="EditMode.Normal"/>
 	<GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.CheckBox"/>
 	<GridPageSettings PageSizes="true"/>
-	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"/>
+	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"/>
 	<GridColumns>
 		<GridColumn Field=@nameof(ObjectModel.Id) HeaderText="ID" IsPrimaryKey="true" ValidationRules="@(new ValidationRules{ Required=true, Number=true})" Width="50"></GridColumn>
 		<GridColumn Field=@nameof(ObjectModel.SfiNumber) HeaderText="Sfi Nr" ValidationRules="@(new ValidationRules{ Required=true, Number=true })" EditType="EditType.DefaultEdit" Width="100" />
@@ -47,10 +54,54 @@
 	</GridColumns>
 </SfGrid>
 
+<h2>Tags</h2>
+<SfGrid DataSource="@Tags"
+		@ref="@TagGrid"
+		AllowReordering="true"
+		AllowResizing="true"
+		AllowSelection="true"
+		Toolbar=@TagToolbaritems Height="315">
+	<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="TagModel"></GridEvents>
+	<SfDataManager AdaptorInstance="@typeof(CustomTagAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+	<GridEditSettings AllowAdding="true"
+					  AllowEditing="true"
+					  AllowDeleting="true"
+					  Mode="EditMode.Batch" />
+	<GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.CheckBox" />
+	<GridPageSettings PageSizes="true" />
+	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
+	<GridColumns>
+		<GridColumn Field=@nameof(TagModel.EqSuffix) HeaderText="Eq Suffix" ValidationRules="@(new ValidationRules{ Required=true, Number=true })" EditType="EditType.DefaultEdit" />
+		<GridColumn Field=@nameof(TagModel.Description) HeaderText="Description" ValidationRules="@(new ValidationRules{ Required=true })" Width="100" />
+		<GridColumn Field=@nameof(TagModel.IoType) HeaderText="IO Type" ValidationRules="@(new ValidationRules{  })" Width="100" />
+		<GridColumn Field=@nameof(TagModel.SignalType) HeaderText="Signal Type" ValidationRules="@(new ValidationRules{  })" />
+		<GridColumn Field=@nameof(TagModel.SWPath) HeaderText="SW Path Type" ValidationRules="@(new ValidationRules{  })" />
+		<GridColumn Field=@nameof(TagModel.DBName) HeaderText="DB Name" ValidationRules="@(new ValidationRules{  })" />
+		<GridColumn Field=@nameof(TagModel.RangeLow) HeaderText="Range L" ValidationRules="@(new ValidationRules{ Number=true })" />
+		<GridColumn Field=@nameof(TagModel.RangeHigh) HeaderText="Range H" ValidationRules="@(new ValidationRules{ Number=true  })" />
+		<GridColumn Field=@nameof(TagModel.LowLowLimit) HeaderText="Alm LL" ValidationRules="@(new ValidationRules{ Number=true  })" />
+		<GridColumn Field=@nameof(TagModel.LowLimit) HeaderText="Alm L" ValidationRules="@(new ValidationRules{ Number=true  })" />
+		<GridColumn Field=@nameof(TagModel.HighLimit) HeaderText="Alm H" ValidationRules="@(new ValidationRules{ Number=true  })" />
+		<GridColumn Field=@nameof(TagModel.HighHighLimit) HeaderText="Alm HH" ValidationRules="@(new ValidationRules{ Number=true  })" />
+		<GridColumn Field=@nameof(TagModel.ModbusAddress) HeaderText="Modbus Address" ValidationRules="@(new ValidationRules{ Number=true  })" />
+		<GridColumn Field=@nameof(TagModel.ModbusBit) HeaderText="Modbus Bit" ValidationRules="@(new ValidationRules{ Number=true  })" />
+		<GridColumn Field=@nameof(TagModel.AbsoluteAddress) HeaderText="Abs Address" ValidationRules="@(new ValidationRules{ Number=true  })" />
+		<GridColumn Field=@nameof(TagModel.EngUnit) HeaderText="Eng unit" ValidationRules="@(new ValidationRules{ Number=true  })" />
+	</GridColumns>
+</SfGrid>
+
 
 @code {
 	List<string>? Cabinets;
 	List<string>? Otds;
+	List<TagModel> Tags;
+	SfGrid<TagModel>? TagGrid;
+	SfGrid<ObjectModel>? ObjectGrid;
+	public ObjectModel? SelectedObject { get; set; }
+	public TagModel? SelectedTag { get; set; }
+	private List<Object> TagToolbaritems = new List<Object>() { "Add", "Delete", "Edit", "Update", "Cancel", new ItemModel() { Text = "Duplicate", TooltipText = "Duplicate", PrefixIcon = "e-duplicate", Id = "Duplicate" } };
+	public string message = "";
+
 	public DropDownEditCellParams? CabinetEditParams = new DropDownEditCellParams
 	{
 		Params = new DropDownListModel<object, object>()
@@ -65,6 +116,53 @@
 			DataSource = new List<ObjectModel>()
 		}
 	};
+
+	public async Task GetSelectedObject(RowSelectEventArgs<ObjectModel> args)
+	{
+		var SelectedObjects = await this.ObjectGrid.GetSelectedRecordsAsync();
+		SelectedObject = SelectedObjects.FirstOrDefault();
+		Tags = await _tagDB.GetTagsByObjectId(SelectedObject.Id);
+
+		StateHasChanged();
+	}
+
+	public async Task ToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+	{
+		if (args.Item.Text == "Update")
+		{
+			var tagChanges = await this.TagGrid.GetBatchChangesAsync();
+
+			if (tagChanges.ChangedRecords.Count > 0)
+			{
+				foreach (var tag in tagChanges.ChangedRecords)
+				{
+					await _tagDB.UpdateTag(tag);
+				}
+			}
+			if (tagChanges.DeletedRecords.Count > 0)
+			{
+				foreach (var tag in tagChanges.DeletedRecords)
+				{
+					await _tagDB.DeleteTag(tag.Id);
+				}
+			}
+			if (tagChanges.AddedRecords.Count > 0)
+			{
+				foreach (var tag in tagChanges.AddedRecords)
+				{
+					await _tagDB.InsertTag(SelectedObject.Id, tag);
+				}
+			}
+		}
+	}
+
+	private async Task InsertTag(TagModel newTag)
+	{
+		if (SelectedObject is not null && newTag is not null)
+		{
+			await _tagDB.InsertTag(SelectedObject.Id, newTag);
+		}
+	}
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -118,7 +216,6 @@
 		public override async Task<Object> InsertAsync(DataManager dataManager, object value, string key)
 		{
 			await _objectDM.InsertObject(value as ObjectModel);
-			GridData = await _objectDM.GetObjects();
 			return value;
 		}
 
@@ -135,5 +232,40 @@
 			await _objectDM.UpdateObject(updatedObject);
 			return updatedObject;
 		}
-    }
+	}
+
+	public class CustomTagAdaptor : DataAdaptor
+	{
+		[Parameter]
+		public ObjectModel? SelectedObject {  get; set; }
+		public TagDataManager _tagDM { get; set; }
+		public static List<TagModel>? Tags { get; set; }
+		IEnumerable<TagModel> GridData { get; set; }
+
+		public CustomTagAdaptor(TagDataManager _context)
+		{
+			_tagDM = _context;
+		}
+
+		public override async Task<Object> InsertAsync(DataManager dataManager, object value, string key)
+		{
+			await _tagDM.InsertTag(SelectedObject.Id, value as TagModel);
+			return value;
+		}
+
+		public override async Task<object> RemoveAsync(DataManager dataManager, object value, string keyField, string key)
+		{
+			int objectId = (int)value;
+			await _tagDM.DeleteTag(objectId);
+			return value;
+		}
+
+		public override async Task<object> UpdateAsync(DataManager dataManager, object value, string keyField, string key)
+		{
+			TagModel updatedObject = (value as TagModel);
+			await _tagDM.UpdateTag(updatedObject);
+			return updatedObject;
+		}
+	}
+
 }

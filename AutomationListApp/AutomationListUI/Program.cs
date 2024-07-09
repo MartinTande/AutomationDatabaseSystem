@@ -15,7 +15,9 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddTransient<ISqlConnector, SqlConnector>();
 builder.Services.AddSingleton<IObjectDataManager, ObjectDataManager>();
 builder.Services.AddSingleton<CategoryDataManager>();
+builder.Services.AddSingleton<TagDataManager>();
 builder.Services.AddSingleton<CustomerObjects.CustomAdaptor>();
+builder.Services.AddSingleton<CustomerObjects.CustomTagAdaptor>();
 builder.Services.AddSyncfusionBlazor();
 
 var app = builder.Build();
