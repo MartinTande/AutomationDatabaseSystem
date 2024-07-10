@@ -1,7 +1,7 @@
 -- Check if Stored Procedure exists and deletes it if it does
 IF EXISTS (SELECT name
-	FROM sysobjects
-	WHERE name = 'CreateObject'
+FROM sysobjects
+WHERE name = 'CreateObject'
 	AND type = 'P')
 DROP PROCEDURE CreateObject
 GO
@@ -28,6 +28,7 @@ AS
 
 DECLARE
 	-- Internal variables
+	@VduGroupId int,
 	@Hierarchy1Id int,
 	@Hierarchy2Id int,
 	@EasGroupId int,
@@ -38,17 +39,49 @@ DECLARE
 	@NodeId int,
 	@CabinetId int
 
-SELECT @Hierarchy1Id=Id FROM HIERARCHY_1 WHERE Name=@Hierarchy1
-SELECT @Hierarchy2Id=Id FROM HIERARCHY_2 WHERE Name=@Hierarchy2
-SELECT @EasGroupId=Id FROM EAS_GROUP WHERE Name=@EasGroup
-SELECT @AlarmGroupId=Id FROM ALARM_GROUP WHERE Name=@AlarmGroup
-SELECT @OtdId=Id FROM OTD WHERE Name=@Otd
-SELECT @AcknowledgeAllowedId=Id FROM ACKNOWLEDGE_ALLOWED WHERE Name=@AcknowledgeAllowed
-SELECT @AlwaysVisibleId=Id FROM ALWAYS_VISIBLE WHERE Name=@AlwaysVisible
-SELECT @NodeId=Id FROM NODE WHERE Name=@Node
-SELECT @CabinetId=Id FROM CABINET WHERE Name=@Cabinet
+-- Checks to see if the VduGroup input is present in the table, if not it inserts it
+IF NOT EXISTS (SELECT *
+FROM VDU_GROUP
+WHERE Name = @VduGroup)
+INSERT INTO VDU_GROUP
+	(Name)
+VALUES
+	(@VduGroup)
 
-INSERT INTO OBJECT (SfiNumber, MainEqNumber, EqNumber, Description, VduGroup, Hierarchy1Id, Hierarchy2Id, EasGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId) 
-VALUES (@SfiNumber, @MainEqNumber, @EqNumber, @Description, @VduGroup, @Hierarchy1Id, @Hierarchy2Id, @EasGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId)
+SELECT @VduGroupId=Id
+FROM VDU_GROUP
+WHERE Name=@VduGroup
+SELECT @Hierarchy1Id=Id
+FROM HIERARCHY_1
+WHERE Name=@Hierarchy1
+SELECT @Hierarchy2Id=Id
+FROM HIERARCHY_2
+WHERE Name=@Hierarchy2
+SELECT @EasGroupId=Id
+FROM EAS_GROUP
+WHERE Name=@EasGroup
+SELECT @AlarmGroupId=Id
+FROM ALARM_GROUP
+WHERE Name=@AlarmGroup
+SELECT @OtdId=Id
+FROM OTD
+WHERE Name=@Otd
+SELECT @AcknowledgeAllowedId=Id
+FROM ACKNOWLEDGE_ALLOWED
+WHERE Name=@AcknowledgeAllowed
+SELECT @AlwaysVisibleId=Id
+FROM ALWAYS_VISIBLE
+WHERE Name=@AlwaysVisible
+SELECT @NodeId=Id
+FROM NODE
+WHERE Name=@Node
+SELECT @CabinetId=Id
+FROM CABINET
+WHERE Name=@Cabinet
+
+INSERT INTO OBJECT
+	(SfiNumber, MainEqNumber, EqNumber, Description, VduGroupId, Hierarchy1Id, Hierarchy2Id, EasGroupId, AlarmGroupId, OtdId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId, LastModified)
+VALUES
+	(@SfiNumber, @MainEqNumber, @EqNumber, @Description, @VduGroupId, @Hierarchy1Id, @Hierarchy2Id, @EasGroupId, @AlarmGroupId, @OtdId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId, getdate())
 
 GO

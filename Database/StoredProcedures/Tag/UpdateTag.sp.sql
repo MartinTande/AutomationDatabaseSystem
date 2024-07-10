@@ -1,7 +1,7 @@
 -- Check if Stored Procedure exists and deletes it if it does
 IF EXISTS (SELECT name
-	FROM sysobjects
-	WHERE name = 'UpdateTag'
+FROM sysobjects
+WHERE name = 'UpdateTag'
 	AND type = 'P')
 DROP PROCEDURE UpdateTag
 GO
@@ -37,9 +37,15 @@ DECLARE
     @SignalTypeId int,
     @EngUnitId int
 
-SELECT @IoTypeId = Id FROM IO_TYPE WHERE Name = @IoType
-SELECT @SignalTypeId = Id FROM SIGNAL_TYPE WHERE Name = @SignalType
-SELECT @EngUnitId = Id FROM ENG_UNIT WHERE Name = @EngUnit
+SELECT @IoTypeId = Id
+FROM IO_TYPE
+WHERE Name = @IoType
+SELECT @SignalTypeId = Id
+FROM SIGNAL_TYPE
+WHERE Name = @SignalType
+SELECT @EngUnitId = Id
+FROM ENG_UNIT
+WHERE Name = @EngUnit
 
 UPDATE TAG SET
     EqSuffix = @EqSuffix,
@@ -60,7 +66,8 @@ UPDATE TAG SET
     ModbusAddress = @ModbusAddress,
     ModbusBit = @ModbusBit,
     IsE0 = @IsE0,
-    IsVDR = @IsVDR
+    IsVDR = @IsVDR,
+	LastModified = getdate()
 
 WHERE Id = @Id
 
