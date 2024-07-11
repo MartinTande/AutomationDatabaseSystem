@@ -57,7 +57,6 @@
 		AllowSelection="true"
 		Toolbar=@TagToolbaritems Height="315">
 	<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="TagModel"></GridEvents>
-	<SfDataManager AdaptorInstance="@typeof(CustomTagAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
 	<GridEditSettings AllowAdding="true"
 					  AllowEditing="true"
 					  AllowDeleting="true"
@@ -112,6 +111,17 @@
 		}
 	};
 
+	protected override async Task OnInitializedAsync()
+	{
+		Cabinets = new List<string>(await _categoryDB.GetCabinetNames());
+		Otds = new List<string>(await _categoryDB.GetOtdNames());
+		List<ObjectModel> cabinets = Cabinets.Select(cabinetName => new ObjectModel() { Cabinet = cabinetName }).ToList();
+		List<ObjectModel> otds = Otds.Select(otdName => new ObjectModel() { Otd = otdName }).ToList();
+
+		CabinetEditParams.Params.DataSource = cabinets;
+		OtdEditParams.Params.DataSource = otds;
+	}
+
 	public async Task GetSelectedObject(RowSelectEventArgs<ObjectModel> args)
 	{
 		var SelectedObjects = await this.ObjectGrid.GetSelectedRecordsAsync();
@@ -158,18 +168,6 @@
 			await _tagDB.InsertTag(SelectedObject.Id, newTag);
 		}
 	}
-
-	protected override async Task OnInitializedAsync()
-	{
-		Cabinets = new List<string>(await _categoryDB.GetCabinetNames());
-		Otds = new List<string>(await _categoryDB.GetOtdNames());
-		List<ObjectModel> cabinets = Cabinets.Select(cabinetName => new ObjectModel() { Cabinet = cabinetName }).ToList();
-		List<ObjectModel> otds = Otds.Select(otdName => new ObjectModel() { Otd = otdName }).ToList();
-
-		CabinetEditParams.Params.DataSource = cabinets;
-		OtdEditParams.Params.DataSource = otds;
-	}
-
 
 	// Implementing custom adaptor by extending the DataAdaptor class
 	public class CustomAdaptor : DataAdaptor
@@ -225,40 +223,6 @@
 		{
 			ObjectModel updatedObject = (value as ObjectModel);
 			await _objectDM.UpdateObject(updatedObject);
-			return updatedObject;
-		}
-	}
-
-	public class CustomTagAdaptor : DataAdaptor
-	{
-		[Parameter]
-		public ObjectModel? SelectedObject {  get; set; }
-		public TagDataManager _tagDM { get; set; }
-		public static List<TagModel>? Tags { get; set; }
-		IEnumerable<TagModel> GridData { get; set; }
-
-		public CustomTagAdaptor(TagDataManager _context)
-		{
-			_tagDM = _context;
-		}
-
-		public override async Task<Object> InsertAsync(DataManager dataManager, object value, string key)
-		{
-			await _tagDM.InsertTag(SelectedObject.Id, value as TagModel);
-			return value;
-		}
-
-		public override async Task<object> RemoveAsync(DataManager dataManager, object value, string keyField, string key)
-		{
-			int objectId = (int)value;
-			await _tagDM.DeleteTag(objectId);
-			return value;
-		}
-
-		public override async Task<object> UpdateAsync(DataManager dataManager, object value, string keyField, string key)
-		{
-			TagModel updatedObject = (value as TagModel);
-			await _tagDM.UpdateTag(updatedObject);
 			return updatedObject;
 		}
 	}

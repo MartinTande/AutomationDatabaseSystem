@@ -1,0 +1,146 @@
+﻿@page "/picture-hierarchy"
+
+@using AutomationListLibrary.Data
+@using AutomationListLibrary.DataManager
+
+@inject CategoryDataManager _categoryDB
+@inject SubCategoryDataManager _subCategoryDB
+
+<h1>Picture Hierarchy</h1>
+@* <div style="margin-left:280px"><p style="color:red;" id="message">@message</p></div> *@
+
+
+<div class="control-section">
+    <div id="flat-list">
+        <h4>VDU Group (Customer)</h4>
+        <SfListView 
+	        DataSource="@VduGroups"
+	        TValue="VduGroup"
+	        Width="400"
+	        ShowHeader=true
+	        HeaderTitle="VDU Groups">
+	        <ListViewFieldSettings TValue="VduGroup" Id="Id" Text="Name"></ListViewFieldSettings>
+            
+        </SfListView>
+    </div>
+</div>
+
+
+<EditForm Model="@newMainPicture">
+    <InputText id="Name" @bind-Value="newMainPicture.Name" />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+<div id="container">
+    <div class="sample flex vertical-center">
+        <div class="padding">
+            <h4>Main Pictures</h4>
+            <SfListView DataSource="@MainPictures" CssClass="e-list-template" Width="400">
+                <ListViewFieldSettings TValue="Hierarchy1" Id="Id" Text="Name"></ListViewFieldSettings>
+                <ListViewTemplates TValue="Hierarchy1">
+                    <Template>
+                        @{
+                            Hierarchy1 currentData = (Hierarchy1)context;
+                            <div class="e-list-wrapper e-list-multi-line e-list-avatar" @onclick="(e => OnSelect(currentData))">
+                                <span class="e-list-item-header">@currentData.Name</span>
+                            </div>
+                        }
+                    </Template>
+                </ListViewTemplates>
+            </SfListView>
+        </div>
+        <div class="padding">
+            <h4>Sub Pictures</h4>
+            @if (SelectedMainPicture != null)
+            {
+                <SfListView DataSource="@SelectedMainPicture.SubPictures" CssClass="e-list-template" Width="400">
+                    <ListViewFieldSettings TValue="Hierarchy2" Id="Id" Text="Name"></ListViewFieldSettings>
+                    <ListViewTemplates TValue="Hierarchy2">
+                        <Template>
+                            @{
+                                Hierarchy2 currentData = (Hierarchy2)context;
+                                <div class="e-list-wrapper e-list-multi-line e-list-avatar">
+                                    <span class="e-list-item-header">@currentData.Name</span>
+                                </div>
+                            }
+                        </Template>
+                    </ListViewTemplates>
+                </SfListView>    
+            }
+        </div>
+        
+    </div>
+</div>
+<br/>
+<div id="container" class="picture-hierarchy">
+    <h3>test</h3>
+    <div>Div 1</div>
+    <div>Div 2</div>
+    <div>Div 3</div>
+</div>
+
+@code {
+    List<VduGroup> VduGroups = new List<VduGroup>();
+    private const bool Value = true;
+    List<Hierarchy1> MainPictures = new List<Hierarchy1>();
+    Hierarchy1 newMainPicture = new Hierarchy1();
+    Hierarchy2 newSubPicture = new Hierarchy2();
+    Hierarchy1? SelectedMainPicture;
+
+    string message;
+
+    protected override async Task OnInitializedAsync()
+    {
+        VduGroups = await _categoryDB.GetVduGroupCategory();
+        MainPictures = await _categoryDB.GetHierarchy1Category();
+        foreach (var picture in MainPictures)
+        {
+            picture.SubPictures = (await _subCategoryDB.GetHierarchy2Category(picture.Name)).ToList();
+        }
+    }
+
+    void OnSelect(Hierarchy1 currentData)
+    {
+        if (currentData == null)
+        {
+            return;
+        }
+        SelectedMainPicture = currentData;
+        //message = SelectedMainPicture.Name;
+    }
+}
+
+<style>
+    /*Sample level customization styles*/
+    .listview, .listview-group {
+        border: 1px solid #dddddd;
+        border-bottom: 0px;
+        border-radius: 3px;
+    }
+
+    .fluent .listview, .fluent .listview-group,
+    .fluent-dark .listview, .fluent-dark .listview-group {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    #flat-list,
+    #group-list {
+        width: 49%;
+        margin: auto;
+        margin-bottom: 15px;
+    }
+
+    #flat-list h4, #group-list h4 {
+        padding-left: 16px;
+    }
+
+    #flat-list {
+        float: left;
+        padding-left: 16px;
+    }
+
+    #group-list {
+        float: right;
+        padding-right: 16px;
+    }
+</style>

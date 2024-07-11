@@ -24,6 +24,7 @@ public class TagModel
     public int? ModbusBit { get; set; }
     public bool IsE0 { get; set; }
     public bool IsVDR { get; set; }
+    public DateTime? LastModified { get; }
     public string? ObjectName { get; set; }
 
 
