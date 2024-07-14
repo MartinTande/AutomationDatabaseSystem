@@ -58,7 +58,7 @@ public class SubCategoryDataManager
         await _sqlConnector.WriteDataAsync("AddHierarchy2", p);
     }
 
-    public void DeleteHierarchy2Category(int id)
+    public async Task DeleteHierarchy2Category(int id)
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
@@ -67,18 +67,18 @@ public class SubCategoryDataManager
             Id = id
         };
 
-        _sqlConnector.WriteDataAsync("DeleteHierarchy2", p);
+        await _sqlConnector.WriteDataAsync("DeleteHierarchy2", p);
     }
 
-    public void EditHierarchy2Category(int id, string updatedHierarchy2Name)
+    public async Task EditHierarchy2Category(ICategory category)
     {
         var p = new
         {
-            Id = id,
-            Name = updatedHierarchy2Name
+            category.Id,
+            category.Name
         };
 
-        _sqlConnector.WriteDataAsync("EditHierarchy2", p);
+        await _sqlConnector.WriteDataAsync("EditHierarchy2", p);
     }
 
     public async Task<IEnumerable<string>> GetHierarchy2Names(string hierarchy1Name)
@@ -104,6 +104,4 @@ public class SubCategoryDataManager
 
         return await _sqlConnector.ReadDataAsync<string, dynamic>("GetSignalTypeNamesByGroup", p);
     }
-
-
 }

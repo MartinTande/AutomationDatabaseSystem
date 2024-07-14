@@ -53,4 +53,42 @@ public class SqlConnector : ISqlConnector
             }
         }
     }
+
+	public List<T>? ReadData<T, U>(string storedProcedure, U parameters)
+	{
+		string connectionString = _configuration.GetConnectionString(ConnectionStringName);
+
+		using (IDbConnection connection = new SqlConnection(connectionString))
+		{
+			try
+			{
+				// Queries rows of type T into a list of T
+				IEnumerable<T> rows = connection.Query<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+
+				return rows.ToList();
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.ToString());
+				return null;
+			}
+		}
+	}
+
+	public void WriteData<T>(string storedProcedure, T parameters)
+	{
+		string connectionString = _configuration.GetConnectionString(ConnectionStringName);
+
+		using (IDbConnection connection = new SqlConnection(connectionString))
+		{
+			try
+			{
+				connection.Execute(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.ToString());
+			}
+		}
+	}
 }

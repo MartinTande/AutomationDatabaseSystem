@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace AutomationListLibrary.Data;
 
 public class ObjectModel
 {
-    [Key]
     public int Id { get; set; }
     public int SfiNumber { get; set; }
     public string? MainEqNumber { get; set; }
@@ -22,16 +22,10 @@ public class ObjectModel
     public string? Node { get; set; }
     public string? Cabinet { get; set; }
 	public DateTime? LastModified { get; }
+	
+    public string? FullObjectName => $"{SfiNumber}_{MainEqNumber}_{EqNumber}";
 
-	public string? FullObjectName
-    {
-        get
-        {
-            return $"{SfiNumber}_{MainEqNumber}_{EqNumber}";
-        }
-    }
-
-    public List<TagModel>? Tags { get; set; }
+	public List<TagModel>? Tags { get; set; }
 
     private bool DescriptionIsValid
     {

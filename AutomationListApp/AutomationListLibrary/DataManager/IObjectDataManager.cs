@@ -10,5 +10,7 @@ namespace AutomationListLibrary.DataManager
 		Task<List<ObjectModel>> GetObjects();
 		Task InsertObject(ObjectModel tagObject);
 		Task UpdateObject(ObjectModel tagObject);
+		List<ObjectModel> GetObjectsSync();
+
 	}
 }

@@ -1,4 +1,4 @@
-﻿@page "/customer-objects"
+@page "/customer-objects"
 
 @using AutomationListLibrary
 @using AutomationListLibrary.Data
@@ -12,10 +12,10 @@
 @inject CategoryDataManager _categoryDB
 
 <h1>Customer Objects Page</h1>
-<h2>Objects</h2>
+<hr />        
+<br/>
 
-<div style="margin-left:280px"><p style="color:red;" id="message">@message</p></div>
-
+<h4>Objects</h4>
 
 <SfGrid 
 	TValue="ObjectModel"
@@ -25,7 +25,8 @@
 	AllowResizing="true"
 	AllowSelection="true"
 	AllowSorting="true"
-	Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update","ExcelExport","Search"})" Height="315">
+	Height="400"
+	Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update","ExcelExport","Search"})">
 	<GridEvents RowSelected="GetSelectedObject" TValue="ObjectModel"></GridEvents>
 	<SfDataManager AdaptorInstance="@typeof(CustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
 	<GridEditSettings 
@@ -48,14 +49,15 @@
 		<GridColumn Field=@nameof(ObjectModel.Cabinet) HeaderText="Cabinet" ValidationRules="@(new ValidationRules{ Required=true })" EditType="EditType.DropDownEdit" EditorSettings="@CabinetEditParams"/>
 	</GridColumns>
 </SfGrid>
-
-<h2>Tags</h2>
+<br />
+<br />
+<h4>Tags</h4>
 <SfGrid DataSource="@Tags"
 		@ref="@TagGrid"
 		AllowReordering="true"
 		AllowResizing="true"
 		AllowSelection="true"
-		Toolbar=@TagToolbaritems Height="315">
+		Toolbar=@TagToolbarItems Height="315">
 	<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="TagModel"></GridEvents>
 	<GridEditSettings AllowAdding="true"
 					  AllowEditing="true"
@@ -93,7 +95,7 @@
 	SfGrid<ObjectModel>? ObjectGrid;
 	public ObjectModel? SelectedObject { get; set; }
 	public TagModel? SelectedTag { get; set; }
-	private List<Object> TagToolbaritems = new List<Object>() { "Add", "Delete", "Edit", "Update", "Cancel", new ItemModel() { Text = "Duplicate", TooltipText = "Duplicate", PrefixIcon = "e-duplicate", Id = "Duplicate" } };
+	private List<Object> TagToolbarItems = new List<Object>() { "Add", "Delete", "Edit", "Update", "Cancel", new ItemModel() { Text = "Duplicate", TooltipText = "Duplicate", PrefixIcon = "e-duplicate", Id = "Duplicate" } };
 	public string message = "";
 
 	public DropDownEditCellParams? CabinetEditParams = new DropDownEditCellParams
@@ -227,4 +229,18 @@
 		}
 	}
 
+
+	private bool FullObjectNameIsUnique(object value, object dataItem)
+	{
+		var inputName = value?.ToString();
+		if (string.IsNullOrEmpty(inputName))
+			return false;
+
+		// Check if the input name is unique among other items
+		var existingNames = _objectDB.GetObjectsSync().Select(o => o.FullObjectName).ToList();
+		if (existingNames.Contains(inputName))
+			return false;
+
+		return true; // Validation passed
+	}
 }
