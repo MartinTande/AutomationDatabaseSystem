@@ -22,8 +22,8 @@ public class TagModel
     public string? DBName { get; set; }
     public int? ModbusAddress { get; set; }
     public int? ModbusBit { get; set; }
-    public bool IsE0 { get; set; }
-    public bool IsVDR { get; set; }
+    public bool? IsE0 { get; set; }
+    public bool? IsVDR { get; set; }
     public DateTime? LastModified { get; }
     public string? ObjectName { get; set; }
 
@@ -32,7 +32,7 @@ public class TagModel
 
     public bool IsInput => IoType.EndsWith("I");
 
-    public bool IsDigital => IoType.Contains("D");
+    public bool? IsDigital => IoType.Contains("D");
 
     public string FullTagName
     {
@@ -70,7 +70,7 @@ public class TagModel
         return ioPrefix + signalPrefix[SignalType.ToUpper()];
     }
 
-    public bool AbsoluteAddressIsValid
+    public bool? AbsoluteAddressIsValid
     {
         get
         {
@@ -113,18 +113,18 @@ public class TagModel
         }
     }
 
-    public bool ReadyForSWGeneration
+    public bool? ReadyForSWGeneration
     {
         get
         {
             bool _hasPath = false;
-            if (!IsHW && (!String.IsNullOrEmpty(SWPath) || !String.IsNullOrEmpty(DBName)))
+            if (!IsHW && (!string.IsNullOrEmpty(SWPath) || !string.IsNullOrEmpty(DBName)))
             {
                 _hasPath = true;
             }
 
-            return !String.IsNullOrEmpty(IoType) &&
-                   !String.IsNullOrEmpty(SignalType) &&
+            return !string.IsNullOrEmpty(IoType) &&
+                   !string.IsNullOrEmpty(SignalType) &&
                    _hasPath;
         }
     }

@@ -1,12 +1,13 @@
 ﻿using AutomationListLibrary.Data;
+using AutomationListUI.Validators;
 using System.ComponentModel.DataAnnotations;
+using static AutomationListUI.Pages.CustomerObjects;
 
 
 namespace AutomationListUI.Models;
 
 public class DisplayObjectModel
 {
-    [Key]
     public int Id { get; set; }
     [Required]
     public int SfiNumber { get; set; }
@@ -21,6 +22,7 @@ public class DisplayObjectModel
     [Required]
     public string? VduGroup { get; set; }
     public string? AlarmGroup { get; set; }
+    public string? EasGroup { get; set; }
     public string? Otd { get; set; }
     public Otd? OtdInterface { get; set; }
     public string? AcknowledgeAllowed { get; set; }
@@ -28,16 +30,13 @@ public class DisplayObjectModel
     public string? Node { get; set; }
     [Required]
     public string? Cabinet { get; set; }
-
-    [Required]
-    [StringLength(20, ErrorMessage = "Object name is too long")]
-    public string? FullObjectName
-    {
-        get
-        {
-            return $"{SfiNumber}_{MainEqNumber}_{EqNumber}";
-        }
-    }
+    [Key]
+	[Required]
+	[StringLength(20, ErrorMessage = "Object name is too long")]
+    [ObjectNameValidator]
+    [Editable(false)]
+	public string? FullObjectName => $"{SfiNumber}_{MainEqNumber}_{EqNumber}";
+    public DateTime? LastModified { get; set; }
 
     public List<TagModel>? Tags { get; set; }
 
@@ -58,33 +57,21 @@ public class DisplayObjectModel
                 }
                 _mandatoryConnectionsResolved = LookupTagSuffixesAgaintOtdInterface(currentInterface.Suffix);
             }
-            return !String.IsNullOrEmpty(Hierarchy1) &&
-                    !String.IsNullOrEmpty(Otd) &&
-                    !String.IsNullOrEmpty(Node) &&
+            return !string.IsNullOrEmpty(Hierarchy1) &&
+                    !string.IsNullOrEmpty(Otd) &&
+                    !string.IsNullOrEmpty(Node) &&
                     _mandatoryConnectionsResolved;
         }
     }
 
-    public bool ReadyForHMIGeneration
-    {
-        get
-        {
-            return !String.IsNullOrEmpty(Hierarchy1) &&
-                    !String.IsNullOrEmpty(Hierarchy2) &&
-                    !String.IsNullOrEmpty(Otd) &&
-                    !String.IsNullOrEmpty(Node);
-        }
-    }
+	public bool ReadyForHMIGeneration => !string.IsNullOrEmpty(Hierarchy1) &&
+					                        !string.IsNullOrEmpty(Hierarchy2) &&
+					                        !string.IsNullOrEmpty(Otd) &&
+					                        !string.IsNullOrEmpty(Node);
 
-    public bool ReadyForPreliminaryPLCGeneration
-    {
-        get
-        {
-            return !String.IsNullOrEmpty(Otd) && !String.IsNullOrEmpty(Node);
-        }
-    }
+	public bool ReadyForPreliminaryPLCGeneration => !string.IsNullOrEmpty(Otd) && !string.IsNullOrEmpty(Node);
 
-    private bool LookupTagSuffixesAgaintOtdInterface(string suffix)
+	private bool LookupTagSuffixesAgaintOtdInterface(string suffix)
     {
         if (Tags == null)
         {

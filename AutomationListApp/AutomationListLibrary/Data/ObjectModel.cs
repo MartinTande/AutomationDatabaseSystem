@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace AutomationListLibrary.Data;
+﻿namespace AutomationListLibrary.Data;
 
 public class ObjectModel
 {
@@ -22,7 +19,7 @@ public class ObjectModel
     public string? Node { get; set; }
     public string? Cabinet { get; set; }
 	public DateTime? LastModified { get; }
-	
+
     public string? FullObjectName => $"{SfiNumber}_{MainEqNumber}_{EqNumber}";
 
 	public List<TagModel>? Tags { get; set; }

@@ -2,13 +2,17 @@
 
 @using AutomationListLibrary
 @using AutomationListLibrary.Data
+@using AutomationListLibrary.DataAccess
 @using AutomationListLibrary.DataManager
 @using AutomationListUI.Models
+@using AutomationListUI.Services
+@using AutomationListUI.Validators
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Navigations
+@using System.ComponentModel.DataAnnotations
 
-@inject IObjectDataManager _objectDB
-@inject TagDataManager _tagDB
+@inject IObjectService _objectDB
+@inject ITagService _tagDB
 @inject CategoryDataManager _categoryDB
 
 <h1>Customer Objects Page</h1>
@@ -18,7 +22,7 @@
 <h4>Objects</h4>
 
 <SfGrid 
-	TValue="ObjectModel"
+	TValue="DisplayObjectModel"
 	@ref="@ObjectGrid"
 	AllowFiltering="true"
 	AllowReordering="true"
@@ -27,7 +31,7 @@
 	AllowSorting="true"
 	Height="400"
 	Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update","ExcelExport","Search"})">
-	<GridEvents RowSelected="GetSelectedObject" TValue="ObjectModel"></GridEvents>
+	<GridEvents RowSelected="GetSelectedObject" TValue="DisplayObjectModel"></GridEvents>
 	<SfDataManager AdaptorInstance="@typeof(CustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
 	<GridEditSettings 
 		AllowAdding="true" 
@@ -38,15 +42,14 @@
 	<GridPageSettings PageSizes="true"/>
 	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"/>
 	<GridColumns>
-		<GridColumn Field=@nameof(ObjectModel.Id) HeaderText="ID" IsPrimaryKey="true" ValidationRules="@(new ValidationRules{ Required=true, Number=true})" Width="50"></GridColumn>
-		<GridColumn Field=@nameof(ObjectModel.SfiNumber) HeaderText="Sfi Nr" ValidationRules="@(new ValidationRules{ Required=true, Number=true })" EditType="EditType.DefaultEdit" Width="120" />
-		<GridColumn Field=@nameof(ObjectModel.MainEqNumber) HeaderText="Main Eq Nr" ValidationRules="@(new ValidationRules{ Required=true })" Width="120" />
-		<GridColumn Field=@nameof(ObjectModel.EqNumber) HeaderText="Eq Nr" ValidationRules="@(new ValidationRules{  })" Width="120" />
-		<GridColumn Field=@nameof(ObjectModel.FullObjectName) HeaderText="Object Name" ValidationRules="@(new ValidationRules{ MaxLength=20 })" />
-		<GridColumn Field=@nameof(ObjectModel.Description) HeaderText="Description" ValidationRules="@(new ValidationRules{ Required=true, MaxLength=46 })" />
-		<GridColumn Field=@nameof(ObjectModel.VduGroup) HeaderText="Vdu Group" ValidationRules="@(new ValidationRules{ Required=true })" />
-		<GridColumn Field=@nameof(ObjectModel.Otd) HeaderText="OTD" ValidationRules="@(new ValidationRules{ Required=true })" EditType="EditType.DropDownEdit" EditorSettings="@OtdEditParams"/>
-		<GridColumn Field=@nameof(ObjectModel.Cabinet) HeaderText="Cabinet" ValidationRules="@(new ValidationRules{ Required=true })" EditType="EditType.DropDownEdit" EditorSettings="@CabinetEditParams"/>
+		<GridColumn Field=@nameof(DisplayObjectModel.SfiNumber) HeaderText="Sfi Nr" EditType="EditType.DefaultEdit" Width="120" />
+		<GridColumn Field=@nameof(DisplayObjectModel.MainEqNumber) HeaderText="Main Eq Nr" Width="120" />
+		<GridColumn Field=@nameof(DisplayObjectModel.EqNumber) HeaderText="Eq Nr" Width="120" />
+		<GridColumn Field=@nameof(DisplayObjectModel.FullObjectName) HeaderText="Object Name" IsPrimaryKey="true" />
+		<GridColumn Field=@nameof(DisplayObjectModel.Description) HeaderText="Description" />
+		<GridColumn Field=@nameof(DisplayObjectModel.VduGroup) HeaderText="Vdu Group" />
+		<GridColumn Field=@nameof(DisplayObjectModel.Otd) HeaderText="OTD" EditType="EditType.DropDownEdit" EditorSettings="@OtdEditParams"/>
+		<GridColumn Field=@nameof(DisplayObjectModel.Cabinet) HeaderText="Cabinet" EditType="EditType.DropDownEdit" EditorSettings="@CabinetEditParams" />
 	</GridColumns>
 </SfGrid>
 <br />
@@ -57,8 +60,9 @@
 		AllowReordering="true"
 		AllowResizing="true"
 		AllowSelection="true"
-		Toolbar=@TagToolbarItems Height="315">
-	<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="TagModel"></GridEvents>
+		Height="300"
+		Toolbar=@TagToolbarItems>
+	<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="DisplayTagModel"></GridEvents>
 	<GridEditSettings AllowAdding="true"
 					  AllowEditing="true"
 					  AllowDeleting="true"
@@ -67,22 +71,23 @@
 	<GridPageSettings PageSizes="true" />
 	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
 	<GridColumns>
-		<GridColumn Field=@nameof(TagModel.EqSuffix) HeaderText="Eq Suffix" ValidationRules="@(new ValidationRules{ Required=true, Number=true })" EditType="EditType.DefaultEdit" />
-		<GridColumn Field=@nameof(TagModel.Description) HeaderText="Description" ValidationRules="@(new ValidationRules{ Required=true })" Width="100" />
-		<GridColumn Field=@nameof(TagModel.IoType) HeaderText="IO Type" ValidationRules="@(new ValidationRules{  })" Width="100" />
-		<GridColumn Field=@nameof(TagModel.SignalType) HeaderText="Signal Type" ValidationRules="@(new ValidationRules{  })" />
-		<GridColumn Field=@nameof(TagModel.SWPath) HeaderText="SW Path Type" ValidationRules="@(new ValidationRules{  })" />
-		<GridColumn Field=@nameof(TagModel.DBName) HeaderText="DB Name" ValidationRules="@(new ValidationRules{  })" />
-		<GridColumn Field=@nameof(TagModel.RangeLow) HeaderText="Range L" ValidationRules="@(new ValidationRules{ Number=true })" />
-		<GridColumn Field=@nameof(TagModel.RangeHigh) HeaderText="Range H" ValidationRules="@(new ValidationRules{ Number=true  })" />
-		<GridColumn Field=@nameof(TagModel.LowLowLimit) HeaderText="Alm LL" ValidationRules="@(new ValidationRules{ Number=true  })" />
-		<GridColumn Field=@nameof(TagModel.LowLimit) HeaderText="Alm L" ValidationRules="@(new ValidationRules{ Number=true  })" />
-		<GridColumn Field=@nameof(TagModel.HighLimit) HeaderText="Alm H" ValidationRules="@(new ValidationRules{ Number=true  })" />
-		<GridColumn Field=@nameof(TagModel.HighHighLimit) HeaderText="Alm HH" ValidationRules="@(new ValidationRules{ Number=true  })" />
-		<GridColumn Field=@nameof(TagModel.ModbusAddress) HeaderText="Modbus Address" ValidationRules="@(new ValidationRules{ Number=true  })" />
-		<GridColumn Field=@nameof(TagModel.ModbusBit) HeaderText="Modbus Bit" ValidationRules="@(new ValidationRules{ Number=true  })" />
-		<GridColumn Field=@nameof(TagModel.AbsoluteAddress) HeaderText="Abs Address" ValidationRules="@(new ValidationRules{ Number=true  })" />
-		<GridColumn Field=@nameof(TagModel.EngUnit) HeaderText="Eng unit" ValidationRules="@(new ValidationRules{ Number=true  })" />
+		<GridColumn Field=@nameof(DisplayTagModel.FullTagName) HeaderText="Tag Name" IsPrimaryKey="true" Width="160" />
+		<GridColumn Field=@nameof(DisplayTagModel.EqSuffix) HeaderText="Eq Suffix" EditType="EditType.DefaultEdit" />
+		<GridColumn Field=@nameof(DisplayTagModel.Description) HeaderText="Description" Width="100" />
+		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="IO Type" Width="100" />
+		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" />
+		<GridColumn Field=@nameof(DisplayTagModel.SWPath) HeaderText="SW Path Type"  />
+		<GridColumn Field=@nameof(DisplayTagModel.DBName) HeaderText="DB Name" />
+		<GridColumn Field=@nameof(DisplayTagModel.RangeLow) HeaderText="Range L" />
+		<GridColumn Field=@nameof(DisplayTagModel.RangeHigh) HeaderText="Range H" />
+		<GridColumn Field=@nameof(DisplayTagModel.LowLowLimit) HeaderText="Alm LL"  />
+		<GridColumn Field=@nameof(DisplayTagModel.LowLimit) HeaderText="Alm L"  />
+		<GridColumn Field=@nameof(DisplayTagModel.HighLimit) HeaderText="Alm H"  />
+		<GridColumn Field=@nameof(DisplayTagModel.HighHighLimit) HeaderText="Alm HH"  />
+		<GridColumn Field=@nameof(DisplayTagModel.ModbusAddress) HeaderText="Modbus Address" />
+		<GridColumn Field=@nameof(DisplayTagModel.ModbusBit) HeaderText="Modbus Bit" />
+		<GridColumn Field=@nameof(DisplayTagModel.AbsoluteAddress) HeaderText="Abs Address" />
+		<GridColumn Field=@nameof(DisplayTagModel.EngUnit) HeaderText="Eng unit" />
 	</GridColumns>
 </SfGrid>
 
@@ -90,11 +95,11 @@
 @code {
 	List<string>? Cabinets;
 	List<string>? Otds;
-	List<TagModel> Tags;
-	SfGrid<TagModel>? TagGrid;
-	SfGrid<ObjectModel>? ObjectGrid;
-	public ObjectModel? SelectedObject { get; set; }
-	public TagModel? SelectedTag { get; set; }
+	List<DisplayTagModel>? Tags;
+	SfGrid<DisplayTagModel>? TagGrid;
+	SfGrid<DisplayObjectModel>? ObjectGrid;
+	public DisplayObjectModel? SelectedObject { get; set; }
+	public DisplayTagModel? SelectedTag { get; set; }
 	private List<Object> TagToolbarItems = new List<Object>() { "Add", "Delete", "Edit", "Update", "Cancel", new ItemModel() { Text = "Duplicate", TooltipText = "Duplicate", PrefixIcon = "e-duplicate", Id = "Duplicate" } };
 	public string message = "";
 
@@ -102,14 +107,14 @@
 	{
 		Params = new DropDownListModel<object, object>()
 		{
-			DataSource = new List<ObjectModel>()
+			DataSource = new List<DisplayObjectModel>()
 		}
 	};
 	public DropDownEditCellParams? OtdEditParams = new DropDownEditCellParams
 	{
 		Params = new DropDownListModel<object, object>()
 		{
-			DataSource = new List<ObjectModel>()
+			DataSource = new List<DisplayObjectModel>()
 		}
 	};
 
@@ -117,18 +122,22 @@
 	{
 		Cabinets = new List<string>(await _categoryDB.GetCabinetNames());
 		Otds = new List<string>(await _categoryDB.GetOtdNames());
-		List<ObjectModel> cabinets = Cabinets.Select(cabinetName => new ObjectModel() { Cabinet = cabinetName }).ToList();
-		List<ObjectModel> otds = Otds.Select(otdName => new ObjectModel() { Otd = otdName }).ToList();
+		List<DisplayObjectModel> cabinets = Cabinets.Select(cabinetName => new DisplayObjectModel() { Cabinet = cabinetName }).ToList();
+		List<DisplayObjectModel> otds = Otds.Select(otdName => new DisplayObjectModel() { Otd = otdName }).ToList();
 
 		CabinetEditParams.Params.DataSource = cabinets;
 		OtdEditParams.Params.DataSource = otds;
 	}
 
-	public async Task GetSelectedObject(RowSelectEventArgs<ObjectModel> args)
+	public async Task GetSelectedObject(RowSelectEventArgs<DisplayObjectModel> args)
 	{
 		var SelectedObjects = await this.ObjectGrid.GetSelectedRecordsAsync();
 		SelectedObject = SelectedObjects.FirstOrDefault();
-		Tags = await _tagDB.GetTagsByObjectId(SelectedObject.Id);
+		Tags = await _tagDB.GetTagsByObjectIdAsync(SelectedObject.Id);
+		foreach (var tag in Tags)
+		{
+			tag.ObjectName = SelectedObject.FullObjectName;
+		}
 
 		StateHasChanged();
 	}
@@ -143,51 +152,44 @@
 			{
 				foreach (var tag in tagChanges.ChangedRecords)
 				{
-					await _tagDB.UpdateTag(tag);
+					await _tagDB.UpdateTagAsync(tag);
 				}
 			}
 			if (tagChanges.DeletedRecords.Count > 0)
 			{
 				foreach (var tag in tagChanges.DeletedRecords)
 				{
-					await _tagDB.DeleteTag(tag.Id);
+					await _tagDB.DeleteTagAsync(tag.Id);
 				}
 			}
 			if (tagChanges.AddedRecords.Count > 0)
 			{
 				foreach (var tag in tagChanges.AddedRecords)
 				{
-					await _tagDB.InsertTag(SelectedObject.Id, tag);
+					await _tagDB.InsertTagAsync(SelectedObject.Id, tag);
 				}
 			}
-		}
-	}
-
-	private async Task InsertTag(TagModel newTag)
-	{
-		if (SelectedObject is not null && newTag is not null)
-		{
-			await _tagDB.InsertTag(SelectedObject.Id, newTag);
 		}
 	}
 
 	// Implementing custom adaptor by extending the DataAdaptor class
 	public class CustomAdaptor : DataAdaptor
 	{
-		public IObjectDataManager _objectDM { get; set; }
-		public static List<ObjectModel>? Objects { get; set; }
-		IEnumerable<ObjectModel> GridData { get; set; }
+		public IObjectService _objectService { get; set; }
+		public static List<DisplayObjectModel>? Objects = new List<DisplayObjectModel>();
+		IEnumerable<DisplayObjectModel> GridData { get; set; }
 
-		public CustomAdaptor(IObjectDataManager _context)
+		public CustomAdaptor(IObjectService objectService)
 		{
-			_objectDM = _context;
+			_objectService = objectService;
 		}
 
 		// Performs data Read operation
 		public override async Task<Object> ReadAsync(DataManagerRequest dataManagerRequest, string key = null)
 		{
-			Objects = await _objectDM.GetObjects();
+			Objects = await _objectService.GetObjectsAsync();
 			GridData = Objects;
+
 			if (dataManagerRequest.Sorted?.Count > 0) // perform Sorting
 			{
 				GridData = DataOperations.PerformSorting(GridData, dataManagerRequest.Sorted);
@@ -210,37 +212,24 @@
 
 		public override async Task<Object> InsertAsync(DataManager dataManager, object value, string key)
 		{
-			await _objectDM.InsertObject(value as ObjectModel);
+			await _objectService.InsertObjectAsync(value as DisplayObjectModel);
 			return value;
 		}
 
 		public override async Task<object> RemoveAsync(DataManager dataManager, object value, string keyField, string key)
 		{
 			int objectId = (int)value;
-			await _objectDM.DeleteObject(objectId);
+			await _objectService.DeleteObjectAsync(objectId);
 			return value;
 		}
 
 		public override async Task<object> UpdateAsync(DataManager dataManager, object value, string keyField, string key)
 		{
-			ObjectModel updatedObject = (value as ObjectModel);
-			await _objectDM.UpdateObject(updatedObject);
+			DisplayObjectModel updatedObject = (value as DisplayObjectModel);
+			await _objectService.UpdateObjectAsync(updatedObject);
 			return updatedObject;
 		}
+
 	}
 
-
-	private bool FullObjectNameIsUnique(object value, object dataItem)
-	{
-		var inputName = value?.ToString();
-		if (string.IsNullOrEmpty(inputName))
-			return false;
-
-		// Check if the input name is unique among other items
-		var existingNames = _objectDB.GetObjectsSync().Select(o => o.FullObjectName).ToList();
-		if (existingNames.Contains(inputName))
-			return false;
-
-		return true; // Validation passed
-	}
 }
