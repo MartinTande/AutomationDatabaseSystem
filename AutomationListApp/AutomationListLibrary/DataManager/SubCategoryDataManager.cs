@@ -12,7 +12,7 @@ public class SubCategoryDataManager
         _sqlConnector = sqlConnector;
     }
 
-    public async Task<List<SignalType>> GetSignalTypeCategory(string ioType)
+    public async Task<List<SignalType>> GetSignalTypesAsync(string ioType)
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
@@ -24,7 +24,19 @@ public class SubCategoryDataManager
         return await _sqlConnector.ReadDataAsync<SignalType, dynamic>("GetSignalTypesByGroup", p);
     }
 
-    public async Task<List<OtdInterface>> GetOtdInterfaces(string otdType)
+	public List<SignalType> GetSignalTypes(string ioType)
+	{
+		// Anonymous object, object with no name type
+		// No parameters, but need an object
+		var p = new
+		{
+			Name = ioType
+		};
+
+		return _sqlConnector.ReadData<SignalType, dynamic>("GetSignalTypesByGroup", p);
+	}
+
+	public async Task<List<OtdInterface>> GetOtdInterfaces(string otdType)
     {
         var p = new
         {

@@ -15,7 +15,7 @@ public class TagService : ITagService
 
 	public async Task<List<DisplayTagModel>> GetTagsByObjectIdAsync(int objectId)
 	{
-		var dtoTags = await _tagDataManager.GetTagsByObjectId(objectId);
+		var dtoTags = await _tagDataManager.GetTagsByObjectIdAsync(objectId);
 		List<DisplayTagModel> displayTags = new List<DisplayTagModel>();
 
 		foreach (var tag in dtoTags)
@@ -28,19 +28,19 @@ public class TagService : ITagService
 
 	public async Task DeleteTagAsync(int tagId)
 	{
-		await _tagDataManager.DeleteTag(tagId);
+		await _tagDataManager.DeleteTagAsync(tagId);
 	}
 
 	public async Task InsertTagAsync(int objectId, DisplayTagModel tag)
 	{
 		TagModel newDto = MapDisplayTagToDTO(tag);
-		await _tagDataManager.InsertTag(objectId, newDto);
+		await _tagDataManager.InsertTagAsync(objectId, newDto);
 	}
 
 	public async Task UpdateTagAsync(DisplayTagModel tag)
 	{
 		TagModel updatedDto = MapDisplayTagToDTO(tag);
-		await _tagDataManager.UpdateTag(updatedDto);
+		await _tagDataManager.UpdateTagAsync(updatedDto);
 	}
 
 	private TagModel? MapDisplayTagToDTO(DisplayTagModel displayTag)
@@ -50,6 +50,7 @@ public class TagService : ITagService
 		TagModel tagModel = new TagModel()
 		{
 			Id = displayTag.Id,
+			ObjectId = displayTag.ObjectId,
 			EqSuffix = displayTag.EqSuffix,
 			Description = displayTag.Description,
 			IoType = displayTag.IoType,
@@ -114,7 +115,7 @@ public class TagService : ITagService
 			List<TagModel> tags = _otdTagStructure[otdName];
 			foreach (TagModel tag in tags)
 			{
-				await _tagDataManager.InsertTag(objectId, tag);
+				await _tagDataManager.InsertTagAsync(objectId, tag);
 			}
 		}
 	}

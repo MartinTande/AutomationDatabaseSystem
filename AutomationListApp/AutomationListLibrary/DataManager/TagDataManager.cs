@@ -13,24 +13,24 @@ public class TagDataManager
         _sqlConnector = sqlConnector;
     }
 
-    public Task<List<TagModel>> GetTagsByObjectId(int objectId)
+    public async Task<List<TagModel>> GetTagsByObjectIdAsync(int objectId)
     {
         // Anonymous object, object with no name type
         // Id is parameter of object, id is input to that parameter
         var p = new { ObjectId = objectId };
 
-        Task<List<TagModel>> tagList = _sqlConnector.ReadDataAsync<TagModel, dynamic>("GetTagsByObjectId", p);
+        List<TagModel> tagList = await _sqlConnector.ReadDataAsync<TagModel, dynamic>("GetTagsByObjectId", p);
         return tagList;
     }
 
-    public async Task DeleteTag(int tagId)
+    public async Task DeleteTagAsync(int tagId)
     {
         var p = new { Id = tagId };
 
         await _sqlConnector.WriteDataAsync("DeleteTag", p);
     }
 
-    public async Task InsertTag(int objectId, TagModel tag)
+    public async Task InsertTagAsync(int objectId, TagModel tag)
     {
         // Anonymous object, object with no name type
         var p = new
@@ -60,7 +60,7 @@ public class TagDataManager
         await _sqlConnector.WriteDataAsync("CreateTag", p);
     }
 
-    public async Task UpdateTag(TagModel tag)
+    public async Task UpdateTagAsync(TagModel tag)
     {
         // Anonymous object, object with no name type
         var p = new
@@ -91,14 +91,14 @@ public class TagDataManager
     }
 
     // Default tag structure for auto generating object tags based on OTD type
-    public async Task AddTagsBasedOnOTD(int objectId, string otdName)
+    public async Task AddTagsBasedOnOTDAsync(int objectId, string otdName)
     {
         if (_otdTagStructure.ContainsKey(otdName))
         {
             List<TagModel> tags = _otdTagStructure[otdName];
             foreach (TagModel tag in tags)
             {
-                await InsertTag(objectId, tag);
+                await InsertTagAsync(objectId, tag);
             }
         }
 

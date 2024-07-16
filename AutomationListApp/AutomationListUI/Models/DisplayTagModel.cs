@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AutomationListUI.Validators;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
 namespace AutomationListUI.Models;
 
 public class DisplayTagModel
 {
-	public int Id { get; set; }
+    public int Id { get; set; }
+	public int ObjectId { get; set; }
 	[Required]
 	public int? EqSuffix { get; set; }
 	[Required]
@@ -13,6 +15,7 @@ public class DisplayTagModel
 	public string? Description { get; set; }
 	[Required]
 	public string? IoType { get; set; }
+	[SignalTypeValidator]
 	public string? SignalType { get; set; }
 	public string? EngUnit { get; set; }
 	public int? RangeLow { get; set; }
@@ -33,38 +36,41 @@ public class DisplayTagModel
 	public DateTime? LastModified { get; set; }
 	public string? ObjectName { get; set; }
 
-	public bool? IsHW => !IoType?.StartsWith("S");
+	public bool IsHW => !(!string.IsNullOrEmpty(IoType) && IoType.StartsWith("S"));
 
-	public bool? IsInput => IoType?.EndsWith("I");
+	public bool IsInput => (!string.IsNullOrEmpty(IoType) && IoType.EndsWith("I"));
 
-	public bool? IsDigital => IoType?.Contains("D");
+	public bool IsDigital => (!string.IsNullOrEmpty(IoType) && IoType.Contains("D"));
 
 	public string FullTagName => $"{GetPrefix()}{ObjectName}_{EqSuffix}";
 
-	private string GetPrefix()
+	private string? GetPrefix()
 	{
-		string ioPrefix = (bool)IsInput ? "x" : "y";
+		string ioPrefix = IsInput ? "x" : "y";
 		Dictionary<string, string> signalPrefix = new Dictionary<string, string>()
-	{
-		{ "NC", "bo" },
-		{ "NO", "bo" },
-		{ "BYTE", "by" },
-		{ "WORD", "wo" },
-		{ "DWORD", "dw" },
-		{ "LWORD", "lw" },
-		{ "SINT", "si" },
-		{ "INT", "in" },
-		{ "DINT", "di" },
-		{ "LINT", "li" },
-		{ "USINT", "us" },
-		{ "UINT", "ui" },
-		{ "UDINT", "ud" },
-		{ "ULINT", "ul" },
-		{ "REAL", "re" },
-		{ "LREAL", "lr" },
-		{ "CHAR", "ch" },
-		{ "STRING", "sti" }
-	};
+		{
+			{ "NC", "bo" },
+			{ "NO", "bo" },
+			{ "BYTE", "by" },
+			{ "WORD", "wo" },
+			{ "DWORD", "dw" },
+			{ "LWORD", "lw" },
+			{ "SINT", "si" },
+			{ "INT", "in" },
+			{ "DINT", "di" },
+			{ "LINT", "li" },
+			{ "USINT", "us" },
+			{ "UINT", "ui" },
+			{ "UDINT", "ud" },
+			{ "ULINT", "ul" },
+			{ "REAL", "re" },
+			{ "LREAL", "lr" },
+			{ "FLOAT", "fl" },
+			{ "DOUBLE", "do" },
+			{ "CHAR", "ch" },
+			{ "STRING", "sti" }
+		};
+		if (string.IsNullOrEmpty(SignalType)) return null;
 
 		return ioPrefix + signalPrefix[SignalType.ToUpper()];
 	}
@@ -73,11 +79,11 @@ public class DisplayTagModel
 	{
 		get
 		{
-			if ((bool)!IsHW)
+			if (!IsHW || string.IsNullOrEmpty(SignalType) || string.IsNullOrEmpty(AbsoluteAddress))
 			{
 				return false;
 			}
-			string regexPattern = (bool)IsInput ? "I" : "Q";
+			string regexPattern = IsInput ? "I" : "Q";
 			switch (SignalType.ToUpper())
 			{
 				case "BYTE":
@@ -117,7 +123,7 @@ public class DisplayTagModel
 		get
 		{
 			bool _hasPath = false;
-			if (!(bool)IsHW && (!string.IsNullOrEmpty(SWPath) || !string.IsNullOrEmpty(DBName)))
+			if (!IsHW && (!string.IsNullOrEmpty(SWPath) || !string.IsNullOrEmpty(DBName)))
 			{
 				_hasPath = true;
 			}

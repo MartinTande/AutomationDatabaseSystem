@@ -5,7 +5,8 @@ namespace AutomationListLibrary.Data;
 public class TagModel
 {
     public int Id { get; set; }
-    public int? EqSuffix { get; set; }
+    public int ObjectId { get; set; }
+	public int? EqSuffix { get; set; }
     public string? Description { get; set; }
     public string? IoType { get; set; }
     public string? SignalType { get; set; }

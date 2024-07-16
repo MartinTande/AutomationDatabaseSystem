@@ -14,6 +14,7 @@
 @inject IObjectService _objectDB
 @inject ITagService _tagDB
 @inject CategoryDataManager _categoryDB
+@inject SubCategoryDataManager _subCategoryDB
 
 <h1>Customer Objects Page</h1>
 <hr />        
@@ -31,13 +32,15 @@
 	AllowSorting="true"
 	Height="400"
 	Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update","ExcelExport","Search"})">
-	<GridEvents RowSelected="GetSelectedObject" TValue="DisplayObjectModel"></GridEvents>
+	<GridEvents RowSelected="GetSelectedObject" TValue="DisplayObjectModel" ></GridEvents>
 	<SfDataManager AdaptorInstance="@typeof(CustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
 	<GridEditSettings 
 		AllowAdding="true" 
 		AllowEditing="true" 
-		AllowDeleting="true" 
-		Mode="EditMode.Normal"/>
+		AllowDeleting="true"
+		ShowConfirmDialog="false" 
+		ShowDeleteConfirmDialog="true" 
+		Mode="EditMode.Normal" />
 	<GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.CheckBox"/>
 	<GridPageSettings PageSizes="true"/>
 	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"/>
@@ -62,10 +65,16 @@
 		AllowSelection="true"
 		Height="300"
 		Toolbar=@TagToolbarItems>
-	<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="DisplayTagModel"></GridEvents>
+	<GridEvents 
+		OnToolbarClick="ToolbarClickHandler" 
+		RowSelected="GetSelectedTag" 
+		TValue="DisplayTagModel" 
+		CellSaved="CellSavedHandler" />
 	<GridEditSettings AllowAdding="true"
 					  AllowEditing="true"
-					  AllowDeleting="true"
+					  AllowDeleting="true" 
+					  ShowConfirmDialog="false"
+					  ShowDeleteConfirmDialog="true"
 					  Mode="EditMode.Batch" />
 	<GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.CheckBox" />
 	<GridPageSettings PageSizes="true" />
@@ -74,8 +83,22 @@
 		<GridColumn Field=@nameof(DisplayTagModel.FullTagName) HeaderText="Tag Name" IsPrimaryKey="true" Width="160" />
 		<GridColumn Field=@nameof(DisplayTagModel.EqSuffix) HeaderText="Eq Suffix" EditType="EditType.DefaultEdit" />
 		<GridColumn Field=@nameof(DisplayTagModel.Description) HeaderText="Description" Width="100" />
-		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="IO Type" Width="100" />
-		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" />
+		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="IO Type" EditType="EditType.DropDownEdit">
+		    <EditTemplate>
+				<SfDropDownList TItem="DisplayTagModel" TValue="string" @bind-Value="@((context as DisplayTagModel).IoType)" DataSource="@ioTypes">
+					<DropDownListFieldSettings Value="IoType" Text="IoType"></DropDownListFieldSettings>
+                </SfDropDownList>
+            </EditTemplate>
+		</GridColumn>
+		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" EditType="EditType.DropDownEdit" EditorSettings="@SignalTypeEditParams" />
+		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" EditType="EditType.DropDownEdit">
+			<EditTemplate>
+				<SfDropDownList TItem="DisplayTagModel" TValue="string" @bind-Value="@((context as DisplayTagModel).SignalType)" DataSource="@signalTypes">
+					<DropDownListFieldSettings Value="SignalType" Text="SignalType"></DropDownListFieldSettings>
+				</SfDropDownList>
+			</EditTemplate>
+		</GridColumn>
+		<GridColumn Field=@nameof(DisplayTagModel.EngUnit) HeaderText="Eng unit" />
 		<GridColumn Field=@nameof(DisplayTagModel.SWPath) HeaderText="SW Path Type"  />
 		<GridColumn Field=@nameof(DisplayTagModel.DBName) HeaderText="DB Name" />
 		<GridColumn Field=@nameof(DisplayTagModel.RangeLow) HeaderText="Range L" />
@@ -87,7 +110,6 @@
 		<GridColumn Field=@nameof(DisplayTagModel.ModbusAddress) HeaderText="Modbus Address" />
 		<GridColumn Field=@nameof(DisplayTagModel.ModbusBit) HeaderText="Modbus Bit" />
 		<GridColumn Field=@nameof(DisplayTagModel.AbsoluteAddress) HeaderText="Abs Address" />
-		<GridColumn Field=@nameof(DisplayTagModel.EngUnit) HeaderText="Eng unit" />
 	</GridColumns>
 </SfGrid>
 
@@ -95,6 +117,10 @@
 @code {
 	List<string>? Cabinets;
 	List<string>? Otds;
+	List<string>? IoTypes;
+	public List<DisplayTagModel> ioTypes { get; set; } = new List<DisplayTagModel>();
+	public List<DisplayTagModel> signalTypes { get; set; } = new List<DisplayTagModel>();
+	List<string>? SignalTypes;
 	List<DisplayTagModel>? Tags;
 	SfGrid<DisplayTagModel>? TagGrid;
 	SfGrid<DisplayObjectModel>? ObjectGrid;
@@ -102,6 +128,31 @@
 	public DisplayTagModel? SelectedTag { get; set; }
 	private List<Object> TagToolbarItems = new List<Object>() { "Add", "Delete", "Edit", "Update", "Cancel", new ItemModel() { Text = "Duplicate", TooltipText = "Duplicate", PrefixIcon = "e-duplicate", Id = "Duplicate" } };
 	public string message = "";
+
+	bool IsAdd { get; set; }
+
+	public async Task CellSavedHandler(CellSavedArgs<DisplayTagModel> args)
+	{
+		var index = await TagGrid.GetRowIndexByPrimaryKey(args.RowData.Id);
+		if (args.ColumnName == "IoType")
+		{
+			string selectedIoType = args.Value.ToString();
+			SignalTypes = (await _subCategoryDB.GetSignalTypeNames(selectedIoType)).ToList();
+			signalTypes = SignalTypes.Select(signalTypeName => new DisplayTagModel() { SignalType = signalTypeName }).ToList();
+			SignalTypeEditParams.Params.DataSource = signalTypes;
+			await TagGrid.UpdateCellAsync(index, "SignalType", null);
+			await TagGrid.UpdateCellAsync(index, "Signal Type 2", null);
+			args.RowData.SignalType = null;
+		}
+		else if (args.ColumnName == "UnitPrice")
+		{
+			if (IsAdd)
+			{
+				await TagGrid.UpdateCell(index, "Amount", Convert.ToDouble(args.Value) * 1);
+				await TagGrid.UpdateCell(index, "Sum", Convert.ToDouble(args.Value) + 0);
+			}
+		}
+	}
 
 	public DropDownEditCellParams? CabinetEditParams = new DropDownEditCellParams
 	{
@@ -117,26 +168,57 @@
 			DataSource = new List<DisplayObjectModel>()
 		}
 	};
+	public DropDownEditCellParams? IoTypeEditParams = new DropDownEditCellParams
+	{
+		Params = new DropDownListModel<object, object>()
+		{
+				DataSource = new List<DisplayTagModel>()
+		}
+	};
+	public DropDownEditCellParams? SignalTypeEditParams = new DropDownEditCellParams
+	{
+		Params = new DropDownListModel<object, object>()
+		{
+			DataSource = new List<DisplayTagModel>()
+		}
+	};
 
 	protected override async Task OnInitializedAsync()
 	{
 		Cabinets = new List<string>(await _categoryDB.GetCabinetNames());
 		Otds = new List<string>(await _categoryDB.GetOtdNames());
+		IoTypes = new List<string>(await _categoryDB.GetIoTypeNames());
 		List<DisplayObjectModel> cabinets = Cabinets.Select(cabinetName => new DisplayObjectModel() { Cabinet = cabinetName }).ToList();
 		List<DisplayObjectModel> otds = Otds.Select(otdName => new DisplayObjectModel() { Otd = otdName }).ToList();
+		ioTypes = IoTypes.Select(ioTypeName => new DisplayTagModel() { IoType = ioTypeName }).ToList();
 
 		CabinetEditParams.Params.DataSource = cabinets;
 		OtdEditParams.Params.DataSource = otds;
+		IoTypeEditParams.Params.DataSource = ioTypes;
 	}
 
 	public async Task GetSelectedObject(RowSelectEventArgs<DisplayObjectModel> args)
 	{
-		var SelectedObjects = await this.ObjectGrid.GetSelectedRecordsAsync();
-		SelectedObject = SelectedObjects.FirstOrDefault();
+		SelectedObject = (await this.ObjectGrid.GetSelectedRecordsAsync()).FirstOrDefault();
+
 		Tags = await _tagDB.GetTagsByObjectIdAsync(SelectedObject.Id);
 		foreach (var tag in Tags)
 		{
 			tag.ObjectName = SelectedObject.FullObjectName;
+		}
+
+		StateHasChanged();
+	}
+
+	public async Task GetSelectedTag(RowSelectEventArgs<DisplayTagModel> args)
+	{
+		SelectedTag = (await this.TagGrid.GetSelectedRecordsAsync()).FirstOrDefault();
+
+		if (SelectedTag.IoType != null)
+		{
+			SignalTypes = (await _subCategoryDB.GetSignalTypeNames(SelectedTag.IoType)).ToList();
+			signalTypes = SignalTypes.Select(signalTypeName => new DisplayTagModel() { SignalType = signalTypeName }).ToList();
+			SignalTypeEditParams.Params.DataSource = signalTypes;
 		}
 
 		StateHasChanged();
@@ -168,6 +250,12 @@
 				{
 					await _tagDB.InsertTagAsync(SelectedObject.Id, tag);
 				}
+			}
+
+			Tags = await _tagDB.GetTagsByObjectIdAsync(SelectedObject.Id);
+			foreach (var tag in Tags)
+			{
+				tag.ObjectName = SelectedObject.FullObjectName;
 			}
 		}
 	}
