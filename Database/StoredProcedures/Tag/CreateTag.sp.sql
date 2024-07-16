@@ -51,20 +51,10 @@ BEGIN
 
 	-- Insert the tag
 	INSERT INTO TAG
-		(EqSuffix, Description, IoTypeId, SignalTypeId, EngUnitId, RangeLow, RangeHigh, LowLowLimit, LowLimit, HighLimit, HighHighLimit,
+		(ObjectId, EqSuffix, Description, IoTypeId, SignalTypeId, EngUnitId, RangeLow, RangeHigh, LowLowLimit, LowLimit, HighLimit, HighHighLimit,
 		Slot, AbsoluteAddress, SWPath, DBName, ModbusAddress, ModbusBit, IsE0, IsVDR, LastModified)
 	VALUES
-		(@EqSuffix, @Description, @IoTypeId, @SignalTypeId, @EngUnitId, @RangeLow, @RangeHigh, @LowLowLimit, @LowLimit, @HighLimit, @HighHighLimit,
-			@Slot, @AbsoluteAddress, @SWPath, @DBName, @ModbusAddress, @ModbusBit,
-			@IsE0, @IsVDR, getdate());
-
-	-- Get the inserted tag's ID
-	SELECT @InsertedTagId=IDENT_CURRENT('TAG')
-
-	-- Insert tag and object Id into joint table
-	INSERT INTO OBJECT_TAG
-		(TagId, ObjectId)
-	VALUES
-		(@InsertedTagId, @ObjectId);
+		(@ObjectId, @EqSuffix, @Description, @IoTypeId, @SignalTypeId, @EngUnitId, @RangeLow, @RangeHigh, @LowLowLimit, @LowLimit, @HighLimit, @HighHighLimit,
+			@Slot, @AbsoluteAddress, @SWPath, @DBName, @ModbusAddress, @ModbusBit, @IsE0, @IsVDR, getdate());
 
 END
