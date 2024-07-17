@@ -6,7 +6,7 @@ public class TagModel
 {
     public int Id { get; set; }
     public int ObjectId { get; set; }
-	public int? EqSuffix { get; set; }
+	public string? EqSuffix { get; set; }
     public string? Description { get; set; }
     public string? IoType { get; set; }
     public string? SignalType { get; set; }
@@ -27,7 +27,6 @@ public class TagModel
     public bool? IsVDR { get; set; }
     public DateTime? LastModified { get; }
     public string? ObjectName { get; set; }
-
 
     public bool IsHW => !IoType.StartsWith("S");
 

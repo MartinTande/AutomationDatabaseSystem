@@ -10,7 +10,7 @@ GO
 CREATE PROCEDURE CreateTag
 	-- Input parameters
 	@ObjectId int,
-	@EqSuffix int,
+	@EqSuffix varchar(50),
 	@Description varchar(100),
 	@IoType varchar(50),
 	@SignalType varchar(50),

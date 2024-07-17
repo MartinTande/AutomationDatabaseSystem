@@ -32,7 +32,8 @@ AS
 		TAG.ModbusAddress,
 		TAG.ModbusBit,
 		TAG.IsE0,
-		TAG.IsVDR
+		TAG.IsVDR,
+		TAG.LastModified
 	FROM TAG
 		LEFT JOIN IO_TYPE ON TAG.IoTypeId = IO_TYPE.Id
 		LEFT JOIN SIGNAL_TYPE ON TAG.SignalTypeId = SIGNAL_TYPE.Id

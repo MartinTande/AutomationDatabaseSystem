@@ -1,4 +1,5 @@
 ﻿using AutomationListUI.Validators;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
@@ -6,10 +7,12 @@ namespace AutomationListUI.Models;
 
 public class DisplayTagModel
 {
-    public int Id { get; set; }
+	public int Id { get; set; }
+	[Display(AutoGenerateField = false)]
 	public int ObjectId { get; set; }
 	[Required]
-	public int? EqSuffix { get; set; }
+	[TagSuffixValidator]
+	public string? EqSuffix { get; set; }
 	[Required]
 	[StringLength(46, ErrorMessage = "Description is too long")]
 	public string? Description { get; set; }
@@ -32,6 +35,7 @@ public class DisplayTagModel
 	public int? ModbusBit { get; set; }
 	public bool? IsE0 { get; set; }
 	public bool? IsVDR { get; set; }
+	[ReadOnly(true)]
 	[Editable(false)]
 	public DateTime? LastModified { get; set; }
 	public string? ObjectName { get; set; }

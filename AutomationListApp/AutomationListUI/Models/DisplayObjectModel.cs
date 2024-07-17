@@ -79,7 +79,7 @@ public class DisplayObjectModel
         }
         foreach (TagModel tag in Tags)
         {
-            if (tag.EqSuffix == Convert.ToInt16(suffix))
+            if (tag.EqSuffix.Equals(suffix))
             {
                 return true;
             }

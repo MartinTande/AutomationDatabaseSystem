@@ -10,7 +10,8 @@ GO
 CREATE PROCEDURE UpdateTag
 	-- Input parameters
 	@Id int,
-	@EqSuffix int,
+	@ObjectId int,
+	@EqSuffix varchar(50),
 	@Description varchar(100),
 	@IoType varchar(50),
 	@SignalType varchar(50),
@@ -48,6 +49,7 @@ FROM ENG_UNIT
 WHERE Name = @EngUnit
 
 UPDATE TAG SET
+	ObjectId = @ObjectId,
     EqSuffix = @EqSuffix,
     Description = @Description,
     IoTypeId = @IoTypeId,
