@@ -47,6 +47,7 @@ public class ObjectDataManager : IObjectDataManager
 			tagObject.EasGroup,
 			tagObject.AlarmGroup,
 			tagObject.Otd,
+			tagObject.ObjectType,
 			tagObject.AcknowledgeAllowed,
 			tagObject.AlwaysVisible,
 			tagObject.Node,
@@ -71,6 +72,7 @@ public class ObjectDataManager : IObjectDataManager
 			updatedObject.EasGroup,
 			updatedObject.AlarmGroup,
 			updatedObject.Otd,
+			updatedObject.ObjectType,
 			updatedObject.AcknowledgeAllowed,
 			updatedObject.AlwaysVisible,
 			updatedObject.Node,
@@ -84,7 +86,7 @@ public class ObjectDataManager : IObjectDataManager
 	{
 		var p = new { };
 
-		IEnumerable<int> lastInsertedObjectIds = await _sqlConnector.ReadDataAsync<int, dynamic>("GetLastInsertedObjectId", p);
+		List<int> lastInsertedObjectIds = await _sqlConnector.ReadDataAsync<int, dynamic>("GetLastInsertedObjectId", p);
 		return lastInsertedObjectIds.FirstOrDefault();
 	}
 

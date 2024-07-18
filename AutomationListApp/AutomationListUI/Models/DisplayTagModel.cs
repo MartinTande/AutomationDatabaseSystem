@@ -61,6 +61,8 @@ public class DisplayTagModel
 			{ "LWORD", "lw" },
 			{ "SINT", "si" },
 			{ "INT", "in" },
+			{ "4-20MA, 2W", "in" },
+			{ "4-20MA, 4W", "in" },
 			{ "DINT", "di" },
 			{ "LINT", "li" },
 			{ "USINT", "us" },

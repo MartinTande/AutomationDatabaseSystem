@@ -1,0 +1,151 @@
+﻿@page "/object-types"
+
+@using AutomationListLibrary.Data
+@using AutomationListLibrary.Data.Categories
+@using AutomationListLibrary.DataManager
+@using AutomationListUI.Services
+
+@inject ITagService _tagDB
+@inject CategoryDataManager _categoryDB
+@inject SubCategoryDataManager _subCategoryDB
+
+<h1>Object Types</h1>
+<hr />
+<br />
+
+<div class="card-group">
+	<div class="sub-group">
+		<SfGrid TValue="ObjectType"
+				@ref="@ObjectTypeGrid"
+				AllowSelection="true"
+				Width="400"
+				EnableStickyHeader=true
+				Toolbar=@ToolbarItems>
+			<GridEvents RowSelected="GetSelectedObjectType" TValue="ObjectType"></GridEvents>
+			<SfDataManager AdaptorInstance="@typeof(CustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+			<GridEditSettings AllowAdding="true"
+							  AllowEditing="true"
+							  AllowDeleting="true"
+							  ShowConfirmDialog="false"
+							  ShowDeleteConfirmDialog="true"
+							  Mode="EditMode.Normal" />
+			<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
+			<GridColumns>
+				<GridColumn Field=@nameof(ObjectType.Name) HeaderText="Object Type" />
+			</GridColumns>
+		</SfGrid>
+	</div>
+	<div class="sub-group">
+		<SfGrid DataSource="@Tags"
+				@ref="@TagGrid"
+				AllowReordering="true"
+				AllowResizing="true"
+				AllowSelection="true"
+				Toolbar=@ToolbarItems>
+			<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
+			<GridColumns>
+				<GridColumn Field=@nameof(DisplayTagModel.EqSuffix) HeaderText="Eq Suffix" Width="100" />
+				<GridColumn Field=@nameof(DisplayTagModel.Description) HeaderText="Description" Width="200"/>
+				<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="Io Type" Width="150"/>
+				<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" Width="150"/>
+			</GridColumns>
+		</SfGrid>
+	</div>
+</div>
+@code {
+	SfGrid<ObjectType>? ObjectTypeGrid;
+	SfGrid<DisplayTagModel>? TagGrid;
+	List<DisplayTagModel> Tags;
+	public ObjectType? SelectedObjectType { get; set; }
+	public string[] ToolbarItems = new string[] { "Add", "Edit", "Delete", "Update", "Cancel" };
+
+
+	public async Task GetSelectedObjectType(RowSelectEventArgs<ObjectType> args)
+	{
+		SelectedObjectType = (await this.ObjectTypeGrid.GetSelectedRecordsAsync()).FirstOrDefault();
+
+		Tags = await _tagDB.GetTagsByObjectTypeAsync(SelectedObjectType.Name);
+		
+		StateHasChanged();
+	}
+
+
+	public class CustomAdaptor : DataAdaptor
+	{
+		public CategoryDataManager _categoryDataManager { get; set; }
+		public static List<ObjectType>? ObjectTypes = new List<ObjectType>();
+		IEnumerable<ObjectType> GridData { get; set; }
+
+		public CustomAdaptor(CategoryDataManager categoryDataManager)
+		{
+			_categoryDataManager = categoryDataManager;
+		}
+
+		// Performs data Read operation
+		public override async Task<Object> ReadAsync(DataManagerRequest dataManagerRequest, string key = null)
+		{
+			ObjectTypes = await _categoryDataManager.GetObjectTypeCategory();
+			GridData = ObjectTypes;
+
+			// Sorting
+			if (dataManagerRequest.Sorted?.Count > 0)
+			{
+				GridData = DataOperations.PerformSorting(GridData, dataManagerRequest.Sorted);
+			}
+
+			// Filtering
+			if (dataManagerRequest.Where != null && dataManagerRequest.Where.Count > 0)
+			{
+				GridData = DataOperations.PerformFiltering(GridData, dataManagerRequest.Where, dataManagerRequest.Where[0].Operator);
+			}
+
+			// Searching
+			if (dataManagerRequest.Search != null && dataManagerRequest.Search.Count > 0)
+			{
+				GridData = DataOperations.PerformSearching(GridData, dataManagerRequest.Search);
+			}
+
+			return dataManagerRequest.RequiresCounts ? new DataResult() { Result = GridData, Count = ObjectTypes.Count() } : (object)GridData;
+		}
+
+		public override async Task<Object> InsertAsync(DataManager dataManager, object value, string key)
+		{
+			// await _objectService.InsertObjectAsync(value as DisplayObjectModel);
+			return value;
+		}
+
+		public override async Task<object> RemoveAsync(DataManager dataManager, object value, string keyField, string key)
+		{
+			// int objectId = (int)value;
+			// await _objectService.DeleteObjectAsync(objectId);
+			return value;
+		}
+
+		public override async Task<object> UpdateAsync(DataManager dataManager, object value, string keyField, string key)
+		{
+			// DisplayObjectModel updatedObject = (value as DisplayObjectModel);
+			// await _objectService.UpdateObjectAsync(updatedObject);
+			return value;
+		}
+	}
+}
+
+
+<style>
+    .card-group {
+        min-height: 600px;
+        margin: 20px;
+        float: left;
+    }
+
+	.sub-group {
+		margin: 10px;
+		max-width: 700px;
+	}
+
+	.e-grid .e-toolbar .e-tbar-btn-text,
+	.e-grid .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn-text {
+		display: none;
+	}
+
+</style>

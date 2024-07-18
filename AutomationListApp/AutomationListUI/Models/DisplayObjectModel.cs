@@ -1,14 +1,15 @@
 ﻿using AutomationListLibrary.Data;
 using AutomationListUI.Validators;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.InteropServices.ObjectiveC;
-using static AutomationListUI.Pages.CustomerObjects;
 
 
 namespace AutomationListUI.Models;
 
 public class DisplayObjectModel
 {
+    [ReadOnly(true)]
+    [Key]
     public int Id { get; set; }
     [Required]
     public int SfiNumber { get; set; }
@@ -32,7 +33,6 @@ public class DisplayObjectModel
     public string? Node { get; set; }
     [Required]
     public string? Cabinet { get; set; }
-    [Key]
 	[Required]
 	[StringLength(20, ErrorMessage = "Object name is too long")]
     [ObjectNameValidator]

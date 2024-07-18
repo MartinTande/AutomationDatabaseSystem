@@ -26,6 +26,19 @@ public class TagService : ITagService
 		return displayTags;
 	}
 
+	public async Task<List<DisplayTagModel>> GetTagsByObjectTypeAsync(string objectType)
+	{
+		var dtoTags = await _tagDataManager.GetTagsByObjectTypeAsync(objectType);
+		List<DisplayTagModel> displayTags = new List<DisplayTagModel>();
+
+		foreach (var tag in dtoTags)
+		{
+			displayTags.Add(MapDTOToDisplayTag(tag));
+		}
+
+		return displayTags;
+	}
+
 	public async Task DeleteTagAsync(int tagId)
 	{
 		await _tagDataManager.DeleteTagAsync(tagId);

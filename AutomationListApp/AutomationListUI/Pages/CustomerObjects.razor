@@ -2,6 +2,7 @@
 
 @using AutomationListLibrary
 @using AutomationListLibrary.Data
+@using AutomationListLibrary.Data.Categories
 @using AutomationListLibrary.DataAccess
 @using AutomationListLibrary.DataManager
 @using AutomationListUI.Models
@@ -49,11 +50,13 @@
 		<GridColumn Field=@nameof(DisplayObjectModel.SfiNumber) HeaderText="Sfi Nr" EditType="EditType.DefaultEdit" Width="120" />
 		<GridColumn Field=@nameof(DisplayObjectModel.MainEqNumber) HeaderText="Main Eq Nr" Width="120" />
 		<GridColumn Field=@nameof(DisplayObjectModel.EqNumber) HeaderText="Eq Nr" Width="120" />
-		<GridColumn Field=@nameof(DisplayObjectModel.FullObjectName) HeaderText="Object Name" IsPrimaryKey="true" />
+		<GridColumn Field=@nameof(DisplayObjectModel.FullObjectName) HeaderText="Object Name"  />
 		<GridColumn Field=@nameof(DisplayObjectModel.Description) HeaderText="Description" />
 		<GridColumn Field=@nameof(DisplayObjectModel.VduGroup) HeaderText="Vdu Group" />
-		<GridColumn Field=@nameof(DisplayObjectModel.Otd) HeaderText="OTD" EditType="EditType.DropDownEdit" EditorSettings="@OtdEditParams"/>
+		<GridColumn Field=@nameof(DisplayObjectModel.ObjectType) HeaderText="Object Type" EditType="EditType.DropDownEdit" EditorSettings="@ObjectTypeEditParams" />
+		<GridColumn Field=@nameof(DisplayObjectModel.Otd) HeaderText="OTD" EditType="EditType.DropDownEdit" EditorSettings="@OtdEditParams" />
 		<GridColumn Field=@nameof(DisplayObjectModel.Cabinet) HeaderText="Cabinet" EditType="EditType.DropDownEdit" EditorSettings="@CabinetEditParams" />
+		<GridColumn Field=@nameof(DisplayObjectModel.Id) HeaderText="ID" IsPrimaryKey="true" />
 	</GridColumns>
 </SfGrid>
 <br />
@@ -96,7 +99,7 @@
 			</Template>
 		</GridColumn>
 		<GridColumn Field=@nameof(DisplayTagModel.EqSuffix) HeaderText="Eq Suffix" EditType="EditType.DefaultEdit" />
-		<GridColumn Field=@nameof(DisplayTagModel.Description) HeaderText="Description" Width="100" />
+		<GridColumn Field=@nameof(DisplayTagModel.Description) HeaderText="Description" Width="150" />
 @* 		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="IO Type" EditType="EditType.DropDownEdit">
 		    <EditTemplate>
 				<SfDropDownList TItem="DisplayTagModel" TValue="string" @bind-Value="@((context as DisplayTagModel).IoType)" DataSource="@ioTypes">
@@ -131,6 +134,7 @@
 
 @code {
 	List<Otd>? Otds = new List<Otd>();
+	List<ObjectType>? ObjectTypes = new List<ObjectType>();
 	List<Cabinet>? Cabinets = new List<Cabinet>();
 	List<IoType>? IoTypes = new List<IoType>();
 	List<SignalType>? SignalTypes = new List<SignalType>();
@@ -141,7 +145,18 @@
 	public DisplayTagModel? SelectedTag { get; set; }
 	private List<Object> TagToolbarItems = new List<Object>() { "Add", "Delete", "Edit", "Update", "Cancel", new ItemModel() { Text = "Duplicate", TooltipText = "Duplicate", PrefixIcon = "e-duplicate", Id = "Duplicate" } };
 
-	bool IsAdd { get; set; }
+	protected override async Task OnInitializedAsync()
+	{
+		Cabinets = await _categoryDB.GetCabinetCategory();
+		Otds = await _categoryDB.GetOtdCategory();
+		IoTypes = await _categoryDB.GetIoTypeCategory();
+		ObjectTypes = await _categoryDB.GetObjectTypeCategory();
+
+		CabinetEditParams.Params.DataSource = Cabinets.Select(cabinet => new DisplayObjectModel() { Cabinet = cabinet.Name }).ToList();
+		OtdEditParams.Params.DataSource = Otds.Select(otd => new DisplayObjectModel() { Otd = otd.Name }).ToList();
+		IoTypeEditParams.Params.DataSource = IoTypes.Select(ioType => new DisplayTagModel() { IoType = ioType.Name }).ToList();
+		ObjectTypeEditParams.Params.DataSource = ObjectTypes.Select(objectType => new DisplayObjectModel() { ObjectType = objectType.Name }).ToList();
+	}
 
 	public async Task CellSavedHandler(CellSavedArgs<DisplayTagModel> args)
 	{
@@ -186,17 +201,13 @@
 			DataSource = new List<DisplayTagModel>()
 		}
 	};
-
-	protected override async Task OnInitializedAsync()
+	public DropDownEditCellParams? ObjectTypeEditParams = new DropDownEditCellParams
 	{
-		Cabinets = await _categoryDB.GetCabinetCategory();
-		Otds = await _categoryDB.GetOtdCategory();
-		IoTypes = await _categoryDB.GetIoTypeCategory();
-
-		CabinetEditParams.Params.DataSource = Cabinets.Select(cabinet => new DisplayObjectModel() { Cabinet = cabinet.Name }).ToList();
-		OtdEditParams.Params.DataSource = Otds.Select(otd => new DisplayObjectModel() { Otd = otd.Name }).ToList();
-		IoTypeEditParams.Params.DataSource = IoTypes.Select(ioType => new DisplayTagModel() { IoType = ioType.Name }).ToList();
-	}
+		Params = new DropDownListModel<object, object>()
+		{
+			DataSource = new List<DisplayTagModel>()
+		}
+	};
 
 	public async Task GetSelectedObject(RowSelectEventArgs<DisplayObjectModel> args)
 	{
@@ -271,12 +282,17 @@
 	public class CustomAdaptor : DataAdaptor
 	{
 		public IObjectService _objectService { get; set; }
+		public ITagService _tagService { get; set; }
+		private readonly CategoryDataManager _categoryDataManager;
 		public static List<DisplayObjectModel>? Objects = new List<DisplayObjectModel>();
+
 		IEnumerable<DisplayObjectModel> GridData { get; set; }
 
-		public CustomAdaptor(IObjectService objectService)
+		public CustomAdaptor(IObjectService objectService, ITagService tagService, CategoryDataManager categoryDataManager)
 		{
 			_objectService = objectService;
+			_tagService = tagService;
+			_categoryDataManager = categoryDataManager;
 		}
 
 		// Performs data Read operation
@@ -308,13 +324,34 @@
 
 		public override async Task<Object> InsertAsync(DataManager dataManager, object value, string key)
 		{
-			await _objectService.InsertObjectAsync(value as DisplayObjectModel);
+			DisplayObjectModel newObject = value as DisplayObjectModel;
+			if(newObject.Otd == null)
+			{
+				newObject.Otd = await _categoryDataManager.GetOtdByObjectType(newObject.ObjectType);
+			}
+			await _objectService.InsertObjectAsync(newObject);
+
+			if (newObject.ObjectType != null)
+			{
+				var objectTypeTags = await _tagService.GetTagsByObjectTypeAsync(newObject.ObjectType);
+				int newObjectId = await _objectService.GetLastInsertedObjectId();
+				foreach (var tag in objectTypeTags)
+				{
+					await _tagService.InsertTagAsync(newObjectId, tag);
+				}
+			}
 			return value;
 		}
 
 		public override async Task<object> RemoveAsync(DataManager dataManager, object value, string keyField, string key)
 		{
 			int objectId = (int)value;
+			var tags = await _tagService.GetTagsByObjectIdAsync(objectId);
+			foreach (var tag in tags)
+			{
+				await _tagService.DeleteTagAsync(tag.Id);
+			}
+
 			await _objectService.DeleteObjectAsync(objectId);
 			return value;
 		}

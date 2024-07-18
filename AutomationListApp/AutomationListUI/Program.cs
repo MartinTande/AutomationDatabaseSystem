@@ -22,6 +22,7 @@ builder.Services.AddSingleton<CategoryDataManager>();
 builder.Services.AddSingleton<SubCategoryDataManager>();
 builder.Services.AddSingleton<TagDataManager>();
 builder.Services.AddSingleton<CustomerObjects.CustomAdaptor>();
+builder.Services.AddSingleton<ObjectTypes.CustomAdaptor>();
 builder.Services.AddSyncfusionBlazor();
 
 var app = builder.Build();

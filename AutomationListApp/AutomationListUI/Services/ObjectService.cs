@@ -33,7 +33,8 @@ public class ObjectService : IObjectService
 			AlarmGroup = displayObject.AlarmGroup,
 			Node = displayObject.Node,
 			Cabinet = displayObject.Cabinet,
-			Otd = displayObject.Otd
+			Otd = displayObject.Otd,
+			ObjectType = displayObject.ObjectType,
 		};
 
 		return objectModel;
@@ -60,6 +61,7 @@ public class ObjectService : IObjectService
 			Node = dtoObject.Node,
 			Cabinet = dtoObject.Cabinet,
 			Otd = dtoObject.Otd,
+			ObjectType = dtoObject.ObjectType,
 			LastModified = dtoObject.LastModified
 		};
 
@@ -95,5 +97,10 @@ public class ObjectService : IObjectService
 		ObjectModel newDTO = MapDisplayObjectToDTO(displayObject);
 
 		await _objectDataManager.InsertObject(newDTO);
+	}
+
+	public async Task<int> GetLastInsertedObjectId()
+	{
+		return await _objectDataManager.GetLastInsertedObjectId();
 	}
 }

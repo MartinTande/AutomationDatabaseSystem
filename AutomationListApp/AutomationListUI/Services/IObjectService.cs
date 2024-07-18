@@ -8,5 +8,6 @@ namespace AutomationListUI.Services
 		Task UpdateObjectAsync(DisplayObjectModel displayObject);
 		Task DeleteObjectAsync(int id);
 		Task InsertObjectAsync(DisplayObjectModel displayObject);
+		Task<int> GetLastInsertedObjectId();
 	}
 }

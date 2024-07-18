@@ -14,6 +14,7 @@ public class ObjectModel
     public string? EasGroup { get; set; }
     public string? Otd { get; set; }
     public Otd? OtdInterface { get; set; }
+    public string? ObjectType { get; set; }
     public string? AcknowledgeAllowed { get; set; }
     public string? AlwaysVisible { get; set; }
     public string? Node { get; set; }

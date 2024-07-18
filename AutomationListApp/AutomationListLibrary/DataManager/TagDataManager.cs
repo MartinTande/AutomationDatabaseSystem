@@ -23,7 +23,15 @@ public class TagDataManager
         return tagList;
     }
 
-    public async Task DeleteTagAsync(int tagId)
+	public async Task<List<TagModel>> GetTagsByObjectTypeAsync(string objectType)
+	{
+		var p = new { ObjectType = objectType };
+
+		List<TagModel> tagList = await _sqlConnector.ReadDataAsync<TagModel, dynamic>("GetTagsByObjectType", p);
+		return tagList;
+	}
+
+	public async Task DeleteTagAsync(int tagId)
     {
         var p = new { Id = tagId };
 
@@ -102,7 +110,6 @@ public class TagDataManager
                 await InsertTagAsync(objectId, tag);
             }
         }
-
     }
 
     public async Task AddTagsBasedOnObjectType(int objectId, string objectType)

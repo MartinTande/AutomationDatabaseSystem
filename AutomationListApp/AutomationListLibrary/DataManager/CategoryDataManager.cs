@@ -1,4 +1,5 @@
 ﻿using AutomationListLibrary.Data;
+using AutomationListLibrary.Data.Categories;
 using AutomationListLibrary.DataAccess;
 
 namespace AutomationListLibrary.DataManager;
@@ -31,18 +32,21 @@ public class CategoryDataManager
     public async Task<List<Hierarchy1>> GetHierarchy1Category() => await GetCategory<Hierarchy1>("HIERARCHY_1");
     public async Task<List<EngUnit>> GetEngUnitCategory() => await GetCategory<EngUnit>("ENG_UNIT");
     public async Task<List<IoType>> GetIoTypeCategory() => await GetCategory<IoType>("IO_TYPE");
+    public async Task<List<ObjectType>> GetObjectTypeCategory()
+	{
+		var p = new { };
 
-    public async Task<List<string>> GetCategoryNames(string tableName)
-    {
-        var p = new
-        {
-            TableName = tableName
-        };
+		return await _sqlConnector.ReadDataAsync<ObjectType, dynamic>("GetObjectTypes", p);
+	}
+	public async Task<string> GetOtdByObjectType(string objectType)
+	{
+		var p = new { ObjectType = objectType };
 
-        return await _sqlConnector.ReadDataAsync<string, dynamic>("GetCategoryNames", p);
-    }
+        var result = await _sqlConnector.ReadDataAsync<string, dynamic>("GetOtdByObjectType", p);
+        return result.FirstOrDefault();
+	}
 
-    private async Task DeleteCategoryItem(string tableName, int id)
+	private async Task DeleteCategoryItem(string tableName, int id)
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
