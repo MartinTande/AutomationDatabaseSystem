@@ -18,25 +18,13 @@ public class SubCategoryDataManager
         // No parameters, but need an object
         var p = new
         {
-            Name = ioType
+            IoTypeName = ioType
         };
 
-        return await _sqlConnector.ReadDataAsync<SignalType, dynamic>("GetSignalTypesByGroup", p);
+        return await _sqlConnector.ReadDataAsync<SignalType, dynamic>("GetSignalTypesByIoType", p);
     }
 
-	public List<SignalType> GetSignalTypes(string ioType)
-	{
-		// Anonymous object, object with no name type
-		// No parameters, but need an object
-		var p = new
-		{
-			Name = ioType
-		};
-
-		return _sqlConnector.ReadData<SignalType, dynamic>("GetSignalTypesByGroup", p);
-	}
-
-	public async Task<List<OtdInterface>> GetOtdInterfaces(string otdType)
+	public async Task<List<OtdInterface>> GetOtdInterfacesAsync(string otdType)
     {
         var p = new
         {
@@ -45,7 +33,7 @@ public class SubCategoryDataManager
         return await _sqlConnector.ReadDataAsync<OtdInterface, dynamic>("GetOtdInterfacesByGroup", p);
     }
 
-    public async Task<IEnumerable<Hierarchy2>> GetHierarchy2Category(string hierarchy1Name)
+    public async Task<IEnumerable<Hierarchy2>> GetHierarchy2CategoryAsync(string hierarchy1Name)
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
@@ -57,7 +45,7 @@ public class SubCategoryDataManager
         return await _sqlConnector.ReadDataAsync<Hierarchy2, dynamic>("GetHierarchy2ByGroup", p);
     }
 
-    public async Task AddHierarchy2Category(string hierarchy1Name, string newHierarchy2Name)
+    public async Task AddHierarchy2CategoryAsync(string hierarchy1Name, string newHierarchy2Name)
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
@@ -70,7 +58,7 @@ public class SubCategoryDataManager
         await _sqlConnector.WriteDataAsync("AddHierarchy2", p);
     }
 
-    public async Task DeleteHierarchy2Category(int id)
+    public async Task DeleteHierarchy2CategoryAsync(int id)
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
@@ -91,29 +79,5 @@ public class SubCategoryDataManager
         };
 
         await _sqlConnector.WriteDataAsync("EditHierarchy2", p);
-    }
-
-    public async Task<IEnumerable<string>> GetHierarchy2Names(string hierarchy1Name)
-    {
-        // Anonymous object, object with no name type
-        // No parameters, but need an object
-        var p = new
-        {
-            Name = hierarchy1Name
-        };
-
-        return await _sqlConnector.ReadDataAsync<string, dynamic>("GetHierarchy2NamesByGroup", p);
-    }
-
-    public async Task<IEnumerable<string>> GetSignalTypeNames(string ioType)
-    {
-        // Anonymous object, object with no name type
-        // No parameters, but need an object
-        var p = new
-        {
-            Name = ioType
-        };
-
-        return await _sqlConnector.ReadDataAsync<string, dynamic>("GetSignalTypeNamesByGroup", p);
     }
 }

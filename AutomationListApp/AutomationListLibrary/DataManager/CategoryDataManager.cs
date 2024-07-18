@@ -21,16 +21,16 @@ public class CategoryDataManager
         return await _sqlConnector.ReadDataAsync<T, dynamic>("GetCategory", p);
     }
 
-    public Task<List<Node>> GetNodeCategory() => GetCategory<Node>("NODE");
-    public Task<List<AcknowledgeAllowed>> GetAckAllowedCategory() => GetCategory<AcknowledgeAllowed>("ACKNOWLEDGE_ALLOWED");
-    public Task<List<AlwaysVisible>> GetAlwaysVisibleCategory() => GetCategory<AlwaysVisible>("ALWAYS_VISIBLE");
-    public Task<List<Cabinet>> GetCabinetCategory() => GetCategory<Cabinet>("CABINET");
-    public Task<List<Otd>> GetOtdCategory() => GetCategory<Otd>("OTD");
-    public Task<List<VduGroup>> GetVduGroupCategory() => GetCategory<VduGroup>("VDU_GROUP");
-    public Task<List<AlarmGroup>> GetAlarmGroupCategory() => GetCategory<AlarmGroup>("ALARM_GROUP");
-    public Task<List<Hierarchy1>> GetHierarchy1Category() => GetCategory<Hierarchy1>("HIERARCHY_1");
-    public Task<List<EngUnit>> GetEngUnitCategory() => GetCategory<EngUnit>("ENG_UNIT");
-    public Task<List<IoType>> GetIoTypeCategory() => GetCategory<IoType>("IO_TYPE");
+    public async Task<List<Node>> GetNodeCategory() => await GetCategory<Node>("NODE");
+    public async Task<List<AcknowledgeAllowed>> GetAckAllowedCategory() => await GetCategory<AcknowledgeAllowed>("ACKNOWLEDGE_ALLOWED");
+    public async Task<List<AlwaysVisible>> GetAlwaysVisibleCategory() => await GetCategory<AlwaysVisible>("ALWAYS_VISIBLE");
+    public async Task<List<Cabinet>> GetCabinetCategory() => await GetCategory<Cabinet>("CABINET");
+    public async Task<List<Otd>> GetOtdCategory() => await GetCategory<Otd>("OTD");
+    public async Task<List<VduGroup>> GetVduGroupCategory() => await GetCategory<VduGroup>("VDU_GROUP");
+    public async Task<List<AlarmGroup>> GetAlarmGroupCategory() => await GetCategory<AlarmGroup>("ALARM_GROUP");
+    public async Task<List<Hierarchy1>> GetHierarchy1Category() => await GetCategory<Hierarchy1>("HIERARCHY_1");
+    public async Task<List<EngUnit>> GetEngUnitCategory() => await GetCategory<EngUnit>("ENG_UNIT");
+    public async Task<List<IoType>> GetIoTypeCategory() => await GetCategory<IoType>("IO_TYPE");
 
     public async Task<List<string>> GetCategoryNames(string tableName)
     {
@@ -41,17 +41,6 @@ public class CategoryDataManager
 
         return await _sqlConnector.ReadDataAsync<string, dynamic>("GetCategoryNames", p);
     }
-
-    public async Task<List<string>> GetAlarmGroupNames() => await GetCategoryNames("ALARM_GROUP");
-    public async Task<List<string>> GetNodeNames() => await GetCategoryNames("NODE");
-    public async Task<List<string>> GetAlwaysVisibleNames() => await GetCategoryNames("ALWAYS_VISIBLE");
-    public async Task<List<string>> GetAckowledgeAllowedNames() => await GetCategoryNames("ACKNOWLEDGE_ALLOWED");
-    public async Task<List<string>> GetVduGroupNames() => await GetCategoryNames("VDU_GROUP");
-    public async Task<List<string>> GetOtdNames() => await GetCategoryNames("OTD");
-    public async Task<List<string>> GetCabinetNames() => await GetCategoryNames("CABINET");
-    public async Task<List<string>> GetHierarchy1Names() => await GetCategoryNames("HIERARCHY_1");
-    public async Task<List<string>> GetIoTypeNames() => await GetCategoryNames("IO_TYPE");
-    public async Task<List<string>> GetEngUnitNames() => await GetCategoryNames("ENG_UNIT");
 
     private async Task DeleteCategoryItem(string tableName, int id)
     {

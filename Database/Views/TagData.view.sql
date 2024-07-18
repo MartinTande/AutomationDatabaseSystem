@@ -14,6 +14,7 @@ AS
 	SELECT
 		TAG.Id,
 		TAG.ObjectId,
+		TAG.ObjectTypeId,
 		TAG.EqSuffix,
 		TAG.Description,
 		IO_TYPE.Name IoType,

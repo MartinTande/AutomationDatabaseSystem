@@ -96,17 +96,4 @@ public class ObjectService : IObjectService
 
 		await _objectDataManager.InsertObject(newDTO);
 	}
-
-	public List<DisplayObjectModel> GetObjects()
-	{
-		List<ObjectModel> objects = _objectDataManager.GetObjectsSync();
-		List<DisplayObjectModel> displayObjects = new List<DisplayObjectModel>();
-
-		foreach (var obj in objects)
-		{
-			displayObjects.Add(MapDTOToDisplayObject(obj));
-		}
-
-		return displayObjects;
-	}
 }

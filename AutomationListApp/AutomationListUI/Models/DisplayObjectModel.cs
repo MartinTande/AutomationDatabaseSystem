@@ -1,6 +1,7 @@
 ﻿using AutomationListLibrary.Data;
 using AutomationListUI.Validators;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices.ObjectiveC;
 using static AutomationListUI.Pages.CustomerObjects;
 
 
@@ -25,6 +26,7 @@ public class DisplayObjectModel
     public string? EasGroup { get; set; }
     public string? Otd { get; set; }
     public Otd? OtdInterface { get; set; }
+    public string? ObjectType { get; set; }
     public string? AcknowledgeAllowed { get; set; }
     public string? AlwaysVisible { get; set; }
     public string? Node { get; set; }

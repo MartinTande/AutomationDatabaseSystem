@@ -94,7 +94,7 @@
         MainPictures = await _categoryDB.GetHierarchy1Category();
         foreach (var picture in MainPictures)
         {
-            picture.SubPictures = (await _subCategoryDB.GetHierarchy2Category(picture.Name)).ToList();
+            picture.SubPictures = (await _subCategoryDB.GetHierarchy2CategoryAsync(picture.Name)).ToList();
         }
     }
 

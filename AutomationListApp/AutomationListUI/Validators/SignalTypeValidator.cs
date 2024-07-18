@@ -22,7 +22,7 @@ public class SignalTypeValidator : ValidationAttribute
 	{
 		if (value is null)
 		{
-			return new ValidationResult("No Signal type");
+			return null;
 		}
 		string signalType = value.ToString();
 		DisplayTagModel tag = (DisplayTagModel)validationContext.ObjectInstance;
@@ -30,7 +30,10 @@ public class SignalTypeValidator : ValidationAttribute
 		if (string.IsNullOrEmpty(signalType))
 			return new ValidationResult("Signal Type is required");
 
-		List<SignalType> _signalTypes = _subCategoryDataManager.GetSignalTypes(tag.IoType);
+		var task = Task.Run(async () => await _subCategoryDataManager.GetSignalTypesAsync(tag.IoType));
+		task.Wait();
+		List<SignalType> _signalTypes = task.Result.ToList();
+
 		var signalTypeNames = _signalTypes.Select(x => x.Name).ToList();
 		if (!signalTypeNames.Contains(signalType))
 			return new ValidationResult("Signal Type does not match with Io Type");

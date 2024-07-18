@@ -57,7 +57,6 @@
 	</GridColumns>
 </SfGrid>
 <br />
-<p>@message</p>
 <br />
 <h4>Tags</h4>
 <SfGrid DataSource="@Tags"
@@ -91,27 +90,29 @@
 					if (tag.ObjectId == 0)
 					{
 						tag.ObjectId = SelectedObject.Id;
+						tag.ObjectName = SelectedObject.FullObjectName;
 					}
 				}
 			</Template>
 		</GridColumn>
 		<GridColumn Field=@nameof(DisplayTagModel.EqSuffix) HeaderText="Eq Suffix" EditType="EditType.DefaultEdit" />
 		<GridColumn Field=@nameof(DisplayTagModel.Description) HeaderText="Description" Width="100" />
-		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="IO Type" EditType="EditType.DropDownEdit">
+@* 		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="IO Type" EditType="EditType.DropDownEdit">
 		    <EditTemplate>
 				<SfDropDownList TItem="DisplayTagModel" TValue="string" @bind-Value="@((context as DisplayTagModel).IoType)" DataSource="@ioTypes">
 					<DropDownListFieldSettings Value="IoType" Text="IoType"></DropDownListFieldSettings>
                 </SfDropDownList>
             </EditTemplate>
-		</GridColumn>
+		</GridColumn> *@
+		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="Io Type" EditType="EditType.DropDownEdit" EditorSettings="@IoTypeEditParams" />
 		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" EditType="EditType.DropDownEdit" EditorSettings="@SignalTypeEditParams" />
-		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" EditType="EditType.DropDownEdit">
+@* 		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" EditType="EditType.DropDownEdit">
 			<EditTemplate>
 				<SfDropDownList TItem="DisplayTagModel" TValue="string" @bind-Value="@((context as DisplayTagModel).SignalType)" DataSource="@signalTypes">
 					<DropDownListFieldSettings Value="SignalType" Text="SignalType"></DropDownListFieldSettings>
 				</SfDropDownList>
 			</EditTemplate>
-		</GridColumn>
+		</GridColumn> *@
 		<GridColumn Field=@nameof(DisplayTagModel.EngUnit) HeaderText="Eng unit" />
 		<GridColumn Field=@nameof(DisplayTagModel.SWPath) HeaderText="SW Path Type"  />
 		<GridColumn Field=@nameof(DisplayTagModel.DBName) HeaderText="DB Name" />
@@ -129,13 +130,10 @@
 
 
 @code {
-	public string message;
-	List<string>? Cabinets;
-	List<string>? Otds;
-	List<string>? IoTypes;
-	public List<DisplayTagModel> ioTypes { get; set; } = new List<DisplayTagModel>();
-	public List<DisplayTagModel> signalTypes { get; set; } = new List<DisplayTagModel>();
-	List<string>? SignalTypes;
+	List<Otd>? Otds = new List<Otd>();
+	List<Cabinet>? Cabinets = new List<Cabinet>();
+	List<IoType>? IoTypes = new List<IoType>();
+	List<SignalType>? SignalTypes = new List<SignalType>();
 	List<DisplayTagModel>? Tags;
 	SfGrid<DisplayTagModel>? TagGrid;
 	SfGrid<DisplayObjectModel>? ObjectGrid;
@@ -151,17 +149,12 @@
 		if (args.ColumnName == "IoType")
 		{
 			string selectedIoType = args.Value.ToString();
-			SignalTypes = (await _subCategoryDB.GetSignalTypeNames(selectedIoType)).ToList();
-			signalTypes = SignalTypes.Select(signalTypeName => new DisplayTagModel() { SignalType = signalTypeName }).ToList();
-			SignalTypeEditParams.Params.DataSource = signalTypes;
+			SignalTypes = (await _subCategoryDB.GetSignalTypesAsync(selectedIoType)).ToList();
+
+			SignalTypeEditParams.Params.DataSource = SignalTypes.Select(signalType => new DisplayTagModel() { SignalType = signalType.Name }).ToList();
+
 			await TagGrid.UpdateCellAsync(index, "SignalType", null);
-			await TagGrid.UpdateCellAsync(index, "Signal Type 2", null);
 			args.RowData.SignalType = null;
-		}
-		else if (args.ColumnName == "FullTagName")
-		{
-			var item = TagGrid.DataSource;
-			// await TagGrid.UpdateCell(index, "ObjectId", SelectedObject.Id);
 		}
 	}
 
@@ -183,7 +176,7 @@
 	{
 		Params = new DropDownListModel<object, object>()
 		{
-				DataSource = new List<DisplayTagModel>()
+			DataSource = new List<DisplayTagModel>()
 		}
 	};
 	public DropDownEditCellParams? SignalTypeEditParams = new DropDownEditCellParams
@@ -196,16 +189,13 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		Cabinets = new List<string>(await _categoryDB.GetCabinetNames());
-		Otds = new List<string>(await _categoryDB.GetOtdNames());
-		IoTypes = new List<string>(await _categoryDB.GetIoTypeNames());
-		List<DisplayObjectModel> cabinets = Cabinets.Select(cabinetName => new DisplayObjectModel() { Cabinet = cabinetName }).ToList();
-		List<DisplayObjectModel> otds = Otds.Select(otdName => new DisplayObjectModel() { Otd = otdName }).ToList();
-		ioTypes = IoTypes.Select(ioTypeName => new DisplayTagModel() { IoType = ioTypeName }).ToList();
+		Cabinets = await _categoryDB.GetCabinetCategory();
+		Otds = await _categoryDB.GetOtdCategory();
+		IoTypes = await _categoryDB.GetIoTypeCategory();
 
-		CabinetEditParams.Params.DataSource = cabinets;
-		OtdEditParams.Params.DataSource = otds;
-		IoTypeEditParams.Params.DataSource = ioTypes;
+		CabinetEditParams.Params.DataSource = Cabinets.Select(cabinet => new DisplayObjectModel() { Cabinet = cabinet.Name }).ToList();
+		OtdEditParams.Params.DataSource = Otds.Select(otd => new DisplayObjectModel() { Otd = otd.Name }).ToList();
+		IoTypeEditParams.Params.DataSource = IoTypes.Select(ioType => new DisplayTagModel() { IoType = ioType.Name }).ToList();
 	}
 
 	public async Task GetSelectedObject(RowSelectEventArgs<DisplayObjectModel> args)
@@ -224,7 +214,10 @@
 	public async Task GetSelectedTag(RowSelectEventArgs<DisplayTagModel> args)
 	{
 		SelectedTag = (await this.TagGrid.GetSelectedRecordsAsync()).FirstOrDefault();
-
+		if (SelectedTag == null)
+		{
+			return;
+		}
 		if (SelectedTag.ObjectId == 0)
 		{
 			SelectedTag.ObjectId = SelectedObject.Id;
@@ -232,9 +225,8 @@
 
 		if (SelectedTag.IoType != null)
 		{
-			SignalTypes = (await _subCategoryDB.GetSignalTypeNames(SelectedTag.IoType)).ToList();
-			signalTypes = SignalTypes.Select(signalTypeName => new DisplayTagModel() { SignalType = signalTypeName }).ToList();
-			SignalTypeEditParams.Params.DataSource = signalTypes;
+			SignalTypes = (await _subCategoryDB.GetSignalTypesAsync(SelectedTag.IoType)).ToList();
+			SignalTypeEditParams.Params.DataSource = SignalTypes.Select(signalType => new DisplayTagModel() { SignalType = signalType.Name }).ToList();
 		}
 
 		StateHasChanged();
@@ -242,16 +234,6 @@
 
 	public async Task ToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
 	{
-		if (args.Item.Text == "Add")
-		{
-			var tagChanges = await this.TagGrid.GetBatchChangesAsync();
-			// var batchChanges = new BatchChanges<DisplayTagModel>()
-			// {
-			// 	AddedRecords = new List<DisplayTagModel>() { new DisplayTagModel() { ObjectId = SelectedObject.Id} }
-			// };
-			// await TagGrid.ApplyBatchChangesAsync(batchChanges);
-
-		}
 		if (args.Item.Text == "Update")
 		{
 			var tagChanges = await this.TagGrid.GetBatchChangesAsync();
@@ -286,7 +268,6 @@
 		}
 	}
 
-	// Implementing custom adaptor by extending the DataAdaptor class
 	public class CustomAdaptor : DataAdaptor
 	{
 		public IObjectService _objectService { get; set; }
@@ -304,20 +285,21 @@
 			Objects = await _objectService.GetObjectsAsync();
 			GridData = Objects;
 
-			if (dataManagerRequest.Sorted?.Count > 0) // perform Sorting
+			// Sorting
+			if (dataManagerRequest.Sorted?.Count > 0)
 			{
 				GridData = DataOperations.PerformSorting(GridData, dataManagerRequest.Sorted);
 			}
 
+			// Filtering
 			if (dataManagerRequest.Where != null && dataManagerRequest.Where.Count > 0)
 			{
-				// Filtering
 				GridData = DataOperations.PerformFiltering(GridData, dataManagerRequest.Where, dataManagerRequest.Where[0].Operator);
 			}
 
+			// Searching
 			if (dataManagerRequest.Search != null && dataManagerRequest.Search.Count > 0)
 			{
-				// Searching
 				GridData = DataOperations.PerformSearching(GridData, dataManagerRequest.Search);
 			}
 

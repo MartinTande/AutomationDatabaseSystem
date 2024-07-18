@@ -19,6 +19,7 @@ CREATE PROCEDURE UpdateObject
 	@EasGroup varchar(50),
 	@AlarmGroup varchar(50),
 	@Otd varchar(50),
+	@ObjectType varchar(150),
 	@AcknowledgeAllowed varchar(100),
 	@AlwaysVisible varchar(100),
 	@Node varchar(100),
@@ -58,6 +59,9 @@ WHERE Name = @AlarmGroup),
 	OtdId = (SELECT Id
 FROM OTD
 WHERE Name=@Otd),
+	ObjectTypeId = (SELECT Id
+FROM OBJECT_TYPE
+WHERE Name=@ObjectType),
 	AcknowledgeAllowedId = (SELECT Id
 FROM ACKNOWLEDGE_ALLOWED
 WHERE Name=@AcknowledgeAllowed),

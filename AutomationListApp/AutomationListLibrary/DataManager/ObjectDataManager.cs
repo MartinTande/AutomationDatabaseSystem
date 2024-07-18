@@ -96,14 +96,4 @@ public class ObjectDataManager : IObjectDataManager
 
 		await _sqlConnector.WriteDataAsync("DeleteObject", p);
 	}
-
-	public List<ObjectModel> GetObjectsSync()
-	{
-		// Anonymous object, object with no name type
-		// No parameters, but need an object
-		var p = new { };
-
-		var tagObjectList = _sqlConnector.ReadData<ObjectModel, dynamic>("GetAllObjects", p);
-		return tagObjectList;
-	}
 }

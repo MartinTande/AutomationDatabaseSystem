@@ -24,10 +24,13 @@ public class ObjectNameValidator : ValidationAttribute
 
     protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 	{
-		objects = _objectService.GetObjects();
+		var task = Task.Run(async () => await _objectService.GetObjectsAsync());
+		task.Wait();
+		objects = task.Result.ToList();
+
 		string inputName = value.ToString();
 		if (string.IsNullOrEmpty(inputName))
-			return new ValidationResult("Object name should is required");
+			return new ValidationResult("Object name is required");
 
 		// Check if the input name is unique among other items
 		var existingNames = objects.Select(o => o.FullObjectName).ToList();

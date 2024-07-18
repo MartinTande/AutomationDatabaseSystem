@@ -2,10 +2,7 @@
 using AutomationListLibrary.DataManager;
 using AutomationListUI.Models;
 using AutomationListUI.Services;
-using Microsoft.Build.Framework;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AutomationListUI.Validators;
 
@@ -28,16 +25,19 @@ public class TagSuffixValidator : ValidationAttribute
 	{
 		if (value is null)
 		{
-			return new ValidationResult("No Signal type");
+			return null;
 		}
 		string currentSuffix = value.ToString();
-		DisplayTagModel tag = (DisplayTagModel)validationContext.ObjectInstance;
+		DisplayTagModel currentTag = (DisplayTagModel)validationContext.ObjectInstance;
 
-		var task = Task.Run(async () => await _tagService.GetTagsByObjectIdAsync(tag.ObjectId));
+		var task = Task.Run(async () => await _tagService.GetTagsByObjectIdAsync(currentTag.ObjectId));
 		task.Wait();
 		tags = task.Result.ToList();
 
-		var usedSuffixes = tags.Select(t => t.EqSuffix).ToList();
+		var usedSuffixes = tags.Where(t => t.Id != currentTag.Id)
+								.Select(t => t.EqSuffix)
+								.ToList();
+
 		if (usedSuffixes.Contains(currentSuffix))
 		{
 			return new ValidationResult("Eq Suffix must be unique");
