@@ -2,11 +2,11 @@ using AutomationListLibrary.DataAccess;
 using AutomationListLibrary.DataManager;
 using AutomationListUI.Data;
 using AutomationListUI.Pages;
+using AutomationListUI.Readers;
 using AutomationListUI.Services;
-using AutomationListUI.Validators;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Syncfusion.Blazor;
+
+System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +22,7 @@ builder.Services.AddSingleton<CategoryDataManager>();
 builder.Services.AddSingleton<SubCategoryDataManager>();
 builder.Services.AddSingleton<TagDataManager>();
 builder.Services.AddSingleton<CustomerObjects.CustomAdaptor>();
-builder.Services.AddSingleton<ObjectTypes.CustomAdaptor>();
+builder.Services.AddSingleton<ExcelReader>();
 builder.Services.AddSyncfusionBlazor();
 
 var app = builder.Build();

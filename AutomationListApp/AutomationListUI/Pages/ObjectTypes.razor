@@ -15,20 +15,19 @@
 
 <div class="card-group">
 	<div class="sub-group">
-		<SfGrid TValue="ObjectType"
+		<SfGrid DataSource="objectTypes"
 				@ref="@ObjectTypeGrid"
 				AllowSelection="true"
-				Width="400"
+				Width="300"
 				EnableStickyHeader=true
 				Toolbar=@ToolbarItems>
 			<GridEvents RowSelected="GetSelectedObjectType" TValue="ObjectType"></GridEvents>
-			<SfDataManager AdaptorInstance="@typeof(CustomAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
 			<GridEditSettings AllowAdding="true"
 							  AllowEditing="true"
 							  AllowDeleting="true"
 							  ShowConfirmDialog="false"
 							  ShowDeleteConfirmDialog="true"
-							  Mode="EditMode.Normal" />
+							  Mode="EditMode.Batch" />
 			<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
 			<GridColumns>
 				<GridColumn Field=@nameof(ObjectType.Name) HeaderText="Object Type" />
@@ -52,13 +51,19 @@
 		</SfGrid>
 	</div>
 </div>
+
 @code {
 	SfGrid<ObjectType>? ObjectTypeGrid;
 	SfGrid<DisplayTagModel>? TagGrid;
-	List<DisplayTagModel> Tags;
+	List<DisplayTagModel>? Tags;
+	List<ObjectType>? objectTypes;
 	public ObjectType? SelectedObjectType { get; set; }
 	public string[] ToolbarItems = new string[] { "Add", "Edit", "Delete", "Update", "Cancel" };
 
+	protected override async Task OnInitializedAsync()
+	{
+		objectTypes = await _categoryDB.GetObjectTypeCategory();
+	}
 
 	public async Task GetSelectedObjectType(RowSelectEventArgs<ObjectType> args)
 	{
@@ -66,66 +71,38 @@
 
 		Tags = await _tagDB.GetTagsByObjectTypeAsync(SelectedObjectType.Name);
 		
-		StateHasChanged();
 	}
 
-
-	public class CustomAdaptor : DataAdaptor
+	public async Task SubPictureToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
 	{
-		public CategoryDataManager _categoryDataManager { get; set; }
-		public static List<ObjectType>? ObjectTypes = new List<ObjectType>();
-		IEnumerable<ObjectType> GridData { get; set; }
-
-		public CustomAdaptor(CategoryDataManager categoryDataManager)
+		if (args.Item.Text == "Update")
 		{
-			_categoryDataManager = categoryDataManager;
-		}
+			var objectTypesChanges = await this.ObjectTypeGrid.GetBatchChangesAsync();
 
-		// Performs data Read operation
-		public override async Task<Object> ReadAsync(DataManagerRequest dataManagerRequest, string key = null)
-		{
-			ObjectTypes = await _categoryDataManager.GetObjectTypeCategory();
-			GridData = ObjectTypes;
-
-			// Sorting
-			if (dataManagerRequest.Sorted?.Count > 0)
+			if (objectTypesChanges.ChangedRecords.Count > 0)
 			{
-				GridData = DataOperations.PerformSorting(GridData, dataManagerRequest.Sorted);
+				foreach (var objectType in objectTypesChanges.ChangedRecords)
+				{
+				}
+			}
+			if (objectTypesChanges.DeletedRecords.Count > 0)
+			{
+				foreach (var objectType in objectTypesChanges.DeletedRecords)
+				{
+					await _subCategoryDB.DeleteHierarchy2CategoryAsync(objectType.Id);
+				}
+			}
+			if (objectTypesChanges.AddedRecords.Count > 0)
+			{
+				foreach (var subPicture in objectTypesChanges.AddedRecords)
+				{
+				}
 			}
 
-			// Filtering
-			if (dataManagerRequest.Where != null && dataManagerRequest.Where.Count > 0)
-			{
-				GridData = DataOperations.PerformFiltering(GridData, dataManagerRequest.Where, dataManagerRequest.Where[0].Operator);
-			}
-
-			// Searching
-			if (dataManagerRequest.Search != null && dataManagerRequest.Search.Count > 0)
-			{
-				GridData = DataOperations.PerformSearching(GridData, dataManagerRequest.Search);
-			}
-
-			return dataManagerRequest.RequiresCounts ? new DataResult() { Result = GridData, Count = ObjectTypes.Count() } : (object)GridData;
 		}
 
-		public override async Task<Object> InsertAsync(DataManager dataManager, object value, string key)
+		if (args.Item.Text == "Delete")
 		{
-			// await _objectService.InsertObjectAsync(value as DisplayObjectModel);
-			return value;
-		}
-
-		public override async Task<object> RemoveAsync(DataManager dataManager, object value, string keyField, string key)
-		{
-			// int objectId = (int)value;
-			// await _objectService.DeleteObjectAsync(objectId);
-			return value;
-		}
-
-		public override async Task<object> UpdateAsync(DataManager dataManager, object value, string keyField, string key)
-		{
-			// DisplayObjectModel updatedObject = (value as DisplayObjectModel);
-			// await _objectService.UpdateObjectAsync(updatedObject);
-			return value;
 		}
 	}
 }

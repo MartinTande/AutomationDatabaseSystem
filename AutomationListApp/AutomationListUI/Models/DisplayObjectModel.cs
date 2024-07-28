@@ -40,7 +40,7 @@ public class DisplayObjectModel
 	public string? FullObjectName => $"{SfiNumber}_{MainEqNumber}_{EqNumber}";
     public DateTime? LastModified { get; set; }
 
-    public List<TagModel>? Tags { get; set; }
+    public List<DisplayTagModel>? Tags { get; set; }
 
     public bool ReadyForPLCGeneration
     {
@@ -79,7 +79,7 @@ public class DisplayObjectModel
         {
             return false;
         }
-        foreach (TagModel tag in Tags)
+        foreach (DisplayTagModel tag in Tags)
         {
             if (tag.EqSuffix.Equals(suffix))
             {

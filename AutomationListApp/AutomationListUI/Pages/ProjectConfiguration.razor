@@ -1,0 +1,271 @@
+﻿@page "/project-config"
+
+@using AutomationListLibrary.Data
+@using AutomationListLibrary.DataManager
+
+@inject CategoryDataManager _categoryDB
+@inject SubCategoryDataManager _subCategoryDB
+
+<h1>Project Configuration</h1>
+<hr />        
+<br/>
+
+<!-- VDU groups -->
+<div class="card-group">
+    <div class="sub-group">
+		<h4>Customer Groups</h4>
+        <div class="control-section">
+            <div id="flat-list">
+                <SfListView DataSource="@VduGroups"
+                            TValue="VduGroup"
+                            Width="250">
+                    <ListViewFieldSettings TValue="VduGroup" Id="Id" Text="Name"></ListViewFieldSettings>
+                </SfListView>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card-group">
+    <div class="sub-group">
+        <h4>Main pictures</h4>
+        <SfGrid DataSource="@MainPictures"
+                @ref="@MainPictureGrid"
+                AllowSelection="true"
+                Width="300"
+                Toolbar="@ToolbarItems">
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
+            <GridEvents RowSelected="GetSelectedMainPicture" TValue="Hierarchy1" OnToolbarClick="MainPictureToolbarClickHandler"></GridEvents>
+            <GridEditSettings AllowAdding="true"
+                              AllowEditing="true"
+                              AllowDeleting="true"
+                              ShowConfirmDialog="false"
+                              ShowDeleteConfirmDialog="true"
+                              Mode="EditMode.Batch" />
+            <GridColumns>
+                <GridColumn Field=@nameof(Hierarchy1.Name) />
+            </GridColumns>
+        </SfGrid>
+    </div>
+    <div class="sub-group">
+        <h4>Sub pictures</h4>
+        <SfGrid DataSource="@SubPictures"
+                @ref="@SubPictureGrid"
+                AllowReordering="true"
+                AllowResizing="true"
+                AllowSelection="true"
+                Width="300"
+                Toolbar=@ToolbarItems>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
+            <GridEvents RowSelected="GetSelectedSubPicture" TValue="Hierarchy2" OnToolbarClick="SubPictureToolbarClickHandler"></GridEvents>
+            <GridEditSettings AllowAdding="true"
+                              AllowEditing="true"
+                              AllowDeleting="true"
+                              ShowConfirmDialog="false"
+                              ShowDeleteConfirmDialog="true"
+                              Mode="EditMode.Batch" /><GridColumns>
+                <GridColumn Field=@nameof(Hierarchy2.Name) Width="200" />
+            </GridColumns>
+        </SfGrid>
+    </div>
+</div>
+
+@code {
+    SfGrid<Hierarchy1> MainPictureGrid;
+    SfGrid<Hierarchy2> SubPictureGrid;
+    List<Hierarchy2> SubPictures;
+    List<VduGroup> VduGroups = new List<VduGroup>();
+    List<Hierarchy1> MainPictures = new List<Hierarchy1>();
+    Hierarchy1? SelectedMainPicture;
+    Hierarchy2? SelectedSubPicture;
+    public string[] ToolbarItems = new string[] { "Add", "Edit", "Delete", "Update", "Cancel" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        VduGroups = await _categoryDB.GetVduGroupCategory();
+        MainPictures = await _categoryDB.GetHierarchy1Category();
+        foreach (var picture in MainPictures)
+        {
+            picture.SubPictures = (await _subCategoryDB.GetHierarchy2CategoryAsync(picture.Name)).ToList();
+        }
+    }
+
+    public async Task GetSelectedMainPicture(RowSelectEventArgs<Hierarchy1> args)
+    {
+        SelectedMainPicture = (await this.MainPictureGrid.GetSelectedRecordsAsync()).FirstOrDefault();
+
+        if (SelectedMainPicture != null) SubPictures = SelectedMainPicture.SubPictures;
+    }
+
+    public async Task GetSelectedSubPicture(RowSelectEventArgs<Hierarchy2> args)
+    {
+        SelectedSubPicture = (await this.SubPictureGrid.GetSelectedRecordsAsync()).FirstOrDefault();
+    }
+
+    public async Task MainPictureToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Text == "Update")
+        {
+            var mainPictureChanges = await this.MainPictureGrid.GetBatchChangesAsync();
+
+            if (mainPictureChanges.ChangedRecords.Count > 0)
+            {
+                foreach (var tag in mainPictureChanges.ChangedRecords)
+                {
+                    try
+                    {
+                        await _categoryDB.EditHierarchy1Async(tag);
+                    }
+                    catch
+                    {
+                        
+                    }
+                }
+            }
+            if (mainPictureChanges.DeletedRecords.Count > 0)
+            {
+                foreach (var tag in mainPictureChanges.DeletedRecords)
+                {
+                    await _categoryDB.DeleteHierarchy1Async(tag.Id);
+                }
+            }
+            if (mainPictureChanges.AddedRecords.Count > 0)
+            {
+                foreach (var tag in mainPictureChanges.AddedRecords)
+                {
+                    await _categoryDB.AddHierarchy1Async(tag.Name);
+                }
+            }
+
+            MainPictures = await _categoryDB.GetHierarchy1Category();
+        }
+
+        if (args.Item.Text == "Delete")
+        {
+            await _categoryDB.DeleteHierarchy1Async(SelectedMainPicture.Id);
+        }
+    }
+
+    public async Task SubPictureToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Text == "Update")
+        {
+            var subPictureChanges = await this.SubPictureGrid.GetBatchChangesAsync();
+
+            if (subPictureChanges.ChangedRecords.Count > 0)
+            {
+                foreach (var subPicture in subPictureChanges.ChangedRecords)
+                {
+                    try
+                    {
+                        await _subCategoryDB.EditHierarchy2Category(subPicture);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+            if (subPictureChanges.DeletedRecords.Count > 0)
+            {
+                foreach (var subPicture in subPictureChanges.DeletedRecords)
+                {
+                    await _subCategoryDB.DeleteHierarchy2CategoryAsync(subPicture.Id);
+                }
+            }
+            if (subPictureChanges.AddedRecords.Count > 0)
+            {
+                foreach (var subPicture in subPictureChanges.AddedRecords)
+                {
+                    await _subCategoryDB.AddHierarchy2CategoryAsync(SelectedMainPicture.Name, subPicture.Name);
+                }
+            }
+
+        }
+
+        if (args.Item.Text == "Delete")
+        {
+            await _subCategoryDB.DeleteHierarchy2CategoryAsync(SelectedSubPicture.Id);
+        }
+    }
+}
+
+<style>
+    .card-group {
+        min-height: 600px;
+        margin-right: 50px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border: solid;
+        border-color: lightgrey;
+        float: left;
+    }
+
+    .sub-group {
+        margin: 10px;
+        max-width: 700px;
+    }
+
+    .e-gridheader .e-table {
+        display: none;
+    }
+
+    .e-grid .e-toolbar .e-tbar-btn-text,
+    .e-grid .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn-text {
+        display: none;
+    }
+
+    .e-grid .e-rowcell.e-selectionbackground {
+        background-color: #91c6ed;
+        border-color: #91c6ed;
+    }
+
+    .vdu-list {
+        width: 400;
+    }
+
+    h4 {
+        padding-left: 10px;
+        padding-top: 10px;
+    }
+
+    .card-under-group {
+        min-height: 500px;
+        width: 390px;
+    }
+
+    /*Sample level customization styles*/
+    .listview, .listview-group {
+        border: 1px solid #dddddd;
+        border-bottom: 0px;
+        border-radius: 3px;
+    }
+
+    .fluent .listview, .fluent .listview-group,
+    .fluent-dark .listview, .fluent-dark .listview-group {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    #flat-list,
+    #group-list {
+        width: 49%;
+        margin: auto;
+        margin-bottom: 15px;
+    }
+
+    #flat-list h4, #group-list h4 {
+        padding-left: 10px;
+    }
+
+    #flat-list {
+        float: left;
+        padding-left: 10px;
+    }
+
+    #group-list {
+        float: right;
+        padding-right: 10px;
+    }
+</style>

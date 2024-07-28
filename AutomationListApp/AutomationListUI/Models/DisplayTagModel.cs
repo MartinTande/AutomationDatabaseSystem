@@ -45,7 +45,8 @@ public class DisplayTagModel
 	public bool IsInput => (!string.IsNullOrEmpty(IoType) && IoType.EndsWith("I"));
 
 	public bool IsDigital => (!string.IsNullOrEmpty(IoType) && IoType.Contains("D"));
-
+	[ReadOnly(true)]
+	[Editable(false)]
 	public string FullTagName => $"{GetPrefix()}{ObjectName}_{EqSuffix}";
 
 	private string? GetPrefix()

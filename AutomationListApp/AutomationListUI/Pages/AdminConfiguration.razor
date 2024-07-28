@@ -1,0 +1,404 @@
+﻿@page "/admin-config"
+
+@using AutomationListLibrary.Data
+@using AutomationListLibrary.DataManager
+@using AutomationListUI.Readers
+@using System.Data
+
+@inject CategoryDataManager _categoryDB
+@inject SubCategoryDataManager _subCategoryDB
+@inject ExcelReader _excelReader  
+@inject IConfiguration config
+
+<h1>Admin Configuration</h1>
+<hr />
+<br />
+
+<div class="card-group">
+    <div class="sub-group">
+        <h4>IO Types</h4>
+        <SfGrid DataSource="@IoTypes"
+                @ref="@IoTypeGrid"
+                AllowSelection="true"
+                Width="230"
+                Toolbar="@ToolbarItems">
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
+            <GridEvents RowSelected="GetSelectedIoType" TValue="IoType" OnToolbarClick="IoTypeToolbarClickHandler"></GridEvents>
+            <GridEditSettings AllowAdding="true"
+                              AllowEditing="true"
+                              AllowDeleting="true"
+                              ShowConfirmDialog="false"
+                              ShowDeleteConfirmDialog="true"
+                              Mode="EditMode.Batch" />
+            <GridColumns>
+                <GridColumn Field=@nameof(Hierarchy1.Name) />
+            </GridColumns>
+        </SfGrid>
+    </div>
+    <div class="sub-group">
+        <h4>Signal Types</h4>
+        <SfGrid DataSource="@SignalTypes"
+                @ref="@SignalTypeGrid"
+                Width="230"
+                AllowSelection="true"
+                Toolbar=@ToolbarItems>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
+            <GridEvents RowSelected="GetSelectedSignalType" TValue="SignalType" OnToolbarClick="SignalTypeToolbarClickHandler"></GridEvents>
+            <GridEditSettings AllowAdding="true"
+                                AllowEditing="true"
+                                AllowDeleting="true"
+                                ShowConfirmDialog="false"
+                                ShowDeleteConfirmDialog="true"
+                                Mode="EditMode.Batch" />
+            <GridColumns>
+                <GridColumn Field=@nameof(Hierarchy2.Name) />
+            </GridColumns>
+        </SfGrid>
+    </div>
+</div>
+<div class="card-group">
+    <div class="sub-group">
+        <h4>Eng units</h4>
+        <SfGrid DataSource="@EngUnits"
+                @ref="@EngUnitGrid"
+                Width="250"
+                Height="500"
+                AllowSelection="true"
+                Toolbar=@ToolbarItems>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
+            <GridEvents RowSelected="GetSelectedEngUnit" TValue="EngUnit" OnToolbarClick="EngUnitToolbarClickHandler"></GridEvents>
+            <GridEditSettings AllowAdding="true"
+                                AllowEditing="true"
+                                AllowDeleting="true"
+                                ShowConfirmDialog="false"
+                                ShowDeleteConfirmDialog="true"
+                                Mode="EditMode.Batch" />
+            <GridColumns>
+                <GridColumn Field=@nameof(EngUnit.Name) Width="120"/>
+                <GridColumn Field=@nameof(EngUnit.UnitId) Width="auto"/>
+            </GridColumns>
+        </SfGrid>
+    </div>
+</div>
+<div class="card-group">
+    <div class="sub-group">
+        <h4>OTDs</h4>
+        <SfGrid DataSource="@Otds"
+                @ref="@OtdGrid"
+                Width="300"
+                Height="900"
+                AllowSelection="true">
+            <SfToolbar>
+                <ToolbarItems>
+                    <ToolbarItem Type="ItemType.Input">
+                        <Template>
+                            <div>
+                                <InputFile OnChange="LoadOtdFiles" multiple class="custom-file-input" accept=".xlsx" />
+                            </div>
+                        </Template>
+                    </ToolbarItem>
+                </ToolbarItems>
+            </SfToolbar>
+            <GridEvents RowSelected="GetSelectedOtd" TValue="Otd" />
+            <GridColumns>
+                <GridColumn Field=@nameof(Otd.Name) Width="120" />
+            </GridColumns>
+        </SfGrid>
+    </div>
+
+    <div class="sub-group">
+        <h4>OTD Interfaces</h4>
+        <SfGrid DataSource="@SelectedOtd.Interface"
+                Width="700"
+                Height="1100"
+                AllowSelection="true">
+            <GridColumns>
+                <GridColumn Field=@nameof(OtdInterface.Name) HeaderText="Name" Width="120"/>
+                <GridColumn Field=@nameof(OtdInterface.Suffix) HeaderText="Suffix" Width="120"/>
+                <GridColumn Field=@nameof(OtdInterface.DataType) HeaderText="DataType" Width="90"/>
+                <GridColumn Field=@nameof(OtdInterface.InterfaceType) HeaderText="Interface Type" Width="90" />
+                <GridColumn Field=@nameof(OtdInterface.IsOptional) HeaderText="Is Optional" TextAlign="TextAlign.Center" DisplayAsCheckBox=true Width="90" />
+            </GridColumns>
+        </SfGrid>
+    </div>
+</div>
+
+@code {
+    SfGrid<IoType>? IoTypeGrid;
+    SfGrid<SignalType>? SignalTypeGrid;
+    SfGrid<EngUnit>? EngUnitGrid;
+    SfGrid<Otd>? OtdGrid;
+    List<SignalType> SignalTypes = new();
+    List<EngUnit> EngUnits = new();
+    List<Otd> Otds = new();
+    List<IoType> IoTypes = new();
+    IoType? SelectedIoType;
+    SignalType? SelectedSignalType;
+    EngUnit? SelectedEngUnit;
+    Otd? SelectedOtd = new();
+    private long maxFileSize = 1024 * 1024 * 3; // represents 3MB
+    private int maxAllowedFiles = 30;
+    public string[] ToolbarItems = new string[] { "Add", "Edit", "Delete", "Update", "Cancel" };
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object>? AdditionalAttributes { get; set; }
+    // OTD Excel file config
+    private int _otdInputSheetNumer = 1;
+    private int _otdOutputSheetNumer = 2;
+    private int nameColumn = 0;
+    private int suffixColumn = 1;
+    private int dataTypeColumn = 3;
+    private int isOptionalColumn = 4;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IoTypes = await _categoryDB.GetIoTypeCategory();
+        EngUnits = await _categoryDB.GetEngUnitCategory();
+        Otds = await _categoryDB.GetOtdCategory();
+        foreach (var ioType in IoTypes)
+        {
+            ioType.SignalTypes = (await _subCategoryDB.GetSignalTypesAsync(ioType.Name));
+        }
+        foreach (var otd in Otds)
+        {
+            otd.Interface = (await _subCategoryDB.GetOtdInterfacesAsync(otd.Name));
+        }
+    }
+
+    public async Task GetSelectedIoType(RowSelectEventArgs<IoType> args)
+    {
+        SelectedIoType = (await this.IoTypeGrid.GetSelectedRecordsAsync()).FirstOrDefault();
+        if (SelectedIoType != null) SignalTypes = SelectedIoType.SignalTypes;
+    }
+
+    public async Task GetSelectedSignalType(RowSelectEventArgs<SignalType> args)
+    {
+        SelectedSignalType = (await this.SignalTypeGrid.GetSelectedRecordsAsync()).FirstOrDefault();
+    }
+
+    public async Task GetSelectedEngUnit(RowSelectEventArgs<EngUnit> args)
+    {
+        SelectedEngUnit = (await this.EngUnitGrid.GetSelectedRecordsAsync()).FirstOrDefault();
+    }
+
+    public async Task GetSelectedOtd(RowSelectEventArgs<Otd> args)
+    {
+        SelectedOtd = (await this.OtdGrid.GetSelectedRecordsAsync()).FirstOrDefault();
+
+    }
+
+    private async Task LoadOtdFiles(InputFileChangeEventArgs e)
+    {
+        List<string> filePaths = new();
+        Otds.Clear();
+        int nameColumn = 0;
+        int suffixColumn = 1;
+        int dataTypeColumn = 3;
+        int isOptionalColumn = 4;
+
+        try
+        {
+            foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+            {
+                string path = Path.Combine(config.GetValue<string>("FileStorage")!, "OTD", file.Name);
+                Directory.CreateDirectory(Path.Combine(config.GetValue<string>("FileStorage")!, "OTD"));
+                filePaths.Add(path);
+
+                await using FileStream fileStream = new(path, FileMode.Create);
+                await file.OpenReadStream(maxFileSize).CopyToAsync(fileStream);
+            }
+            foreach (string filePath in filePaths)
+            {
+                List<DataTable> dataTables = _excelReader.ReadFile(filePath).ToList();
+                Otd newOtd = new Otd { Name = Path.GetFileNameWithoutExtension(filePath) };
+
+
+                foreach (DataRow inputRow in dataTables[_otdInputSheetNumer].Rows)
+                {
+                    newOtd.Interface.Add(new OtdInterface
+                    {
+                        Name = inputRow[nameColumn].ToString(),
+                        Suffix = inputRow[suffixColumn].ToString(),
+                        DataType = inputRow[dataTypeColumn].ToString(),
+                        IsOptional = inputRow[isOptionalColumn].ToString().Equals("True"),
+                        InterfaceType = "Input"
+                    });
+                }
+                foreach (DataRow outputRow in dataTables[_otdOutputSheetNumer].Rows)
+                {
+                    newOtd.Interface.Add(new OtdInterface
+                    {
+                        Name = outputRow[nameColumn].ToString(),
+                        Suffix = outputRow[suffixColumn].ToString(),
+                        DataType = outputRow[dataTypeColumn].ToString(),
+                        IsOptional = outputRow[isOptionalColumn].ToString().Equals("True"),
+                        InterfaceType = "Output"
+                    });
+                }
+                Otds.Add(newOtd);
+            }
+
+            await _categoryDB.UpdateOtds(Otds);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error reading excel file" + ex);
+        }
+
+    }
+
+    public async Task IoTypeToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Text == "Update")
+        {
+            var ioTypeChanges = await this.IoTypeGrid.GetBatchChangesAsync();
+
+            if (ioTypeChanges.ChangedRecords.Count > 0)
+            {
+                foreach (var ioType in ioTypeChanges.ChangedRecords)
+                {
+                    await _categoryDB.EditHierarchy1Async(ioType);
+                }
+            }
+            if (ioTypeChanges.DeletedRecords.Count > 0)
+            {
+                foreach (var ioType in ioTypeChanges.DeletedRecords)
+                {
+                    await _categoryDB.DeleteIoTypeAsync(ioType.Id);
+                }
+            }
+            if (ioTypeChanges.AddedRecords.Count > 0)
+            {
+                foreach (var ioType in ioTypeChanges.AddedRecords)
+                {
+                    await _categoryDB.AddIoTypeAsync(ioType.Name);
+                }
+            }
+
+            IoTypes = await _categoryDB.GetIoTypeCategory();
+        }
+
+        if (args.Item.Text == "Delete")
+        {
+            await _categoryDB.DeleteIoTypeAsync(SelectedIoType.Id);
+        }
+    }
+
+    public async Task SignalTypeToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Text == "Update")
+        {
+            var signalTypeChanges = await this.SignalTypeGrid.GetBatchChangesAsync();
+
+            if (signalTypeChanges.ChangedRecords.Count > 0)
+            {
+                foreach (var signalType in signalTypeChanges.ChangedRecords)
+                {
+                    await _subCategoryDB.EditSignalTypeAync(signalType);
+                }
+            }
+            if (signalTypeChanges.DeletedRecords.Count > 0)
+            {
+                foreach (var signalType in signalTypeChanges.DeletedRecords)
+                {
+                    await _subCategoryDB.DeleteSignalTypeAync(SelectedIoType.Id, signalType.Id);
+                }
+            }
+            if (signalTypeChanges.AddedRecords.Count > 0)
+            {
+                foreach (var signalType in signalTypeChanges.AddedRecords)
+                {
+                    await _subCategoryDB.AddSignalTypeAsync(SelectedIoType.Id, signalType.Name);
+                }
+            }
+        }
+
+        if (args.Item.Text == "Delete")
+        {
+            await _subCategoryDB.DeleteSignalTypeAync(SelectedIoType.Id, SelectedSignalType.Id);
+        }
+    }
+
+    public async Task EngUnitToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Text == "Update")
+        {
+            var engUnitChanges = await this.EngUnitGrid.GetBatchChangesAsync();
+
+            if (engUnitChanges.ChangedRecords.Count > 0)
+            {
+                foreach (var engUnit in engUnitChanges.ChangedRecords)
+                {
+                    await _categoryDB.EditEngUnitAsync(engUnit);
+                }
+            }
+            if (engUnitChanges.DeletedRecords.Count > 0)
+            {
+                foreach (var engUnit in engUnitChanges.DeletedRecords)
+                {
+                    await _categoryDB.DeleteEngUnitAsync(engUnit.Id);
+                }
+            }
+            if (engUnitChanges.AddedRecords.Count > 0)
+            {
+                foreach (var engUnit in engUnitChanges.AddedRecords)
+                {
+                    await _categoryDB.AddEngUnitAsync(engUnit);
+                }
+            }
+        }
+
+        if (args.Item.Text == "Delete")
+        {
+            await _categoryDB.DeleteEngUnitAsync(SelectedEngUnit.Id);
+        }
+    }
+
+}
+
+<style>
+    .card-group {
+        min-height: 600px;
+        margin-right: 50px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border: solid;
+        border-color: lightgrey;
+        float: left;
+    }
+
+    .sub-group {
+        margin: 10px;
+        max-width: 700px;
+    }
+
+/*     .e-gridheader .e-table {
+        display: none;
+    } */
+
+    .e-grid .e-toolbar .e-tbar-btn-text,
+    .e-grid .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn-text {
+        display: none;
+    }
+
+    .e-grid .e-rowcell.e-selectionbackground {
+        background-color: #91c6ed;
+        border-color: #91c6ed;
+    }
+
+    .vdu-list {
+        width: 400;
+    }
+
+    h4 {
+        padding-left: 10px;
+        padding-top: 10px;
+    }
+
+    .card-under-group {
+        min-height: 500px;
+        width: 390px;
+    }
+
+</style>

@@ -46,7 +46,37 @@
 	<GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.CheckBox"/>
 	<GridPageSettings PageSizes="true"/>
 	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single"/>
+	<GridAggregates>
+		<GridAggregate>
+			<GridAggregateColumns>
+				<GridAggregateColumn Field=@nameof(DisplayObjectModel.SfiNumber) Type="AggregateType.Count">
+					<FooterTemplate>
+						@{
+							var aggregate = (context as AggregateTemplateContext);
+							<div>
+								<p>Object Count: @aggregate.Count</p>
+							</div>
+						}
+					</FooterTemplate>
+				</GridAggregateColumn>
+			</GridAggregateColumns>
+		</GridAggregate>
+		<GridAggregate>
+			<GridAggregateColumns>
+				<GridAggregateColumn Field=@nameof(DisplayObjectModel.SfiNumber) Type="AggregateType.Custom" >
+					<FooterTemplate>
+						@{
+							<div>
+								<p>Tag Count: @GetNumberOfTags()</p>
+							</div>
+						}
+					</FooterTemplate>
+				</GridAggregateColumn>
+			</GridAggregateColumns>
+		</GridAggregate>
+	</GridAggregates>
 	<GridColumns>
+		<GridColumn Field=@nameof(DisplayObjectModel.Id) Visible="false" IsPrimaryKey="true" />
 		<GridColumn Field=@nameof(DisplayObjectModel.SfiNumber) HeaderText="Sfi Nr" EditType="EditType.DefaultEdit" Width="120" />
 		<GridColumn Field=@nameof(DisplayObjectModel.MainEqNumber) HeaderText="Main Eq Nr" Width="120" />
 		<GridColumn Field=@nameof(DisplayObjectModel.EqNumber) HeaderText="Eq Nr" Width="120" />
@@ -56,7 +86,6 @@
 		<GridColumn Field=@nameof(DisplayObjectModel.ObjectType) HeaderText="Object Type" EditType="EditType.DropDownEdit" EditorSettings="@ObjectTypeEditParams" />
 		<GridColumn Field=@nameof(DisplayObjectModel.Otd) HeaderText="OTD" EditType="EditType.DropDownEdit" EditorSettings="@OtdEditParams" />
 		<GridColumn Field=@nameof(DisplayObjectModel.Cabinet) HeaderText="Cabinet" EditType="EditType.DropDownEdit" EditorSettings="@CabinetEditParams" />
-		<GridColumn Field=@nameof(DisplayObjectModel.Id) HeaderText="ID" IsPrimaryKey="true" />
 	</GridColumns>
 </SfGrid>
 <br />
@@ -86,7 +115,8 @@
 	<GridPageSettings PageSizes="true" />
 	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
 	<GridColumns>
-		<GridColumn Field=@nameof(DisplayTagModel.FullTagName) HeaderText="Tag Name" IsPrimaryKey="true" Width="160" AllowEditing=false >
+		<GridColumn Field=@nameof(DisplayTagModel.Id) Visible=false IsPrimaryKey="true"/>
+		<GridColumn Field=@nameof(DisplayTagModel.FullTagName) HeaderText="Tag Name" Width="160" AllowEditing=false >
 			<Template>
 				@{
 					var tag = (context as DisplayTagModel);
@@ -95,27 +125,14 @@
 						tag.ObjectId = SelectedObject.Id;
 						tag.ObjectName = SelectedObject.FullObjectName;
 					}
+					<div>@tag.FullTagName</div>
 				}
 			</Template>
 		</GridColumn>
 		<GridColumn Field=@nameof(DisplayTagModel.EqSuffix) HeaderText="Eq Suffix" EditType="EditType.DefaultEdit" />
 		<GridColumn Field=@nameof(DisplayTagModel.Description) HeaderText="Description" Width="150" />
-@* 		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="IO Type" EditType="EditType.DropDownEdit">
-		    <EditTemplate>
-				<SfDropDownList TItem="DisplayTagModel" TValue="string" @bind-Value="@((context as DisplayTagModel).IoType)" DataSource="@ioTypes">
-					<DropDownListFieldSettings Value="IoType" Text="IoType"></DropDownListFieldSettings>
-                </SfDropDownList>
-            </EditTemplate>
-		</GridColumn> *@
 		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="Io Type" EditType="EditType.DropDownEdit" EditorSettings="@IoTypeEditParams" />
 		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" EditType="EditType.DropDownEdit" EditorSettings="@SignalTypeEditParams" />
-@* 		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" EditType="EditType.DropDownEdit">
-			<EditTemplate>
-				<SfDropDownList TItem="DisplayTagModel" TValue="string" @bind-Value="@((context as DisplayTagModel).SignalType)" DataSource="@signalTypes">
-					<DropDownListFieldSettings Value="SignalType" Text="SignalType"></DropDownListFieldSettings>
-				</SfDropDownList>
-			</EditTemplate>
-		</GridColumn> *@
 		<GridColumn Field=@nameof(DisplayTagModel.EngUnit) HeaderText="Eng unit" />
 		<GridColumn Field=@nameof(DisplayTagModel.SWPath) HeaderText="SW Path Type"  />
 		<GridColumn Field=@nameof(DisplayTagModel.DBName) HeaderText="DB Name" />
@@ -133,14 +150,14 @@
 
 
 @code {
-	List<Otd>? Otds = new List<Otd>();
-	List<ObjectType>? ObjectTypes = new List<ObjectType>();
-	List<Cabinet>? Cabinets = new List<Cabinet>();
-	List<IoType>? IoTypes = new List<IoType>();
-	List<SignalType>? SignalTypes = new List<SignalType>();
-	List<DisplayTagModel>? Tags;
-	SfGrid<DisplayTagModel>? TagGrid;
-	SfGrid<DisplayObjectModel>? ObjectGrid;
+	private SfGrid<DisplayTagModel>? TagGrid;
+	private SfGrid<DisplayObjectModel>? ObjectGrid;
+	public List<Otd>? Otds = new List<Otd>();
+	public List<ObjectType>? ObjectTypes = new List<ObjectType>();
+	public List<Cabinet>? Cabinets = new List<Cabinet>();
+	public List<IoType>? IoTypes = new List<IoType>();
+	public List<SignalType>? SignalTypes = new List<SignalType>();
+	public List<DisplayTagModel>? Tags;
 	public DisplayObjectModel? SelectedObject { get; set; }
 	public DisplayTagModel? SelectedTag { get; set; }
 	private List<Object> TagToolbarItems = new List<Object>() { "Add", "Delete", "Edit", "Update", "Cancel", new ItemModel() { Text = "Duplicate", TooltipText = "Duplicate", PrefixIcon = "e-duplicate", Id = "Duplicate" } };
@@ -222,6 +239,20 @@
 		StateHasChanged();
 	}
 
+	public int GetNumberOfTags()
+	{
+		var source = ObjectGrid.CurrentViewData;
+		IEnumerable<DisplayObjectModel> gridObjects = source.Cast<DisplayObjectModel>();
+		foreach (var obj in gridObjects)
+		{
+			var tags = Task.Run(async () => await _tagDB.GetTagsByObjectIdAsync(obj.Id)).Result.ToList();
+			obj.Tags = tags;
+		}
+
+		int _numberOfTags = gridObjects.SelectMany(obj => obj.Tags).Count();
+		return _numberOfTags;
+	}
+
 	public async Task GetSelectedTag(RowSelectEventArgs<DisplayTagModel> args)
 	{
 		SelectedTag = (await this.TagGrid.GetSelectedRecordsAsync()).FirstOrDefault();
@@ -277,6 +308,11 @@
 				tag.ObjectName = SelectedObject.FullObjectName;
 			}
 		}
+
+		if (args.Item.Text == "Delete")
+		{
+			await _tagDB.DeleteTagAsync(SelectedTag.Id);
+		}
 	}
 
 	public class CustomAdaptor : DataAdaptor
@@ -300,6 +336,7 @@
 		{
 			Objects = await _objectService.GetObjectsAsync();
 			GridData = Objects;
+			int count = GridData.Cast<DisplayObjectModel>().Count();
 
 			// Sorting
 			if (dataManagerRequest.Sorted?.Count > 0)
@@ -317,6 +354,17 @@
 			if (dataManagerRequest.Search != null && dataManagerRequest.Search.Count > 0)
 			{
 				GridData = DataOperations.PerformSearching(GridData, dataManagerRequest.Search);
+			}
+
+			// Aggregates
+			DataResult DataObject = new DataResult();
+			if (dataManagerRequest.Aggregates != null) // Aggregation
+			{
+				DataObject.Result = GridData;
+				DataObject.Count = count;
+				DataObject.Aggregates = DataUtil.PerformAggregation(GridData, dataManagerRequest.Aggregates);
+
+				return dataManagerRequest.RequiresCounts ? DataObject : (object)GridData;
 			}
 
 			return dataManagerRequest.RequiresCounts ? new DataResult() { Result = GridData, Count = Objects.Count() } : (object)GridData;

@@ -24,9 +24,7 @@ public class ObjectNameValidator : ValidationAttribute
 
     protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 	{
-		var task = Task.Run(async () => await _objectService.GetObjectsAsync());
-		task.Wait();
-		objects = task.Result.ToList();
+		objects = Task.Run(async () => await _objectService.GetObjectsAsync()).Result.ToList();
 
 		string inputName = value.ToString();
 		if (string.IsNullOrEmpty(inputName))

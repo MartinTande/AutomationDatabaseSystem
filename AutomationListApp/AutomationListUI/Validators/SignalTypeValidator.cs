@@ -30,9 +30,7 @@ public class SignalTypeValidator : ValidationAttribute
 		if (string.IsNullOrEmpty(signalType))
 			return new ValidationResult("Signal Type is required");
 
-		var task = Task.Run(async () => await _subCategoryDataManager.GetSignalTypesAsync(tag.IoType));
-		task.Wait();
-		List<SignalType> _signalTypes = task.Result.ToList();
+		List<SignalType> _signalTypes = Task.Run(async () => await _subCategoryDataManager.GetSignalTypesAsync(tag.IoType)).Result.ToList();
 
 		var signalTypeNames = _signalTypes.Select(x => x.Name).ToList();
 		if (!signalTypeNames.Contains(signalType))

@@ -33,7 +33,7 @@ public class SubCategoryDataManager
         return await _sqlConnector.ReadDataAsync<OtdInterface, dynamic>("GetOtdInterfacesByGroup", p);
     }
 
-    public async Task<IEnumerable<Hierarchy2>> GetHierarchy2CategoryAsync(string hierarchy1Name)
+    public async Task<List<Hierarchy2>> GetHierarchy2CategoryAsync(string hierarchy1Name)
     {
         // Anonymous object, object with no name type
         // No parameters, but need an object
@@ -80,4 +80,38 @@ public class SubCategoryDataManager
 
         await _sqlConnector.WriteDataAsync("EditHierarchy2", p);
     }
+
+    public async Task AddSignalTypeAsync(int ioTypeId, string newSignalType)
+    {
+        // Anonymous object, object with no name type
+        // No parameters, but need an object
+        var p = new
+        {
+            IoTypeId = ioTypeId,
+            SignalTypeName = newSignalType
+        };
+
+        await _sqlConnector.WriteDataAsync("AddSignalType", p);
+    }
+
+    public async Task DeleteSignalTypeAync(int ioTypeId, int signalTypeId)
+    {
+        var p = new 
+        { 
+            IoTypeId = ioTypeId,
+            SignalTypeId = signalTypeId 
+        };
+        await _sqlConnector.WriteDataAsync("DeleteSignalType", p);
+    }
+
+    public async Task EditSignalTypeAync(ICategory category)
+    {
+        var p = new
+        {
+            category.Id,
+            category.Name
+        };
+        await _sqlConnector.WriteDataAsync("EditCategory", p);
+    }
+
 }
