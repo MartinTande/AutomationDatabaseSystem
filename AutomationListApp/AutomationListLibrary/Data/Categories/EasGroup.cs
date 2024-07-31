@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AutomationListLibrary.Data.Categories;
+﻿namespace AutomationListLibrary.Data;
 
 public class EasGroup : ICategory
 {

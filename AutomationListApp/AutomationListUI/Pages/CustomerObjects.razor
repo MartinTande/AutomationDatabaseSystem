@@ -2,7 +2,6 @@
 
 @using AutomationListLibrary
 @using AutomationListLibrary.Data
-@using AutomationListLibrary.Data.Categories
 @using AutomationListLibrary.DataAccess
 @using AutomationListLibrary.DataManager
 @using AutomationListUI.Models
@@ -95,9 +94,10 @@
 		@ref="@TagGrid"
 		AllowReordering="true"
 		AllowResizing="true"
+		AllowSorting="true"
 		AllowSelection="true"
 		Height="300"
-		Toolbar=@TagToolbarItems>
+		Toolbar=@ToolbarItems>
 	<GridEvents 
 		OnToolbarClick="ToolbarClickHandler" 
 		RowSelected="GetSelectedTag" 
@@ -131,7 +131,7 @@
 		</GridColumn>
 		<GridColumn Field=@nameof(DisplayTagModel.EqSuffix) HeaderText="Eq Suffix" EditType="EditType.DefaultEdit" />
 		<GridColumn Field=@nameof(DisplayTagModel.Description) HeaderText="Description" Width="150" />
-		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="Io Type" EditType="EditType.DropDownEdit" EditorSettings="@IoTypeEditParams" />
+		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="Io Type" EditType="EditType.DropDownEdit" EditorSettings="@IoTypeEditParams" Width="auto"/>
 		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" EditType="EditType.DropDownEdit" EditorSettings="@SignalTypeEditParams" />
 		<GridColumn Field=@nameof(DisplayTagModel.EngUnit) HeaderText="Eng unit" />
 		<GridColumn Field=@nameof(DisplayTagModel.SWPath) HeaderText="SW Path Type"  />
@@ -160,7 +160,7 @@
 	public List<DisplayTagModel>? Tags;
 	public DisplayObjectModel? SelectedObject { get; set; }
 	public DisplayTagModel? SelectedTag { get; set; }
-	private List<Object> TagToolbarItems = new List<Object>() { "Add", "Delete", "Edit", "Update", "Cancel", new ItemModel() { Text = "Duplicate", TooltipText = "Duplicate", PrefixIcon = "e-duplicate", Id = "Duplicate" } };
+	private List<Object> ToolbarItems = new List<Object>() { "Add", "Delete", "Edit", "Update", "Cancel", new ItemModel() { Text = "Duplicate", TooltipText = "Duplicate", PrefixIcon = "oi oi-duplicate", Id = "Duplicate" } };
 
 	protected override async Task OnInitializedAsync()
 	{

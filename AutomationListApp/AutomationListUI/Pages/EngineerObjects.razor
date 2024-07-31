@@ -1,0 +1,473 @@
+﻿@page "/engineer-objects"
+
+@using AutomationListLibrary
+@using AutomationListLibrary.Data
+@using AutomationListLibrary.DataAccess
+@using AutomationListLibrary.DataManager
+@using AutomationListUI.Models
+@using AutomationListUI.Services
+@using AutomationListUI.Validators
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Navigations
+@using System.ComponentModel.DataAnnotations
+
+@inject IObjectService _objectService
+@inject ITagService _tagService
+@inject CategoryDataManager _categoryDB
+@inject SubCategoryDataManager _subCategoryDB
+
+<h3>Objects</h3>
+
+<SfGrid DataSource="Objects"
+		@ref="@ObjectGrid"
+		AllowFiltering="true"
+		AllowReordering="true"
+		AllowResizing="true"
+		AllowSelection="true"
+		AllowSorting="true"
+		Height="400"
+		EnableStickyHeader=true
+		Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update","ExcelExport","Search"})">
+	<GridEvents 
+		RowSelected="GetSelectedObject"
+		Filtering="FilteringHandler" 
+		Filtered="FilteredHandler"
+		TValue="DisplayObjectModel"
+		OnToolbarClick="ObjectToolbarClickHandler"/>
+	<GridEditSettings AllowAdding="true"
+					  AllowEditing="true"
+					  AllowDeleting="true"
+					  ShowConfirmDialog="false"
+					  ShowDeleteConfirmDialog="true"
+					  Mode="EditMode.Batch" />
+	<GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar" Mode="Syncfusion.Blazor.Grids.FilterBarMode.Immediate" />
+	<GridPageSettings PageSizes="true" />
+	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
+	<GridColumns>
+		<GridColumn Field=@nameof(DisplayObjectModel.Id) Visible="false" IsPrimaryKey="true" />
+		<GridColumn Field=@nameof(DisplayObjectModel.SfiNumber) HeaderText="Sfi" Width="90" />
+		<GridColumn Field=@nameof(DisplayObjectModel.MainEqNumber) HeaderText="MainEq" Width="105" />
+		<GridColumn Field=@nameof(DisplayObjectModel.EqNumber) HeaderText="Eq" Width="80" />
+		<GridColumn Field=@nameof(DisplayObjectModel.FullObjectName) HeaderText="Object Name" Width="150"/>
+		<GridColumn Field=@nameof(DisplayObjectModel.Description) HeaderText="Description" Width="150"/>
+		<GridColumn Field=@nameof(DisplayObjectModel.VduGroup) HeaderText="Vdu Group" Width="140"/>
+		<GridColumn Field=@nameof(DisplayObjectModel.ObjectType) HeaderText="Object Type" Width="140" EditType="EditType.DropDownEdit" EditorSettings="@ObjectTypeEditParams" />
+		<GridColumn Field=@nameof(DisplayObjectModel.Otd) HeaderText="OTD" Width="130" EditType="EditType.DropDownEdit" EditorSettings="@OtdEditParams" />
+		<GridColumn Field=@nameof(DisplayObjectModel.Cabinet) HeaderText="Cabinet" Width="120" EditType="EditType.DropDownEdit" EditorSettings="@CabinetEditParams" />
+		<GridColumn Field=@nameof(DisplayObjectModel.Node) HeaderText="Node" Width="100" EditType="EditType.DropDownEdit" EditorSettings="@NodeEditParams" />
+		<GridColumn Field=@nameof(DisplayObjectModel.AcknowledgeAllowed) HeaderText="Ack Allowed" Width="140" EditType="EditType.DropDownEdit" EditorSettings="@AckAllowedEditParams" />
+		<GridColumn Field=@nameof(DisplayObjectModel.AlwaysVisible) HeaderText="Always Visible" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@AlwaysVisibleEditParams" />
+		<GridColumn Field=@nameof(DisplayObjectModel.AlarmGroup) HeaderText="Alarm Group" Width="145" EditType="EditType.DropDownEdit" EditorSettings="@AlarmGroupEditParams" />
+		<GridColumn Field=@nameof(DisplayObjectModel.EasGroup) HeaderText="Eas Group" Width="140" EditType="EditType.DropDownEdit" EditorSettings="@EasGroupEditParams" />
+		<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy1) HeaderText="Main Pic" Width="130" EditType="EditType.DropDownEdit" EditorSettings="@MainPictureEditParams" />
+		<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy2) HeaderText="Sub Pic" Width="130" EditType="EditType.DropDownEdit" EditorSettings="@SubPictureEditParams" />
+		<GridColumn Field=@nameof(DisplayObjectModel.LastModified) HeaderText="Last Modified" Width="150" />
+	</GridColumns>
+</SfGrid>
+<h5>Object Count: @ObjectCount - Tag Count: </h5>
+<br />
+
+<h3>Tags</h3>
+<SfGrid DataSource="@Tags"
+		@ref="@TagGrid"
+		AllowReordering="true"
+		AllowResizing="true"
+		AllowSelection="true"
+		Height="300"
+		Toolbar=@TagToolbarItems>
+	<GridEvents OnToolbarClick="ToolbarClickHandler"
+				RowSelected="GetSelectedTag"
+				TValue="DisplayTagModel"
+				CellSaved="CellSavedHandler" />
+	<GridEditSettings AllowAdding="true"
+					  AllowEditing="true"
+					  AllowDeleting="true"
+					  ShowConfirmDialog="false"
+					  ShowDeleteConfirmDialog="true"
+					  Mode="EditMode.Batch">
+	</GridEditSettings>
+	<GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.CheckBox" />
+	<GridPageSettings PageSizes="true" />
+	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
+	<GridColumns>
+		<GridColumn Field=@nameof(DisplayTagModel.Id) Visible=false IsPrimaryKey="true" />
+		<GridColumn Field=@nameof(DisplayTagModel.FullTagName) HeaderText="Tag Name" Width="160" AllowEditing=false>
+			<Template>
+				@{
+					var tag = (context as DisplayTagModel);
+					if (tag.ObjectId == 0)
+					{
+						tag.ObjectId = SelectedObject.Id;
+						tag.ObjectName = SelectedObject.FullObjectName;
+					}
+					<div>@tag.FullTagName</div>
+				}
+			</Template>
+		</GridColumn>
+		<GridColumn Field=@nameof(DisplayTagModel.EqSuffix) HeaderText="Eq Suffix" />
+		<GridColumn Field=@nameof(DisplayTagModel.Description) HeaderText="Description" Width="150" />
+		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="Io Type" EditType="EditType.DropDownEdit" EditorSettings="@IoTypeEditParams" />
+		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" EditType="EditType.DropDownEdit" EditorSettings="@SignalTypeEditParams" />
+		<GridColumn Field=@nameof(DisplayTagModel.EngUnit) HeaderText="Eng unit" />
+		<GridColumn Field=@nameof(DisplayTagModel.SWPath) HeaderText="SW Path" />
+		<GridColumn Field=@nameof(DisplayTagModel.DBName) HeaderText="DB Name" />
+		<GridColumn Field=@nameof(DisplayTagModel.RangeLow) HeaderText="Range L" />
+		<GridColumn Field=@nameof(DisplayTagModel.RangeHigh) HeaderText="Range H" />
+		<GridColumn Field=@nameof(DisplayTagModel.LowLowLimit) HeaderText="Alm LL" />
+		<GridColumn Field=@nameof(DisplayTagModel.LowLimit) HeaderText="Alm L" />
+		<GridColumn Field=@nameof(DisplayTagModel.HighLimit) HeaderText="Alm H" />
+		<GridColumn Field=@nameof(DisplayTagModel.HighHighLimit) HeaderText="Alm HH" />
+		<GridColumn Field=@nameof(DisplayTagModel.ModbusAddress) HeaderText="Modbus Address" />
+		<GridColumn Field=@nameof(DisplayTagModel.ModbusBit) HeaderText="Modbus Bit" />
+		<GridColumn Field=@nameof(DisplayTagModel.AbsoluteAddress) HeaderText="Abs Address" />
+	</GridColumns>
+</SfGrid>
+
+
+@code {
+	private SfGrid<DisplayTagModel>? TagGrid;
+	private SfGrid<DisplayObjectModel>? ObjectGrid = new();
+	public List<Otd>? Otds { get; set; } = new();
+	public List<Node>? Nodes { get; set; } = new();
+	public List<IoType>? IoTypes { get; set; } = new();
+	public List<Cabinet>? Cabinets { get; set; } = new();
+	public List<VduGroup>? VduGroups { get; set; } = new();
+	public List<EasGroup>? EasGroups { get; set; } = new();
+	public List<AlarmGroup>? AlarmGroups { get; set; } = new();
+	public List<SignalType>? SignalTypes { get; set; } = new();
+	public List<ObjectType>? ObjectTypes { get; set; } = new();
+	public List<Hierarchy2>? SubPictures { get; set; } = new();
+	public List<Hierarchy1>? MainPictures { get; set; } = new();
+	public List<AlwaysVisible>? AlwaysVisibleLocations { get; set; } = new();
+	public List<AcknowledgeAllowed>? AckAllowedLocations { get; set; } = new();
+	public List<DisplayTagModel>? Tags { get; set; }
+	public DisplayObjectModel? SelectedObject { get; set; }
+	public DisplayTagModel? SelectedTag { get; set; }
+	public int ObjectCount { get; set; }
+	public int TagsCount { get; set; }
+	public List<DisplayObjectModel>? Objects { get; set; }
+	private List<Object> TagToolbarItems = new List<Object>() { "Add", "Delete", "Edit", "Update", "Cancel", new ItemModel() { Text = "Duplicate", TooltipText = "Duplicate", PrefixIcon = "e-duplicate", Id = "Duplicate" } };
+
+	protected override async Task OnInitializedAsync()
+	{
+		Objects = await _objectService.GetObjectsAsync();
+		ObjectCount = Objects.Count();
+
+		// Categories
+		Otds = await _categoryDB.GetOtdCategory();
+		Nodes = await _categoryDB.GetNodeCategory();
+		IoTypes = await _categoryDB.GetIoTypeCategory();
+		Cabinets = await _categoryDB.GetCabinetCategory();
+		EasGroups = await _categoryDB.GetEasGroupCategory();
+		AlarmGroups = await _categoryDB.GetAlarmGroupCategory();
+		ObjectTypes = await _categoryDB.GetObjectTypeCategory();
+		MainPictures = await _categoryDB.GetHierarchy1Category();
+		AckAllowedLocations = await _categoryDB.GetAckAllowedCategory();
+		AlwaysVisibleLocations = await _categoryDB.GetAlwaysVisibleCategory();
+
+		// Dropdown menu params
+		OtdEditParams.Params.DataSource = Otds.Select(otd => new DisplayObjectModel() { Otd = otd.Name }).ToList();
+		NodeEditParams.Params.DataSource = Nodes.Select(node => new DisplayObjectModel() { Node = node.Name }).ToList();
+		IoTypeEditParams.Params.DataSource = IoTypes.Select(ioType => new DisplayTagModel() { IoType = ioType.Name }).ToList();
+		CabinetEditParams.Params.DataSource = Cabinets.Select(cabinet => new DisplayObjectModel() { Cabinet = cabinet.Name }).ToList();
+		EasGroupEditParams.Params.DataSource = EasGroups.Select(easGroup => new DisplayObjectModel() { EasGroup = easGroup.Name }).ToList();
+		AlarmGroupEditParams.Params.DataSource = AlarmGroups.Select(alarmGroup => new DisplayObjectModel() { AlarmGroup = alarmGroup.Name }).ToList();
+		ObjectTypeEditParams.Params.DataSource = ObjectTypes.Select(objectType => new DisplayObjectModel() { ObjectType = objectType.Name }).ToList();
+		MainPictureEditParams.Params.DataSource = MainPictures.Select(mainPicture => new DisplayObjectModel() { Hierarchy1 = mainPicture.Name }).ToList();
+		AckAllowedEditParams.Params.DataSource = AckAllowedLocations.Select(ackAllowed => new DisplayObjectModel() { AcknowledgeAllowed = ackAllowed.Name }).ToList();
+		AlwaysVisibleEditParams.Params.DataSource = AlwaysVisibleLocations.Select(alwaysVisible => new DisplayObjectModel() { AlwaysVisible = alwaysVisible.Name }).ToList();
+	}
+
+	public async Task FilteringHandler(Syncfusion.Blazor.Grids.FilteringEventArgs args)
+
+	{
+		//GetNumberOfObjects();
+	}
+
+	public async Task FilteredHandler(FilteredEventArgs args)
+	{
+		ObjectCount = await GetNumberOfObjects();
+		// TagsCount = await GetNumberOfTags();
+	}
+
+	public async Task ActionBeginHandler(ActionBeginEventArgs args)
+	{
+		
+	}
+	public async Task CellSavedHandler(CellSavedArgs<DisplayTagModel> args)
+	{
+		var index = await TagGrid.GetRowIndexByPrimaryKey(args.RowData.Id);
+		if (args.ColumnName == "IoType")
+		{
+			string selectedIoType = args.Value.ToString();
+			SignalTypes = (await _subCategoryDB.GetSignalTypesAsync(selectedIoType)).ToList();
+
+			SignalTypeEditParams.Params.DataSource = SignalTypes.Select(signalType => new DisplayTagModel() { SignalType = signalType.Name }).ToList();
+
+			await TagGrid.UpdateCellAsync(index, "SignalType", null);
+			args.RowData.SignalType = null;
+		}
+	}
+	#region Drop down parameters
+	public DropDownEditCellParams OtdEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>()
+			}
+		};
+	public DropDownEditCellParams NodeEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>()
+			}
+		};
+	public DropDownEditCellParams CabinetEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>()
+			}
+		};
+	public DropDownEditCellParams EasGroupEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>()
+			}
+		};
+	public DropDownEditCellParams AlarmGroupEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>()
+			}
+		};
+	public DropDownEditCellParams SubPictureEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>()
+			}
+		};
+	public DropDownEditCellParams AckAllowedEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>()
+			}
+		};
+	public DropDownEditCellParams MainPictureEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>()
+			}
+		};
+	public DropDownEditCellParams AlwaysVisibleEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>()
+			}
+		};
+	public static DropDownEditCellParams dropDownTagTemplate = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayTagModel>()
+			}
+		};
+	public DropDownEditCellParams IoTypeEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayTagModel>()
+			}
+		};
+	public DropDownEditCellParams SignalTypeEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayTagModel>()
+			}
+		};
+	public DropDownEditCellParams ObjectTypeEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayTagModel>()
+			}
+		};
+	#endregion
+
+	public async Task GetSelectedObject(RowSelectEventArgs<DisplayObjectModel> args)
+	{
+		SelectedObject = (await this.ObjectGrid.GetSelectedRecordsAsync()).FirstOrDefault();
+		if (SelectedObject == null) return;
+
+		Tags = await _tagService.GetTagsByObjectIdAsync(SelectedObject.Id);
+		foreach (var tag in Tags)
+		{
+			tag.ObjectName = SelectedObject.FullObjectName;
+		}
+		if (SelectedObject.Hierarchy1 != null)
+		{
+			SubPictures = await _subCategoryDB.GetHierarchy2CategoryAsync(SelectedObject.Hierarchy1);
+			SubPictureEditParams.Params.DataSource = SubPictures.Select(subPicture => new DisplayObjectModel() { Hierarchy1 = subPicture.Name }).ToList();
+		}
+
+		StateHasChanged();
+	}
+
+	public async Task<int> GetNumberOfObjects()
+	{
+		var filteredRecords = ObjectGrid.GetFilteredRecordsAsync();
+		var filteredObjects = (List<DisplayObjectModel>)filteredRecords.Result;
+		// if (ObjectGrid == null) return 0;
+		var source = ObjectGrid.CurrentViewData;
+		// IEnumerable<DisplayObjectModel> gridObjects = source.Cast<DisplayObjectModel>();
+		return filteredObjects.Count();
+	}
+
+	public int GetNumberOfTags()
+	{
+		if (ObjectGrid.CurrentViewData == null) return 0;
+		var source = ObjectGrid.CurrentViewData;
+		IEnumerable<DisplayObjectModel> gridObjects = source.Cast<DisplayObjectModel>();
+		foreach (var obj in gridObjects)
+		{
+			var tags = Task.Run(async () => await _tagService.GetTagsByObjectIdAsync(obj.Id)).Result.ToList();
+			obj.Tags = tags;
+		}
+
+		int _numberOfTags = gridObjects.SelectMany(obj => obj.Tags).Count();
+		return _numberOfTags;
+	}
+
+	public async Task GetSelectedTag(RowSelectEventArgs<DisplayTagModel> args)
+	{
+		SelectedTag = (await this.TagGrid.GetSelectedRecordsAsync()).FirstOrDefault();
+
+		if (SelectedTag == null || SelectedObject == null) return;
+
+		if (SelectedTag.ObjectId == 0)
+		{
+			SelectedTag.ObjectId = SelectedObject.Id;
+		}
+		if (SelectedTag.IoType != null)
+		{
+			SignalTypes = await _subCategoryDB.GetSignalTypesAsync(SelectedTag.IoType);
+			SignalTypeEditParams.Params.DataSource = SignalTypes.Select(signalType => new DisplayTagModel() { SignalType = signalType.Name }).ToList();
+		}
+
+		StateHasChanged();
+	}
+
+	public async Task ToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+	{
+		if (args.Item.Text == "Update")
+		{
+			var tagChanges = await this.TagGrid.GetBatchChangesAsync();
+
+			if (tagChanges.AddedRecords.Count > 0)
+			{
+				foreach (var tag in tagChanges.AddedRecords)
+				{
+					await _tagService.InsertTagAsync(SelectedObject.Id, tag);
+				}
+			}
+			if (tagChanges.ChangedRecords.Count > 0)
+			{
+				foreach (var tag in tagChanges.ChangedRecords)
+				{
+					await _tagService.UpdateTagAsync(tag);
+				}
+			}
+			if (tagChanges.DeletedRecords.Count > 0)
+			{
+				foreach (var tag in tagChanges.DeletedRecords)
+				{
+					await _tagService.DeleteTagAsync(tag.Id);
+				}
+			}
+
+			if (SelectedObject == null) return;
+			Tags = await _tagService.GetTagsByObjectIdAsync(SelectedObject.Id);
+			foreach (var tag in Tags)
+			{
+				tag.ObjectName = SelectedObject.FullObjectName;
+			}
+		}
+
+		if (args.Item.Text == "Delete")
+		{
+			if (SelectedTag == null) return;
+			await _tagService.DeleteTagAsync(SelectedTag.Id);
+		}
+	}
+
+	public async Task ObjectToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+	{
+		if (args.Item.Text == "Update")
+		{
+			var objectChanges = await this.ObjectGrid.GetBatchChangesAsync();
+
+			if (objectChanges.AddedRecords.Count > 0)
+			{
+				foreach (var newObject in objectChanges.AddedRecords)
+				{
+					if (newObject.Otd == null)
+					{
+						newObject.Otd = await _categoryDB.GetOtdByObjectType(newObject.ObjectType);
+					}
+					await _objectService.InsertObjectAsync(newObject);
+
+					if (newObject.ObjectType != null)
+					{
+						var objectTypeTags = await _tagService.GetTagsByObjectTypeAsync(newObject.ObjectType);
+						int newObjectId = await _objectService.GetLastInsertedObjectId();
+						foreach (var tag in objectTypeTags)
+						{
+							await _tagService.InsertTagAsync(newObjectId, tag);
+						}
+					}
+				}
+			}
+			if (objectChanges.ChangedRecords.Count > 0)
+			{
+				foreach (var obj in objectChanges.ChangedRecords)
+				{
+					await _objectService.UpdateObjectAsync(obj);
+				}
+			}
+			if (objectChanges.DeletedRecords.Count > 0)
+			{
+				foreach (var obj in objectChanges.DeletedRecords)
+				{
+					var tags = await _tagService.GetTagsByObjectIdAsync(obj.Id);
+					foreach (var tag in tags)
+					{
+						await _tagService.DeleteTagAsync(tag.Id);
+					}
+					await _objectService.DeleteObjectAsync(obj.Id);
+				}
+			}
+			Objects = await _objectService.GetObjectsAsync();
+			ObjectCount = await GetNumberOfObjects();
+		}
+
+		if (args.Item.Text == "Delete")
+		{
+			if (SelectedObject == null) return;
+			var tags = await _tagService.GetTagsByObjectIdAsync(SelectedObject.Id);
+			foreach (var tag in tags)
+			{
+				await _tagService.DeleteTagAsync(tag.Id);
+			}
+			await _objectService.DeleteObjectAsync(SelectedObject.Id);
+			ObjectCount = await GetNumberOfObjects();
+		}
+	}
+}

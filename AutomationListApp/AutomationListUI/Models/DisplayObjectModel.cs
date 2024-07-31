@@ -12,7 +12,7 @@ public class DisplayObjectModel
     [Key]
     public int Id { get; set; }
     [Required]
-    public int SfiNumber { get; set; }
+    public string? SfiNumber { get; set; }
     [Required]
     public string? MainEqNumber { get; set; }
     public string? EqNumber { get; set; }

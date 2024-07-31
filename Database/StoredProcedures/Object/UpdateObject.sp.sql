@@ -9,7 +9,7 @@ GO
 CREATE PROCEDURE UpdateObject
 	-- Input parameters
 	@Id int,
-	@SfiNumber int,
+	@SfiNumber varchar(50),
 	@MainEqNumber varchar(100),
 	@EqNumber varchar(100),
 	@Description varchar(100),

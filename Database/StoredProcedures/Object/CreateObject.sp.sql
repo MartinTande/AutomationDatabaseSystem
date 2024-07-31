@@ -10,7 +10,7 @@ GO
 -- Stored Procedure
 CREATE PROCEDURE CreateObject
 	-- Input parameters
-	@SfiNumber int,
+	@SfiNumber varchar(50),
 	@MainEqNumber varchar(100),
 	@EqNumber varchar(100),
 	@Description varchar(100),

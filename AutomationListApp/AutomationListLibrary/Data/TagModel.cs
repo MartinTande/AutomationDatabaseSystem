@@ -25,5 +25,4 @@ public class TagModel
     public bool? IsVDR { get; set; }
     public DateTime? LastModified { get; }
     public string? ObjectName { get; set; }
-
 }

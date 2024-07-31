@@ -60,21 +60,22 @@ public class CategoryDataManager
     #endregion
 
     #region Specific Get methods
-    public async Task<List<Node>> GetNodeCategory() => await GetCategory<Node>("NODE");
-    public async Task<List<AcknowledgeAllowed>> GetAckAllowedCategory() => await GetCategory<AcknowledgeAllowed>("ACKNOWLEDGE_ALLOWED");
-    public async Task<List<AlwaysVisible>> GetAlwaysVisibleCategory() => await GetCategory<AlwaysVisible>("ALWAYS_VISIBLE");
-    public async Task<List<Cabinet>> GetCabinetCategory() => await GetCategory<Cabinet>("CABINET");
-    public async Task<List<Otd>> GetOtdCategory() => await GetCategory<Otd>("OTD");
-    public async Task<List<VduGroup>> GetVduGroupCategory() => await GetCategory<VduGroup>("VDU_GROUP");
-    public async Task<List<AlarmGroup>> GetAlarmGroupCategory() => await GetCategory<AlarmGroup>("ALARM_GROUP");
-    public async Task<List<Hierarchy1>> GetHierarchy1Category() => await GetCategory<Hierarchy1>("HIERARCHY_1");
-    public async Task<List<IoType>> GetIoTypeCategory() => await GetCategory<IoType>("IO_TYPE");
     public async Task<List<ObjectType>> GetObjectTypeCategory()
 	{
 		var p = new { };
 
 		return await _sqlConnector.ReadDataAsync<ObjectType, dynamic>("GetObjectTypes", p);
 	}
+    public async Task<List<Otd>> GetOtdCategory() => await GetCategory<Otd>("OTD");
+    public async Task<List<Node>> GetNodeCategory() => await GetCategory<Node>("NODE");
+    public async Task<List<IoType>> GetIoTypeCategory() => await GetCategory<IoType>("IO_TYPE");
+    public async Task<List<Cabinet>> GetCabinetCategory() => await GetCategory<Cabinet>("CABINET");
+    public async Task<List<VduGroup>> GetVduGroupCategory() => await GetCategory<VduGroup>("VDU_GROUP");
+    public async Task<List<EasGroup>> GetEasGroupCategory() => await GetCategory<EasGroup>("EAS_GROUP");
+    public async Task<List<AlarmGroup>> GetAlarmGroupCategory() => await GetCategory<AlarmGroup>("ALARM_GROUP");
+    public async Task<List<Hierarchy1>> GetHierarchy1Category() => await GetCategory<Hierarchy1>("HIERARCHY_1");
+    public async Task<List<AlwaysVisible>> GetAlwaysVisibleCategory() => await GetCategory<AlwaysVisible>("ALWAYS_VISIBLE");
+    public async Task<List<AcknowledgeAllowed>> GetAckAllowedCategory() => await GetCategory<AcknowledgeAllowed>("ACKNOWLEDGE_ALLOWED");
     public async Task<List<EngUnit>> GetEngUnitCategory()
     {
         var p = new {  };

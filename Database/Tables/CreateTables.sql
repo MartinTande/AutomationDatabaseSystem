@@ -151,7 +151,7 @@ CREATE TABLE OBJECT_TYPE
 CREATE TABLE OBJECT
 (
 	Id int PRIMARY KEY IDENTITY (1,1),
-	SfiNumber int NOT NULL,
+	SfiNumber varchar(50) NOT NULL,
 	MainEqNumber varchar(50) NOT NULL,
 	EqNumber varchar(50),
 	Description varchar(150) NOT NULL UNIQUE,

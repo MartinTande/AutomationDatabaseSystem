@@ -3,7 +3,7 @@
 public class ObjectModel
 {
     public int Id { get; set; }
-    public int SfiNumber { get; set; }
+    public string? SfiNumber { get; set; }
     public string? MainEqNumber { get; set; }
     public string? EqNumber { get; set; }
     public string? Description { get; set; }
@@ -21,8 +21,5 @@ public class ObjectModel
     public string? Cabinet { get; set; }
 	public DateTime? LastModified { get; }
 
-    public string? FullObjectName => $"{SfiNumber}_{MainEqNumber}_{EqNumber}";
-
 	public List<TagModel>? Tags { get; set; }
-
 }
