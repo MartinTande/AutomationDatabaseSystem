@@ -13,13 +13,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-    <PackageReference Include="Syncfusion.Blazor.DropDowns" Version="26.2.5" />
-    <PackageReference Include="Syncfusion.Blazor.Grid" Version="26.2.5" />
-    <PackageReference Include="Syncfusion.Blazor.Inputs" Version="26.2.5" />
-    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="26.2.5" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="26.2.5" />
-    <PackageReference Include="Syncfusion.Licensing" Version="26.2.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
+    <PackageReference Include="Syncfusion.Blazor.DropDowns" Version="26.2.7" />
+    <PackageReference Include="Syncfusion.Blazor.Grid" Version="26.2.7" />
+    <PackageReference Include="Syncfusion.Blazor.Inputs" Version="26.2.7" />
+    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="26.2.7" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="26.2.7" />
+    <PackageReference Include="Syncfusion.Licensing" Version="26.2.7" />
   </ItemGroup>
 
   <ItemGroup>

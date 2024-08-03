@@ -27,11 +27,13 @@
 		AllowSorting="true"
 		Height="400"
 		EnableStickyHeader=true
-		Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update","ExcelExport","Search"})">
+		Toolbar="@ObjectToolbarItems">
 	<GridEvents 
 		RowSelected="GetSelectedObject"
 		Filtering="FilteringHandler" 
 		Filtered="FilteredHandler"
+		CellSaved="ObjectCellSavedHandler"
+		DataBound="DataboundHandler"
 		TValue="DisplayObjectModel"
 		OnToolbarClick="ObjectToolbarClickHandler"/>
 	<GridEditSettings AllowAdding="true"
@@ -43,28 +45,97 @@
 	<GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar" Mode="Syncfusion.Blazor.Grids.FilterBarMode.Immediate" />
 	<GridPageSettings PageSizes="true" />
 	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Single" />
+	<GridAggregates>
+		<GridAggregate>
+			<GridAggregateColumns>
+				<GridAggregateColumn Field=@nameof(DisplayObjectModel.SfiNumber) Type="AggregateType.Count">
+					<FooterTemplate>
+						@{
+							var aggregate = (context as AggregateTemplateContext);
+							<div>
+								<p>Objects: @aggregate.Count</p>
+							</div>
+						}
+					</FooterTemplate>
+				</GridAggregateColumn>
+				<GridAggregateColumn Field=@nameof(DisplayObjectModel.MainEqNumber) Type="AggregateType.Custom">
+					<FooterTemplate>
+						@{
+							<div>
+								<p>Tags: @GetNumberOfTags()</p>
+							</div>
+						}
+					</FooterTemplate>
+				</GridAggregateColumn>
+			</GridAggregateColumns>
+		</GridAggregate>
+	</GridAggregates>
 	<GridColumns>
 		<GridColumn Field=@nameof(DisplayObjectModel.Id) Visible="false" IsPrimaryKey="true" />
+		<GridColumn Field=@nameof(DisplayObjectModel.ReadyForHMIGeneration) HeaderText="HMI Ready" Width="90" DisplayAsCheckBox="true" Type="Syncfusion.Blazor.Grids.ColumnType.Boolean" />
+		<GridColumn Field=@nameof(DisplayObjectModel.ReadyForPLCGeneration) HeaderText="PLC Ready" Width="90" DisplayAsCheckBox="true" Type="Syncfusion.Blazor.Grids.ColumnType.Boolean" />
 		<GridColumn Field=@nameof(DisplayObjectModel.SfiNumber) HeaderText="Sfi" Width="90" />
-		<GridColumn Field=@nameof(DisplayObjectModel.MainEqNumber) HeaderText="MainEq" Width="105" />
-		<GridColumn Field=@nameof(DisplayObjectModel.EqNumber) HeaderText="Eq" Width="80" />
+		<GridColumn Field=@nameof(DisplayObjectModel.MainEqNumber) HeaderText="MainEq" Width="90" />
+		<GridColumn Field=@nameof(DisplayObjectModel.EqNumber) HeaderText="Eq" Width="60" />
 		<GridColumn Field=@nameof(DisplayObjectModel.FullObjectName) HeaderText="Object Name" Width="150"/>
 		<GridColumn Field=@nameof(DisplayObjectModel.Description) HeaderText="Description" Width="150"/>
-		<GridColumn Field=@nameof(DisplayObjectModel.VduGroup) HeaderText="Vdu Group" Width="140"/>
-		<GridColumn Field=@nameof(DisplayObjectModel.ObjectType) HeaderText="Object Type" Width="140" EditType="EditType.DropDownEdit" EditorSettings="@ObjectTypeEditParams" />
-		<GridColumn Field=@nameof(DisplayObjectModel.Otd) HeaderText="OTD" Width="130" EditType="EditType.DropDownEdit" EditorSettings="@OtdEditParams" />
-		<GridColumn Field=@nameof(DisplayObjectModel.Cabinet) HeaderText="Cabinet" Width="120" EditType="EditType.DropDownEdit" EditorSettings="@CabinetEditParams" />
-		<GridColumn Field=@nameof(DisplayObjectModel.Node) HeaderText="Node" Width="100" EditType="EditType.DropDownEdit" EditorSettings="@NodeEditParams" />
-		<GridColumn Field=@nameof(DisplayObjectModel.AcknowledgeAllowed) HeaderText="Ack Allowed" Width="140" EditType="EditType.DropDownEdit" EditorSettings="@AckAllowedEditParams" />
-		<GridColumn Field=@nameof(DisplayObjectModel.AlwaysVisible) HeaderText="Always Visible" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@AlwaysVisibleEditParams" />
-		<GridColumn Field=@nameof(DisplayObjectModel.AlarmGroup) HeaderText="Alarm Group" Width="145" EditType="EditType.DropDownEdit" EditorSettings="@AlarmGroupEditParams" />
-		<GridColumn Field=@nameof(DisplayObjectModel.EasGroup) HeaderText="Eas Group" Width="140" EditType="EditType.DropDownEdit" EditorSettings="@EasGroupEditParams" />
-		<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy1) HeaderText="Main Pic" Width="130" EditType="EditType.DropDownEdit" EditorSettings="@MainPictureEditParams" />
-		<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy2) HeaderText="Sub Pic" Width="130" EditType="EditType.DropDownEdit" EditorSettings="@SubPictureEditParams" />
-		<GridColumn Field=@nameof(DisplayObjectModel.LastModified) HeaderText="Last Modified" Width="150" />
+		<GridColumn Field=@nameof(DisplayObjectModel.VduGroup) HeaderText="Vdu Group" Width="150"/>
+		<GridColumn Field=@nameof(DisplayObjectModel.ObjectType) HeaderText="Object Type" Width="200" EditType="EditType.DropDownEdit">
+			<EditTemplate>
+				<SfDropDownList ID="ObjectType" ShowClearButton=true TItem="ObjectType" TValue="string" @bind-Value="@((context as DisplayObjectModel).ObjectType)" DataSource="@ObjectTypes">
+					<DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
+				</SfDropDownList>
+			</EditTemplate>
+		</GridColumn>
+		<GridColumn Field=@nameof(DisplayObjectModel.Otd) HeaderText="OTD" Width="190" EditType="EditType.DropDownEdit">
+			<EditTemplate>
+				<SfDropDownList ID="Otd" ShowClearButton=true TItem="Otd" TValue="string" @bind-Value="@((context as DisplayObjectModel).Otd)" DataSource="@Otds">
+					<DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
+				</SfDropDownList>
+			</EditTemplate>
+		</GridColumn>
+		<GridColumn Field=@nameof(DisplayObjectModel.Cabinet) HeaderText="Cabinet" Width="130" EditType="EditType.DropDownEdit">
+			<EditTemplate>
+				<SfDropDownList ID="Cabinet" ShowClearButton=true TItem="Cabinet" TValue="string" @bind-Value="@((context as DisplayObjectModel).Cabinet)" DataSource="@Cabinets">
+					<DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
+				</SfDropDownList>
+			</EditTemplate>
+		</GridColumn>
+		<GridColumn Field=@nameof(DisplayObjectModel.Node) HeaderText="Node" Width="130" EditType="EditType.DropDownEdit">
+			<EditTemplate>
+				<SfDropDownList ID="Node" ShowClearButton=true TItem="Node" TValue="string" @bind-Value="@((context as DisplayObjectModel).Node)" DataSource="@Nodes">
+					<DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
+				</SfDropDownList>
+			</EditTemplate>
+		</GridColumn>
+		<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy1) HeaderText="Main Pic" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@MainPictureEditParams"/>
+		<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy2) HeaderText="Sub Pic" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@SubPictureEditParams"/>
+		<GridColumn Field=@nameof(DisplayObjectModel.AcknowledgeAllowed) HeaderText="Ack Allowed" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@AckAllowedEditParams"/>
+		<GridColumn Field=@nameof(DisplayObjectModel.AlwaysVisible) HeaderText="Always Visible" Width="150" EditType="EditType.DropDownEdit">
+			<EditTemplate>
+				<SfDropDownList ID="AlwaysVisible" ShowClearButton=true TItem="AlwaysVisible" TValue="string" @bind-Value="@((context as DisplayObjectModel).AlwaysVisible)" DataSource="@AlwaysVisibleLocations">
+					<DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
+				</SfDropDownList>
+			</EditTemplate>
+		</GridColumn>
+		<GridColumn Field=@nameof(DisplayObjectModel.AlarmGroup) HeaderText="Alarm Group" Width="150" EditType="EditType.DropDownEdit">
+			<EditTemplate>
+				<SfDropDownList ID="AlarmGroup" ShowClearButton=true TItem="AlarmGroup" TValue="string" @bind-Value="@((context as DisplayObjectModel).AlarmGroup)" DataSource="@AlarmGroups">
+					<DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
+				</SfDropDownList>
+			</EditTemplate>
+		</GridColumn>
+		<GridColumn Field=@nameof(DisplayObjectModel.EasGroup) HeaderText="Eas Group" Width="150" EditType="EditType.DropDownEdit">
+			<EditTemplate>
+				<SfDropDownList ID="EasGroup" ShowClearButton=true TItem="EasGroup" TValue="string" @bind-Value="@((context as DisplayObjectModel).EasGroup)" DataSource="@EasGroups">
+					<DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
+				</SfDropDownList>
+			</EditTemplate>
+		</GridColumn>
+		<GridColumn Field=@nameof(DisplayObjectModel.LastModified) HeaderText="Last Modified" Width="130" Format="dd.MM.yyyy" />
 	</GridColumns>
 </SfGrid>
-<h5>Object Count: @ObjectCount - Tag Count: </h5>
+<h6>Object Count: @ObjectCount - Tag Count: </h6>
 <br />
 
 <h3>Tags</h3>
@@ -75,10 +146,10 @@
 		AllowSelection="true"
 		Height="300"
 		Toolbar=@TagToolbarItems>
-	<GridEvents OnToolbarClick="ToolbarClickHandler"
+	<GridEvents OnToolbarClick="TagToolbarClickHandler"
 				RowSelected="GetSelectedTag"
 				TValue="DisplayTagModel"
-				CellSaved="CellSavedHandler" />
+				CellSaved="TagCellSavedHandler" />
 	<GridEditSettings AllowAdding="true"
 					  AllowEditing="true"
 					  AllowDeleting="true"
@@ -104,10 +175,11 @@
 				}
 			</Template>
 		</GridColumn>
-		<GridColumn Field=@nameof(DisplayTagModel.EqSuffix) HeaderText="Eq Suffix" />
+		<GridColumn Field=@nameof(DisplayTagModel.ReadyForSWGeneration) HeaderText="SW Ready" DisplayAsCheckBox="true" Type="Syncfusion.Blazor.Grids.ColumnType.Boolean" Width="90" />
+		<GridColumn Field=@nameof(DisplayTagModel.EqSuffix) HeaderText="Eq Suffix" Width="90"/>
 		<GridColumn Field=@nameof(DisplayTagModel.Description) HeaderText="Description" Width="150" />
-		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="Io Type" EditType="EditType.DropDownEdit" EditorSettings="@IoTypeEditParams" />
-		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" EditType="EditType.DropDownEdit" EditorSettings="@SignalTypeEditParams" />
+		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="Io Type" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@IoTypeEditParams" />
+		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@SignalTypeEditParams"/>
 		<GridColumn Field=@nameof(DisplayTagModel.EngUnit) HeaderText="Eng unit" />
 		<GridColumn Field=@nameof(DisplayTagModel.SWPath) HeaderText="SW Path" />
 		<GridColumn Field=@nameof(DisplayTagModel.DBName) HeaderText="DB Name" />
@@ -125,8 +197,17 @@
 
 
 @code {
+	// Grids
 	private SfGrid<DisplayTagModel>? TagGrid;
 	private SfGrid<DisplayObjectModel>? ObjectGrid = new();
+
+	// Objects and tags
+	public List<DisplayTagModel>? Tags { get; set; }
+	public List<DisplayObjectModel>? Objects { get; set; }
+	public DisplayTagModel? SelectedTag { get; set; }
+	public DisplayObjectModel? SelectedObject { get; set; }
+
+	// Categories
 	public List<Otd>? Otds { get; set; } = new();
 	public List<Node>? Nodes { get; set; } = new();
 	public List<IoType>? IoTypes { get; set; } = new();
@@ -140,19 +221,124 @@
 	public List<Hierarchy1>? MainPictures { get; set; } = new();
 	public List<AlwaysVisible>? AlwaysVisibleLocations { get; set; } = new();
 	public List<AcknowledgeAllowed>? AckAllowedLocations { get; set; } = new();
-	public List<DisplayTagModel>? Tags { get; set; }
-	public DisplayObjectModel? SelectedObject { get; set; }
-	public DisplayTagModel? SelectedTag { get; set; }
+
+	// Counts
 	public int ObjectCount { get; set; }
 	public int TagsCount { get; set; }
-	public List<DisplayObjectModel>? Objects { get; set; }
+
+	// Toolbar items
 	private List<Object> TagToolbarItems = new List<Object>() { "Add", "Delete", "Edit", "Update", "Cancel", new ItemModel() { Text = "Duplicate", TooltipText = "Duplicate", PrefixIcon = "e-duplicate", Id = "Duplicate" } };
+	private List<Object> ObjectToolbarItems = new List<Object>() { "Add", "Delete", "Edit", "Update", "Cancel", "ExcelExport", "Search", new ItemModel() { Text = "Duplicate", TooltipText = "Duplicate", PrefixIcon = "e-duplicate", Id = "Duplicate" } };
+
+	#region Drop down parameters
+	public DropDownEditCellParams OtdEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>(),
+				ShowClearButton = true
+			}
+		};
+	public DropDownEditCellParams NodeEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>(),
+				ShowClearButton = true
+			}
+		};
+	public DropDownEditCellParams CabinetEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>(),
+				ShowClearButton = true
+			}
+		};
+	public DropDownEditCellParams EasGroupEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>(),
+				ShowClearButton = true
+			}
+		};
+	public DropDownEditCellParams AlarmGroupEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>(),
+				ShowClearButton = true
+			}
+		};
+	public DropDownEditCellParams SubPictureEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>(),
+				ShowClearButton = true
+			}
+		};
+	public DropDownEditCellParams AckAllowedEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>(),
+				ShowClearButton = true
+			}
+		};
+	public DropDownEditCellParams MainPictureEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>(),
+				ShowClearButton = true
+			}
+		};
+	public DropDownEditCellParams AlwaysVisibleEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayObjectModel>(),
+				ShowClearButton = true
+			}
+		};
+	public static DropDownEditCellParams dropDownTagTemplate = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayTagModel>(),
+				ShowClearButton = true
+			}
+		};
+	public DropDownEditCellParams IoTypeEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayTagModel>(),
+				ShowClearButton = true
+			}
+		};
+	public DropDownEditCellParams SignalTypeEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayTagModel>(),
+				ShowClearButton = true
+			}
+		};
+	public DropDownEditCellParams ObjectTypeEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayTagModel>(),
+				ShowClearButton = true
+			}
+		};
+	#endregion
 
 	protected override async Task OnInitializedAsync()
 	{
-		Objects = await _objectService.GetObjectsAsync();
-		ObjectCount = Objects.Count();
-
 		// Categories
 		Otds = await _categoryDB.GetOtdCategory();
 		Nodes = await _categoryDB.GetNodeCategory();
@@ -176,12 +362,39 @@
 		MainPictureEditParams.Params.DataSource = MainPictures.Select(mainPicture => new DisplayObjectModel() { Hierarchy1 = mainPicture.Name }).ToList();
 		AckAllowedEditParams.Params.DataSource = AckAllowedLocations.Select(ackAllowed => new DisplayObjectModel() { AcknowledgeAllowed = ackAllowed.Name }).ToList();
 		AlwaysVisibleEditParams.Params.DataSource = AlwaysVisibleLocations.Select(alwaysVisible => new DisplayObjectModel() { AlwaysVisible = alwaysVisible.Name }).ToList();
+
+		Objects = await _objectService.GetObjectsAsync();
+
+		foreach (var ioType in IoTypes)
+		{
+			ioType.SignalTypes = await _subCategoryDB.GetSignalTypesAsync(ioType.Name);
+		}
+		foreach (var mainPic in MainPictures)
+		{
+			mainPic.SubPictures = await _subCategoryDB.GetHierarchy2CategoryAsync(mainPic.Name);
+		}
+		foreach (var otd in Otds)
+		{
+			otd.Interface = await _subCategoryDB.GetOtdInterfacesAsync(otd.Name);
+		}
+		foreach (var obj in Objects)
+		{
+			Otd otd = Otds.Where(otd => otd.Name == obj.Otd).FirstOrDefault();
+			obj.OtdInterface = otd;
+
+			obj.Tags = await _tagService.GetTagsByObjectIdAsync(obj.Id);
+		}
+		ObjectCount = Objects.Count();
 	}
 
 	public async Task FilteringHandler(Syncfusion.Blazor.Grids.FilteringEventArgs args)
-
 	{
-		//GetNumberOfObjects();
+		ObjectCount = await GetNumberOfObjects();
+	}
+
+	public void DataboundHandler(object args)
+	{
+		this.ObjectGrid.AutoFitColumnsAsync(new string[] { "FullObjectName", "Description", "VduGroup" });
 	}
 
 	public async Task FilteredHandler(FilteredEventArgs args)
@@ -190,117 +403,41 @@
 		// TagsCount = await GetNumberOfTags();
 	}
 
-	public async Task ActionBeginHandler(ActionBeginEventArgs args)
-	{
-		
-	}
-	public async Task CellSavedHandler(CellSavedArgs<DisplayTagModel> args)
+	public async Task TagCellSavedHandler(CellSavedArgs<DisplayTagModel> args)
 	{
 		var index = await TagGrid.GetRowIndexByPrimaryKey(args.RowData.Id);
 		if (args.ColumnName == "IoType")
 		{
 			string selectedIoType = args.Value.ToString();
 			SignalTypes = (await _subCategoryDB.GetSignalTypesAsync(selectedIoType)).ToList();
-
 			SignalTypeEditParams.Params.DataSource = SignalTypes.Select(signalType => new DisplayTagModel() { SignalType = signalType.Name }).ToList();
 
 			await TagGrid.UpdateCellAsync(index, "SignalType", null);
-			args.RowData.SignalType = null;
 		}
 	}
-	#region Drop down parameters
-	public DropDownEditCellParams OtdEditParams = new DropDownEditCellParams
+
+	public async Task ObjectCellSavedHandler(CellSavedArgs<DisplayObjectModel> args)
+	{
+		var index = await ObjectGrid.GetRowIndexByPrimaryKey(args.RowData.Id);
+		if (args == null || args.Value == null) return;
+		if (args.ColumnName == "Hierarchy1")
 		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayObjectModel>()
-			}
-		};
-	public DropDownEditCellParams NodeEditParams = new DropDownEditCellParams
+			string selectedMainPicture = args.Value.ToString();
+			SubPictures = (await _subCategoryDB.GetHierarchy2CategoryAsync(selectedMainPicture)).ToList();
+			SubPictureEditParams.Params.DataSource = SubPictures.Select(subPicture => new DisplayObjectModel() { Hierarchy2 = subPicture.Name }).ToList();
+
+			await ObjectGrid.UpdateCellAsync(index, "Hierarchy2", null);
+		}
+		if (args.ColumnName == "ObjectType")
 		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayObjectModel>()
-			}
-		};
-	public DropDownEditCellParams CabinetEditParams = new DropDownEditCellParams
-		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayObjectModel>()
-			}
-		};
-	public DropDownEditCellParams EasGroupEditParams = new DropDownEditCellParams
-		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayObjectModel>()
-			}
-		};
-	public DropDownEditCellParams AlarmGroupEditParams = new DropDownEditCellParams
-		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayObjectModel>()
-			}
-		};
-	public DropDownEditCellParams SubPictureEditParams = new DropDownEditCellParams
-		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayObjectModel>()
-			}
-		};
-	public DropDownEditCellParams AckAllowedEditParams = new DropDownEditCellParams
-		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayObjectModel>()
-			}
-		};
-	public DropDownEditCellParams MainPictureEditParams = new DropDownEditCellParams
-		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayObjectModel>()
-			}
-		};
-	public DropDownEditCellParams AlwaysVisibleEditParams = new DropDownEditCellParams
-		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayObjectModel>()
-			}
-		};
-	public static DropDownEditCellParams dropDownTagTemplate = new DropDownEditCellParams
-		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayTagModel>()
-			}
-		};
-	public DropDownEditCellParams IoTypeEditParams = new DropDownEditCellParams
-		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayTagModel>()
-			}
-		};
-	public DropDownEditCellParams SignalTypeEditParams = new DropDownEditCellParams
-		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayTagModel>()
-			}
-		};
-	public DropDownEditCellParams ObjectTypeEditParams = new DropDownEditCellParams
-		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayTagModel>()
-			}
-		};
-	#endregion
+			string selectedObjectType = args.Value.ToString();
+			string matchingOtd = ObjectTypes.Where(objectType => objectType.Name == selectedObjectType)
+											.Select(objectType => objectType.OtdName)
+											.FirstOrDefault();
+			await ObjectGrid.UpdateCellAsync(index, "Otd", matchingOtd);
+		}
+		StateHasChanged();
+	}
 
 	public async Task GetSelectedObject(RowSelectEventArgs<DisplayObjectModel> args)
 	{
@@ -315,9 +452,8 @@
 		if (SelectedObject.Hierarchy1 != null)
 		{
 			SubPictures = await _subCategoryDB.GetHierarchy2CategoryAsync(SelectedObject.Hierarchy1);
-			SubPictureEditParams.Params.DataSource = SubPictures.Select(subPicture => new DisplayObjectModel() { Hierarchy1 = subPicture.Name }).ToList();
+			SubPictureEditParams.Params.DataSource = SubPictures.Select(subPicture => new DisplayObjectModel() { Hierarchy2 = subPicture.Name }).ToList();
 		}
-
 		StateHasChanged();
 	}
 
@@ -325,15 +461,12 @@
 	{
 		var filteredRecords = ObjectGrid.GetFilteredRecordsAsync();
 		var filteredObjects = (List<DisplayObjectModel>)filteredRecords.Result;
-		// if (ObjectGrid == null) return 0;
 		var source = ObjectGrid.CurrentViewData;
-		// IEnumerable<DisplayObjectModel> gridObjects = source.Cast<DisplayObjectModel>();
 		return filteredObjects.Count();
 	}
 
 	public int GetNumberOfTags()
 	{
-		if (ObjectGrid.CurrentViewData == null) return 0;
 		var source = ObjectGrid.CurrentViewData;
 		IEnumerable<DisplayObjectModel> gridObjects = source.Cast<DisplayObjectModel>();
 		foreach (var obj in gridObjects)
@@ -359,13 +492,107 @@
 		if (SelectedTag.IoType != null)
 		{
 			SignalTypes = await _subCategoryDB.GetSignalTypesAsync(SelectedTag.IoType);
-			SignalTypeEditParams.Params.DataSource = SignalTypes.Select(signalType => new DisplayTagModel() { SignalType = signalType.Name }).ToList();
 		}
-
 		StateHasChanged();
 	}
 
-	public async Task ToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+
+	public async Task ObjectToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+	{
+		if (args.Item.Text == "Update")
+		{
+			var objectChanges = await this.ObjectGrid.GetBatchChangesAsync();
+
+			if (objectChanges.AddedRecords.Count > 0)
+			{
+				foreach (var newObject in objectChanges.AddedRecords)
+				{
+					if (newObject.Otd == null)
+					{
+						newObject.Otd = await _categoryDB.GetOtdByObjectType(newObject.ObjectType);
+					}
+					await _objectService.InsertObjectAsync(newObject);
+
+					if (newObject.ObjectType != null)
+					{
+						var objectTypeTags = await _tagService.GetTagsByObjectTypeAsync(newObject.ObjectType);
+						int newObjectId = await _objectService.GetLastInsertedObjectId();
+						foreach (var tag in objectTypeTags)
+						{
+							await _tagService.InsertTagAsync(newObjectId, tag);
+						}
+					}
+					ObjectCount += 1;
+				}
+			}
+			if (objectChanges.ChangedRecords.Count > 0)
+			{
+				foreach (var obj in objectChanges.ChangedRecords)
+				{
+					await _objectService.UpdateObjectAsync(obj);
+				}
+			}
+			if (objectChanges.DeletedRecords.Count > 0)
+			{
+				foreach (var obj in objectChanges.DeletedRecords)
+				{
+					var tags = await _tagService.GetTagsByObjectIdAsync(obj.Id);
+					foreach (var tag in tags)
+					{
+						await _tagService.DeleteTagAsync(tag.Id);
+					}
+					await _objectService.DeleteObjectAsync(obj.Id);
+				}
+				ObjectCount -= 1;
+			}
+			Objects = await _objectService.GetObjectsAsync();
+		}
+
+		if (args.Item.Text == "Delete")
+		{
+			if (SelectedObject == null) return;
+			var tags = await _tagService.GetTagsByObjectIdAsync(SelectedObject.Id);
+			foreach (var tag in tags)
+			{
+				await _tagService.DeleteTagAsync(tag.Id);
+			}
+			await _objectService.DeleteObjectAsync(SelectedObject.Id);
+			ObjectCount -= 1;
+		}
+
+		if (args.Item.Text == "Duplicate")
+		{
+			if (SelectedObject == null) return;
+
+			DisplayObjectModel newObject = SelectedObject;
+
+			int counter = 1;
+			string newName = SelectedObject.FullObjectName;
+
+			List<string> objectNames = Objects.Select(obj => obj.FullObjectName).ToList();
+
+			// Keep adding "_01", "_02", etc. until a unique name is found
+			while (objectNames.Contains(newName))
+			{
+				newName = $"{SelectedObject.FullObjectName}_{counter:00}";
+				newObject.EqNumber = $"{SelectedObject.EqNumber}_{counter:00}";
+				counter++;
+			}
+
+			await _objectService.InsertObjectAsync(newObject);
+			int newObjectId = await _objectService.GetLastInsertedObjectId();
+			foreach (var tag in SelectedObject.Tags)
+			{
+				await _tagService.InsertTagAsync(newObjectId, tag);
+			}
+			Objects = await _objectService.GetObjectsAsync();
+		}
+		if (args.Item.Id == "Grid_pdfexport")
+		{
+		}
+	}
+	
+	public async Task TagToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
 	{
 		if (args.Item.Text == "Update")
 		{
@@ -405,69 +632,6 @@
 		{
 			if (SelectedTag == null) return;
 			await _tagService.DeleteTagAsync(SelectedTag.Id);
-		}
-	}
-
-	public async Task ObjectToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
-	{
-		if (args.Item.Text == "Update")
-		{
-			var objectChanges = await this.ObjectGrid.GetBatchChangesAsync();
-
-			if (objectChanges.AddedRecords.Count > 0)
-			{
-				foreach (var newObject in objectChanges.AddedRecords)
-				{
-					if (newObject.Otd == null)
-					{
-						newObject.Otd = await _categoryDB.GetOtdByObjectType(newObject.ObjectType);
-					}
-					await _objectService.InsertObjectAsync(newObject);
-
-					if (newObject.ObjectType != null)
-					{
-						var objectTypeTags = await _tagService.GetTagsByObjectTypeAsync(newObject.ObjectType);
-						int newObjectId = await _objectService.GetLastInsertedObjectId();
-						foreach (var tag in objectTypeTags)
-						{
-							await _tagService.InsertTagAsync(newObjectId, tag);
-						}
-					}
-				}
-			}
-			if (objectChanges.ChangedRecords.Count > 0)
-			{
-				foreach (var obj in objectChanges.ChangedRecords)
-				{
-					await _objectService.UpdateObjectAsync(obj);
-				}
-			}
-			if (objectChanges.DeletedRecords.Count > 0)
-			{
-				foreach (var obj in objectChanges.DeletedRecords)
-				{
-					var tags = await _tagService.GetTagsByObjectIdAsync(obj.Id);
-					foreach (var tag in tags)
-					{
-						await _tagService.DeleteTagAsync(tag.Id);
-					}
-					await _objectService.DeleteObjectAsync(obj.Id);
-				}
-			}
-			Objects = await _objectService.GetObjectsAsync();
-			ObjectCount = await GetNumberOfObjects();
-		}
-
-		if (args.Item.Text == "Delete")
-		{
-			if (SelectedObject == null) return;
-			var tags = await _tagService.GetTagsByObjectIdAsync(SelectedObject.Id);
-			foreach (var tag in tags)
-			{
-				await _tagService.DeleteTagAsync(tag.Id);
-			}
-			await _objectService.DeleteObjectAsync(SelectedObject.Id);
-			ObjectCount = await GetNumberOfObjects();
 		}
 	}
 }

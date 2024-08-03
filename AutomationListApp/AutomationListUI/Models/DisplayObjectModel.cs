@@ -12,6 +12,7 @@ public class DisplayObjectModel
     [Key]
     public int Id { get; set; }
     [Required]
+    [StringLength(4, ErrorMessage = "SfiNumber is too long")]
     public string? SfiNumber { get; set; }
     [Required]
     public string? MainEqNumber { get; set; }
@@ -33,21 +34,27 @@ public class DisplayObjectModel
     public string? Node { get; set; }
     [Required]
     public string? Cabinet { get; set; }
+
 	[Required]
 	[StringLength(20, ErrorMessage = "Object name is too long")]
     [ObjectNameValidator]
     [Editable(false)]
 	public string? FullObjectName => $"{SfiNumber}_{MainEqNumber}_{EqNumber}";
-    public DateTime? LastModified { get; set; }
+
+	[ReadOnly(true)]
+    [Editable(false)]
+	public DateTime? LastModified { get; set; }
 
     public List<DisplayTagModel>? Tags { get; set; }
 
-    public bool ReadyForPLCGeneration
+    [ReadOnly(true)]
+	[Editable(false)]
+	public bool ReadyForPLCGeneration
     {
         get
         {
             bool _mandatoryConnectionsResolved = false;
-            if (Otd == null)
+            if (Otd == null || OtdInterface == null)
             {
                 return false;
             }
@@ -57,7 +64,7 @@ public class DisplayObjectModel
                 {
                     continue;
                 }
-                _mandatoryConnectionsResolved = LookupTagSuffixesAgaintOtdInterface(currentInterface.Suffix);
+                _mandatoryConnectionsResolved = IsRequiredTagSuffixPresent(currentInterface.Suffix);
             }
             return !string.IsNullOrEmpty(Hierarchy1) &&
                     !string.IsNullOrEmpty(Otd) &&
@@ -66,25 +73,27 @@ public class DisplayObjectModel
         }
     }
 
+    [ReadOnly(true)]
+	[Editable(false)]
 	public bool ReadyForHMIGeneration => !string.IsNullOrEmpty(Hierarchy1) &&
 					                        !string.IsNullOrEmpty(Hierarchy2) &&
 					                        !string.IsNullOrEmpty(Otd) &&
 					                        !string.IsNullOrEmpty(Node);
-
+	[Editable(false)]
+    [ReadOnly(true)]
 	public bool ReadyForPreliminaryPLCGeneration => !string.IsNullOrEmpty(Otd) && !string.IsNullOrEmpty(Node);
 
-	private bool LookupTagSuffixesAgaintOtdInterface(string suffix)
+	private bool IsRequiredTagSuffixPresent(string suffix)
     {
+        suffix = suffix.Replace("<ObjectTag>_","");  // Removes "<ObjectTag>_" from suffix
         if (Tags == null)
         {
             return false;
         }
-        foreach (DisplayTagModel tag in Tags)
+        List<string> tagSuffixes = Tags.Select(tag => tag.EqSuffix).ToList();
+        if (tagSuffixes.Contains(suffix))
         {
-            if (tag.EqSuffix.Equals(suffix))
-            {
-                return true;
-            }
+            return true;
         }
         return false;
     }

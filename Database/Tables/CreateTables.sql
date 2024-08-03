@@ -154,7 +154,7 @@ CREATE TABLE OBJECT
 	SfiNumber varchar(50) NOT NULL,
 	MainEqNumber varchar(50) NOT NULL,
 	EqNumber varchar(50),
-	Description varchar(150) NOT NULL UNIQUE,
+	Description varchar(150) NOT NULL,
 	VduGroupId int NOT NULL FOREIGN KEY REFERENCES VDU_GROUP(Id),
 	Hierarchy1Id int FOREIGN KEY REFERENCES HIERARCHY_1(Id),
 	Hierarchy2Id int FOREIGN KEY REFERENCES HIERARCHY_2(Id),

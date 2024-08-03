@@ -39,11 +39,20 @@ public class DisplayTagModel
 	[Editable(false)]
 	public DateTime? LastModified { get; set; }
 	public string? ObjectName { get; set; }
-
-	public bool IsHW => !(!string.IsNullOrEmpty(IoType) && IoType.StartsWith("S"));
-
+    public string Path 
+	{
+		get
+		{
+			if (IsHW) return $"\"{FullTagName}\"";
+			if (!string.IsNullOrEmpty(SWPath)) return SWPath;
+			if (!string.IsNullOrEmpty(DBName) && !string.IsNullOrEmpty(FullTagName)) return $"\"{DBName}\".\"{FullTagName}\"";
+			return "";
+		} 
+	}
+    public bool IsHW => !(!string.IsNullOrEmpty(IoType) && IoType.StartsWith("S"));
+	public bool IsSW => !IsHW;
 	public bool IsInput => (!string.IsNullOrEmpty(IoType) && IoType.EndsWith("I"));
-
+	public bool IsOutput => !IsInput;
 	public bool IsDigital => (!string.IsNullOrEmpty(IoType) && IoType.Contains("D"));
 	[ReadOnly(true)]
 	[Editable(false)]
@@ -82,11 +91,13 @@ public class DisplayTagModel
 		return ioPrefix + signalPrefix[SignalType.ToUpper()];
 	}
 
-	public bool? AbsoluteAddressIsValid
+	private bool AbsoluteAddressIsValid
 	{
 		get
 		{
-			if (!IsHW || string.IsNullOrEmpty(SignalType) || string.IsNullOrEmpty(AbsoluteAddress))
+			if (!IsHW) return true;
+
+			if (string.IsNullOrEmpty(SignalType) || string.IsNullOrEmpty(AbsoluteAddress))
 			{
 				return false;
 			}
@@ -125,19 +136,8 @@ public class DisplayTagModel
 		}
 	}
 
-	public bool? ReadyForSWGeneration
-	{
-		get
-		{
-			bool _hasPath = false;
-			if (!IsHW && (!string.IsNullOrEmpty(SWPath) || !string.IsNullOrEmpty(DBName)))
-			{
-				_hasPath = true;
-			}
-
-			return !string.IsNullOrEmpty(IoType) &&
-				   !string.IsNullOrEmpty(SignalType) &&
-				   _hasPath;
-		}
-	}
+	public bool? ReadyForSWGeneration => !string.IsNullOrEmpty(IoType) &&
+										   !string.IsNullOrEmpty(SignalType) &&
+										   !string.IsNullOrEmpty(Path) &&
+										   AbsoluteAddressIsValid;
 }
