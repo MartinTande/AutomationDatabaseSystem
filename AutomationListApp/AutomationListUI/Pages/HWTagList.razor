@@ -18,7 +18,7 @@
 
 <h3>HW Tags</h3>
 <button></button>
-<SfGrid DataSource="@Tags"
+<SfGrid DataSource="@HWTags"
 		@ref="@TagGrid"
 		AllowReordering="true"
 		AllowResizing="true"
@@ -62,15 +62,17 @@
 	private SfGrid<DisplayObjectModel>? ObjectGrid = new();
 
 	// Objects and tags
-	public List<DisplayTagModel>? Tags { get; set; } = new();
-	public List<DisplayObjectModel>? Objects { get; set; }
+	public List<DisplayTagModel>? HWTags { get; set; } = new();
+	public List<DisplayObjectModel>? HWObjects { get; set; }
 	public DisplayTagModel? SelectedTag { get; set; }
 
 	// Categories
 	public List<IoType>? IoTypes { get; set; } = new();
 	public List<EngUnit>? EngUnits { get; set; } = new();
-	public List<SignalType>? SignalTypes { get; set; } = new();
 	public List<Cabinet>? Cabinets { get; set; } = new();
+	public List<ModuleType>? ModuleTypes { get; set; } = new();
+	public List<ModuleConfig>? ModuleConfig { get; set; } = new();
+	public List<SignalType>? SignalTypes { get; set; } = new();
 
 	private readonly string _interfaceModule = "K200";
 	private Dictionary<string, int> NumberOfTagsInCabinets = new Dictionary<string, int>();
@@ -201,50 +203,66 @@
 		IoTypes = await _categoryDB.GetIoTypes();
 		EngUnits = await _categoryDB.GetEngUnits();
 		Cabinets = await _categoryDB.GetCabinets();
+		ModuleTypes = await _categoryDB.GetModuleTypes();
+		ModuleConfig = await _categoryDB.GetModuleConfig();
 
 		// Dropdown menu params
 		IoTypeEditParams.Params.DataSource = IoTypes.Select(ioType => new DisplayTagModel() { IoType = ioType.Name }).ToList();
 		EngUnitEditParams.Params.DataSource = EngUnits.Select(engUnit => new DisplayTagModel() { EngUnit = engUnit.Name }).ToList();
 
-		Objects = await _objectService.GetObjectsAsync();
-
+		HWObjects = await _objectService.GetObjectsAsync();
 		await GetHWTags();
 		AllocateTagsToIM();
-
 	}
 
 	private async Task GetHWTags()
 	{
-		foreach (var obj in Objects)
+		foreach (var obj in HWObjects)
 		{
 			obj.Tags = await _tagService.GetTagsByObjectIdAsync(obj.Id);
 			foreach (var tag in obj.Tags)
 			{
 				if (tag.IsSW)
 				{
+					obj.Tags.Remove(tag);
 					continue;
 				}
 				tag.ObjectName = obj.FullObjectName;
 				tag.ObjectDescription = obj.Description;
 				tag.Cabinet = obj.Cabinet;
 			}
-			Tags.AddRange(obj.Tags);
+			HWTags.AddRange(obj.Tags);
 		}
 	}
 
 	private void AllocateTagsToIM()
 	{
-		foreach (var tag in Tags)
+		foreach (var tag in HWTags)
 		{
 			tag.InterfaceModule = _interfaceModule;
 		}
+	}
+
+	private ModuleType? GetModuleType(IoType ioType, SignalType signalType)
+	{
+		if (ModuleConfig is null || ModuleTypes is null) return null;
+
+		foreach (var moduleConfig in ModuleConfig)
+		{
+			if (moduleConfig.IoTypeId == ioType.Id && moduleConfig.SignalTypeId == signalType.Id)
+			{
+				return ModuleTypes.Where(module => module.Id == moduleConfig.ModuleTypeId).FirstOrDefault();
+			}
+		}
+
+		return null;
 	}
 
 	public void AllocateTagToSlotChannel()
 	{
 		foreach (var cabinet in Cabinets)
 		{
-			int tagCountInCabinet = Tags.Count(t => t.Cabinet == cabinet.Name);
+			int tagCountInCabinet = HWTags.Count(t => t.Cabinet == cabinet.Name);
 
 			NumberOfTagsInCabinets.Add(cabinet.Name, tagCountInCabinet);
 		}
@@ -266,6 +284,11 @@
 		{
 			channelsInEmptySlotOfThisType = 0;
 		}
+		return 0;
+	}
+
+	private int GetNumberOfSignalTypes()
+	{
 		return 0;
 	}
 

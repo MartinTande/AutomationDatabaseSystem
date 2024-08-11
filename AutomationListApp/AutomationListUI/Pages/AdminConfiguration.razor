@@ -183,7 +183,6 @@
     public async Task GetSelectedOtd(RowSelectEventArgs<Otd> args)
     {
         SelectedOtd = (await this.OtdGrid.GetSelectedRecordsAsync()).FirstOrDefault();
-
     }
 
     private async Task LoadOtdFiles(InputFileChangeEventArgs e)

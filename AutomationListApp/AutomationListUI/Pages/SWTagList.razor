@@ -195,7 +195,7 @@
 		// Categories
 		Symbols = await _categoryDB.GetSymbols();
 		IoTypes = await _categoryDB.GetIoTypes();
-		EngUnits = await _categoryDB.GetEngUnitCategory();
+		EngUnits = await _categoryDB.GetEngUnits();
 
 		// Dropdown menu params
 		SymbolEditParams.Params.DataSource = Symbols.Select(symbol => new DisplayTagModel() { Symbol = symbol.Name }).ToList();
