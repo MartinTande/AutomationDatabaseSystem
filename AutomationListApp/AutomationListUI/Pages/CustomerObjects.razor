@@ -164,9 +164,9 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		Cabinets = await _categoryDB.GetCabinetCategory();
-		Otds = await _categoryDB.GetOtdCategory();
-		IoTypes = await _categoryDB.GetIoTypeCategory();
+		Cabinets = await _categoryDB.GetCabinets();
+		Otds = await _categoryDB.GetOtds();
+		IoTypes = await _categoryDB.GetIoTypes();
 		ObjectTypes = await _categoryDB.GetObjectTypeCategory();
 
 		CabinetEditParams.Params.DataSource = Cabinets.Select(cabinet => new DisplayObjectModel() { Cabinet = cabinet.Name }).ToList();

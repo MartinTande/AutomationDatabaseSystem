@@ -51,7 +51,8 @@ public class ObjectDataManager : IObjectDataManager
 			tagObject.AcknowledgeAllowed,
 			tagObject.AlwaysVisible,
 			tagObject.Node,
-			tagObject.Cabinet
+			tagObject.Cabinet,
+			tagObject.Revision
 		};
 
 		await _sqlConnector.WriteDataAsync("CreateObject", p);
@@ -76,7 +77,8 @@ public class ObjectDataManager : IObjectDataManager
 			updatedObject.AcknowledgeAllowed,
 			updatedObject.AlwaysVisible,
 			updatedObject.Node,
-			updatedObject.Cabinet
+			updatedObject.Cabinet,
+			updatedObject.Revision
 		};
 
 		await _sqlConnector.WriteDataAsync("UpdateObject", p);

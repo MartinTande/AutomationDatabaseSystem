@@ -15,7 +15,9 @@ CREATE PROCEDURE UpdateTag
 	@Description varchar(100),
 	@IoType varchar(50),
 	@SignalType varchar(50),
+	@Symbol varchar(50),
 	@EngUnit varchar(50),
+	@AlarmDelay varchar(50),
 	@LowLimit int,
 	@LowLowLimit int,
 	@HighLimit int,
@@ -23,20 +25,31 @@ CREATE PROCEDURE UpdateTag
 	@RangeLow int,
 	@RangeHigh int,
 	@Slot int,
+	@Channel int,
+	@TP1 int,
+	@TP2 int,
+	@TP3 int,
+	@TP4 int,
 	@AbsoluteAddress varchar(50),
 	@SWPath varchar(150),
 	@DBName varchar(150),
 	@ModbusAddress int,
 	@ModbusBit int,
 	@IsE0 bit,
-	@IsVDR bit
+	@IsVDR bit,
+	@IOStatus varchar(100),
+	@InterfaceModule varchar(100),
+	@UserLock bit,
+	@IOLock bit,
+	@BeijerBoxId int
 AS
 
 DECLARE
 -- Internal variables
     @IoTypeId int,
     @SignalTypeId int,
-    @EngUnitId int
+    @EngUnitId int,
+	@SymbolId int
 
 SELECT @IoTypeId = Id
 FROM IO_TYPE
@@ -47,11 +60,16 @@ WHERE Name = @SignalType
 SELECT @EngUnitId = Id
 FROM ENG_UNIT
 WHERE Name = @EngUnit
+SELECT @SymbolId = Id 
+FROM SYMBOL 
+WHERE Name = @Symbol;
+
 
 UPDATE TAG SET
 	ObjectId = @ObjectId,
     EqSuffix = @EqSuffix,
     Description = @Description,
+	SymbolId = @SymbolId,
     IoTypeId = @IoTypeId,
     SignalTypeId = @SignalTypeId,
     EngUnitId = @EngUnitId,
@@ -69,7 +87,18 @@ UPDATE TAG SET
     ModbusBit = @ModbusBit,
     IsE0 = @IsE0,
     IsVDR = @IsVDR,
-	LastModified = getdate()
+	LastModified = getdate(),
+	TP1 = @TP1,
+	TP2 = @TP2,
+	TP3 = @TP3,
+	TP4 = @TP4,
+	Channel = @Channel,
+	IOStatus = @IOStatus,
+	AlarmDelay = @AlarmDelay,
+	InterfaceModule = @InterfaceModule,
+	UserLock = @UserLock,
+	IOLock = @IOLock,
+	BeijerBoxId = @BeijerBoxId
 
 WHERE Id = @Id
 

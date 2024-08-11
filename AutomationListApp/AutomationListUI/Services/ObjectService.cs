@@ -35,6 +35,7 @@ public class ObjectService : IObjectService
 			Cabinet = displayObject.Cabinet,
 			Otd = displayObject.Otd,
 			ObjectType = displayObject.ObjectType,
+			Revision = displayObject.Revision
 		};
 
 		return objectModel;
@@ -62,6 +63,7 @@ public class ObjectService : IObjectService
 			Cabinet = dtoObject.Cabinet,
 			Otd = dtoObject.Otd,
 			ObjectType = dtoObject.ObjectType,
+			Revision = dtoObject.Revision,
 			LastModified = dtoObject.LastModified
 		};
 
@@ -102,5 +104,11 @@ public class ObjectService : IObjectService
 	public async Task<int> GetLastInsertedObjectId()
 	{
 		return await _objectDataManager.GetLastInsertedObjectId();
+	}
+
+	public async Task<DisplayObjectModel> GetObjectByIdAsync(int id)
+	{
+		ObjectModel dtoObject = await _objectDataManager.GetObjectById(id);
+		return MapDTOToDisplayObject(dtoObject);
 	}
 }

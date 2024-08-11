@@ -68,7 +68,9 @@ public class TagService : ITagService
 			Description = displayTag.Description,
 			IoType = displayTag.IoType,
 			SignalType = displayTag.SignalType,
+			Symbol = displayTag.Symbol,
 			EngUnit = displayTag.EngUnit,
+			AlarmDelay = displayTag.AlarmDelay,
 			RangeLow = displayTag.RangeLow,
 			RangeHigh = displayTag.RangeHigh,
 			LowLowLimit = displayTag.LowLowLimit,
@@ -76,6 +78,11 @@ public class TagService : ITagService
 			HighLimit = displayTag.HighLimit,
 			HighHighLimit = displayTag.HighHighLimit,
 			Slot = displayTag.Slot,
+			Channel = displayTag.Channel,
+			TP1 = displayTag.TP1,
+			TP2 = displayTag.TP2,
+			TP3 = displayTag.TP3,
+			TP4 = displayTag.TP4,
 			AbsoluteAddress = displayTag.AbsoluteAddress,
 			SWPath = displayTag.SWPath,
 			DBName = displayTag.DBName,
@@ -83,6 +90,11 @@ public class TagService : ITagService
 			ModbusBit = displayTag.ModbusBit,
 			IsE0 = displayTag.IsE0,
 			IsVDR = displayTag.IsVDR,
+			IOStatus = displayTag.IOStatus,
+			InterfaceModule = displayTag.InterfaceModule,
+			UserLock = displayTag.UserLock,
+			IOLock = displayTag.IOLock,
+			BeijerBoxId = displayTag.BeijerBoxId
 		};
 
 		return tagModel;
@@ -100,7 +112,9 @@ public class TagService : ITagService
 			Description = dtoTag.Description,
 			IoType = dtoTag.IoType,
 			SignalType = dtoTag.SignalType,
+			Symbol = dtoTag.Symbol,
 			EngUnit = dtoTag.EngUnit,
+			AlarmDelay = dtoTag.AlarmDelay,
 			RangeLow = dtoTag.RangeLow,
 			RangeHigh = dtoTag.RangeHigh,
 			LowLowLimit = dtoTag.LowLowLimit,
@@ -108,6 +122,11 @@ public class TagService : ITagService
 			HighLimit = dtoTag.HighLimit,
 			HighHighLimit = dtoTag.HighHighLimit,
 			Slot = dtoTag.Slot,
+			Channel = dtoTag.Channel,
+			TP1 = dtoTag.TP1,
+			TP2 = dtoTag.TP2,
+			TP3 = dtoTag.TP3,
+			TP4 = dtoTag.TP4,
 			AbsoluteAddress = dtoTag.AbsoluteAddress,
 			SWPath = dtoTag.SWPath,
 			DBName = dtoTag.DBName,
@@ -115,7 +134,12 @@ public class TagService : ITagService
 			ModbusBit = dtoTag.ModbusBit,
 			IsE0 = dtoTag.IsE0,
 			IsVDR = dtoTag.IsVDR,
-			LastModified = dtoTag.LastModified
+			LastModified = dtoTag.LastModified,
+			IOStatus = dtoTag.IOStatus,
+			InterfaceModule = dtoTag.InterfaceModule,
+			UserLock = dtoTag.UserLock,
+			IOLock = dtoTag.IOLock,
+			BeijerBoxId = dtoTag.BeijerBoxId
 		};
 
 		return displayTag;

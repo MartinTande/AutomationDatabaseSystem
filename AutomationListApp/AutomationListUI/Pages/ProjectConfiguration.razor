@@ -82,7 +82,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        VduGroups = await _categoryDB.GetVduGroupCategory();
+        VduGroups = await _categoryDB.GetVduGroups();
         MainPictures = await _categoryDB.GetHierarchy1Category();
         foreach (var picture in MainPictures)
         {

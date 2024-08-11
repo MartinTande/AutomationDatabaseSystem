@@ -34,8 +34,9 @@ public class DisplayObjectModel
     public string? Node { get; set; }
     [Required]
     public string? Cabinet { get; set; }
+    public string? Revision { get; set; }
 
-	[Required]
+    [Required]
 	[StringLength(20, ErrorMessage = "Object name is too long")]
     [ObjectNameValidator]
     [Editable(false)]

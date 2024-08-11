@@ -13,7 +13,7 @@ BEGIN
     DECLARE @SQLString nvarchar(MAX)
 
     -- Construct the dynamic SQL statement
-    SET @SQLString = 'SELECT Id, Name FROM ' + QUOTENAME(@TableName)
+    SET @SQLString = 'SELECT * FROM ' + QUOTENAME(@TableName)
 
     -- Execute the dynamic SQL
     EXEC sp_executesql @SQLString

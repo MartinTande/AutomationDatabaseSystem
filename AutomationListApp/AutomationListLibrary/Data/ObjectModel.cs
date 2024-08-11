@@ -19,7 +19,6 @@ public class ObjectModel
     public string? AlwaysVisible { get; set; }
     public string? Node { get; set; }
     public string? Cabinet { get; set; }
-	public DateTime? LastModified { get; }
-
-	public List<TagModel>? Tags { get; set; }
+    public string? Revision { get; set; }
+    public DateTime? LastModified { get; }
 }

@@ -138,7 +138,6 @@ INSERT INTO ALARM_GROUP (Name) VALUES ('Bilge')
 INSERT INTO ALARM_GROUP (Name) VALUES ('Fire')
 INSERT INTO ALARM_GROUP (Name) VALUES ('Dead Man Alarm')
 
-
 -- Insert sample data into OTD
 INSERT INTO OTD (Name) VALUES ('BO_1DI')
 INSERT INTO OTD (Name) VALUES ('BO_8DI_8DO')
@@ -164,83 +163,21 @@ INSERT INTO OTD (Name) VALUES ('BO_TwoSensors2')
 INSERT INTO OTD (Name) VALUES ('BO_NetworkMonitor')
 INSERT INTO OTD (Name) VALUES ('NA')
 
--- Retrieve OtdId for "BO_1DI"
-DECLARE @BO_1DIOtdId INT;
-SET @BO_1DIOtdId = (SELECT Id FROM OTD WHERE Name = 'BO_1DI');
-
--- Insert subcategories under "BO_1DI"
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xvarInputSignal', @BO_1DIOtdId, '01', 'Variant', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboInputQuality', @BO_1DIOtdId, '01_Q', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboCSF', @BO_1DIOtdId, '01[CSF]', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboBlock', @BO_1DIOtdId, '01[Block]', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xyvarSim', @BO_1DIOtdId, 'Sim', 'Variant', 'Input');
-
--- Retrieve OtdId for "BO_AnalogIn"
-DECLARE @BO_AnalogInId INT;
-SET @BO_AnalogInId = (SELECT Id FROM OTD WHERE Name = 'BO_AnalogIn');
-
--- Insert subcategories under "BO_AnalogIn"
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xvarInputValue', @BO_AnalogInId, '41', 'Variant', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboQuality', @BO_AnalogInId, '41_Q', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage1', @BO_AnalogInId, '01', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage2', @BO_AnalogInId, '02', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage3', @BO_AnalogInId, '03', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage4', @BO_AnalogInId, '04', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboCSF', @BO_AnalogInId, '41[CSF]', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboBlock', @BO_AnalogInId, '41[Block]', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xyvarSim', @BO_AnalogInId, 'Sim', 'Variant', 'Input');
-
--- Retrieve OtdId for "BO_AnalogIn_AllAlarms"
-DECLARE @BO_AnalogIn_AllAlarmsId INT;
-SET @BO_AnalogIn_AllAlarmsId = (SELECT Id FROM OTD WHERE Name = 'BO_AnalogIn_AllAlarms');
-
--- Insert subcategories under "BO_AnalogInAlarms"
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xvarInputValue', @BO_AnalogIn_AllAlarmsId, '41', 'Variant', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboQuality', @BO_AnalogIn_AllAlarmsId, '41_Q', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage1', @BO_AnalogIn_AllAlarmsId, '01', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage2', @BO_AnalogIn_AllAlarmsId, '02', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage3', @BO_AnalogIn_AllAlarmsId, '03', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboExtMessage4', @BO_AnalogIn_AllAlarmsId, '04', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboCSF', @BO_AnalogIn_AllAlarmsId, '41[CSF]', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboBlock', @BO_AnalogIn_AllAlarmsId, '41[Block]', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xyvarSim', @BO_AnalogIn_AllAlarmsId, 'Sim', 'Variant', 'Input');
-
--- Retrieve OtdId for "BO_Valve"
-DECLARE @BO_ValveId INT;
-SET @BO_ValveId = (SELECT Id FROM OTD WHERE Name = 'BO_Valve');
-
--- Insert subcategories under "BO_Valve"
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xvarOpened', @BO_ValveId, '02', 'Variant', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xvarClosed', @BO_ValveId, '01', 'Variant', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xvarLocal', @BO_ValveId, '05', 'Variant', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboCSF', @BO_ValveId, '01[CSF]', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xboBlock', @BO_ValveId, '01[Block]', 'Bool', 'Input');
-INSERT INTO OTD_INTERFACE (Name, OtdId, Suffix, DataType, InterfaceType) VALUES ('xyvarSim', @BO_ValveId, 'Sim', 'Variant', 'Input');
-
-
 -- Insert sample data into NODE
 INSERT INTO NODE (Name) VALUES ('PCU1')
 INSERT INTO NODE (Name) VALUES ('PCU2')
 
 -- Insert sample data into CABINET
-INSERT INTO CABINET (Name) VALUES ('C01')
-INSERT INTO CABINET (Name) VALUES ('C02')
+INSERT INTO CABINET (Name, Description, NoIMs, NoSlotsPerIM) VALUES ('C01', 'Main cabinet C01 with PLC', 1, 55)
+INSERT INTO CABINET (Name, Description, NoIMs, NoSlotsPerIM) VALUES ('C02', 'Main cabinet C02 with PLC', 1, 50)
+INSERT INTO CABINET (Name, Description, NoIMs, NoSlotsPerIM) VALUES ('C03', 'Remote I/O cabinet C03', 1, 50)
+INSERT INTO CABINET (Name, Description, NoIMs, NoSlotsPerIM) VALUES ('C04', 'Remote I/O cabinet C04', 1, 50)
 
--- Insert sample data into LOCATION
-INSERT INTO LOCATION (Name) VALUES ('ECR')
-INSERT INTO LOCATION (Name) VALUES ('Bridge')
-INSERT INTO LOCATION (Name) VALUES ('Switchboard Room')
-INSERT INTO LOCATION (Name) VALUES ('Battery Room')
-
--- Insert sample data into ACKNOWLEDGE_ALLOWED
-INSERT INTO ACKNOWLEDGE_ALLOWED (Name) VALUES ('ECR')
-INSERT INTO ACKNOWLEDGE_ALLOWED (Name) VALUES ('Bridge')
-INSERT INTO ACKNOWLEDGE_ALLOWED (Name) VALUES ('Switchboard Room')
-INSERT INTO ACKNOWLEDGE_ALLOWED (Name) VALUES ('Battery Room')
-
--- Insert sample data into ALWAYS_VISIBLE
-INSERT INTO ALWAYS_VISIBLE (Name) VALUES ('ECR')
-INSERT INTO ALWAYS_VISIBLE (Name) VALUES ('Bridge')
+-- Insert sample data into LOCATION_GROUP
+INSERT INTO LOCATION_GROUP (Name) VALUES ('ECR')
+INSERT INTO LOCATION_GROUP (Name) VALUES ('Bridge')
+INSERT INTO LOCATION_GROUP (Name) VALUES ('Switchboard Room')
+INSERT INTO LOCATION_GROUP (Name) VALUES ('Battery Room')
 
 -- Insert sample data into IO_TYPE
 INSERT INTO IO_TYPE (Name) VALUES ('DI')
@@ -253,13 +190,48 @@ INSERT INTO IO_TYPE (Name) VALUES ('SAI')
 -- Insert sample data into SIGNAL_TYPE
 INSERT INTO SIGNAL_TYPE (Name) VALUES ('NC')
 INSERT INTO SIGNAL_TYPE (Name) VALUES ('NO')
+INSERT INTO SIGNAL_TYPE (Name) VALUES ('NC, 230V Relay')
+INSERT INTO SIGNAL_TYPE (Name) VALUES ('NO, 230V Relay')
 INSERT INTO SIGNAL_TYPE (Name) VALUES ('Int')
 INSERT INTO SIGNAL_TYPE (Name) VALUES ('Real')
 INSERT INTO SIGNAL_TYPE (Name) VALUES ('Float')
 INSERT INTO SIGNAL_TYPE (Name) VALUES ('Word')
 INSERT INTO SIGNAL_TYPE (Name) VALUES ('Double')
+INSERT INTO SIGNAL_TYPE (Name) VALUES ('U_B_AnalogValueLong')
 INSERT INTO SIGNAL_TYPE (Name) VALUES ('4-20mA, 2W')
+INSERT INTO SIGNAL_TYPE (Name) VALUES ('4-20mA, 3W')
 INSERT INTO SIGNAL_TYPE (Name) VALUES ('4-20mA, 4W')
+INSERT INTO SIGNAL_TYPE (Name) VALUES ('PT100, 3W')
+INSERT INTO SIGNAL_TYPE (Name) VALUES ('PT100, 4W')
+INSERT INTO SIGNAL_TYPE (Name) VALUES ('TC')
+INSERT INTO SIGNAL_TYPE (Name) VALUES ('0-10V')
+
+-- Insert sample data into MODULE_TYPE
+INSERT INTO MODULE_TYPE (Name, OrderNumber, Channels, InBytes, InBits, OutBytes, OutBits, QIBytes) VALUES ('DI 8×24VDC ST', '6ES7131-6BF00-0BA0', 8,1,0,0,0,1)
+INSERT INTO MODULE_TYPE (Name, OrderNumber, Channels, InBytes, InBits, OutBytes, OutBits, QIBytes) VALUES ('RQ 4×24VUC/2A CO ST', '6ES7132-6GD50-0BA0', 4,0,0,0,4,1)
+INSERT INTO MODULE_TYPE (Name, OrderNumber, Channels, InBytes, InBits, OutBytes, OutBits, QIBytes) VALUES ('AI 4×I 2-/4-wire ST', '6ES7134-6GD00-0BA1', 4,8,0,0,0,1)
+INSERT INTO MODULE_TYPE (Name, OrderNumber, Channels, InBytes, InBits, OutBytes, OutBits, QIBytes) VALUES ('AI 4×RTD/TC 2-/3-/4-wire HF', '6ES7134-6JD00-0CA1', 4,8,0,0,0,1)
+INSERT INTO MODULE_TYPE (Name, OrderNumber, Channels, InBytes, InBits, OutBytes, OutBits, QIBytes) VALUES ('AI 4xU/I 2-wire ST', '6ES7134-6HD00-0BA1', 4,8,0,0,0,1)
+INSERT INTO MODULE_TYPE (Name, OrderNumber, Channels, InBytes, InBits, OutBytes, OutBits, QIBytes) VALUES ('AQ 4×U/I ST', '6ES7135-6HD00-0BA1', 4,0,0,8,0,1)
+INSERT INTO MODULE_TYPE (Name, OrderNumber, Channels, InBytes, InBits, OutBytes, OutBits, QIBytes) VALUES ('TM Count 1x24V', '6ES7138-6AA00-0BA0', 1,16,0,12,0,0)
+INSERT INTO MODULE_TYPE (Name, OrderNumber, Channels, InBytes, InBits, OutBytes, OutBits, QIBytes) VALUES ('CM PtP communication module', '6ES7137-6AA00-0BA0', 1,8,0,0,0,0)
+
+-- Insert sample data into MODULE_CONFIG
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'DI'), null, (SELECT Id FROM MODULE_TYPE WHERE Name = 'DI 8×24VDC ST'))
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'), (SELECT Id FROM MODULE_TYPE WHERE Name = 'RQ 4×24VUC/2A CO ST'))
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'), (SELECT Id FROM MODULE_TYPE WHERE Name = 'RQ 4×24VUC/2A CO ST'))
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC, 230V Relay'), (SELECT Id FROM MODULE_TYPE WHERE Name = 'RQ 4×24VUC/2A CO ST'))
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO, 230V Relay'), (SELECT Id FROM MODULE_TYPE WHERE Name = 'RQ 4×24VUC/2A CO ST'))
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = '4-20mA, 2W'), (SELECT Id FROM MODULE_TYPE WHERE Name = 'AI 4×I 2-/4-wire ST'))
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = '4-20mA, 4W'), (SELECT Id FROM MODULE_TYPE WHERE Name = 'AI 4×I 2-/4-wire ST'))
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'PT100, 2W'), (SELECT Id FROM MODULE_TYPE WHERE Name = 'AI 4×RTD/TC 2-/3-/4-wire HF'))
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'PT100, 3W'), (SELECT Id FROM MODULE_TYPE WHERE Name = 'AI 4×RTD/TC 2-/3-/4-wire HF'))
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'PT100, 4W'), (SELECT Id FROM MODULE_TYPE WHERE Name = 'AI 4×RTD/TC 2-/3-/4-wire HF'))
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'TC'), (SELECT Id FROM MODULE_TYPE WHERE Name = 'AI 4×RTD/TC 2-/3-/4-wire HF'))
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = '0-10V'), (SELECT Id FROM MODULE_TYPE WHERE Name = 'AI 4xU/I 2-wire ST'))
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = '4-20mA, 2W'), (SELECT Id FROM MODULE_TYPE WHERE Name = 'AQ 4×U/I ST'))
+INSERT INTO MODULE_CONFIG (IoTypeId, SignalTypeId, ModuleTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = '0-10V'), (SELECT Id FROM MODULE_TYPE WHERE Name = 'AQ 4×U/I ST'))
+
 
 -- Insert connections into IO_SIGNAL_TYPE
 -- DI
@@ -268,31 +240,28 @@ INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_T
 -- DO
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'))
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'))
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO, 230V Relay'))
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC, 230V Relay'))
 -- SDI
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SDI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'))
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SDI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'))
 -- AI
-INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Int'))
-INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Real'))
-INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Float'))
-INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Word'))
-INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Double'))
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = '4-20mA, 2W'))
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = '4-20mA, 4W'))
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'PT100, 3W'))
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'PT100, 4W'))
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'TC'))
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = '0-10V'))
 -- AO
-INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Int'))
-INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Real'))
-INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Float'))
-INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Word'))
-INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Double'))
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = '4-20mA, 2W'))
-INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = '4-20mA, 4W'))
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = '0-10V'))
 -- SAI
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Int'))
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Real'))
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Float'))
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Word'))
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Double'))
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'U_B_AnalogValueLong'))
 
 -- Insert sample data into ENG_UNIT
 INSERT INTO ENG_UNIT (Name, UnitId) VALUES ('V', 1000)
@@ -300,6 +269,25 @@ INSERT INTO ENG_UNIT (Name, UnitId) VALUES ('deg C', 1001)
 INSERT INTO ENG_UNIT (Name, UnitId) VALUES ('bar', 1002)
 INSERT INTO ENG_UNIT (Name, UnitId) VALUES ('rpm', 1003)
 INSERT INTO ENG_UNIT (Name, UnitId) VALUES ('%', 1004)
+
+-- Insert sample data into SYMBOL
+INSERT INTO SYMBOL (Name) VALUES ('FI')
+INSERT INTO SYMBOL (Name) VALUES ('LAH')
+INSERT INTO SYMBOL (Name) VALUES ('LAL')
+INSERT INTO SYMBOL (Name) VALUES ('LI')
+INSERT INTO SYMBOL (Name) VALUES ('LIAL')
+INSERT INTO SYMBOL (Name) VALUES ('PAL')
+INSERT INTO SYMBOL (Name) VALUES ('PI')
+INSERT INTO SYMBOL (Name) VALUES ('PIAL')
+INSERT INTO SYMBOL (Name) VALUES ('PTL')
+INSERT INTO SYMBOL (Name) VALUES ('QI')
+INSERT INTO SYMBOL (Name) VALUES ('SAH')
+INSERT INTO SYMBOL (Name) VALUES ('SI')
+INSERT INTO SYMBOL (Name) VALUES ('TI')
+INSERT INTO SYMBOL (Name) VALUES ('TIAH')
+INSERT INTO SYMBOL (Name) VALUES ('XA')
+INSERT INTO SYMBOL (Name) VALUES ('XC')
+INSERT INTO SYMBOL (Name) VALUES ('XI')
 
 -- Insert sample data into OBJECT_TYPE
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Digital sensor', (SELECT Id FROM OTD WHERE Name = 'BO_1DI'))

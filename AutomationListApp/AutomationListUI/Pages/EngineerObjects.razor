@@ -76,7 +76,7 @@
 		<GridColumn Field=@nameof(DisplayObjectModel.ReadyForPLCGeneration) HeaderText="PLC Ready" Width="90" DisplayAsCheckBox="true" Type="Syncfusion.Blazor.Grids.ColumnType.Boolean" />
 		<GridColumn Field=@nameof(DisplayObjectModel.SfiNumber) HeaderText="Sfi" Width="90" />
 		<GridColumn Field=@nameof(DisplayObjectModel.MainEqNumber) HeaderText="MainEq" Width="90" />
-		<GridColumn Field=@nameof(DisplayObjectModel.EqNumber) HeaderText="Eq" Width="60" />
+		<GridColumn Field=@nameof(DisplayObjectModel.EqNumber) HeaderText="Eq" Width="70" />
 		<GridColumn Field=@nameof(DisplayObjectModel.FullObjectName) HeaderText="Object Name" Width="150"/>
 		<GridColumn Field=@nameof(DisplayObjectModel.Description) HeaderText="Description" Width="150"/>
 		<GridColumn Field=@nameof(DisplayObjectModel.VduGroup) HeaderText="Vdu Group" Width="150"/>
@@ -110,14 +110,8 @@
 		</GridColumn>
 		<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy1) HeaderText="Main Pic" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@MainPictureEditParams"/>
 		<GridColumn Field=@nameof(DisplayObjectModel.Hierarchy2) HeaderText="Sub Pic" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@SubPictureEditParams"/>
-		<GridColumn Field=@nameof(DisplayObjectModel.AcknowledgeAllowed) HeaderText="Ack Allowed" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@AckAllowedEditParams"/>
-		<GridColumn Field=@nameof(DisplayObjectModel.AlwaysVisible) HeaderText="Always Visible" Width="150" EditType="EditType.DropDownEdit">
-			<EditTemplate>
-				<SfDropDownList ID="AlwaysVisible" ShowClearButton=true TItem="AlwaysVisible" TValue="string" @bind-Value="@((context as DisplayObjectModel).AlwaysVisible)" DataSource="@AlwaysVisibleLocations">
-					<DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
-				</SfDropDownList>
-			</EditTemplate>
-		</GridColumn>
+		<GridColumn Field=@nameof(DisplayObjectModel.AcknowledgeAllowed) HeaderText="Ack Allowed" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@AckAllowedEditParams" />
+		<GridColumn Field=@nameof(DisplayObjectModel.AlwaysVisible) HeaderText="Always Visible" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@AlwaysVisibleEditParams" />
 		<GridColumn Field=@nameof(DisplayObjectModel.AlarmGroup) HeaderText="Alarm Group" Width="150" EditType="EditType.DropDownEdit">
 			<EditTemplate>
 				<SfDropDownList ID="AlarmGroup" ShowClearButton=true TItem="AlarmGroup" TValue="string" @bind-Value="@((context as DisplayObjectModel).AlarmGroup)" DataSource="@AlarmGroups">
@@ -132,6 +126,7 @@
 				</SfDropDownList>
 			</EditTemplate>
 		</GridColumn>
+		<GridColumn Field=@nameof(DisplayObjectModel.Revision) HeaderText="Rev" Width="90" />
 		<GridColumn Field=@nameof(DisplayObjectModel.LastModified) HeaderText="Last Modified" Width="130" Format="dd.MM.yyyy" />
 	</GridColumns>
 </SfGrid>
@@ -177,10 +172,12 @@
 		</GridColumn>
 		<GridColumn Field=@nameof(DisplayTagModel.ReadyForSWGeneration) HeaderText="SW Ready" DisplayAsCheckBox="true" Type="Syncfusion.Blazor.Grids.ColumnType.Boolean" Width="90" />
 		<GridColumn Field=@nameof(DisplayTagModel.EqSuffix) HeaderText="Eq Suffix" Width="90"/>
-		<GridColumn Field=@nameof(DisplayTagModel.Description) HeaderText="Description" Width="150" />
-		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="Io Type" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@IoTypeEditParams" />
-		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" Width="150" EditType="EditType.DropDownEdit" EditorSettings="@SignalTypeEditParams"/>
-		<GridColumn Field=@nameof(DisplayTagModel.EngUnit) HeaderText="Eng unit" />
+		<GridColumn Field=@nameof(DisplayTagModel.Description) HeaderText="Description" Width="140" />
+		<GridColumn Field=@nameof(DisplayTagModel.IoType) HeaderText="Io Type" Width="120" EditType="EditType.DropDownEdit" EditorSettings="@IoTypeEditParams" />
+		<GridColumn Field=@nameof(DisplayTagModel.SignalType) HeaderText="Signal Type" Width="120" EditType="EditType.DropDownEdit" EditorSettings="@SignalTypeEditParams" />
+		<GridColumn Field=@nameof(DisplayTagModel.Symbol) HeaderText="Symbol" Width="120" EditType="EditType.DropDownEdit" EditorSettings="@SymbolEditParams" />
+		<GridColumn Field=@nameof(DisplayTagModel.EngUnit) HeaderText="Eng unit" Width="120" EditType="EditType.DropDownEdit" EditorSettings="@EngUnitEditParams" />
+		<GridColumn Field=@nameof(DisplayTagModel.AlarmDelay) HeaderText="Alm Delay" Width="110"/>
 		<GridColumn Field=@nameof(DisplayTagModel.SWPath) HeaderText="SW Path" />
 		<GridColumn Field=@nameof(DisplayTagModel.DBName) HeaderText="DB Name" />
 		<GridColumn Field=@nameof(DisplayTagModel.RangeLow) HeaderText="Range L" />
@@ -188,10 +185,18 @@
 		<GridColumn Field=@nameof(DisplayTagModel.LowLowLimit) HeaderText="Alm LL" />
 		<GridColumn Field=@nameof(DisplayTagModel.LowLimit) HeaderText="Alm L" />
 		<GridColumn Field=@nameof(DisplayTagModel.HighLimit) HeaderText="Alm H" />
+		<GridColumn Field=@nameof(DisplayTagModel.Slot) HeaderText="Slot" />
+		<GridColumn Field=@nameof(DisplayTagModel.Channel) HeaderText="Channel" />
+		<GridColumn Field=@nameof(DisplayTagModel.TP1) HeaderText="TP1" />
+		<GridColumn Field=@nameof(DisplayTagModel.TP2) HeaderText="TP2" />
+		<GridColumn Field=@nameof(DisplayTagModel.TP3) HeaderText="TP3" />
+		<GridColumn Field=@nameof(DisplayTagModel.TP4) HeaderText="TP4" />
+		<GridColumn Field=@nameof(DisplayTagModel.AbsoluteAddress) HeaderText="Abs Address" />
 		<GridColumn Field=@nameof(DisplayTagModel.HighHighLimit) HeaderText="Alm HH" />
 		<GridColumn Field=@nameof(DisplayTagModel.ModbusAddress) HeaderText="Modbus Address" />
 		<GridColumn Field=@nameof(DisplayTagModel.ModbusBit) HeaderText="Modbus Bit" />
-		<GridColumn Field=@nameof(DisplayTagModel.AbsoluteAddress) HeaderText="Abs Address" />
+		<GridColumn Field=@nameof(DisplayTagModel.IsE0) HeaderText="E0" DisplayAsCheckBox="true" Type="Syncfusion.Blazor.Grids.ColumnType.Boolean" Width="90" />
+		<GridColumn Field=@nameof(DisplayTagModel.IsVDR ) HeaderText="VDR" DisplayAsCheckBox="true" Type="Syncfusion.Blazor.Grids.ColumnType.Boolean" Width="90" />
 	</GridColumns>
 </SfGrid>
 
@@ -210,7 +215,9 @@
 	// Categories
 	public List<Otd>? Otds { get; set; } = new();
 	public List<Node>? Nodes { get; set; } = new();
+	public List<Symbol>? Symbols { get; set; } = new();
 	public List<IoType>? IoTypes { get; set; } = new();
+	public List<EngUnit>? EngUnits { get; set; } = new();
 	public List<Cabinet>? Cabinets { get; set; } = new();
 	public List<VduGroup>? VduGroups { get; set; } = new();
 	public List<EasGroup>? EasGroups { get; set; } = new();
@@ -219,8 +226,7 @@
 	public List<ObjectType>? ObjectTypes { get; set; } = new();
 	public List<Hierarchy2>? SubPictures { get; set; } = new();
 	public List<Hierarchy1>? MainPictures { get; set; } = new();
-	public List<AlwaysVisible>? AlwaysVisibleLocations { get; set; } = new();
-	public List<AcknowledgeAllowed>? AckAllowedLocations { get; set; } = new();
+	public List<LocationGroup>? LocationGroups { get; set; } = new();
 
 	// Counts
 	public int ObjectCount { get; set; }
@@ -303,14 +309,6 @@
 				ShowClearButton = true
 			}
 		};
-	public static DropDownEditCellParams dropDownTagTemplate = new DropDownEditCellParams
-		{
-			Params = new DropDownListModel<object, object>()
-			{
-				DataSource = new List<DisplayTagModel>(),
-				ShowClearButton = true
-			}
-		};
 	public DropDownEditCellParams IoTypeEditParams = new DropDownEditCellParams
 		{
 			Params = new DropDownListModel<object, object>()
@@ -335,33 +333,52 @@
 				ShowClearButton = true
 			}
 		};
+	public DropDownEditCellParams SymbolEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayTagModel>(),
+				ShowClearButton = true
+			}
+		};
+	public DropDownEditCellParams EngUnitEditParams = new DropDownEditCellParams
+		{
+			Params = new DropDownListModel<object, object>()
+			{
+				DataSource = new List<DisplayTagModel>(),
+				ShowClearButton = true
+			}
+		};
 	#endregion
 
 	protected override async Task OnInitializedAsync()
 	{
 		// Categories
-		Otds = await _categoryDB.GetOtdCategory();
-		Nodes = await _categoryDB.GetNodeCategory();
-		IoTypes = await _categoryDB.GetIoTypeCategory();
-		Cabinets = await _categoryDB.GetCabinetCategory();
-		EasGroups = await _categoryDB.GetEasGroupCategory();
-		AlarmGroups = await _categoryDB.GetAlarmGroupCategory();
+		Otds = await _categoryDB.GetOtds();
+		Nodes = await _categoryDB.GetNodes();
+		Symbols = await _categoryDB.GetSymbols();
+		IoTypes = await _categoryDB.GetIoTypes();
+		EngUnits = await _categoryDB.GetEngUnits();
+		Cabinets = await _categoryDB.GetCabinets();
+		EasGroups = await _categoryDB.GetEasGroups();
+		AlarmGroups = await _categoryDB.GetAlarmGroups();
 		ObjectTypes = await _categoryDB.GetObjectTypeCategory();
 		MainPictures = await _categoryDB.GetHierarchy1Category();
-		AckAllowedLocations = await _categoryDB.GetAckAllowedCategory();
-		AlwaysVisibleLocations = await _categoryDB.GetAlwaysVisibleCategory();
+		LocationGroups = await _categoryDB.GetLocationGroups();
 
 		// Dropdown menu params
 		OtdEditParams.Params.DataSource = Otds.Select(otd => new DisplayObjectModel() { Otd = otd.Name }).ToList();
 		NodeEditParams.Params.DataSource = Nodes.Select(node => new DisplayObjectModel() { Node = node.Name }).ToList();
+		SymbolEditParams.Params.DataSource = Symbols.Select(symbol => new DisplayTagModel() { Symbol = symbol.Name }).ToList();
 		IoTypeEditParams.Params.DataSource = IoTypes.Select(ioType => new DisplayTagModel() { IoType = ioType.Name }).ToList();
+		EngUnitEditParams.Params.DataSource = EngUnits.Select(engUnit => new DisplayTagModel() { EngUnit = engUnit.Name }).ToList();
 		CabinetEditParams.Params.DataSource = Cabinets.Select(cabinet => new DisplayObjectModel() { Cabinet = cabinet.Name }).ToList();
 		EasGroupEditParams.Params.DataSource = EasGroups.Select(easGroup => new DisplayObjectModel() { EasGroup = easGroup.Name }).ToList();
 		AlarmGroupEditParams.Params.DataSource = AlarmGroups.Select(alarmGroup => new DisplayObjectModel() { AlarmGroup = alarmGroup.Name }).ToList();
 		ObjectTypeEditParams.Params.DataSource = ObjectTypes.Select(objectType => new DisplayObjectModel() { ObjectType = objectType.Name }).ToList();
 		MainPictureEditParams.Params.DataSource = MainPictures.Select(mainPicture => new DisplayObjectModel() { Hierarchy1 = mainPicture.Name }).ToList();
-		AckAllowedEditParams.Params.DataSource = AckAllowedLocations.Select(ackAllowed => new DisplayObjectModel() { AcknowledgeAllowed = ackAllowed.Name }).ToList();
-		AlwaysVisibleEditParams.Params.DataSource = AlwaysVisibleLocations.Select(alwaysVisible => new DisplayObjectModel() { AlwaysVisible = alwaysVisible.Name }).ToList();
+		AckAllowedEditParams.Params.DataSource = LocationGroups.Select(ackAllowed => new DisplayObjectModel() { AcknowledgeAllowed = ackAllowed.Name }).ToList();
+		AlwaysVisibleEditParams.Params.DataSource = LocationGroups.Select(alwaysVisible => new DisplayObjectModel() { AlwaysVisible = alwaysVisible.Name }).ToList();
 
 		Objects = await _objectService.GetObjectsAsync();
 
@@ -448,6 +465,7 @@
 		foreach (var tag in Tags)
 		{
 			tag.ObjectName = SelectedObject.FullObjectName;
+			tag.Hierarchy2 = SelectedObject.Hierarchy2;
 		}
 		if (SelectedObject.Hierarchy1 != null)
 		{
@@ -587,11 +605,11 @@
 			}
 			Objects = await _objectService.GetObjectsAsync();
 		}
-		if (args.Item.Id == "Grid_pdfexport")
+		if (args.Item.Id == "Grid_excelexport")
 		{
 		}
 	}
-	
+
 	public async Task TagToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
 	{
 		if (args.Item.Text == "Update")
@@ -602,6 +620,7 @@
 			{
 				foreach (var tag in tagChanges.AddedRecords)
 				{
+					AddDBNameIfNeeded(tag);
 					await _tagService.InsertTagAsync(SelectedObject.Id, tag);
 				}
 			}
@@ -609,6 +628,7 @@
 			{
 				foreach (var tag in tagChanges.ChangedRecords)
 				{
+					AddDBNameIfNeeded(tag);
 					await _tagService.UpdateTagAsync(tag);
 				}
 			}
@@ -634,4 +654,14 @@
 			await _tagService.DeleteTagAsync(SelectedTag.Id);
 		}
 	}
+
+	private DisplayTagModel AddDBNameIfNeeded(DisplayTagModel tag)
+	{
+		if (tag.IsSW && string.IsNullOrEmpty(tag.DBName) && string.IsNullOrEmpty(tag.SWPath))
+		{
+			tag.DBName = $"db_{SelectedObject.Hierarchy2.Replace(" ", "")}";
+		}
+		return tag;
+	}
+
 }

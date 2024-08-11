@@ -23,7 +23,8 @@ CREATE PROCEDURE UpdateObject
 	@AcknowledgeAllowed varchar(100),
 	@AlwaysVisible varchar(100),
 	@Node varchar(100),
-	@Cabinet varchar(100)
+	@Cabinet varchar(100),
+	@Revision varchar(50)
 AS
 
 -- Checks to see if the VduGroup input is present in the table, if not it inserts it
@@ -74,6 +75,7 @@ WHERE Name=@Node),
 	CabinetId = (SELECT Id
 FROM CABINET
 WHERE Name=@Cabinet),
+	Revision = @Revision,
 	LastModified = getdate()
 
 WHERE Id = @Id

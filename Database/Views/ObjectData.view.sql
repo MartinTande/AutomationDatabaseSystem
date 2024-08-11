@@ -28,6 +28,7 @@ AS
 		ALWAYS_VISIBLE.Name AS AlwaysVisible,
 		NODE.Name AS Node,
 		CABINET.Name AS Cabinet,
+		OBJECT.Revision,
 		OBJECT.LastModified
 	FROM OBJECT
 		LEFT JOIN VDU_GROUP ON OBJECT.VduGroupId = VDU_GROUP.Id

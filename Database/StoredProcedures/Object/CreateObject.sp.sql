@@ -24,7 +24,8 @@ CREATE PROCEDURE CreateObject
 	@AcknowledgeAllowed varchar(100),
 	@AlwaysVisible varchar(100),
 	@Node varchar(100),
-	@Cabinet varchar(100)
+	@Cabinet varchar(100),
+	@Revision varchar(50)
 AS
 
 DECLARE
@@ -72,10 +73,10 @@ SELECT @ObjectTypeId=Id
 FROM OBJECT_TYPE
 WHERE Name=@ObjectType
 SELECT @AcknowledgeAllowedId=Id
-FROM ACKNOWLEDGE_ALLOWED
+FROM LOCATION_GROUP
 WHERE Name=@AcknowledgeAllowed
 SELECT @AlwaysVisibleId=Id
-FROM ALWAYS_VISIBLE
+FROM LOCATION_GROUP
 WHERE Name=@AlwaysVisible
 SELECT @NodeId=Id
 FROM NODE
@@ -85,8 +86,8 @@ FROM CABINET
 WHERE Name=@Cabinet
 
 INSERT INTO OBJECT
-	(SfiNumber, MainEqNumber, EqNumber, Description, VduGroupId, Hierarchy1Id, Hierarchy2Id, EasGroupId, AlarmGroupId, OtdId, ObjectTypeId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId, LastModified)
+	(SfiNumber, MainEqNumber, EqNumber, Description, VduGroupId, Hierarchy1Id, Hierarchy2Id, EasGroupId, AlarmGroupId, OtdId, ObjectTypeId, AcknowledgeAllowedId, AlwaysVisibleId, NodeId, CabinetId, Revision, LastModified)
 VALUES
-	(@SfiNumber, @MainEqNumber, @EqNumber, @Description, @VduGroupId, @Hierarchy1Id, @Hierarchy2Id, @EasGroupId, @AlarmGroupId, @OtdId, @ObjectTypeId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId, getdate())
+	(@SfiNumber, @MainEqNumber, @EqNumber, @Description, @VduGroupId, @Hierarchy1Id, @Hierarchy2Id, @EasGroupId, @AlarmGroupId, @OtdId, @ObjectTypeId, @AcknowledgeAllowedId, @AlwaysVisibleId, @NodeId, @CabinetId, @Revision, getdate())
 
 GO

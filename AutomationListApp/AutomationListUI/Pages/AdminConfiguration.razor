@@ -151,9 +151,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        IoTypes = await _categoryDB.GetIoTypeCategory();
-        EngUnits = await _categoryDB.GetEngUnitCategory();
-        Otds = await _categoryDB.GetOtdCategory();
+        IoTypes = await _categoryDB.GetIoTypes();
+        EngUnits = await _categoryDB.GetEngUnits();
+        Otds = await _categoryDB.GetOtds();
         foreach (var ioType in IoTypes)
         {
             ioType.SignalTypes = (await _subCategoryDB.GetSignalTypesAsync(ioType.Name));
@@ -274,7 +274,7 @@
                 }
             }
 
-            IoTypes = await _categoryDB.GetIoTypeCategory();
+            IoTypes = await _categoryDB.GetIoTypes();
         }
 
         if (args.Item.Text == "Delete")
