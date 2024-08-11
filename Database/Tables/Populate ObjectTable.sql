@@ -14,7 +14,9 @@ exec CreateObject @SfiNumber='722',
 					@AcknowledgeAllowed='ECR',
 					@AlwaysVisible='ECR',
 					@Node='PCU1',
-					@Cabinet='C01'
-exec CreateObject '899','651','01','Fire valve 1','Fire','Fire System','Deck 1','Fire System','Machinery','BO_Valve','Valve','ECR','ECR','PCU1','C02'
-exec CreateObject '909','707','01','Generator Winding temperature','Thrusters','Propulsion','Thruster Overview','Propulsion','Load Reduction','BO_AnalogIn','Analog sensor','Bridge','Bridge','PCU2', 'C02'
+					@Cabinet='C01',
+					@Revision='A'
+
+exec CreateObject '899','651','01','Fire valve 1','Fire','Fire System','Deck 1','Fire System','Machinery','BO_Valve','Valve','ECR','ECR','PCU1','C02','A'
+exec CreateObject '909','707','01','Generator Winding temperature','Thrusters','Propulsion','Thruster Overview','Propulsion','Load Reduction','BO_AnalogIn','Analog sensor','Bridge','ECR','PCU2', 'C02','A'
 
