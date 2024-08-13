@@ -48,7 +48,7 @@
 	<GridAggregates>
 		<GridAggregate>
 			<GridAggregateColumns>
-				<GridAggregateColumn Field=@nameof(DisplayObjectModel.SfiNumber) Type="AggregateType.Count">
+				<GridAggregateColumn Field=@nameof(DisplayObjectModel.SfiNumber) Type="Syncfusion.Blazor.Grids.AggregateType.Count">
 					<FooterTemplate>
 						@{
 							var aggregate = (context as AggregateTemplateContext);
@@ -58,7 +58,7 @@
 						}
 					</FooterTemplate>
 				</GridAggregateColumn>
-				<GridAggregateColumn Field=@nameof(DisplayObjectModel.MainEqNumber) Type="AggregateType.Custom">
+				<GridAggregateColumn Field=@nameof(DisplayObjectModel.MainEqNumber) Type="Syncfusion.Blazor.Grids.AggregateType.Custom">
 					<FooterTemplate>
 						@{
 							<div>

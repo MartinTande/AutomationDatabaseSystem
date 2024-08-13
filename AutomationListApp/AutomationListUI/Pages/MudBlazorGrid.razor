@@ -1,5 +1,102 @@
-﻿<h3>MudBlazorGrid</h3>
+﻿@page "/mudblazor-grid"
+
+@using AutomationListLibrary
+@using AutomationListLibrary.Data
+@using AutomationListLibrary.DataAccess
+@using AutomationListLibrary.DataManager
+@using AutomationListUI.Models
+@using AutomationListUI.Services
+@using AutomationListUI.Validators
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Navigations
+@using System.ComponentModel.DataAnnotations
+
+@inject IObjectService _objectService
+@inject ITagService _tagService
+@inject CategoryDataManager _categoryDB
+@inject SubCategoryDataManager _subCategoryDB
+
+<h3>MudBlazorGrid</h3>
+
+<MudDataGrid 
+	T="DisplayObjectModel" 
+	Items="@Objects"
+	Hover=true
+	ReadOnly="@_readOnly"
+	EditMode="@(_isCellEditMode ? DataGridEditMode.Cell : DataGridEditMode.Cell)"
+    StartedEditingItem="@StartedEditingItem" 
+	CanceledEditingItem="@CanceledEditingItem" 
+	CommittedItemChanges="@CommittedItemChanges"
+    Bordered="true" 
+	Dense="true" 
+	EditTrigger="@(_editTriggerRowClick ? DataGridEditTrigger.OnRowClick : DataGridEditTrigger.Manual)">
+	<ToolBarContent>
+		<MudButton OnClick="@AddEmptyRow">Add</MudButton>
+	</ToolBarContent>
+    <Columns>
+        <PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required/>
+        <PropertyColumn Property="x => x.MainEqNumber" Title="Main Eq" Required/>
+        <PropertyColumn Property="x => x.EqNumber" Title="Eq"/>
+        <PropertyColumn Property="x => x.Description" Title="Description">
+			<EditTemplate>
+				<MudTextField @bind-Value="context.Item.Description" Required Margin="@Margin.Dense" Validation="@(new StringLengthAttribute(10) {ErrorMessage = "Description is too long"})">
+				</MudTextField>
+			</EditTemplate>
+		</PropertyColumn>
+        <PropertyColumn Property="x => x.Hierarchy1" Title="Main picture">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.Hierarchy1" T="string" AnchorOrigin="Origin.BottomCenter">
+					@foreach (var mainPic in MainPictures)
+					{
+						<MudSelectItem Value="@mainPic.Name"/>
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+    </Columns>
+</MudDataGrid>
+
 
 @code {
+	// Objects and tags
+	public List<DisplayTagModel>? Tags { get; set; }
+	public List<DisplayObjectModel>? Objects { get; set; }
+	public DisplayTagModel? SelectedTag { get; set; }
+	public DisplayObjectModel? SelectedObject { get; set; }
+	public List<Hierarchy1>? MainPictures { get; set; } = new();
+
+	private bool _readOnly;
+	private bool _isCellEditMode;
+	private List<string> _events = new();
+	private bool _editTriggerRowClick;
+
+	// events
+	void StartedEditingItem(DisplayObjectModel item)
+	{
+		_events.Insert(0, $"Event = StartedEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+	}
+
+	void CanceledEditingItem(DisplayObjectModel item)
+	{
+		_events.Insert(0, $"Event = CanceledEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+	}
+
+	void CommittedItemChanges(DisplayObjectModel item)
+	{
+		_events.Insert(0, $"Event = CommittedItemChanges, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+	}
+
+	protected override async Task OnInitializedAsync()
+	{	
+		Objects = await _objectService.GetObjectsAsync();
+		MainPictures = await _categoryDB.GetHierarchy1Category();
+
+	}
+
+	private void AddEmptyRow()
+	{
+		Objects.Insert(0, new DisplayObjectModel());
+
+	}
 
 }
