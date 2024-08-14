@@ -15,6 +15,7 @@ public class DisplayObjectModel
     [StringLength(4, ErrorMessage = "SfiNumber is too long")]
     public string? SfiNumber { get; set; }
     [Required]
+    [ObjectNameValidator]
     public string? MainEqNumber { get; set; }
     public string? EqNumber { get; set; }
     [Required]
@@ -36,11 +37,29 @@ public class DisplayObjectModel
     public string? Cabinet { get; set; }
     public string? Revision { get; set; }
 
+    private string _fullObjectName;
+
     [Required]
 	[StringLength(20, ErrorMessage = "Object name is too long")]
     [ObjectNameValidator]
     [Editable(false)]
-	public string? FullObjectName => $"{SfiNumber}_{MainEqNumber}_{EqNumber}";
+	public string? FullObjectName
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(EqNumber))
+            {
+                return $"{SfiNumber}_{MainEqNumber}";
+			}
+            return $"{SfiNumber}_{MainEqNumber}_{EqNumber}";
+        }
+        set
+        {
+            value = _fullObjectName;
+        }
+
+    }
+
 
 	[ReadOnly(true)]
     [Editable(false)]

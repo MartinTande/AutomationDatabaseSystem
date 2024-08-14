@@ -13,46 +13,78 @@
 
 @inject IObjectService _objectService
 @inject ITagService _tagService
-@inject CategoryDataManager _categoryDB
-@inject SubCategoryDataManager _subCategoryDB
+@inject CategoryDataManager _categoryDM
+@inject SubCategoryDataManager _subCategoryDM
 
 <h3>MudBlazorGrid</h3>
 
 <MudDataGrid 
-	T="DisplayObjectModel" 
+	T="DisplayObjectModel"
 	Items="@Objects"
+	MultiSelection="true"
+	RowStyleFunc="@_disableRowClick"
+	SortMode="SortMode.Multiple"
+	Filterable=true
+	FilterMode="MudBlazor.DataGridFilterMode.ColumnFilterRow"
 	Hover=true
-	ReadOnly="@_readOnly"
-	EditMode="@(_isCellEditMode ? DataGridEditMode.Cell : DataGridEditMode.Cell)"
+	ReadOnly=false
+	EditMode="@DataGridEditMode.Cell"
     StartedEditingItem="@StartedEditingItem" 
 	CanceledEditingItem="@CanceledEditingItem" 
 	CommittedItemChanges="@CommittedItemChanges"
-    Bordered="true" 
+	RowClick="@RowClicked" 
+	RowContextMenuClick="RowRightClicked" 
+	SelectedItemsChanged="@SelectedItemsChanged"
 	Dense="true" 
 	EditTrigger="@(_editTriggerRowClick ? DataGridEditTrigger.OnRowClick : DataGridEditTrigger.Manual)">
 	<ToolBarContent>
-		<MudButton OnClick="@AddEmptyRow">Add</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Disabled="_addButtonDisabled" OnClick="@AddEmptyRow">Add</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Disabled="_saveButtonDisabled" OnClick="@SaveObject">Save</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Disabled="_deleteButtonDisabled" OnClick="@DeleteObject">Delete</MudButton>
+		<MudButton Variant="Variant.Filled" Disabled="_cancelButtonDisabled" OnClick="@CancelOperation">Cancel</MudButton>
 	</ToolBarContent>
     <Columns>
-        <PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required/>
-        <PropertyColumn Property="x => x.MainEqNumber" Title="Main Eq" Required/>
-        <PropertyColumn Property="x => x.EqNumber" Title="Eq"/>
+		<SelectColumn T="DisplayObjectModel" />
+		<PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required="true" />
+        <PropertyColumn Property="x => x.MainEqNumber" Title="Main Eq" Required="true">
+			<EditTemplate>
+				<MudTextField @bind-Value="context.Item.MainEqNumber" Clearable Margin="@Margin.Dense" For="@(() => context.Item.MainEqNumber)" />
+			</EditTemplate>
+		</PropertyColumn>
+        <PropertyColumn Property="x => x.EqNumber" Title="Eq" Required="false"/>
+        <PropertyColumn Property="x => x.FullObjectName" Title="Object Name">
+			<EditTemplate>
+					<MudTextField @bind-Value="context.Item.FullObjectName" For="() => context.Item.FullObjectName" />
+			</EditTemplate>
+		</PropertyColumn>
         <PropertyColumn Property="x => x.Description" Title="Description">
 			<EditTemplate>
-				<MudTextField @bind-Value="context.Item.Description" Required Margin="@Margin.Dense" Validation="@(new StringLengthAttribute(10) {ErrorMessage = "Description is too long"})">
+					<MudTextField @bind-Value="context.Item.Description" Clearable Margin="@Margin.Dense" For="() => context.Item.Description">
 				</MudTextField>
 			</EditTemplate>
 		</PropertyColumn>
-        <PropertyColumn Property="x => x.Hierarchy1" Title="Main picture">
+        <PropertyColumn Property="x => x.VduGroup" Title="Vdu Group"/>
+        <PropertyColumn Property="x => x.ObjectType" Title="Object Type">
 			<EditTemplate>
-				<MudSelect @bind-Value="context.Item.Hierarchy1" T="string" AnchorOrigin="Origin.BottomCenter">
-					@foreach (var mainPic in MainPictures)
+				<MudSelect @bind-Value="context.Item.ObjectType" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
+					@foreach (var type in ObjectTypes)
 					{
-						<MudSelectItem Value="@mainPic.Name"/>
+						<MudSelectItem Value="@type.Name"/>
 					}
 				</MudSelect>
 			</EditTemplate>
 		</PropertyColumn>
+		<PropertyColumn Property="x => x.Cabinet" Title="Cabinet">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.Cabinet" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
+						@foreach (var cabinet in Cabinets)
+					{
+						<MudSelectItem Value="@cabinet.Name" />
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.Revision" Title="Revision" Required=false/>
     </Columns>
 </MudDataGrid>
 
@@ -62,11 +94,21 @@
 	public List<DisplayTagModel>? Tags { get; set; }
 	public List<DisplayObjectModel>? Objects { get; set; }
 	public DisplayTagModel? SelectedTag { get; set; }
-	public DisplayObjectModel? SelectedObject { get; set; }
+	public DisplayObjectModel? SelectedObject { get; set; } = new();
+	public HashSet<DisplayObjectModel> SelectedObjects { get; set; } = new();
 	public List<Hierarchy1>? MainPictures { get; set; } = new();
+	public List<ObjectType>? ObjectTypes { get; set; } = new();
+	public List<Cabinet>? Cabinets { get; set; } = new();
 
-	private bool _readOnly;
+	private bool _isReadOnly = true;
+
+	private bool _addButtonDisabled = false;
+	private bool _saveButtonDisabled = true;
+	private bool _deleteButtonDisabled = true;
+	private bool _cancelButtonDisabled = true;
+
 	private bool _isCellEditMode;
+	private State state;
 	private List<string> _events = new();
 	private bool _editTriggerRowClick;
 
@@ -86,17 +128,115 @@
 		_events.Insert(0, $"Event = CommittedItemChanges, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
 	}
 
-	protected override async Task OnInitializedAsync()
-	{	
-		Objects = await _objectService.GetObjectsAsync();
-		MainPictures = await _categoryDB.GetHierarchy1Category();
-
+	// events
+	void RowClicked(DataGridRowClickEventArgs<DisplayObjectModel> args)
+	{
+		_events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+		SelectedObject = args.Item;
 	}
+
+	void RowRightClicked(DataGridRowClickEventArgs<DisplayObjectModel> args)
+	{
+		_events.Insert(0, $"Event = RowRightClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+	}
+
+	void SelectedItemsChanged(HashSet<DisplayObjectModel> items)
+	{
+		_events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		state = State.Normal;
+		Objects = await _objectService.GetObjectsAsync();
+		MainPictures = await _categoryDM.GetHierarchy1Category();
+		ObjectTypes = await _categoryDM.GetObjectTypeCategory();
+		Cabinets = await _categoryDM.GetCabinets();
+	}
+
+	private Func<DisplayObjectModel, int, string> _disableRowClick => (x, i) =>
+	{
+		string style = string.Empty;
+		switch (state)
+		{
+			case State.Normal:
+				_isReadOnly = true;
+				break;
+			case State.Add:
+				if (x.Id != 0)
+				{
+					//condition for the row to be disabled
+					style += "pointer-events: none;";
+				}
+				break;
+			default:
+				break;
+		}
+
+		return style;
+	};
 
 	private void AddEmptyRow()
 	{
+		state = State.Add;
+		_events.Insert(0, $"StartedAddingItem, 0");
 		Objects.Insert(0, new DisplayObjectModel());
+		_saveButtonDisabled = false;
+		_addButtonDisabled = true;
+		_cancelButtonDisabled = false;
+	}
+
+	private async void SaveObject()
+	{
+		DisplayObjectModel newObject = Objects[0];
+
+		newObject.Otd = await _categoryDM.GetOtdByObjectType(newObject.ObjectType);
+
+		await _objectService.InsertObjectAsync(newObject);
+
+		if (newObject.ObjectType != null)
+		{
+			var objectTypeTags = await _tagService.GetTagsByObjectTypeAsync(newObject.ObjectType);
+			int newObjectId = await _objectService.GetLastInsertedObjectId();
+			foreach (var tag in objectTypeTags)
+			{
+				await _tagService.InsertTagAsync(newObjectId, tag);
+			}
+		}
+
+		Objects = await _objectService.GetObjectsAsync();
+		_saveButtonDisabled = true;
+		_cancelButtonDisabled = true;
+		_addButtonDisabled = false;
+		state = State.Normal;
+	}
+
+	private void DeleteObject()
+	{
 
 	}
 
+	private void CancelOperation()
+	{
+		Objects.RemoveAt(0);
+		_addButtonDisabled = false;
+		_saveButtonDisabled = true;
+		_cancelButtonDisabled = true;
+		state = State.Normal;
+	}
+
+	public void Enter(KeyboardEventArgs e)
+	{
+		if (e.Code == "Enter" || e.Code == "NumpadEnter")
+		{
+			// ...
+		}
+	}
+
+	enum State
+	{
+		Add,
+		Edit,
+		Normal
+	}
 }
