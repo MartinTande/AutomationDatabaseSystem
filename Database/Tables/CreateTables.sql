@@ -244,6 +244,6 @@ CREATE TABLE TAG
 	InterfaceModule varchar(50),
 	UserLock bit,
 	IOLock bit,
-	BeijerBoxId int FOREIGN KEY REFERENCES BEIJER_BOX(Id)
+	BeijerBoxId int,
 )
 GO

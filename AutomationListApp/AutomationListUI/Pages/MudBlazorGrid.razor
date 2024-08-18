@@ -11,162 +11,563 @@
 @using Syncfusion.Blazor.Navigations
 @using System.ComponentModel.DataAnnotations
 
+@inject ISnackbar Snackbar
 @inject IObjectService _objectService
 @inject ITagService _tagService
 @inject CategoryDataManager _categoryDM
 @inject SubCategoryDataManager _subCategoryDM
 
-<h3>MudBlazorGrid</h3>
+<h4>Objects</h4>
 
 <MudDataGrid 
 	T="DisplayObjectModel"
 	Items="@Objects"
-	MultiSelection="true"
-	RowStyleFunc="@_disableRowClick"
+	@ref="@ObjectGrid"
+	Height="600px"
+	MultiSelection="false"
+	RowStyleFunc="@_objectRowStyleFunc"
 	SortMode="SortMode.Multiple"
 	Filterable=true
 	FilterMode="MudBlazor.DataGridFilterMode.ColumnFilterRow"
 	Hover=true
-	ReadOnly=false
+	FixedHeader=true
+	ColumnResizeMode=@ResizeMode.Column
+	Striped=true
+	Dense=true
+	ReadOnly=@(_objectGridState is State.Normal)
+	SelectedItem="@SelectedObject"
 	EditMode="@DataGridEditMode.Cell"
-    StartedEditingItem="@StartedEditingItem" 
-	CanceledEditingItem="@CanceledEditingItem" 
-	CommittedItemChanges="@CommittedItemChanges"
-	RowClick="@RowClicked" 
-	RowContextMenuClick="RowRightClicked" 
-	SelectedItemsChanged="@SelectedItemsChanged"
-	Dense="true" 
-	EditTrigger="@(_editTriggerRowClick ? DataGridEditTrigger.OnRowClick : DataGridEditTrigger.Manual)">
+	SelectedItemChanged="@SelectedObjectChanged"
+	SelectedItemsChanged="@SelectedObjectsChanged"
+	EditTrigger="@DataGridEditTrigger.OnRowClick">
 	<ToolBarContent>
-		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Disabled="_addButtonDisabled" OnClick="@AddEmptyRow">Add</MudButton>
-		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Disabled="_saveButtonDisabled" OnClick="@SaveObject">Save</MudButton>
-		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Disabled="_deleteButtonDisabled" OnClick="@DeleteObject">Delete</MudButton>
-		<MudButton Variant="Variant.Filled" Disabled="_cancelButtonDisabled" OnClick="@CancelOperation">Cancel</MudButton>
+		<MudStack>
+			<MudStack Row="true" Spacing="2">
+				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Disabled=@(_objectGridState is not State.Normal) OnClick="@AddEmptyObjectRow">Add</MudButton>
+				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Disabled=@(_objectGridState is not State.Normal || SelectedObject is null) OnClick="@StartObjectEditMode">Edit</MudButton>
+				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Disabled=@(_objectGridState is State.Normal) OnClick="@SaveObjectIfValid">Save</MudButton>
+				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Disabled=@(_objectGridState is not State.Normal || SelectedObject is null) OnClick="@DeleteObject">Delete</MudButton>
+				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Disabled=@(_objectGridState is State.Normal) OnClick="@CancelObjectOperation">Cancel</MudButton>
+				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.ContentCopy" Disabled=@(_objectGridState is not State.Normal || SelectedObject is null) OnClick="@DuplicateObject">Duplicate</MudButton>
+				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileOpen" Disabled=@(_objectGridState is not State.Normal) OnClick="@DuplicateObject">Excel import</MudButton>
+			</MudStack>
+			<MudStack Row=true>
+				<MudTextField Label="Sfi Nr" Variant="Variant.Outlined" Margin="Margin.Dense" Style="width: 110px" />
+				<MudTextField Label="Main Eq Nr" Variant="Variant.Outlined" Margin="Margin.Dense" Style="width: 110px" />
+				<MudTextField Label="Eq Nr" Variant="Variant.Outlined" Margin="Margin.Dense" Style="width: 120px; font-family " />
+				<MudTextField Label="Object Name" Variant="Variant.Outlined" Margin="Margin.Dense" Style="width: 120px" />
+				<MudTextField Label="Description" Variant="Variant.Outlined" SMargin="Margin.Dense" Style="width: 120px" />
+				<MudTextField Label="Vdu Group" Variant="Variant.Outlined" Margin="Margin.Dense" Style="width: 110px" />
+			</MudStack>
+		</MudStack>
 	</ToolBarContent>
+
     <Columns>
-		<SelectColumn T="DisplayObjectModel" />
-		<PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required="true" />
-        <PropertyColumn Property="x => x.MainEqNumber" Title="Main Eq" Required="true">
-			<EditTemplate>
-				<MudTextField @bind-Value="context.Item.MainEqNumber" Clearable Margin="@Margin.Dense" For="@(() => context.Item.MainEqNumber)" />
-			</EditTemplate>
-		</PropertyColumn>
-        <PropertyColumn Property="x => x.EqNumber" Title="Eq" Required="false"/>
-        <PropertyColumn Property="x => x.FullObjectName" Title="Object Name">
-			<EditTemplate>
-					<MudTextField @bind-Value="context.Item.FullObjectName" For="() => context.Item.FullObjectName" />
-			</EditTemplate>
-		</PropertyColumn>
-        <PropertyColumn Property="x => x.Description" Title="Description">
-			<EditTemplate>
-					<MudTextField @bind-Value="context.Item.Description" Clearable Margin="@Margin.Dense" For="() => context.Item.Description">
-				</MudTextField>
-			</EditTemplate>
-		</PropertyColumn>
-        <PropertyColumn Property="x => x.VduGroup" Title="Vdu Group"/>
-        <PropertyColumn Property="x => x.ObjectType" Title="Object Type">
-			<EditTemplate>
-				<MudSelect @bind-Value="context.Item.ObjectType" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
-					@foreach (var type in ObjectTypes)
-					{
-						<MudSelectItem Value="@type.Name"/>
-					}
-				</MudSelect>
-			</EditTemplate>
-		</PropertyColumn>
-		<PropertyColumn Property="x => x.Cabinet" Title="Cabinet">
-			<EditTemplate>
-				<MudSelect @bind-Value="context.Item.Cabinet" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
-						@foreach (var cabinet in Cabinets)
-					{
-						<MudSelectItem Value="@cabinet.Name" />
-					}
-				</MudSelect>
-			</EditTemplate>
-		</PropertyColumn>
-		<PropertyColumn Property="x => x.Revision" Title="Revision" Required=false/>
+			<SelectColumn T="DisplayObjectModel" />
+			<PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required="true">
+				<EditTemplate>
+					<MudForm @bind-IsValid="@_sfiNumberIsValid">
+						<MudTextField @bind-Value="context.Item.SfiNumber" Margin="@Margin.Dense" For="@(() => context.Item.SfiNumber)" />
+					</MudForm>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.MainEqNumber" Title="Main Eq" Required="true">
+				<EditTemplate>
+					<MudForm @bind-IsValid="@_mainEqNumberIsValid">
+						<MudTextField @bind-Value="context.Item.MainEqNumber" Margin="@Margin.Dense" For="@(() => context.Item.MainEqNumber)" />
+					</MudForm>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.EqNumber" Title="Eq" Required="false"/>
+			<PropertyColumn Property="x => x.FullObjectName" Title="Object Name">
+				<EditTemplate>
+					<MudForm @bind-IsValid="@_objectNameIsValid">
+						<MudTextField @bind-Value="context.Item.FullObjectName" Validation="@(new ObjectNameValidator2(_objectService))" />
+					</MudForm>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.Description" Title="Description">
+				<EditTemplate>
+					<MudForm @bind-IsValid="@_descriptionIsValid">
+						<MudTextField @bind-Value="context.Item.Description" Clearable Margin="@Margin.Dense" For="() => context.Item.Description"/>
+					</MudForm>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.VduGroup" Title="Vdu Group">
+				<EditTemplate>
+					<MudForm @bind-IsValid="@_vduGroupIsValid">
+						<MudTextField @bind-Value="context.Item.VduGroup" Clearable Margin="@Margin.Dense" For="() => context.Item.VduGroup" />
+					</MudForm>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.ObjectType" Title="Object Type">
+				<EditTemplate>
+					<MudSelect @bind-Value="context.Item.ObjectType" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
+						@foreach (var type in ObjectTypes)
+						{
+							<MudSelectItem Value="@type.Name"/>
+						}
+					</MudSelect>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.Cabinet" Title="Cabinet">
+				<EditTemplate>
+					<MudSelect @bind-Value="context.Item.Cabinet" T="string" AnchorOrigin="Origin.BottomCenter">
+							@foreach (var cabinet in Cabinets)
+						{
+							<MudSelectItem Value="@cabinet.Name" />
+						}
+					</MudSelect>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.Revision" Title="Revision" Required=false/>
     </Columns>
 </MudDataGrid>
-
+<br>
+<h4>Tags</h4>
+<MudDataGrid T="DisplayTagModel"
+			 Items="@Tags"
+			 RowStyleFunc="@_tagRowStyleFunc"
+			 SortMode="SortMode.Multiple"
+			 Filterable=true
+			 FilterMode="MudBlazor.DataGridFilterMode.ColumnFilterRow"
+			 Hover=true
+			 Dense=true
+			 Striped=true
+			 Height="300px"
+			 ReadOnly=@(_tagGridState is State.Normal)
+			 SelectedItem="@SelectedTag"
+			 SelectedItemChanged="@GetSelectedTag"
+			 EditMode="@DataGridEditMode.Cell"
+			 EditTrigger="@DataGridEditTrigger.OnRowClick">
+	<ToolBarContent>
+		<MudStack Row="true" Spacing="2">
+			<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Disabled=@(_tagGridState is not State.Normal) OnClick="@AddEmptyTagRow">Add</MudButton>
+			<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Disabled=@(_tagGridState is not State.Normal || SelectedTag is null) OnClick="@StartTagEditMode">Edit</MudButton>
+			<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Disabled=@(_tagGridState is State.Normal) OnClick="@SaveTagIfValid">Save</MudButton>
+			<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Disabled=@(_tagGridState is not State.Normal || SelectedTag is null) OnClick="@DeleteTag">Delete</MudButton>
+			<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Disabled=@(_tagGridState is State.Normal) OnClick="@CancelTagOperation">Cancel</MudButton>
+		</MudStack>
+	</ToolBarContent>
+	<Columns>
+		<SelectColumn T="DisplayTagModel" />
+		<PropertyColumn Property="x => x.FullTagName" Title="Tag Name" Editable=false/>
+		<PropertyColumn Property="x => x.EqSuffix" Title="Eq" Required="true">
+			<EditTemplate>
+				<MudForm @bind-IsValid="@_eqSuffixIsValid">
+					<MudTextField @bind-Value="context.Item.EqSuffix" Margin="@Margin.Dense" For="() => context.Item.Description" />
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.Description" Title="Description">
+			<EditTemplate>
+				<MudForm @bind-IsValid="@_descriptionIsValid">
+					<MudTextField @bind-Value="context.Item.Description" Clearable Margin="@Margin.Dense" For="() => context.Item.Description" />
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.IoType" Title="Io Type">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.IoType" T="string" AnchorOrigin="Origin.BottomCenter" OnClose="@(()=>IoTypeChange(context.Item))">
+				@foreach (var ioType in IoTypes)
+				{
+					<MudSelectItem Value="@ioType.Name" />
+				}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.SignalType" Title="Signal Type">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.SignalType" T="string" AnchorOrigin="Origin.BottomCenter">
+					@foreach (var signalType in SignalTypes)
+					{
+						<MudSelectItem Value="@signalType.Name" />
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.EngUnit" Title="Eng Unit">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.EngUnit" T="string" AnchorOrigin="Origin.BottomCenter" ReadOnly="@(context.Item.IsDigital)">
+					@foreach (var engUnit in EngUnits)
+					{
+						<MudSelectItem Value="@engUnit.Name" />
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.AlarmDelay" Title="Alm Delay" Editable=false>
+			<EditTemplate>
+				<MudForm>
+					<MudTextField @bind-Value="context.Item.AlarmDelay" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.RangeLow" Title="Range Low" Editable=false>
+			<EditTemplate>
+				<MudForm>
+					<MudTextField @bind-Value="context.Item.RangeLow" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.RangeHigh" Title="Range High" Editable=false>
+			<EditTemplate>
+				<MudForm>
+					<MudTextField @bind-Value="context.Item.RangeHigh" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.LowLowLimit" Title="Alm LL" Editable=false>
+			<EditTemplate>
+				<MudForm>
+					<MudNumericField @bind-Value="context.Item.LowLowLimit" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.LowLimit" Title="Alm L" Editable=false>
+			<EditTemplate>
+				<MudForm>
+					<MudNumericField @bind-Value="context.Item.LowLimit" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.HighLimit" Title="Alm H" Editable=false>
+			<EditTemplate>
+				<MudForm>
+					<MudNumericField @bind-Value="context.Item.HighLimit" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.HighHighLimit" Title="Alm HH" Editable=false>
+			<EditTemplate>
+				<MudForm>
+					<MudNumericField @bind-Value="context.Item.HighHighLimit" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+	</Columns>
+</MudDataGrid>
 
 @code {
+	// Validator checks
+	private bool _objectNameIsValid;
+	private bool _sfiNumberIsValid;
+	private bool _mainEqNumberIsValid;
+	private bool _descriptionIsValid;
+	private bool _vduGroupIsValid;
+	private bool _eqSuffixIsValid;
+	private bool _tagNameIsValid;
+	private bool _ioTypeIsValid;
+
+	// Color
+	string EditModeColor = "#c9d8f0";
+	string SelectedItemColor = "#d0d5d9";
+
 	// Objects and tags
 	public List<DisplayTagModel>? Tags { get; set; }
 	public List<DisplayObjectModel>? Objects { get; set; }
+
 	public DisplayTagModel? SelectedTag { get; set; }
-	public DisplayObjectModel? SelectedObject { get; set; } = new();
+	public DisplayObjectModel? SelectedObject { get; set; }
 	public HashSet<DisplayObjectModel> SelectedObjects { get; set; } = new();
-	public List<Hierarchy1>? MainPictures { get; set; } = new();
-	public List<ObjectType>? ObjectTypes { get; set; } = new();
+
+	public List<IoType>? IoTypes { get; set; } = new();
 	public List<Cabinet>? Cabinets { get; set; } = new();
+	public List<EngUnit>? EngUnits { get; set; } = new();
+	public List<SignalType>? SignalTypes { get; set; } = new();
+	public List<ObjectType>? ObjectTypes { get; set; } = new();
 
-	private bool _isReadOnly = true;
+	public MudDataGrid<DisplayObjectModel> ObjectGrid { get; set; }
+	public MudDataGrid<DisplayTagModel> TagGrid { get; set; }
 
-	private bool _addButtonDisabled = false;
-	private bool _saveButtonDisabled = true;
-	private bool _deleteButtonDisabled = true;
-	private bool _cancelButtonDisabled = true;
+	private State _objectGridState;
+	private State _tagGridState;
 
-	private bool _isCellEditMode;
-	private State state;
 	private List<string> _events = new();
-	private bool _editTriggerRowClick;
 
-	// events
-	void StartedEditingItem(DisplayObjectModel item)
-	{
-		_events.Insert(0, $"Event = StartedEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
-	}
-
-	void CanceledEditingItem(DisplayObjectModel item)
-	{
-		_events.Insert(0, $"Event = CanceledEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
-	}
-
-	void CommittedItemChanges(DisplayObjectModel item)
-	{
-		_events.Insert(0, $"Event = CommittedItemChanges, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
-	}
-
-	// events
-	void RowClicked(DataGridRowClickEventArgs<DisplayObjectModel> args)
-	{
-		_events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
-		SelectedObject = args.Item;
-	}
-
-	void RowRightClicked(DataGridRowClickEventArgs<DisplayObjectModel> args)
-	{
-		_events.Insert(0, $"Event = RowRightClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
-	}
-
-	void SelectedItemsChanged(HashSet<DisplayObjectModel> items)
+	#region events
+	void SelectedObjectsChanged(HashSet<DisplayObjectModel> items)
 	{
 		_events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
 	}
 
+	private async Task SelectedObjectChanged(DisplayObjectModel item)
+	{
+		SelectedObject = item;
+		if (SelectedObject is null || SelectedObject.Tags is null) return;
+
+		Tags = SelectedObject.Tags;
+		foreach (var tag in Tags)
+		{
+			tag.ObjectName = SelectedObject.FullObjectName;
+		}
+	}
+	#endregion
+
 	protected override async Task OnInitializedAsync()
 	{
-		state = State.Normal;
-		Objects = await _objectService.GetObjectsAsync();
-		MainPictures = await _categoryDM.GetHierarchy1Category();
-		ObjectTypes = await _categoryDM.GetObjectTypeCategory();
+		_objectGridState = State.Normal;
+		_tagGridState = State.Normal;
+
+		await GetObjects();
+		IoTypes = await _categoryDM.GetIoTypes();
+		EngUnits = await _categoryDM.GetEngUnits();
 		Cabinets = await _categoryDM.GetCabinets();
+		ObjectTypes = await _categoryDM.GetObjectTypeCategory();
+
+		foreach (var ioType in IoTypes)
+		{
+			ioType.SignalTypes = await _subCategoryDM.GetSignalTypesAsync(ioType.Name);
+		}
 	}
 
-	private Func<DisplayObjectModel, int, string> _disableRowClick => (x, i) =>
+	#region Object methods
+	private async Task GetObjects()
+	{
+		Objects = await _objectService.GetObjectsAsync();
+		foreach (var obj in Objects)
+		{
+			obj.Tags = await _tagService.GetTagsByObjectIdAsync(obj.Id);
+		}
+		StateHasChanged();
+	}
+
+	private void AddEmptyObjectRow()
+	{
+		_objectGridState = State.Add;
+		_events.Insert(0, $"StartedAddingItem, 0");
+		Objects.Insert(0, new DisplayObjectModel());
+	}
+
+	private async Task DuplicateObject()
+	{
+		if (SelectedObject == null) return;
+
+		DisplayObjectModel newObject = SelectedObject;
+
+		int counter = 1;
+		string newName = SelectedObject.FullObjectName;
+
+		List<string> objectNames = Objects.Select(obj => obj.FullObjectName).ToList();
+
+		// Keep adding "_01", "_02", etc. until a unique name is found
+		while (objectNames.Contains(newName))
+		{
+			newName = $"{SelectedObject.FullObjectName}_{counter:00}";
+			newObject.EqNumber = $"{SelectedObject.EqNumber}_{counter:00}";
+			counter++;
+		}
+
+		await _objectService.InsertObjectAsync(newObject);
+		int newObjectId = await _objectService.GetLastInsertedObjectId();
+		foreach (var tag in SelectedObject.Tags)
+		{
+			await _tagService.InsertTagAsync(newObjectId, tag);
+		}
+
+		await GetObjects();
+	}
+
+	private async void SaveObjectIfValid()
+	{
+		DisplayObjectModel obj = new();
+		switch (_objectGridState)
+		{
+			case State.Add:
+				obj = Objects[0];
+				break;
+			case State.Edit:
+				obj = SelectedObject;
+				break;
+			default:
+				break;
+		}
+		if (!ObjectIsValid(obj))
+		{
+			Snackbar.Add("Object is not valid, not saved", Severity.Error);
+			return;
+		}
+		try
+		{
+			obj = await AddOtdBasedOnObjectType(obj);
+			await _objectService.InsertObjectAsync(obj);
+			await AddTagsBasedOnObjectType(obj);
+			Snackbar.Add("Object saved", Severity.Success);
+		}
+		catch
+		{
+			Snackbar.Add("Object not saved, something went wrong", Severity.Error);
+		}
+
+		await GetObjects();
+		_objectGridState = State.Normal;
+	}
+
+	private bool ObjectIsValid(DisplayObjectModel obj)
+	{
+		return (_sfiNumberIsValid && _mainEqNumberIsValid && _objectNameIsValid && _descriptionIsValid && _vduGroupIsValid && obj is not null);
+	}
+
+	private async Task DeleteObject()
+	{
+		var tags = await _tagService.GetTagsByObjectIdAsync(SelectedObject.Id);
+		foreach (var tag in tags)
+		{
+			await _tagService.DeleteTagAsync(tag.Id);
+		}
+		await _objectService.DeleteObjectAsync(SelectedObject.Id);
+
+		await GetObjects();
+		_objectGridState = State.Normal;
+	}
+
+	private async void StartObjectEditMode()
+	{
+		_objectGridState = State.Edit;
+	}
+
+	private async Task<DisplayObjectModel> AddOtdBasedOnObjectType(DisplayObjectModel displayObject)
+	{
+		if (displayObject.ObjectType is null)
+		{
+			return displayObject;
+		}
+		displayObject.Otd = await _categoryDM.GetOtdByObjectType(displayObject.ObjectType);
+		return displayObject;
+	}
+
+
+	private async Task AddTagsBasedOnObjectType(DisplayObjectModel displayObject)
+	{
+		if (displayObject.ObjectType != null)
+		{
+			var objectTypeTags = await _tagService.GetTagsByObjectTypeAsync(displayObject.ObjectType);
+			int displayObjectId = await _objectService.GetLastInsertedObjectId();
+			foreach (var tag in objectTypeTags)
+			{
+				await _tagService.InsertTagAsync(displayObjectId, tag);
+			}
+		}
+	}
+
+	private async Task CancelObjectOperation()
+	{
+		_objectGridState = State.Normal;
+		await GetObjects();
+	}
+	#endregion
+
+	#region Tag Methods
+	private void AddEmptyTagRow()
+	{
+		_tagGridState = State.Add;
+		Tags.Insert(0, new DisplayTagModel(){ ObjectName=SelectedObject.FullObjectName });
+	}
+
+	private async void IoTypeChange(DisplayTagModel tag)
+	{
+		SignalTypes = await _subCategoryDM.GetSignalTypesAsync(tag.IoType);
+		tag.SignalType = null;
+		StateHasChanged();
+	}
+
+	private void GetSelectedTag(DisplayTagModel tag)
+	{
+		SelectedTag = tag;
+		StateHasChanged();
+	}
+
+	private async void SaveTagIfValid()
+	{
+		DisplayTagModel tag = new();
+		switch (_tagGridState)
+		{
+			case State.Add:
+				tag = Tags[0];
+				break;
+			case State.Edit:
+				tag = SelectedTag;
+				break;
+			default:
+				break;
+		}
+		if (!TagIsValid(tag))
+		{
+			Snackbar.Add("Tag is not valid, not saved", Severity.Error);
+			return;
+		}
+		try
+		{
+			await _tagService.InsertTagAsync(SelectedObject.Id, tag);
+			Snackbar.Add("Tag saved", Severity.Success);
+		}
+		catch
+		{
+			Snackbar.Add("Tag not saved, something went wrong", Severity.Error);
+		}
+
+		await GetObjects();
+		_tagGridState = State.Normal;
+	}
+
+	private bool TagIsValid(DisplayTagModel tag)
+	{
+		return (_eqSuffixIsValid && _ioTypeIsValid && tag is not null);
+	}
+
+	private async Task DeleteTag()
+	{
+		var tags = await _tagService.GetTagsByObjectIdAsync(SelectedObject.Id);
+		foreach (var tag in tags)
+		{
+			await _tagService.DeleteTagAsync(tag.Id);
+		}
+		await _objectService.DeleteObjectAsync(SelectedObject.Id);
+
+		await GetObjects();
+		_tagGridState = State.Normal;
+	}
+
+	private async void StartTagEditMode()
+	{
+		_tagGridState = State.Edit;
+	}
+
+	private async Task CancelTagOperation()
+	{
+		_tagGridState = State.Normal;
+		await GetObjects();
+	}
+
+
+	#endregion
+
+	#region Style functions
+	private Func<DisplayObjectModel, int, string> _objectRowStyleFunc => (x, i) =>
 	{
 		string style = string.Empty;
-		switch (state)
+		switch (_objectGridState)
 		{
 			case State.Normal:
-				_isReadOnly = true;
+				if (x.Equals(SelectedObject))
+				{
+					style += $"background-color:{SelectedItemColor}";
+				}
 				break;
 			case State.Add:
 				if (x.Id != 0)
 				{
-					//condition for the row to be disabled
 					style += "pointer-events: none;";
+				}
+				break;
+			case State.Edit:
+				if (!x.Equals(SelectedObject))
+				{
+					style += "pointer-events: none;";
+				}
+				else
+				{
+					style += $"background-color:{EditModeColor}";
 				}
 				break;
 			default:
@@ -176,62 +577,40 @@
 		return style;
 	};
 
-	private void AddEmptyRow()
+	private Func<DisplayTagModel, int, string> _tagRowStyleFunc => (x, i) =>
 	{
-		state = State.Add;
-		_events.Insert(0, $"StartedAddingItem, 0");
-		Objects.Insert(0, new DisplayObjectModel());
-		_saveButtonDisabled = false;
-		_addButtonDisabled = true;
-		_cancelButtonDisabled = false;
-	}
-
-	private async void SaveObject()
-	{
-		DisplayObjectModel newObject = Objects[0];
-
-		newObject.Otd = await _categoryDM.GetOtdByObjectType(newObject.ObjectType);
-
-		await _objectService.InsertObjectAsync(newObject);
-
-		if (newObject.ObjectType != null)
+		string style = string.Empty;
+		switch (_tagGridState)
 		{
-			var objectTypeTags = await _tagService.GetTagsByObjectTypeAsync(newObject.ObjectType);
-			int newObjectId = await _objectService.GetLastInsertedObjectId();
-			foreach (var tag in objectTypeTags)
-			{
-				await _tagService.InsertTagAsync(newObjectId, tag);
-			}
+			case State.Normal:
+				if (x.Equals(SelectedTag))
+				{
+					style += $"background-color:{SelectedItemColor}";
+				}
+				break;
+			case State.Add:
+				if (x.Id != 0)
+				{
+					style += "pointer-events: none;";
+				}
+				break;
+			case State.Edit:
+				if (!x.Equals(SelectedTag))
+				{
+					style += "pointer-events: none;";
+				}
+				else
+				{
+					style += $"background-color:{EditModeColor}";
+				}
+				break;
+			default:
+				break;
 		}
 
-		Objects = await _objectService.GetObjectsAsync();
-		_saveButtonDisabled = true;
-		_cancelButtonDisabled = true;
-		_addButtonDisabled = false;
-		state = State.Normal;
-	}
-
-	private void DeleteObject()
-	{
-
-	}
-
-	private void CancelOperation()
-	{
-		Objects.RemoveAt(0);
-		_addButtonDisabled = false;
-		_saveButtonDisabled = true;
-		_cancelButtonDisabled = true;
-		state = State.Normal;
-	}
-
-	public void Enter(KeyboardEventArgs e)
-	{
-		if (e.Code == "Enter" || e.Code == "NumpadEnter")
-		{
-			// ...
-		}
-	}
+		return style;
+	};
+	#endregion
 
 	enum State
 	{
@@ -240,3 +619,19 @@
 		Normal
 	}
 }
+
+<style>
+	.mud-toolbar{
+		height: 120px
+	}
+
+	.mud-input,
+	.mud-input-control > .mud-input-control-input-container > .mud-input-label-inputcontrol {
+		font-size: 0.9rem; /* 1 rem is default */
+	}
+
+	.mud-menu{
+		display: none;
+	}
+
+</style>

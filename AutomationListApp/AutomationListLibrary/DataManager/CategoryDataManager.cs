@@ -78,7 +78,7 @@ public class CategoryDataManager
     public async Task<List<LocationGroup>> GetLocationGroups() => await GetCategory<LocationGroup>("LOCATION_GROUP");
     public async Task<List<ModuleType>> GetModuleTypes() => await GetCategory<ModuleType>("MODULE_TYPE");
     public async Task<List<ModuleConfig>> GetModuleConfig() => await GetCategory<ModuleConfig>("MODULE_CONFIG");
-    public async Task<List<EngUnit>> GetEngUnits() => await GetCategory<EngUnit>("EngUnit");
+    public async Task<List<EngUnit>> GetEngUnits() => await GetCategory<EngUnit>("ENG_UNIT");
 	public async Task<string> GetOtdByObjectType(string objectType)
 	{
 		var p = new { ObjectType = objectType };

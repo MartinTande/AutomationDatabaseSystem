@@ -1,0 +1,230 @@
+﻿
+@*@using AutomationListLibrary
+@using AutomationListLibrary.Data
+@using AutomationListLibrary.DataAccess
+@using AutomationListLibrary.DataManager
+@using AutomationListUI.Models
+@using AutomationListUI.Services
+@using AutomationListUI.Validators
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Navigations
+@using System.ComponentModel.DataAnnotations
+
+@typeparam TItem
+
+@inject ISnackbar Snackbar
+@inject IObjectService _objectService
+@inject ITagService _tagService
+@inject CategoryDataManager _categoryDM
+@inject SubCategoryDataManager _subCategoryDM
+
+<h3>MudBlazorGrid</h3>
+
+<MudDataGrid T="TItem"
+			 Items="@Items"
+			 @ref="@ItemGrid"
+			 MultiSelection="false"
+			 RowStyleFunc="@_rowStyleFunc"
+			 SortMode="SortMode.Multiple"
+			 Filterable=true
+			 FilterMode="MudBlazor.DataGridFilterMode.ColumnFilterRow"
+			 Hover=true
+			 Striped=true
+			 ReadOnly="@_isReadOnly"
+			 SelectedItem="@SelectedItem"
+			 EditMode="@DataGridEditMode.Cell"
+			 EditTrigger="@DataGridEditTrigger.OnRowClick">
+	<ToolBarContent>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Disabled="_addButtonDisabled" OnClick="@AddEmptyRow">Add</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Disabled=@(SelectedItem is null || _state is not State.Normal) OnClick="@SetEditState">Edit</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Disabled="_saveButtonDisabled" OnClick="@SaveObjectIfValid">Save</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Disabled=@(SelectedItem is null || _state is not State.Normal) OnClick="@DeleteItem">Delete</MudButton>
+		<MudButton Variant="Variant.Filled" Disabled="_cancelButtonDisabled" OnClick="@CancelOperation">Cancel</MudButton>
+	</ToolBarContent>
+	<Columns>
+		@Columns
+	</Columns>
+</MudDataGrid>
+@code {
+    // Validator checks
+    private bool objectNameIsValid;
+    private bool sfiNumberIsValid;
+    private bool mainEqNumberIsValid;
+    private bool descriptionIsValid;
+    private bool vduGroupIsValid;
+
+    [Parameter]
+    public IList<TItem>? Items { get; set; }
+    [Parameter]
+    public TItem? SelectedItem { get; set; }
+    [Parameter]
+    public RenderFragment? Columns { get; set; }
+
+    public List<Hierarchy1>? MainPictures { get; set; } = new();
+    public List<ObjectType>? ObjectTypes { get; set; } = new();
+    public List<Cabinet>? Cabinets { get; set; } = new();
+
+    public MudDataGrid<TItem> ItemGrid { get; set; }
+
+    private bool _isReadOnly = true;
+
+    private bool _addButtonDisabled = false;
+    private bool _editButtonDisabled = true;
+    private bool _saveButtonDisabled = true;
+    private bool _deleteButtonDisabled = true;
+    private bool _cancelButtonDisabled = true;
+
+    private bool _isCellEditMode;
+    private State _state;
+
+    public ExtendedMudGrid(TItem? selectedItem)
+    {
+        SelectedItem = selectedItem;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+		ChangeState(State.Normal);
+	}
+
+	private Func<TItem, int, string> _rowStyleFunc => (x, i) =>
+	{
+		string style = string.Empty;
+		switch (_state)
+		{
+			case State.Normal:
+				if (x.Equals(SelectedItem))
+				{
+					style += "background-color:#d0d5d9";
+				}
+				break;
+			case State.Add:
+				if (x.Id != 0)
+				{
+					style += "pointer-events: none;";
+				}
+				break;
+			case State.Edit:
+				if (!x.Equals(SelectedItem))
+				{
+					style += "pointer-events: none;";
+				}
+				else
+				{
+					style += "background-color:#c9d8f0";
+				}
+				break;
+			default:
+				break;
+		}
+
+		return style;
+	};
+
+	private void AddEmptyRow()
+	{
+		ChangeState(State.Add);
+		Items.Insert(0, new TItem());
+	}
+
+	private async void SaveObjectIfValid()
+	{
+		switch (_state)
+		{
+			case State.Add:
+				TItem item = Items[0];
+				if (!ObjectIsValid(item))
+				{
+					Snackbar.Add("Object is not valid, not saved", Severity.Error);
+					return;
+				}
+				Snackbar.Add("Object is added", Severity.Success);
+				break;
+			case State.Edit:
+				if (!ObjectIsValid(SelectedItem))
+				{
+					Snackbar.Add("Object is not valid, not saved", Severity.Error);
+					return;
+				}
+				Snackbar.Add("Object is updated", Severity.Success);
+				break;
+			default:
+				break;
+		}
+
+		ChangeState(State.Normal);
+	}
+
+	private bool ObjectIsValid(TItem newObject)
+	{
+		return (sfiNumberIsValid && mainEqNumberIsValid && objectNameIsValid && descriptionIsValid && vduGroupIsValid && newObject is not null);
+	}
+
+	private async Task DeleteItem()
+	{
+		var item = ItemGrid.CommittedItemChanges;
+		ChangeState(State.Normal);
+	}
+
+	private async void SetEditState()
+	{
+		ChangeState(State.Edit);
+	}
+
+	private async Task CancelOperation()
+	{
+		ChangeState(State.Normal);
+	}
+
+	private void ChangeState(State state)
+	{
+		switch (state)
+		{
+			case State.Normal:
+				_state = State.Normal;
+				if (SelectedItem is not null)
+				{
+					_deleteButtonDisabled = false;
+				}
+				_isReadOnly = true;
+				_saveButtonDisabled = true;
+				_editButtonDisabled = true;
+				_cancelButtonDisabled = true;
+				_addButtonDisabled = false;
+				StateHasChanged();
+				break;
+			case State.Add:
+				_state = State.Add;
+				_isReadOnly = false;
+				_editButtonDisabled = true;
+				_saveButtonDisabled = false;
+				_addButtonDisabled = true;
+				_cancelButtonDisabled = false;
+				StateHasChanged();
+				break;
+			case State.Edit:
+				_state = State.Edit;
+				_isReadOnly = false;
+				_saveButtonDisabled = false;
+				_cancelButtonDisabled = false;
+				_addButtonDisabled = true;
+				_isReadOnly = false;
+				StateHasChanged();
+				break;
+			default:
+				_isReadOnly = true;
+				_saveButtonDisabled = true;
+				_editButtonDisabled = true;
+				_cancelButtonDisabled = true;
+				_addButtonDisabled = false;
+				break;
+		}
+	}
+
+	enum State
+	{
+		Add,
+		Edit,
+		Normal
+	}
+}*@

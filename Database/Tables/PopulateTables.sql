@@ -159,6 +159,7 @@ INSERT INTO OTD (Name) VALUES ('BO_Valve')
 INSERT INTO OTD (Name) VALUES ('BO_ValveAI_AO')
 INSERT INTO OTD (Name) VALUES ('BO_Value')
 INSERT INTO OTD (Name) VALUES ('BO_Tank')
+INSERT INTO OTD (Name) VALUES ('BO_TwoSensors')
 INSERT INTO OTD (Name) VALUES ('BO_TwoSensors2')
 INSERT INTO OTD (Name) VALUES ('BO_NetworkMonitor')
 INSERT INTO OTD (Name) VALUES ('NA')
@@ -185,7 +186,9 @@ INSERT INTO IO_TYPE (Name) VALUES ('DO')
 INSERT INTO IO_TYPE (Name) VALUES ('AI')
 INSERT INTO IO_TYPE (Name) VALUES ('AO')
 INSERT INTO IO_TYPE (Name) VALUES ('SDI')
+INSERT INTO IO_TYPE (Name) VALUES ('SDO')
 INSERT INTO IO_TYPE (Name) VALUES ('SAI')
+INSERT INTO IO_TYPE (Name) VALUES ('SAO')
 
 -- Insert sample data into SIGNAL_TYPE
 INSERT INTO SIGNAL_TYPE (Name) VALUES ('NC')
@@ -246,6 +249,9 @@ INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_T
 -- SDI
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SDI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'))
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SDI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'))
+-- SDO
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SDO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'))
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SDO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'))
 -- AI
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = '4-20mA, 2W'))
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'AI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = '4-20mA, 4W'))
@@ -263,6 +269,13 @@ INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_T
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Word'))
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Double'))
 INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'U_B_AnalogValueLong'))
+-- SAO
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Int'))
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Real'))
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Float'))
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Word'))
+INSERT INTO IO_SIGNAL_TYPE (IoTypeId, SignalTypeId) VALUES ((SELECT Id FROM IO_TYPE WHERE Name = 'SAO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'Double'))
+
 
 -- Insert sample data into ENG_UNIT
 INSERT INTO ENG_UNIT (Name, UnitId) VALUES ('V', 1000)
@@ -293,20 +306,24 @@ INSERT INTO SYMBOL (Name) VALUES ('XI')
 -- Insert sample data into OBJECT_TYPE
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Digital sensor', (SELECT Id FROM OTD WHERE Name = 'BO_1DI'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Fire detector', (SELECT Id FROM OTD WHERE Name = 'BO_8DI_8DO'))
-INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('8DI_8DO', (SELECT Id FROM OTD WHERE Name = 'BO_8DI_8DO'))
+INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Fire detector with commands', (SELECT Id FROM OTD WHERE Name = 'BO_8DI_8DO'))
+INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Multi DI/DO Object', (SELECT Id FROM OTD WHERE Name = 'BO_8DI_8DO'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Analog sensor', (SELECT Id FROM OTD WHERE Name = 'BO_AnalogIn'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Analog sensor with alarms', (SELECT Id FROM OTD WHERE Name = 'BO_AnalogIn_AllAlarms'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Analog actuator', (SELECT Id FROM OTD WHERE Name = 'BO_AnalogOut'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Breaker', (SELECT Id FROM OTD WHERE Name = 'BO_Breaker'))
-INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Duty Stby', (SELECT Id FROM OTD WHERE Name = 'BO_DutyStby'))
+INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Breaker feedback only', (SELECT Id FROM OTD WHERE Name = 'BO_Breaker'))
+INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Duty Standby', (SELECT Id FROM OTD WHERE Name = 'BO_DutyStby'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Motor', (SELECT Id FROM OTD WHERE Name = 'BO_Motor'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Motor feedback only', (SELECT Id FROM OTD WHERE Name = 'BO_Motor'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Motor FC', (SELECT Id FROM OTD WHERE Name = 'BO_MotorFC'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('PID controller', (SELECT Id FROM OTD WHERE Name = 'BO_PID'))
+INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Valve Feedback only', (SELECT Id FROM OTD WHERE Name = 'BO_Valve'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Valve', (SELECT Id FROM OTD WHERE Name = 'BO_Valve'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Valve w/o command', (SELECT Id FROM OTD WHERE Name = 'BO_Valve'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Valve Analog', (SELECT Id FROM OTD WHERE Name = 'BO_ValveAI_AO'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Tank', (SELECT Id FROM OTD WHERE Name = 'BO_Tank'))
+INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Two Sensor selector', (SELECT Id FROM OTD WHERE Name = 'BO_TwoSensors'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('Network Monitor', (SELECT Id FROM OTD WHERE Name = 'NO_NetworkMonitor'))
 INSERT INTO OBJECT_TYPE (Name, OtdId) VALUES ('NA', (SELECT Id FROM OTD WHERE Name = 'NA'))
 
@@ -322,10 +339,23 @@ DECLARE @FireDetectorId INT;
 SET @FireDetectorId = (SELECT Id FROM OBJECT_TYPE WHERE Name = 'Fire detector');
 
 -- Insert subcategories under "Fire detector"
-INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorId, '01', 'Alarm', (SELECT Id FROM IO_TYPE WHERE Name = 'DI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
-INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorId, '02', 'Warning', (SELECT Id FROM IO_TYPE WHERE Name = 'DI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
-INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorId, '03', 'Fault', (SELECT Id FROM IO_TYPE WHERE Name = 'DI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
-INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorId, '04', 'Test', (SELECT Id FROM IO_TYPE WHERE Name = 'DI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorId, '01', 'Alarm', (SELECT Id FROM IO_TYPE WHERE Name = 'SDI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorId, '02', 'Warning', (SELECT Id FROM IO_TYPE WHERE Name = 'SDI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorId, '03', 'Fault', (SELECT Id FROM IO_TYPE WHERE Name = 'SDI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorId, '04', 'Test', (SELECT Id FROM IO_TYPE WHERE Name = 'SDI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
+
+-- Retrieve Ids for "Fire detector with commands"
+DECLARE @FireDetectorWithCommandsId INT;
+SET @FireDetectorWithCommandsId = (SELECT Id FROM OBJECT_TYPE WHERE Name = 'Fire detector with commands');
+
+-- Insert subcategories under "Fire detector with commands"
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorWithCommandsId, '01', 'Alarm', (SELECT Id FROM IO_TYPE WHERE Name = 'SDI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorWithCommandsId, '02', 'Warning', (SELECT Id FROM IO_TYPE WHERE Name = 'SDI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorWithCommandsId, '03', 'Fault', (SELECT Id FROM IO_TYPE WHERE Name = 'SDI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorWithCommandsId, '04', 'Disabled', (SELECT Id FROM IO_TYPE WHERE Name = 'SDI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorWithCommandsId, '05', 'Test', (SELECT Id FROM IO_TYPE WHERE Name = 'SDI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorWithCommandsId, '21', 'Disable', (SELECT Id FROM IO_TYPE WHERE Name = 'SDO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@FireDetectorWithCommandsId, '22', 'Enable', (SELECT Id FROM IO_TYPE WHERE Name = 'SDO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
 
 -- Retrieve Ids for "Motor"
 DECLARE @MotorId INT;
@@ -337,6 +367,13 @@ INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VA
 INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@MotorId, '21', 'Start command', (SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'));
 INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@MotorId, '22', 'Stop command', (SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'));
 INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@MotorId, '18', 'Auxiliary fault', (SELECT Id FROM IO_TYPE WHERE Name = 'DI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
+
+-- Retrieve Ids for "MotorFeedbackOnly"
+DECLARE @MotorFeedbackOnlyId INT;
+SET @MotorFeedbackOnlyId = (SELECT Id FROM OBJECT_TYPE WHERE Name = 'Motor feedback only');
+
+-- Insert subcategories under "MotorFeedbackOnly"
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@MotorFeedbackOnlyId, '11', 'Running feedback', (SELECT Id FROM IO_TYPE WHERE Name = 'DI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'));
 
 -- Retrieve Ids for "Motor FC"
 DECLARE @MotorFCId INT;
@@ -362,14 +399,14 @@ INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VA
 INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@ValveId, '04', 'Open command', (SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'));
 INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@ValveId, '07', 'Valve - fault', (SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
 
--- Retrieve Ids for "Valve w/o command"
-DECLARE @ValveWOCommandId INT;
-SET @ValveWOCommandId = (SELECT Id FROM OBJECT_TYPE WHERE Name = 'Valve w/o command');
+-- Retrieve Ids for "Valve feedback only"
+DECLARE @ValveFeedbackOnlyId INT;
+SET @ValveFeedbackOnlyId = (SELECT Id FROM OBJECT_TYPE WHERE Name = 'Valve feedback only');
 
--- Insert subcategories under "Valve w/o command"
-INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@ValveWOCommandId, '01', 'Closed feedback', (SELECT Id FROM IO_TYPE WHERE Name = 'DI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'));
-INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@ValveWOCommandId, '02', 'Open feedback', (SELECT Id FROM IO_TYPE WHERE Name = 'DI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'));
-INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@ValveWOCommandId, '07', 'Valve - fault', (SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
+-- Insert subcategories under "Valve feedback only"
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@ValveFeedbackOnlyId, '01', 'Closed feedback', (SELECT Id FROM IO_TYPE WHERE Name = 'DI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@ValveFeedbackOnlyId, '02', 'Open feedback', (SELECT Id FROM IO_TYPE WHERE Name = 'DI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@ValveFeedbackOnlyId, '07', 'Valve - fault', (SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NC'));
 
 -- Retrieve Ids for "Analog sensor"
 DECLARE @AnalogSensorId INT;
@@ -399,3 +436,27 @@ INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VA
 INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@BreakerId, '32', 'Open feedback', (SELECT Id FROM IO_TYPE WHERE Name = 'DI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'));
 INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@BreakerId, '33', 'Close command', (SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'));
 INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@BreakerId, '34', 'Open command', (SELECT Id FROM IO_TYPE WHERE Name = 'DO'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'));
+
+-- Retrieve Ids for "BreakerFeedbackOnly"
+DECLARE @BreakerIdFeedbackOnly INT;
+SET @BreakerIdFeedbackOnly = (SELECT Id FROM OBJECT_TYPE WHERE Name = 'Breaker feedback only');
+
+-- Insert subcategories under "BreakerFeedbackOnly"
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@BreakerIdFeedbackOnly, '31', 'Close feedback', (SELECT Id FROM IO_TYPE WHERE Name = 'DI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@BreakerIdFeedbackOnly, '32', 'Open feedback', (SELECT Id FROM IO_TYPE WHERE Name = 'DI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'NO'));
+
+-- Retrieve Ids for "PIDController"
+DECLARE @PIDControllerId INT;
+SET @PIDControllerId = (SELECT Id FROM OBJECT_TYPE WHERE Name = 'PID controller');
+
+-- Insert subcategories under "PIDController"
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@PIDControllerId, '61', 'Output value', (SELECT Id FROM IO_TYPE WHERE Name = 'SAI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'U_AnalogValueLong'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@PIDControllerId, '62', 'Process value', (SELECT Id FROM IO_TYPE WHERE Name = 'SAI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'U_AnalogValueLong'));
+
+-- Retrieve Ids for "DutyStandby"
+DECLARE @DutyStandbyId INT;
+SET @DutyStandbyId = (SELECT Id FROM OBJECT_TYPE WHERE Name = 'Duty standby');
+
+-- Insert subcategories under "DutyStandby"
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@DutyStandbyId, '01', 'Object 1 process', (SELECT Id FROM IO_TYPE WHERE Name = 'SAI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'U_AnalogValueLong'));
+INSERT INTO TAG (ObjectTypeId, EqSuffix, Description, IoTypeId, SignalTypeId) VALUES (@DutyStandbyId, '02', 'Object 2 process', (SELECT Id FROM IO_TYPE WHERE Name = 'SAI'), (SELECT Id FROM SIGNAL_TYPE WHERE Name = 'U_AnalogValueLong'));

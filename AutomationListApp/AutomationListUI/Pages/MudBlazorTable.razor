@@ -1,0 +1,114 @@
+﻿<h3>MudBlazorTable</h3>
+
+<MudTable 
+    Items="@DisplayObjectModels" 
+    Dense="@dense" 
+    @ref="@table"
+    Hover="@hover" 
+    ReadOnly="@ronly" 
+    CanCancelEdit="@canCancelEdit" 
+    Filter="new Func<DisplayObjectModel,bool>(FilterFunc)"
+    @bind-SelectedItem="selectedItem1" 
+    SortLabel="Sort By"
+    CommitEditTooltip="Commit Edit"
+    RowEditCommit="ItemHasBeenCommitted" 
+    IsEditRowSwitchingBlocked="@blockSwitch" 
+    ApplyButtonPosition="@applyButtonPosition" 
+    EditButtonPosition="@editButtonPosition" 
+    EditTrigger="@editTrigger">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Periodic DisplayObjectModels</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        @if (applyButtonPosition.DisplayApplyButtonAtStart() || (editButtonPosition.DisplayEditButtonAtStart() && editTrigger == TableEditTrigger.EditButton))
+        {
+            <col style="width:50px;" />
+        }
+        <col style="width:50px;" />
+        <col style="width:80px;" />
+        <col style="width:50%;" />
+        <col />
+        <col />
+        @if (applyButtonPosition.DisplayApplyButtonAtEnd() || (editButtonPosition.DisplayEditButtonAtEnd() && editTrigger == TableEditTrigger.EditButton))
+        {
+            <col style="width:50px;" />
+        }
+    </ColGroup>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<DisplayObjectModel, object>(x=>x.SfiNumber)">Nr</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<DisplayObjectModel, object>(x=>x.MainEqNumber)">Sign</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<DisplayObjectModel, object>(x=>x.EqNumber)">Position</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<DisplayObjectModel, object>(x=>x.FullObjectName)">Name</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Nr">@context.SfiNumber</MudTd>
+        <MudTd DataLabel="Sign">@context.MainEqNumber</MudTd>
+        <MudTd DataLabel="Name">@context.EqNumber</MudTd>
+    </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Nr">@context.SfiNumber</MudTd>
+        <MudTd DataLabel="Sign">
+            <MudTextField @bind-Value="context.MainEqNumber" Required />
+        </MudTd>
+
+    </RowEditingTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+    <EditButtonContent Context="button">
+        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
+    </EditButtonContent>
+</MudTable>
+
+
+ @code {
+    private List<string> editEvents = new();
+    private bool dense = false;
+    private bool hover = true;
+    private bool ronly = false;
+    private bool canCancelEdit = false;
+    private bool blockSwitch = false;
+    private string searchString = "";
+    private MudTable<DisplayObjectModel> table;
+    private DisplayObjectModel selectedItem1 = null;
+    private DisplayObjectModel DisplayObjectModelBeforeEdit;
+    private HashSet<DisplayObjectModel> selectedItems1 = new HashSet<DisplayObjectModel>();
+    private TableApplyButtonPosition applyButtonPosition = TableApplyButtonPosition.End;
+    private TableEditButtonPosition editButtonPosition = TableEditButtonPosition.End;
+    private TableEditTrigger editTrigger = TableEditTrigger.RowClick;
+    private IEnumerable<DisplayObjectModel> DisplayObjectModels = new List<DisplayObjectModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+
+    private void ClearEventLog()
+    {
+        editEvents.Clear();
+    }
+
+    private void AddEditionEvent(string message)
+    {
+        editEvents.Add(message);
+        StateHasChanged();
+    }
+
+
+    private void ItemHasBeenCommitted(object DisplayObjectModel)
+    {
+        AddEditionEvent($"RowEditCommit event: Changes to DisplayObjectModel {((DisplayObjectModel)DisplayObjectModel).FullObjectName} committed");
+    }
+
+    private bool FilterFunc(DisplayObjectModel DisplayObjectModel)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (DisplayObjectModel.SfiNumber.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (DisplayObjectModel.MainEqNumber.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}

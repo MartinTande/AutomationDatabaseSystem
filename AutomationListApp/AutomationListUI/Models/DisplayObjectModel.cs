@@ -37,8 +37,6 @@ public class DisplayObjectModel
     public string? Cabinet { get; set; }
     public string? Revision { get; set; }
 
-    private string _fullObjectName;
-
     [Required]
 	[StringLength(20, ErrorMessage = "Object name is too long")]
     [ObjectNameValidator]
@@ -55,13 +53,12 @@ public class DisplayObjectModel
         }
         set
         {
-            value = _fullObjectName;
-        }
+		}
+	}
 
-    }
+    public bool AutoAddon { get; set; } = false;    // Flag used for adding software tags for Auto Start/Stop Mode AddOn for pumps and valves
 
-
-	[ReadOnly(true)]
+    [ReadOnly(true)]
     [Editable(false)]
 	public DateTime? LastModified { get; set; }
 
@@ -105,7 +102,7 @@ public class DisplayObjectModel
 
 	private bool IsRequiredTagSuffixPresent(string suffix)
     {
-        suffix = suffix.Replace("<ObjectTag>_","");  // Removes "<ObjectTag>_" from suffix
+        suffix = suffix.Replace("<ObjectTag>_","");
         if (Tags == null)
         {
             return false;

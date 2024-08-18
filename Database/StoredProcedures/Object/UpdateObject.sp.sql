@@ -64,10 +64,10 @@ WHERE Name=@Otd),
 FROM OBJECT_TYPE
 WHERE Name=@ObjectType),
 	AcknowledgeAllowedId = (SELECT Id
-FROM ACKNOWLEDGE_ALLOWED
+FROM LOCATION_GROUP
 WHERE Name=@AcknowledgeAllowed),
 	AlwaysVisibleId = (SELECT Id
-FROM ALWAYS_VISIBLE
+FROM LOCATION_GROUP
 WHERE Name=@AlwaysVisible),
 	NodeId = (SELECT Id
 FROM NODE

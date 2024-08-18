@@ -1,0 +1,134 @@
+﻿@page "/test"
+
+<MudDataGrid T="Element" Items="@Elements" Filterable="true" FilterMode="@DataGridFilterMode.ColumnFilterRow">
+    <Columns>
+        <PropertyColumn Property="x => x.Sign">
+            <FilterTemplate>
+                <MudPopover 
+                    Open="@_filterOpen" 
+                    AnchorOrigin="Origin.BottomCenter" 
+                    TransformOrigin="Origin.TopCenter"
+                    Style="width:150px">
+                    <MudStack Spacing="0">
+                        <MudStack Spacing="0" Style="overflow-y:auto;max-height:250px">
+                            @foreach (var item in context.Items)
+                            {
+                                <MudCheckBox T="bool" Label="@($"{item.Sign}")" Size="@Size.Small" Value="@(_selectedItems.Contains(item))"
+                                             ValueChanged="@((value) => SelectedChanged(value, item))" />
+                            }
+                        </MudStack>
+                        <MudStack Row="true">
+                            <MudButton OnClick="@(() => ClearFilterAsync(context))">Clear</MudButton>
+                            <MudButton Color="@Color.Primary" OnClick="@(() => ApplyFilterAsync(context))">Filter</MudButton>
+                        </MudStack>
+                    </MudStack>
+                </MudPopover>
+            </FilterTemplate>
+        </PropertyColumn>
+        <PropertyColumn Property="x => x.Name" />
+        <PropertyColumn Property="x => x.Position" />
+        <PropertyColumn Property="x => x.MolarMass" Title="Molar mass" />
+        <PropertyColumn Property="x => x.Category" Title="Category" />
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager T="Element" />
+    </PagerContent>
+</MudDataGrid>
+@code {
+    IEnumerable<Element> Elements = new List<Element>();
+    HashSet<Element> _selectedItems = new();
+    HashSet<Element> _filterItems = new();
+    FilterDefinition<Element> _filterDefinition;
+    bool _selectAll = true;
+    // string _icon = Icons.Material.Outlined.FilterAlt;
+
+    bool _filterOpen = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Elements = new List<Element>
+        {
+            new Element
+            {
+                Sign = "H",
+                Name = "Hydrogen",
+                Position = "1",
+                MolarMass = "1.008 g/mol",
+                Category = "Nonmetal"
+            },
+            new Element
+            {
+                Sign = "He",
+                Name = "Helium",
+                Position = "2",
+                MolarMass = "4.0026 g/mol",
+                Category = "Noble gas"
+            },
+            // Add more elements here...
+        };
+        _selectedItems = Elements.ToHashSet();
+        _filterItems = Elements.ToHashSet();
+        _filterDefinition = new FilterDefinition<Element>
+            {
+                FilterFunction = x => _filterItems.Contains(x)
+            };
+    }
+
+    void OpenFilter()
+    {
+        _filterOpen = true;
+    }
+
+    private void SelectedChanged(bool value, Element item)
+    {
+        if (value)
+            _selectedItems.Add(item);
+        else
+            _selectedItems.Remove(item);
+
+        if (_selectedItems.Count == Elements.Count())
+            _selectAll = true;
+        else
+            _selectAll = false;
+    }
+
+    private async Task ClearFilterAsync(FilterContext<Element> context)
+    {
+        _selectedItems = Elements.ToHashSet();
+        _filterItems = Elements.ToHashSet();
+        //_icon = Icons.Material.Outlined.FilterAlt;
+        await context.Actions.ClearFilterAsync(_filterDefinition);
+        _filterOpen = false;
+    }
+
+    private async Task ApplyFilterAsync(FilterContext<Element> context)
+    {
+        _filterItems = _selectedItems.ToHashSet();
+        // _icon = _filterItems.Count == Elements.Count() ? Icons.Material.Outlined.FilterAlt : Icons.Material.Filled.FilterAlt;
+        await context.Actions.ApplyFilterAsync(_filterDefinition);
+        _filterOpen = false;
+    }
+
+    private void SelectAll(bool value)
+    {
+        _selectAll = value;
+
+        if (value)
+        {
+            _selectedItems = Elements.ToHashSet();
+        }
+        else
+        {
+            _selectedItems.Clear();
+        }
+    }
+
+    class Element
+    {
+        public string Sign { get; set; }
+        public string Name { get; set; }
+        public string Position { get; set; }
+        public string MolarMass { get; set; }
+        public string Category { get; set; }
+    }
+}

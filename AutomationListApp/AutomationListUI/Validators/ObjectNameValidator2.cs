@@ -1,25 +1,18 @@
-﻿using AutomationListLibrary.DataAccess;
-using AutomationListLibrary.DataManager;
-using AutomationListUI.Models;
+﻿using AutomationListUI.Models;
 using AutomationListUI.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace AutomationListUI.Validators;
 
 
-public class ObjectNameValidator : ValidationAttribute
+public class ObjectNameValidator2 : ValidationAttribute
 {
-	ISqlConnector _sqlConnector;
-	IObjectDataManager _objectManager;
 	IObjectService _objectService;
 	List<DisplayObjectModel> objects = new List<DisplayObjectModel>();
 
-    public ObjectNameValidator()
+    public ObjectNameValidator2(IObjectService objectService)
     {
-		var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
-		_sqlConnector = new SqlConnector(configuration);
-		_objectManager = new ObjectDataManager(_sqlConnector);
-		_objectService = new ObjectService(_objectManager);
+		_objectService = objectService;
 	}
 
     protected override ValidationResult IsValid(object value, ValidationContext validationContext)
@@ -29,9 +22,14 @@ public class ObjectNameValidator : ValidationAttribute
 			return new ValidationResult("Object name is required");
 		}
 
-		objects = Task.Run(async () => await _objectService.GetObjectsAsync()).Result.ToList();
-
 		string inputName = value.ToString();
+
+		if (inputName.Length > 20)
+		{
+			return new ValidationResult("Object name is too long");
+		}
+
+		objects = Task.Run(async () => await _objectService.GetObjectsAsync()).Result.ToList();
 
 		// Check if the input name is unique among other items
 		var existingNames = objects.Select(o => o.FullObjectName).ToList();

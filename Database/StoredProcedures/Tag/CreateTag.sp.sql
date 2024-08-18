@@ -17,12 +17,12 @@ CREATE PROCEDURE CreateTag
 	@Symbol varchar(50),
 	@EngUnit varchar(50),
 	@AlarmDelay varchar(50),
-	@LowLimit int,
-	@LowLowLimit int,
-	@HighLimit int,
-	@HighHighLimit int,
 	@RangeLow int,
 	@RangeHigh int,
+	@LowLowLimit int,
+	@LowLimit int,
+	@HighLimit int,
+	@HighHighLimit int,
 	@Slot int,
 	@Channel int,
 	@TP1 int,
@@ -49,7 +49,7 @@ BEGIN
 		@SignalTypeId int,
 		@EngUnitId int,
 		@SymbolId int,
-		@InsertedTagId int,
+		@InsertedTagId int;
 	-- Scalar variable to store the inserted tag's ID
 
 	SELECT @IoTypeId = Id
