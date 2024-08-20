@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationListUI", "Automat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationListLibrary", "AutomationListLibrary\AutomationListLibrary.csproj", "{3C7B7FEF-B71B-4E4C-9694-B7A77CB4D9BC}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "AutomationListDB", "AutomationListDB\AutomationListDB.sqlproj", "{F8618C79-4B2E-4C93-A61E-B09148B965CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,12 @@ Global
 		{3C7B7FEF-B71B-4E4C-9694-B7A77CB4D9BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C7B7FEF-B71B-4E4C-9694-B7A77CB4D9BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C7B7FEF-B71B-4E4C-9694-B7A77CB4D9BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8618C79-4B2E-4C93-A61E-B09148B965CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8618C79-4B2E-4C93-A61E-B09148B965CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8618C79-4B2E-4C93-A61E-B09148B965CE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{F8618C79-4B2E-4C93-A61E-B09148B965CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8618C79-4B2E-4C93-A61E-B09148B965CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8618C79-4B2E-4C93-A61E-B09148B965CE}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
