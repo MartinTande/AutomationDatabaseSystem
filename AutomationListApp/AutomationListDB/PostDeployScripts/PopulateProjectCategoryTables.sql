@@ -39,7 +39,6 @@ DECLARE @PropulsionHierarchyId INT;
 SET @PropulsionHierarchyId = (SELECT Id FROM HIERARCHY_1 WHERE Name = 'Propulsion');
 INSERT INTO HIERARCHY_2 (Name, Hierarchy1Id) SELECT 'Thruster Overview', @PropulsionHierarchyId WHERE NOT EXISTS (SELECT 1 FROM HIERARCHY_2 WHERE Name = 'Thruster Overview');
 INSERT INTO HIERARCHY_2 (Name, Hierarchy1Id) SELECT 'Thruster FWD', @PropulsionHierarchyId WHERE NOT EXISTS (SELECT 1 FROM HIERARCHY_2 WHERE Name = 'Thruster FWD');
-
 INSERT INTO HIERARCHY_2 (Name, Hierarchy1Id) SELECT 'Thruster AFT', @PropulsionHierarchyId WHERE NOT EXISTS (SELECT 1 FROM HIERARCHY_2 WHERE Name = 'Thruster AFT');
 
 -- Insert subcategories under "Bilge"
