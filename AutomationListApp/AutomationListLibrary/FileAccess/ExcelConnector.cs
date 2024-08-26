@@ -7,7 +7,7 @@ namespace AutomationListLibrary.FileAcces;
 
 public class ExcelConnector
 {
-    public IEnumerable<DataTable> ReadFile(string filePath)
+    private IEnumerable<DataTable> ReadFile(string filePath)
     {
         using (var streamVal = File.Open(filePath, FileMode.Open, FileAccess.Read))
         {
@@ -29,8 +29,12 @@ public class ExcelConnector
             }
         }
     }
+    private void WriteFile()
+    {
 
-    public HashSet<Otd> ReadOtdFiles(HashSet<string> filePaths)
+    }
+
+    public HashSet<Otd> ReadOtdFiles(List<string> filePaths)
     {
         // OTD Excel file config
         int _otdInputSheetNumer = 1;
@@ -72,10 +76,5 @@ public class ExcelConnector
             Otds.Add(newOtd);
         }
         return Otds;
-    }
-
-    public void WriteFile()
-    {
-
     }
 }
