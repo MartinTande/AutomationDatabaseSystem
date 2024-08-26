@@ -1,7 +1,7 @@
 using AutomationListLibrary.DataAccess;
 using AutomationListLibrary.DataManager;
+using AutomationListLibrary.FileAcces;
 using AutomationListUI.Pages;
-using AutomationListUI.Readers;
 using AutomationListUI.Services;
 using MudBlazor.Services;
 using Syncfusion.Blazor;
@@ -21,7 +21,7 @@ builder.Services.AddSingleton<CategoryDataManager>();
 builder.Services.AddSingleton<SubCategoryDataManager>();
 builder.Services.AddSingleton<TagDataManager>();
 builder.Services.AddSingleton<CustomerObjects.CustomAdaptor>();
-builder.Services.AddSingleton<ExcelReader>();
+builder.Services.AddSingleton<ExcelConnector>();
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddMudServices();
 

@@ -17,7 +17,7 @@
 @inject CategoryDataManager _categoryDM
 @inject SubCategoryDataManager _subCategoryDM
 
-<h4>Objects</h4>
+<h5>Objects</h5>
 
 <MudDataGrid 
 	T="DisplayObjectModel"
@@ -124,7 +124,7 @@
     </Columns>
 </MudDataGrid>
 <br>
-<h4>Tags</h4>
+<h5>Tags</h5>
 <MudDataGrid T="DisplayTagModel"
 			 Items="@Tags"
 			 RowStyleFunc="@_tagRowStyleFunc"
@@ -538,8 +538,6 @@
 		_tagGridState = State.Normal;
 		await GetObjects();
 	}
-
-
 	#endregion
 
 	#region Style functions

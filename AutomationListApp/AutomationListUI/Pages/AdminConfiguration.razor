@@ -2,12 +2,12 @@
 
 @using AutomationListLibrary.Data
 @using AutomationListLibrary.DataManager
-@using AutomationListUI.Readers
+@using AutomationListLibrary.FileAcces
 @using System.Data
 
 @inject CategoryDataManager _categoryDB
 @inject SubCategoryDataManager _subCategoryDB
-@inject ExcelReader _excelReader  
+@inject ExcelConnector _excelConnector
 @inject IConfiguration config
 
 <h1>Admin Configuration</h1>
@@ -187,12 +187,7 @@
 
     private async Task LoadOtdFiles(InputFileChangeEventArgs e)
     {
-        List<string> filePaths = new();
-        Otds.Clear();
-        int nameColumn = 0;
-        int suffixColumn = 1;
-        int dataTypeColumn = 3;
-        int isOptionalColumn = 4;
+        HashSet<string> filePaths = new();
 
         try
         {
@@ -205,36 +200,9 @@
                 await using FileStream fileStream = new(path, FileMode.Create);
                 await file.OpenReadStream(maxFileSize).CopyToAsync(fileStream);
             }
-            foreach (string filePath in filePaths)
-            {
-                List<DataTable> dataTables = _excelReader.ReadFile(filePath).ToList();
-                Otd newOtd = new Otd { Name = Path.GetFileNameWithoutExtension(filePath) };
 
-
-                foreach (DataRow inputRow in dataTables[_otdInputSheetNumer].Rows)
-                {
-                    newOtd.Interface.Add(new OtdInterface
-                    {
-                        Name = inputRow[nameColumn].ToString(),
-                        Suffix = inputRow[suffixColumn].ToString(),
-                        DataType = inputRow[dataTypeColumn].ToString(),
-                        IsOptional = inputRow[isOptionalColumn].ToString().Equals("True"),
-                        InterfaceType = "Input"
-                    });
-                }
-                foreach (DataRow outputRow in dataTables[_otdOutputSheetNumer].Rows)
-                {
-                    newOtd.Interface.Add(new OtdInterface
-                    {
-                        Name = outputRow[nameColumn].ToString(),
-                        Suffix = outputRow[suffixColumn].ToString(),
-                        DataType = outputRow[dataTypeColumn].ToString(),
-                        IsOptional = outputRow[isOptionalColumn].ToString().Equals("True"),
-                        InterfaceType = "Output"
-                    });
-                }
-                Otds.Add(newOtd);
-            }
+            Otds.Clear();
+            Otds = _excelConnector.ReadOtdFiles(filePaths);
 
             await _categoryDB.UpdateOtds(Otds);
         }
@@ -242,7 +210,6 @@
         {
             Console.WriteLine("Error reading excel file" + ex);
         }
-
     }
 
     public async Task IoTypeToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
