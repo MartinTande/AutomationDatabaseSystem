@@ -75,6 +75,8 @@ public class ObjectService : IObjectService
 		List<ObjectModel> objects = await _objectDataManager.GetObjects();
 		List<DisplayObjectModel> displayObjects = new List<DisplayObjectModel>();
 
+		if (objects is null) return null;
+
 		foreach (var obj in objects)
 		{
 			displayObjects.Add(MapDTOToDisplayObject(obj));

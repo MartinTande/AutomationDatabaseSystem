@@ -315,6 +315,8 @@
 		Cabinets = await _categoryDM.GetCabinets();
 		ObjectTypes = await _categoryDM.GetObjectTypeCategory();
 
+		if (IoTypes is null) return;
+
 		foreach (var ioType in IoTypes)
 		{
 			ioType.SignalTypes = await _subCategoryDM.GetSignalTypesAsync(ioType.Name);
@@ -325,6 +327,9 @@
 	private async Task GetObjects()
 	{
 		Objects = await _objectService.GetObjectsAsync();
+
+		if (Objects is null) return;
+
 		foreach (var obj in Objects)
 		{
 			obj.Tags = await _tagService.GetTagsByObjectIdAsync(obj.Id);
