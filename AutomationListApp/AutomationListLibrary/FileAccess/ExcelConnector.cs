@@ -34,7 +34,7 @@ public class ExcelConnector
 
     }
 
-    public HashSet<Otd> ReadOtdFiles(List<string> filePaths)
+    public List<Otd> ReadOtdFiles(List<string> filePaths)
     {
         // OTD Excel file config
         int _otdInputSheetNumer = 1;
@@ -44,7 +44,7 @@ public class ExcelConnector
         int dataTypeColumn = 3;
         int isOptionalColumn = 4;
 
-        HashSet<Otd> Otds = new HashSet<Otd>();
+        List<Otd> Otds = new List<Otd>();
 
         foreach (string filePath in filePaths)
         {
