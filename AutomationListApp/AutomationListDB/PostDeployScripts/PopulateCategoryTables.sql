@@ -15,7 +15,7 @@ Post-Deployment Script Template
 :r .\PopulateAdminCategoryTables\PopulateIoAndSignalTypes.sql
 :r .\PopulateAdminCategoryTables\PopulateOtds.sql	
 :r .\PopulateAdminCategoryTables\PopulateSymbols.sql
-:r .\PopulateAdminCategoryTables\PopulateSymbols.sql
+:r .\PopulateAdminCategoryTables\PopulateObjectTypes.sql
 :r .\PopulateAdminCategoryTables\PopulateModuleTypeAndConfig.sql
 
 

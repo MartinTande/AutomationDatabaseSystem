@@ -1,20 +1,8 @@
-﻿/*
-Post-Deployment Script Template							
---------------------------------------------------------------------------------------
- This file contains SQL statements that will be appended to the build script.		
- Use SQLCMD syntax to include a file in the post-deployment script.			
- Example:      :r .\myfile.sql								
- Use SQLCMD syntax to reference a variable in the post-deployment script.		
- Example:      :setvar TableName MyTable							
-               SELECT * FROM [$(TableName)]					
---------------------------------------------------------------------------------------
-*/
-
-SET NOCOUNT ON
+﻿SET NOCOUNT ON
 
 
 -- Insert sample data into SYMBOL
-INSERT INTO SYMBOL (Name) SELECT 'FI' WHERE NOT EXISTS (SELECT 1 FROM HIERARCHY_1 WHERE Name = 'FI')
+INSERT INTO SYMBOL (Name) SELECT 'FI' WHERE NOT EXISTS (SELECT 1 FROM SYMBOL WHERE Name = 'FI')
 INSERT INTO SYMBOL (Name) SELECT 'LAH' WHERE NOT EXISTS (SELECT 1 FROM SYMBOL WHERE Name ='LAH')
 INSERT INTO SYMBOL (Name) SELECT 'LAL' WHERE NOT EXISTS (SELECT 1 FROM SYMBOL WHERE Name ='LAL')
 INSERT INTO SYMBOL (Name) SELECT 'LI' WHERE NOT EXISTS (SELECT 1 FROM SYMBOL WHERE Name ='LI')

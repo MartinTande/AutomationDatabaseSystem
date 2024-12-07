@@ -166,15 +166,15 @@
     <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateEngUnits.sql" />
     <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateIoAndSignalTypes.sql" />
     <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateModuleTypeAndConfig.sql" />
-    <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateObjectTypes.sql" />
     <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateOtds.sql" />
     <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateSymbols.sql" />
     <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateNodeAndCabinets.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PublishScripts\LocalDB.publish.xml" />
+    <None Include="PublishScripts\PublishLocalDB.publish.xml" />
+    <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateObjectTypes.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="PostDeployScripts\PopulateTables.PostDeployScript.sql" />
+    <PostDeploy Include="PostDeployScripts\PopulateCategoryTables.sql" />
   </ItemGroup>
 </Project>
