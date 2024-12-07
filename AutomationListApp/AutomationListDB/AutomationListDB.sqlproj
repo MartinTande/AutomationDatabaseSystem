@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{f8618c79-4b2e-4c93-a61e-b09148b965ce}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -161,29 +161,20 @@
     <Build Include="dbo\Stored Procedures\SubCategory\DeleteOtdInterfaces.sql">
       <QuotedIdentifier>Off</QuotedIdentifier>
     </Build>
-    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateObjectTypes.sql" />
-    <PostDeploy Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateEasAlarmLocationGroups.sql" />
+    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateDefaultHierarchy.sql" />
+    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateEasAlarmLocationGroups.sql" />
+    <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateEngUnits.sql" />
+    <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateIoAndSignalTypes.sql" />
+    <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateModuleTypeAndConfig.sql" />
+    <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateObjectTypes.sql" />
+    <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateOtds.sql" />
+    <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateSymbols.sql" />
+    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateNodeAndCabinets.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateIoAndSignalTypes.sql" />
-    <None Include="AutomationListDB.publish.xml" />
+    <None Include="PublishScripts\LocalDB.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateOtds.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateModuleTypeAndConfig.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateEngUnits.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateSymbols.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateDefaultHierarchy.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateNodeAndCabinets.sql" />
+    <PostDeploy Include="PostDeployScripts\PopulateTables.PostDeployScript.sql" />
   </ItemGroup>
 </Project>
