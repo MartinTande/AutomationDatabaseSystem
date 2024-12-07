@@ -67,6 +67,9 @@
     <Folder Include="dbo\Stored Procedures\Category" />
     <Folder Include="dbo\Stored Procedures\SubCategory" />
     <Folder Include="PostDeployScripts" />
+    <Folder Include="PostDeployScripts\PopulateAdminCategoryTables" />
+    <Folder Include="PostDeployScripts\PopulateProjectCategoryTables" />
+    <Folder Include="PublishScripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\LOCATION_GROUP.sql" />
@@ -158,9 +161,29 @@
     <Build Include="dbo\Stored Procedures\SubCategory\DeleteOtdInterfaces.sql">
       <QuotedIdentifier>Off</QuotedIdentifier>
     </Build>
+    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateObjectTypes.sql" />
+    <PostDeploy Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateEasAlarmLocationGroups.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="PostDeployScripts\PopulateProjectCategoryTables.sql" />
-    <None Include="PostDeployScripts\PopulateAdminCategoryTables.sql" />
+    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateIoAndSignalTypes.sql" />
+    <None Include="AutomationListDB.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateOtds.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateModuleTypeAndConfig.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateEngUnits.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PostDeployScripts\PopulateProjectCategoryTables\PopulateSymbols.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateDefaultHierarchy.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PostDeployScripts\PopulateAdminCategoryTables\PopulateNodeAndCabinets.sql" />
   </ItemGroup>
 </Project>
