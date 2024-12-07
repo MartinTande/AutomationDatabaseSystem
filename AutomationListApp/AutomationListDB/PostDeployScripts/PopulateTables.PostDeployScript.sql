@@ -20,6 +20,6 @@ Post-Deployment Script Template
 
 
 -- Project category tables
-:r .\PopulateProjetCategoryTables\PopulateDefaultHierarchy.sql
-:r .\PopulateProjetCategoryTables\PopulateEasAlarmLocationGroups.sql
-:r .\PopulateProjetCategoryTables\PopulateNodeAndCabinets.sql
+:r .\PopulateProjectCategoryTables\PopulateDefaultHierarchy.sql
+:r .\PopulateProjectCategoryTables\PopulateEasAlarmLocationGroups.sql
+:r .\PopulateProjectCategoryTables\PopulateNodeAndCabinets.sql
