@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[OBJECT] (
-    [Id]                   INT           IDENTITY (1, 1) NOT NULL,
+    [Id]                   INT           PRIMARY KEY IDENTITY (1, 1) NOT NULL,
     [SfiNumber]            VARCHAR (50)  NOT NULL,
     [MainEqNumber]         VARCHAR (50)  NOT NULL,
     [EqNumber]             VARCHAR (50)  NULL,
@@ -17,7 +17,6 @@
     [CabinetId]            INT           NOT NULL,
     [Revision]             VARCHAR (50)  NULL,
     [LastModified]         DATETIME      NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC),
     FOREIGN KEY ([AcknowledgeAllowedId]) REFERENCES [dbo].[LOCATION_GROUP] ([Id]),
     FOREIGN KEY ([AlarmGroupId]) REFERENCES [dbo].[ALARM_GROUP] ([Id]),
     FOREIGN KEY ([AlwaysVisibleId]) REFERENCES [dbo].[LOCATION_GROUP] ([Id]),

@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[TAG] (
-    [Id]              INT           IDENTITY (1, 1) NOT NULL,
+    [Id]              INT           PRIMARY KEY IDENTITY (1, 1) NOT NULL,
     [ObjectId]        INT           NULL,
     [ObjectTypeId]    INT           NULL,
     [EqSuffix]        VARCHAR (50)  NOT NULL,
@@ -34,7 +34,6 @@
     [UserLock]        BIT           NULL,
     [IOLock]          BIT           NULL,
     [BeijerBoxId]     INT           NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC),
     FOREIGN KEY ([EngUnitId]) REFERENCES [dbo].[ENG_UNIT] ([Id]),
     FOREIGN KEY ([IoTypeId]) REFERENCES [dbo].[IO_TYPE] ([Id]),
     FOREIGN KEY ([ObjectId]) REFERENCES [dbo].[OBJECT] ([Id]),
