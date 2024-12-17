@@ -20,7 +20,7 @@ builder.Services.AddSingleton<ITagService, TagService>();
 builder.Services.AddSingleton<CategoryDataManager>();
 builder.Services.AddSingleton<SubCategoryDataManager>();
 builder.Services.AddSingleton<TagDataManager>();
-builder.Services.AddSingleton<CustomerObjects.CustomAdaptor>();
+//builder.Services.AddSingleton<CustomerObjects.CustomAdaptor>();
 builder.Services.AddSingleton<ExcelConnector>();
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddMudServices();

@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace AutomationListLibrary.DataAccess;
 
@@ -18,7 +18,8 @@ public class SqlConnector : ISqlConnector
 
     public async Task<List<T>> ReadDataAsync<T, U>(string storedProcedure, U parameters)
     {
-        string connectionString = _configuration.GetConnectionString(ConnectionStringName);
+		#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+		string connectionString = _configuration.GetConnectionString(ConnectionStringName);
 
         using (IDbConnection connection = new SqlConnection(connectionString))
         {
@@ -39,9 +40,10 @@ public class SqlConnector : ISqlConnector
 
     public async Task WriteDataAsync<T>(string storedProcedure, T parameters)
     {
-        string connectionString = _configuration.GetConnectionString(ConnectionStringName);
+		#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+		string connectionString = _configuration.GetConnectionString(ConnectionStringName);
 
-        using (IDbConnection connection = new SqlConnection(connectionString))
+		using (IDbConnection connection = new SqlConnection(connectionString))
         {
             try
             {
@@ -54,6 +56,7 @@ public class SqlConnector : ISqlConnector
         }
     }
 
+	#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
 	public List<T>? ReadData<T, U>(string storedProcedure, U parameters)
 	{
 		string connectionString = _configuration.GetConnectionString(ConnectionStringName);
