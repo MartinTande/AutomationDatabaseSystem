@@ -22,13 +22,13 @@ public class ObjectDataManager : IObjectDataManager
 		return tagObjectList.FirstOrDefault();
 	}
 
-	public Task<List<ObjectModel>> GetObjects()
+	public async Task<List<ObjectModel>> GetObjects()
 	{
 		// Anonymous object, object with no name type
 		// No parameters, but need an object
 		var p = new { };
 
-		var tagObjectList = _sqlConnector.ReadDataAsync<ObjectModel, dynamic>("GetAllObjects", p);
+		var tagObjectList = await _sqlConnector.ReadDataAsync<ObjectModel, dynamic>("GetAllObjects", p);
 		return tagObjectList;
 	}
 
