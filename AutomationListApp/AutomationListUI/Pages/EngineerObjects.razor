@@ -1,4 +1,4 @@
-﻿@page "/engineer-objects"
+@page "/engineer-objects"
 
 @using AutomationListLibrary
 @using AutomationListLibrary.Data
@@ -63,64 +63,144 @@
 	</ToolBarContent>
 
     <Columns>
-			<SelectColumn T="DisplayObjectModel" />
-			<PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required="true">
-				<EditTemplate>
-					<MudForm @bind-IsValid="@_sfiNumberIsValid">
-						<MudTextField @bind-Value="context.Item.SfiNumber" Margin="@Margin.Dense" For="@(() => context.Item.SfiNumber)" />
-					</MudForm>
-				</EditTemplate>
-			</PropertyColumn>
-			<PropertyColumn Property="x => x.MainEqNumber" Title="Main Eq" Required="true">
-				<EditTemplate>
-					<MudForm @bind-IsValid="@_mainEqNumberIsValid">
-						<MudTextField @bind-Value="context.Item.MainEqNumber" Margin="@Margin.Dense" For="@(() => context.Item.MainEqNumber)" />
-					</MudForm>
-				</EditTemplate>
-			</PropertyColumn>
-			<PropertyColumn Property="x => x.EqNumber" Title="Eq" Required="false"/>
-			<PropertyColumn Property="x => x.FullObjectName" Title="Object Name">
-				<EditTemplate>
-					<MudForm @bind-IsValid="@_objectNameIsValid">
-						<MudTextField @bind-Value="context.Item.FullObjectName" Validation="@(new ObjectNameValidator2(_objectService))" />
-					</MudForm>
-				</EditTemplate>
-			</PropertyColumn>
-			<PropertyColumn Property="x => x.Description" Title="Description">
-				<EditTemplate>
-					<MudForm @bind-IsValid="@_descriptionIsValid">
-						<MudTextField @bind-Value="context.Item.Description" Clearable Margin="@Margin.Dense" For="() => context.Item.Description"/>
-					</MudForm>
-				</EditTemplate>
-			</PropertyColumn>
-			<PropertyColumn Property="x => x.VduGroup" Title="Vdu Group">
-				<EditTemplate>
-					<MudForm @bind-IsValid="@_vduGroupIsValid">
-						<MudTextField @bind-Value="context.Item.VduGroup" Clearable Margin="@Margin.Dense" For="() => context.Item.VduGroup" />
-					</MudForm>
-				</EditTemplate>
-			</PropertyColumn>
-			<PropertyColumn Property="x => x.ObjectType" Title="Object Type">
-				<EditTemplate>
-					<MudSelect @bind-Value="context.Item.ObjectType" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
-						@foreach (var type in ObjectTypes)
-						{
-							<MudSelectItem Value="@type.Name"/>
-						}
-					</MudSelect>
-				</EditTemplate>
-			</PropertyColumn>
-			<PropertyColumn Property="x => x.Cabinet" Title="Cabinet">
-				<EditTemplate>
-					<MudSelect @bind-Value="context.Item.Cabinet" T="string" AnchorOrigin="Origin.BottomCenter">
-							@foreach (var cabinet in Cabinets)
-						{
-							<MudSelectItem Value="@cabinet.Name" />
-						}
-					</MudSelect>
-				</EditTemplate>
-			</PropertyColumn>
-			<PropertyColumn Property="x => x.Revision" Title="Revision" Required=false/>
+		<SelectColumn T="DisplayObjectModel" />
+		<PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required="true">
+			<EditTemplate>
+				<MudForm @bind-IsValid="@_sfiNumberIsValid">
+					<MudTextField @bind-Value="context.Item.SfiNumber" Margin="@Margin.Dense" For="@(() => context.Item.SfiNumber)" />
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.MainEqNumber" Title="Main Eq" Required="true">
+			<EditTemplate>
+				<MudForm @bind-IsValid="@_mainEqNumberIsValid">
+					<MudTextField @bind-Value="context.Item.MainEqNumber" Margin="@Margin.Dense" For="@(() => context.Item.MainEqNumber)" />
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.EqNumber" Title="Eq" Required="false"/>
+		<PropertyColumn Property="x => x.FullObjectName" Title="Object Name">
+			<EditTemplate>
+				<MudForm @bind-IsValid="@_objectNameIsValid">
+					<MudTextField @bind-Value="context.Item.FullObjectName" Validation="@(new ObjectNameValidator2(_objectService))" />
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.Description" Title="Description">
+			<EditTemplate>
+				<MudForm @bind-IsValid="@_descriptionIsValid">
+					<MudTextField @bind-Value="context.Item.Description" Clearable Margin="@Margin.Dense" For="() => context.Item.Description"/>
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.VduGroup" Title="Vdu Group">
+			<EditTemplate>
+				<MudForm @bind-IsValid="@_vduGroupIsValid">
+					<MudTextField @bind-Value="context.Item.VduGroup" Clearable Margin="@Margin.Dense" For="() => context.Item.VduGroup" />
+				</MudForm>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.EasGroup" Title="Eas Group">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.EasGroup" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
+					@foreach (var easGroup in EasGroups)
+					{
+						<MudSelectItem Value="@easGroup.Name" />
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.AlarmGroup" Title="Alarm Group">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.AlarmGroup" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
+					@foreach (var alarmGroup in AlarmGroups)
+					{
+						<MudSelectItem Value="@alarmGroup.Name" />
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.ObjectType" Title="Object Type">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.ObjectType" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
+					@foreach (var type in ObjectTypes)
+					{
+						<MudSelectItem Value="@type.Name"/>
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.Otd" Title="Otd">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.Otd" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
+					@foreach (var type in Otds)
+					{
+						<MudSelectItem Value="@type.Name" />
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.Node" Title="Node">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.Node" T="string" AnchorOrigin="Origin.BottomCenter">
+					@foreach (var nodes in Nodes)
+					{
+						<MudSelectItem Value="@nodes.Name" />
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.Cabinet" Title="Cabinet">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.Cabinet" T="string" AnchorOrigin="Origin.BottomCenter">
+					@foreach (var cabinet in Cabinets)
+					{
+						<MudSelectItem Value="@cabinet.Name" />
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.Hierarchy1" Title="Main Picture">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.Hierarchy1" T="string" AnchorOrigin="Origin.BottomCenter">
+					@foreach (var mainPicture in MainPictures)
+					{
+						<MudSelectItem Value="@mainPicture.Name" />
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.Hierarchy2" Title="Sub Picture">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.Hierarchy2" T="string" AnchorOrigin="Origin.BottomCenter">
+					@foreach (var subPicture in SubPictures)
+					{
+						<MudSelectItem Value="@subPicture.Name" />
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.AcknowledgeAllowed" Title="Acknowledge Allowed">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.AcknowledgeAllowed" T="string" AnchorOrigin="Origin.BottomCenter">
+					@foreach (var ackAllowedGroup in AcknowledgeAllowedGroups)
+					{
+						<MudSelectItem Value="@ackAllowedGroup.Name" />
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.AlwaysVisible" Title="Always Visible">
+			<EditTemplate>
+				<MudSelect @bind-Value="context.Item.AlwaysVisible" T="string" AnchorOrigin="Origin.BottomCenter">
+					@foreach (var alwaysVisibleGroup in AlwaysVisibleGroups)
+					{
+						<MudSelectItem Value="@alwaysVisibleGroup.Name" />
+					}
+				</MudSelect>
+			</EditTemplate>
+		</PropertyColumn>
+		<PropertyColumn Property="x => x.Revision" Title="Revision" Required=false/>
     </Columns>
 </MudDataGrid>
 <br>
@@ -259,6 +339,8 @@
 	private bool _tagNameIsValid;
 	private bool _ioTypeIsValid;
 
+	private bool _resizeColumn;
+
 	// Color
 	string EditModeColor = "#c9d8f0";
 	string SelectedItemColor = "#d0d5d9";
@@ -271,14 +353,22 @@
 	public DisplayObjectModel? SelectedObject { get; set; }
 	public HashSet<DisplayObjectModel> SelectedObjects { get; set; } = new();
 
+	public List<Otd>? Otds { get; set; } = new();
+	public List<Node>? Nodes { get; set; } = new();
 	public List<IoType>? IoTypes { get; set; } = new();
 	public List<Cabinet>? Cabinets { get; set; } = new();
 	public List<EngUnit>? EngUnits { get; set; } = new();
+	public List<EasGroup>? EasGroups { get; set; } = new();
 	public List<SignalType>? SignalTypes { get; set; } = new();
 	public List<ObjectType>? ObjectTypes { get; set; } = new();
+	public List<AlarmGroup>? AlarmGroups { get; set; } = new();
+	public List<Hierarchy1>? MainPictures { get; set; } = new();
+	public List<Hierarchy2>? SubPictures { get; set; } = new();
+	public List<LocationGroup>? AlwaysVisibleGroups { get; set; } = new();
+	public List<LocationGroup>? AcknowledgeAllowedGroups { get; set; } = new();
 
-	public MudDataGrid<DisplayObjectModel> ObjectGrid { get; set; }
-	public MudDataGrid<DisplayTagModel> TagGrid { get; set; }
+	public MudDataGrid<DisplayObjectModel>? ObjectGrid { get; set; }
+	public MudDataGrid<DisplayTagModel>? TagGrid { get; set; }
 
 	private State _objectGridState;
 	private State _tagGridState;

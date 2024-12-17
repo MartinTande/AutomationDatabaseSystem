@@ -113,7 +113,7 @@
 			<PropertyColumn Property="x => x.Cabinet" Title="Cabinet">
 				<EditTemplate>
 					<MudSelect @bind-Value="context.Item.Cabinet" T="string" AnchorOrigin="Origin.BottomCenter">
-							@foreach (var cabinet in Cabinets)
+						@foreach (var cabinet in Cabinets)
 						{
 							<MudSelectItem Value="@cabinet.Name" />
 						}
@@ -277,8 +277,8 @@
 	public List<SignalType>? SignalTypes { get; set; } = new();
 	public List<ObjectType>? ObjectTypes { get; set; } = new();
 
-	public MudDataGrid<DisplayObjectModel> ObjectGrid { get; set; }
-	public MudDataGrid<DisplayTagModel> TagGrid { get; set; }
+	public MudDataGrid<DisplayObjectModel>? ObjectGrid { get; set; }
+	public MudDataGrid<DisplayTagModel>? TagGrid { get; set; }
 
 	private State _objectGridState;
 	private State _tagGridState;
