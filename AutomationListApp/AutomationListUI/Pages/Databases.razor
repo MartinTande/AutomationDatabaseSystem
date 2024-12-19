@@ -1,0 +1,38 @@
+﻿@page "/databases"
+
+@inject IConfiguration _config
+@inject SqlConnectionStringBuilder sqlBuilder
+
+<h3>Databases 213</h3>
+<MudButton Type="ButtonType.Link" OnClick="@UpdateConnString">Test</MudButton>
+
+<h6>   @_dbName  </h6>
+
+<MudTextField @bind-Value="dbName" Label="Outlined" Variant="Variant.Outlined"></MudTextField>
+
+<MudSelect @bind-Value="_dbName" T="string" AnchorOrigin="Origin.BottomCenter">
+    @foreach (var database in _databases)
+    {
+        <MudSelectItem Value="@database" />
+    }
+</MudSelect>
+
+@code {
+    private string _connectiongString = string.Empty;
+    public string dbName { get; set; } = "LocalDB";
+    string _dbName;
+
+    private string[] _databases = { "Database1", "database2", "database 33" };
+    protected override async Task OnInitializedAsync()
+    {
+        _connectiongString = _config.GetConnectionString("Default");
+        sqlBuilder.ConnectionString = _connectiongString;
+        dbName = sqlBuilder.InitialCatalog;
+    }
+
+    public void UpdateConnString()
+    {
+        sqlBuilder.InitialCatalog = dbName;
+        _connectiongString = sqlBuilder.ConnectionString;
+    }
+}

@@ -3,6 +3,7 @@ using AutomationListLibrary.DataManager;
 using AutomationListLibrary.FileAcces;
 using AutomationListUI.Pages;
 using AutomationListUI.Services;
+using Microsoft.Data.SqlClient;
 using MudBlazor.Services;
 using Syncfusion.Blazor;
 
@@ -22,10 +23,12 @@ builder.Services.AddSingleton<SubCategoryDataManager>();
 builder.Services.AddSingleton<TagDataManager>();
 //builder.Services.AddSingleton<CustomerObjects.CustomAdaptor>();
 builder.Services.AddSingleton<ExcelConnector>();
+builder.Services.AddSingleton<SqlConnectionStringBuilder>();
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddMudServices();
 
 var app = builder.Build();
+
 //Syncfusion license
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NCaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWXheeHRTRWdfWEV0V0Q=");
 
