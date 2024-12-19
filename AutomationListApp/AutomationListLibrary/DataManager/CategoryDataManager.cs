@@ -43,7 +43,7 @@ public class CategoryDataManager
             Name = updatedName
         };
 
-        await _sqlConnector.ReadDataAsync<string, dynamic>("EditCategoryItem", p);
+        await _sqlConnector.WriteDataAsync("EditCategoryItem", p);
     }
     private async Task AddCategoryItem(string tableName, string name)
     {
