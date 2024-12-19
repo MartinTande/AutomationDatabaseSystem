@@ -2,16 +2,19 @@
 
 
 using AutomationListLibrary.DataAccess;
+using Microsoft.Extensions.Configuration;
 
 namespace AutomationListLibrary.MetaData;
 
 public class DatabaseManager
 {
+    IConfiguration _configuration;
     private readonly ISqlConnector _sqlConnector;
     private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder;
 
-    public DatabaseManager(ISqlConnector sqlConnector, SqlConnectionStringBuilder sqlConnectionStringBuilder)
+    public DatabaseManager(IConfiguration configuration, ISqlConnector sqlConnector, SqlConnectionStringBuilder sqlConnectionStringBuilder)
     {
+        _configuration = configuration;
         _sqlConnector = sqlConnector;
         _sqlConnectionStringBuilder = sqlConnectionStringBuilder;
     }
@@ -62,8 +65,10 @@ public class DatabaseManager
         await _sqlConnector.WriteDataAsync("CreateDatabase", p);
     }
 
-    public void UpdateConncectionString(string databaseName)
+    public void UpdateConncectionString(string databaseName, string connString = "defualt")
     {
-        _sqlConnectionStringBuilder.
+        string connectionString = _configuration.GetConnectionString(connString);
+        _sqlConnectionStringBuilder.ConnectionString = connectionString;
+        _sqlConnectionStringBuilder.InitialCatalog = databaseName;
     }
 }
