@@ -16,43 +16,39 @@ public class SqlConnector : ISqlConnector
         _configuration = configuration;
     }
 
-    public async Task<List<T>> ReadDataAsync<T, U>(string storedProcedure, U parameters)
+    public async Task<List<T>> ReadDataAsync<T, U>(string storedProcedure, U parameters, string connectionStringName = "Default")
     {
 		#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-		string connectionString = _configuration.GetConnectionString(ConnectionStringName);
+		string connectionString = _configuration.GetConnectionString(connectionStringName);
 
-        using (IDbConnection connection = new SqlConnection(connectionString))
+        using IDbConnection connection = new SqlConnection(connectionString);
+        try
         {
-            try
-            {
-                // Queries rows of type T into a list of T
-                IEnumerable<T> rows = await connection.QueryAsync<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+            // Queries rows of type T into a list of T
+            IEnumerable<T> rows = await connection.QueryAsync<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
 
-                return rows.ToList();
-            }
-            catch (Exception ex)
-            {
-				Console.WriteLine(ex.ToString());
-                return null;
-			}
+            return rows.ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+            return null;
         }
     }
 
-    public async Task WriteDataAsync<T>(string storedProcedure, T parameters)
+    public async Task WriteDataAsync<T>(string storedProcedure, T parameters, string connectionStringName = "Default")
     {
 		#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-		string connectionString = _configuration.GetConnectionString(ConnectionStringName);
+		string connectionString = _configuration.GetConnectionString(connectionStringName);
 
-		using (IDbConnection connection = new SqlConnection(connectionString))
+        using IDbConnection connection = new SqlConnection(connectionString);
+        try
         {
-            try
-            {
-                await connection.ExecuteAsync(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
+            await connection.ExecuteAsync(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
         }
     }
 
@@ -61,37 +57,33 @@ public class SqlConnector : ISqlConnector
 	{
 		string connectionString = _configuration.GetConnectionString(ConnectionStringName);
 
-		using (IDbConnection connection = new SqlConnection(connectionString))
-		{
-			try
-			{
-				// Queries rows of type T into a list of T
-				IEnumerable<T> rows = connection.Query<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+        using IDbConnection connection = new SqlConnection(connectionString);
+        try
+        {
+            // Queries rows of type T into a list of T
+            IEnumerable<T> rows = connection.Query<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
 
-				return rows.ToList();
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.ToString());
-				return null;
-			}
-		}
-	}
+            return rows.ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+            return null;
+        }
+    }
 
 	public void WriteData<T>(string storedProcedure, T parameters)
 	{
 		string connectionString = _configuration.GetConnectionString(ConnectionStringName);
 
-		using (IDbConnection connection = new SqlConnection(connectionString))
-		{
-			try
-			{
-				connection.Execute(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.ToString());
-			}
-		}
-	}
+        using IDbConnection connection = new SqlConnection(connectionString);
+        try
+        {
+            connection.Execute(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+    }
 }

@@ -6,6 +6,6 @@ AS
 
 BEGIN
 	DELETE 
-	FROM DATABSE 
+	FROM [dbo].[DATABASE] 
 	WHERE Id=@Id
 END;

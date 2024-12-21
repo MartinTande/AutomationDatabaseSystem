@@ -3,7 +3,7 @@
 AS
 
 BEGIN
-	SELECT *
-	FROM DATABASE
+	SELECT Id, Name, DateCreated
+	FROM [dbo].[DATABASE]
 	WHERE Id = @Id
 END;

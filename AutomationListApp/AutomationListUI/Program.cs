@@ -1,7 +1,7 @@
 using AutomationListLibrary.DataAccess;
 using AutomationListLibrary.DataManager;
 using AutomationListLibrary.FileAcces;
-using AutomationListUI.Pages;
+using AutomationListLibrary.MetaData;
 using AutomationListUI.Services;
 using Microsoft.Data.SqlClient;
 using MudBlazor.Services;
@@ -24,6 +24,7 @@ builder.Services.AddSingleton<TagDataManager>();
 //builder.Services.AddSingleton<CustomerObjects.CustomAdaptor>();
 builder.Services.AddSingleton<ExcelConnector>();
 builder.Services.AddSingleton<SqlConnectionStringBuilder>();
+builder.Services.AddTransient<DatabaseManager>();
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddMudServices();
 

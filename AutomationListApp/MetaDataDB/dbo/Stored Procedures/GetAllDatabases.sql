@@ -5,5 +5,5 @@ AS
 
 BEGIN
 	SELECT Id, Name, DateCreated
-	FROM DATABASE
+	FROM [dbo].[DATABASE]
 END;

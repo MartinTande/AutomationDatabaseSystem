@@ -1,8 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
-
-
 using AutomationListLibrary.DataAccess;
 using Microsoft.Extensions.Configuration;
+using AutomationListLibrary.Data;
+
 
 namespace AutomationListLibrary.MetaData;
 
@@ -11,6 +11,8 @@ public class DatabaseManager
     IConfiguration _configuration;
     private readonly ISqlConnector _sqlConnector;
     private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder;
+    private readonly string _metaDataConnStringName = "MetaData";
+    private readonly string _defaultConnStringName = "Default";
 
     public DatabaseManager(IConfiguration configuration, ISqlConnector sqlConnector, SqlConnectionStringBuilder sqlConnectionStringBuilder)
     {
@@ -19,31 +21,31 @@ public class DatabaseManager
         _sqlConnectionStringBuilder = sqlConnectionStringBuilder;
     }
 
-    public async Task<List<Database>> GetAll<Database>()
+    public async Task<List<Database>> GetAllDatabases()
     {
         var p = new { };
 
-        return await _sqlConnector.ReadDataAsync<Database, dynamic>("GetAllDatabases", p);
+        return await _sqlConnector.ReadDataAsync<Database, dynamic>("GetAllDatabases", p, _metaDataConnStringName);
     }
 
-    public async Task<List<Database>> GetById<Database>(int id)
+    public async Task<List<Database>> GetByDatabaseId(int id)
     {
         var p = new
         {
             Id = id
         };
 
-        return await _sqlConnector.ReadDataAsync<Database, dynamic>("GetDatabaseById", p);
+        return await _sqlConnector.ReadDataAsync<Database, dynamic>("GetDatabaseById", p, _metaDataConnStringName);
     }
 
-    public async Task Delete(int id)
+    public async Task DeleteDatabase(int id)
     {
         var p = new
         {
             Id = id
         };
 
-        await _sqlConnector.ReadDataAsync<string, dynamic>("DeleteDatabase", p);
+        await _sqlConnector.ReadDataAsync<string, dynamic>("DeleteDatabase", p, _metaDataConnStringName);
     }
     public async Task Update(int id, string updatedName)
     {
@@ -53,7 +55,7 @@ public class DatabaseManager
             Name = updatedName
         };
 
-        await _sqlConnector.WriteDataAsync("EditCategoryItem", p);
+        await _sqlConnector.WriteDataAsync("EditCategoryItem", p, _metaDataConnStringName);
     }
     public async Task CreateDatabase(string name)
     {
@@ -62,13 +64,16 @@ public class DatabaseManager
             Name = name
         };
 
-        await _sqlConnector.WriteDataAsync("CreateDatabase", p);
+        await _sqlConnector.WriteDataAsync("CreateDatabase", p, _metaDataConnStringName);
     }
 
-    public void UpdateConncectionString(string databaseName, string connString = "defualt")
+    public void UpdateConncectionString(string databaseName)
     {
-        string connectionString = _configuration.GetConnectionString(connString);
+        string connectionString = _configuration.GetConnectionString(_defaultConnStringName);
         _sqlConnectionStringBuilder.ConnectionString = connectionString;
         _sqlConnectionStringBuilder.InitialCatalog = databaseName;
+
+        string test = _sqlConnectionStringBuilder.ConnectionString;
+        _configuration["ConnectionStrings:Default"] = test;
     }
 }

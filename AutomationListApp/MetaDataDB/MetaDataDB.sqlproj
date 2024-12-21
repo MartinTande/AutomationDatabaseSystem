@@ -63,11 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\DATABASE.sql" />
-    <None Include="dbo\Stored Procedures\CreateDatabase.sql" />
-    <None Include="dbo\Stored Procedures\DeleteDatabase.sql" />
-    <None Include="dbo\Stored Procedures\GetAllDatabases.sql" />
-    <None Include="dbo\Stored Procedures\GetDatabaseById.sql" />
-    <None Include="dbo\Stored Procedures\UpdateDatabase.sql" />
+    <Build Include="dbo\Stored Procedures\DeleteDatabase.sql" />
+    <Build Include="dbo\Stored Procedures\GetAllDatabases.sql" />
+    <Build Include="dbo\Stored Procedures\GetDatabaseById.sql" />
+    <Build Include="dbo\Stored Procedures\UpdateDatabase.sql" />
+    <Build Include="dbo\Stored Procedures\CreateDatabase.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishScripts\MetaDataDB.publish.xml" />

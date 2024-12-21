@@ -2,37 +2,53 @@
 
 @inject IConfiguration _config
 @inject SqlConnectionStringBuilder sqlBuilder
+@inject DatabaseManager _databaseManager
 
-<h3>Databases 213</h3>
-<MudButton Type="ButtonType.Link" OnClick="@UpdateConnString">Test</MudButton>
+<h2>Databases</h2>
+<br />
 
-<h6>   @_dbName  </h6>
+<div style="width:300px;">
+    <h5>Select Database</h5>
 
-<MudTextField @bind-Value="dbName" Label="Outlined" Variant="Variant.Outlined"></MudTextField>
+    <MudSelect @bind-Value="currentDatabase" T="string" AnchorOrigin="Origin.BottomCenter">
+        @foreach (var database in databases)
+        {
+            <MudSelectItem Value="@database" />
+        }
+    </MudSelect>
 
-<MudSelect @bind-Value="_dbName" T="string" AnchorOrigin="Origin.BottomCenter">
-    @foreach (var database in _databases)
-    {
-        <MudSelectItem Value="@database" />
-    }
-</MudSelect>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="@UpdateConnString">Go to Database</MudButton>
+
+</div>
+<br />
+<br />
+<div style="width:300px;">
+    <h5>Create new Database</h5>
+
+    <MudTextField @bind-Value="newDatabaseName" Label="Outlined" Variant="Variant.Outlined" Placeholder="Database name"></MudTextField>
+
+    <MudButton Variant="Variant.Filled" FullWidth="true" Color="Color.Primary" Disabled="@(string.IsNullOrEmpty(newDatabaseName))" OnClick="@AddDatabase">Create New Database</MudButton>
+</div>
 
 @code {
     private string _connectiongString = string.Empty;
-    public string dbName { get; set; } = "LocalDB";
-    string _dbName;
+    public string currentDatabase { get; set; } = string.Empty;
+    string newDatabaseName = string.Empty;
 
-    private string[] _databases = { "Database1", "database2", "database 33" };
+    public List<Database> databases { get; set; } = new();
+
     protected override async Task OnInitializedAsync()
     {
-        _connectiongString = _config.GetConnectionString("Default");
-        sqlBuilder.ConnectionString = _connectiongString;
-        dbName = sqlBuilder.InitialCatalog;
+        databases = await _databaseManager.GetAllDatabases();
     }
 
     public void UpdateConnString()
     {
-        sqlBuilder.InitialCatalog = dbName;
-        _connectiongString = sqlBuilder.ConnectionString;
+        _databaseManager.UpdateConncectionString(newDatabaseName);
+    }
+
+    public async Task AddDatabase()
+    {
+        await _databaseManager.CreateDatabase(newDatabaseName);
     }
 }

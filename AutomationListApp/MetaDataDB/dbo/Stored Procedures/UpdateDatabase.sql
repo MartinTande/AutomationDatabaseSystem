@@ -4,7 +4,7 @@
 AS
 
 BEGIN
-	UPDATE DATABASE SET
+	UPDATE [dbo].[DATABASE] SET
 	Name = @Name
 	WHERE Id = @Id
 END;
