@@ -24,7 +24,7 @@
 <div style="width:300px;">
     <h5>Create new Database</h5>
 
-    <MudTextField @bind-Value="newDatabaseName" Label="Database name" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
+    <MudTextField @bind-Value="newDatabaseName" Immediate="true" Label="Database name" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
 
     <MudButton Variant="Variant.Filled" FullWidth="true" Color="Color.Primary" Disabled="@(string.IsNullOrEmpty(newDatabaseName))" OnClick="@AddDatabase">Create New Database</MudButton>
 </div>
