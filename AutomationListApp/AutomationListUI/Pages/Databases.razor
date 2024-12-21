@@ -1,8 +1,7 @@
 ﻿@page "/databases"
 
-@inject IConfiguration _config
-@inject SqlConnectionStringBuilder sqlBuilder
 @inject DatabaseManager _databaseManager
+@inject NavigationManager _navigationManager
 
 <h2>Databases</h2>
 <br />
@@ -10,14 +9,14 @@
 <div style="width:300px;">
     <h5>Select Database</h5>
 
-    <MudSelect @bind-Value="currentDatabase" T="string" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect @bind-Value="currentDatabase" T="string" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined">
         @foreach (var database in databases)
         {
-            <MudSelectItem Value="@database" />
+            <MudSelectItem Value="@database.Name" />
         }
     </MudSelect>
 
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="@UpdateConnString">Go to Database</MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Disabled="@(string.IsNullOrEmpty(currentDatabase))" OnClick="@NavigateToDatabase">Go to Database</MudButton>
 
 </div>
 <br />
@@ -25,7 +24,7 @@
 <div style="width:300px;">
     <h5>Create new Database</h5>
 
-    <MudTextField @bind-Value="newDatabaseName" Label="Outlined" Variant="Variant.Outlined" Placeholder="Database name"></MudTextField>
+    <MudTextField @bind-Value="newDatabaseName" Label="Database name" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
 
     <MudButton Variant="Variant.Filled" FullWidth="true" Color="Color.Primary" Disabled="@(string.IsNullOrEmpty(newDatabaseName))" OnClick="@AddDatabase">Create New Database</MudButton>
 </div>
@@ -40,11 +39,13 @@
     protected override async Task OnInitializedAsync()
     {
         databases = await _databaseManager.GetAllDatabases();
+
     }
 
-    public void UpdateConnString()
+    public void NavigateToDatabase()
     {
-        _databaseManager.UpdateConncectionString(newDatabaseName);
+        _databaseManager.UpdateConncectionString(currentDatabase);
+        _navigationManager.NavigateTo("/engineer-objects");
     }
 
     public async Task AddDatabase()
