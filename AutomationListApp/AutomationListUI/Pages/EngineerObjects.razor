@@ -1,16 +1,7 @@
 @page "/engineer-objects"
 
-@using AutomationListLibrary
-@using AutomationListLibrary.Data
-@using AutomationListLibrary.DataAccess
-@using AutomationListLibrary.DataManager
-@using AutomationListUI.Models
-@using AutomationListUI.Services
-@using AutomationListUI.Validators
-@using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Navigations
-@using System.ComponentModel.DataAnnotations
 
+@inject State State
 @inject ISnackbar Snackbar
 @inject IObjectService _objectService
 @inject ITagService _tagService
@@ -704,13 +695,6 @@
 		return style;
 	};
 	#endregion
-
-	enum State
-	{
-		Add,
-		Edit,
-		Normal
-	}
 }
 
 <style>
