@@ -20,56 +20,34 @@ CREATE PROCEDURE UpdateObject
 	@Revision varchar(50)
 AS
 
--- Checks to see if the VduGroup input is present in the table, if not it inserts it
-IF NOT EXISTS (SELECT *
-FROM VDU_GROUP
-WHERE Name = @VduGroup)
-INSERT INTO VDU_GROUP
-	(Name)
-VALUES
-	(@VduGroup)
+BEGIN
+	-- Checks to see if the VduGroup input is present in the table, if not it inserts it
+	IF NOT EXISTS (SELECT *
+	FROM VDU_GROUP
+	WHERE Name = @VduGroup)
+	INSERT INTO VDU_GROUP
+		(Name)
+	VALUES
+		(@VduGroup)
 
+	UPDATE OBJECT SET
+		SfiNumber = @SfiNumber,
+		MainEqNumber = @MainEqNumber,
+		EqNumber = @EqNumber,
+		Description = @Description,
+		VduGroupId = (SELECT Id FROM VDU_GROUP WHERE Name=@VduGroup),
+		Hierarchy1Id = (SELECT Id FROM HIERARCHY_1 WHERE Name = @Hierarchy1),
+		Hierarchy2Id = (SELECT Id FROM HIERARCHY_2 WHERE Name = @Hierarchy2),
+		EasGroupId = (SELECT Id FROM EAS_GROUP WHERE Name = @EasGroup),
+		AlarmGroupId = (SELECT Id FROM ALARM_GROUP WHERE Name = @AlarmGroup),
+		OtdId = (SELECT Id FROM OTD WHERE Name=@Otd),
+		ObjectTypeId = (SELECT Id FROM OBJECT_TYPE WHERE Name=@ObjectType),
+		AcknowledgeAllowedId = (SELECT Id FROM LOCATION_GROUP WHERE Name=@AcknowledgeAllowed),
+		AlwaysVisibleId = (SELECT Id FROM LOCATION_GROUP WHERE Name=@AlwaysVisible),
+		NodeId = (SELECT Id FROM NODE WHERE Name=@Node),
+		CabinetId = (SELECT Id FROM CABINET WHERE Name=@Cabinet),
+		Revision = @Revision,
+		LastModified = getdate()
 
-UPDATE OBJECT SET
-	SfiNumber = @SfiNumber,
-	MainEqNumber = @MainEqNumber,
-	EqNumber = @EqNumber,
-	Description = @Description,
-	VduGroupId = (SELECT Id
-FROM VDU_GROUP
-WHERE Name=@VduGroup),
-	Hierarchy1Id = (SELECT Id
-FROM HIERARCHY_1
-WHERE Name = @Hierarchy1),
-	Hierarchy2Id = (SELECT Id
-FROM HIERARCHY_2
-WHERE Name = @Hierarchy2),
-	EasGroupId = (SELECT Id
-FROM EAS_GROUP
-WHERE Name = @EasGroup),
-	AlarmGroupId = (SELECT Id
-FROM ALARM_GROUP
-WHERE Name = @AlarmGroup),
-	OtdId = (SELECT Id
-FROM OTD
-WHERE Name=@Otd),
-	ObjectTypeId = (SELECT Id
-FROM OBJECT_TYPE
-WHERE Name=@ObjectType),
-	AcknowledgeAllowedId = (SELECT Id
-FROM LOCATION_GROUP
-WHERE Name=@AcknowledgeAllowed),
-	AlwaysVisibleId = (SELECT Id
-FROM LOCATION_GROUP
-WHERE Name=@AlwaysVisible),
-	NodeId = (SELECT Id
-FROM NODE
-WHERE Name=@Node),
-	CabinetId = (SELECT Id
-FROM CABINET
-WHERE Name=@Cabinet),
-	Revision = @Revision,
-	LastModified = getdate()
-
-WHERE Id = @Id
-
+	WHERE Id = @Id
+END;
