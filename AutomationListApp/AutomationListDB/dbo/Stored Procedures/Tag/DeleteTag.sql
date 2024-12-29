@@ -5,8 +5,8 @@ CREATE PROCEDURE DeleteTag
 	@Id int
 AS
 
--- Need to delete reference of Tag in connection table first
-DELETE
-	FROM TAG 
-	WHERE Id=@Id
-
+BEGIN
+	DELETE
+		FROM TAG 
+		WHERE Id=@Id
+END;

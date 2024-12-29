@@ -40,49 +40,41 @@ DECLARE
     @EngUnitId int,
 	@SymbolId int
 
-SELECT @IoTypeId = Id
-FROM IO_TYPE
-WHERE Name = @IoType
-SELECT @SignalTypeId = Id
-FROM SIGNAL_TYPE
-WHERE Name = @SignalType
-SELECT @EngUnitId = Id
-FROM ENG_UNIT
-WHERE Name = @EngUnit
-SELECT @SymbolId = Id 
-FROM SYMBOL 
-WHERE Name = @Symbol;
+BEGIN
+	SELECT @IoTypeId = Id FROM IO_TYPE WHERE Name = @IoType
+	SELECT @SignalTypeId = Id FROM SIGNAL_TYPE WHERE Name = @SignalType
+	SELECT @EngUnitId = Id FROM ENG_UNIT WHERE Name = @EngUnit
+	SELECT @SymbolId = Id  FROM SYMBOL  WHERE Name = @Symbol;
 
-UPDATE TAG SET
-	ObjectId = @ObjectId,
-    EqSuffix = @EqSuffix,
-    Description = @Description,
-	SymbolId = @SymbolId,
-    IoTypeId = @IoTypeId,
-    SignalTypeId = @SignalTypeId,
-    EngUnitId = @EngUnitId,
-    LowLimit = @LowLimit,
-    LowLowLimit = @LowLowLimit,
-    HighLimit = @HighLimit,
-    HighHighLimit = @HighHighLimit,
-    RangeLow = @RangeLow,
-    RangeHigh = @RangeHigh,
-    Slot = @Slot,
-    AbsoluteAddress = @AbsoluteAddress,
-    SWPath = @SWPath,
-    DBName = @DBName,
-    ModbusAddress = @ModbusAddress,
-    ModbusBit = @ModbusBit,
-    IsE0 = @IsE0,
-    IsVDR = @IsVDR,
-	LastModified = getdate(),
-	TP1 = @TP1,
-	TP2 = @TP2,
-	TP3 = @TP3,
-	TP4 = @TP4,
-	Channel = @Channel,
-	IOStatus = @IOStatus,
-	AlarmDelay = @AlarmDelay
-
-WHERE Id = @Id
-
+	UPDATE TAG SET
+		ObjectId = @ObjectId,
+		EqSuffix = @EqSuffix,
+		Description = @Description,
+		SymbolId = @SymbolId,
+		IoTypeId = @IoTypeId,
+		SignalTypeId = @SignalTypeId,
+		EngUnitId = @EngUnitId,
+		LowLimit = @LowLimit,
+		LowLowLimit = @LowLowLimit,
+		HighLimit = @HighLimit,
+		HighHighLimit = @HighHighLimit,
+		RangeLow = @RangeLow,
+		RangeHigh = @RangeHigh,
+		Slot = @Slot,
+		AbsoluteAddress = @AbsoluteAddress,
+		SWPath = @SWPath,
+		DBName = @DBName,
+		ModbusAddress = @ModbusAddress,
+		ModbusBit = @ModbusBit,
+		IsE0 = @IsE0,
+		IsVDR = @IsVDR,
+		LastModified = getdate(),
+		TP1 = @TP1,
+		TP2 = @TP2,
+		TP3 = @TP3,
+		TP4 = @TP4,
+		Channel = @Channel,
+		IOStatus = @IOStatus,
+		AlarmDelay = @AlarmDelay
+	WHERE Id = @Id
+END;

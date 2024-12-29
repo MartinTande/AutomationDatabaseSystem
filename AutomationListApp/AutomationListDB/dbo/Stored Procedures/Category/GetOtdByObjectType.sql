@@ -6,7 +6,5 @@ AS
 BEGIN
     SELECT Name
     FROM OTD
-    WHERE Id=(SELECT OtdId
-    FROM OBJECT_TYPE
-    WHERE Name = @ObjectType);
+    WHERE Id=(SELECT OtdId FROM OBJECT_TYPE WHERE Name = @ObjectType);
 END
