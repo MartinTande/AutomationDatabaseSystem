@@ -62,7 +62,7 @@ public class DisplayObjectModel
     [Editable(false)]
 	public DateTime? LastModified { get; set; }
 
-    public List<DisplayTagModel>? Tags { get; set; }
+    public List<DisplayTagModel>? Tags { get; set; } = new();
 
     [ReadOnly(true)]
 	[Editable(false)]

@@ -40,8 +40,8 @@ public class DisplayTagModel
 	public string? DBName { get; set; }
 	public int? ModbusAddress { get; set; }
 	public int? ModbusBit { get; set; }
-	public bool? IsE0 { get; set; }
-	public bool? IsVDR { get; set; }
+	public bool IsE0 { get; set; }
+	public bool IsVDR { get; set; }
     public string? IOStatus { get; set; }
     [ReadOnly(true)]
 	[Editable(false)]
@@ -57,11 +57,11 @@ public class DisplayTagModel
 			return "";
 		} 
 	}
-    public bool IsHW => !(!string.IsNullOrEmpty(IoType) && IoType.StartsWith("S"));
+    public bool IsHW => !(!string.IsNullOrEmpty(IoType) && IoType.StartsWith('S'));
 	public bool IsSW => !IsHW;
-	public bool IsInput => (!string.IsNullOrEmpty(IoType) && IoType.EndsWith("I"));
+	public bool IsInput => (!string.IsNullOrEmpty(IoType) && IoType.EndsWith('I'));
 	public bool IsOutput => !IsInput;
-	public bool IsDigital => (!string.IsNullOrEmpty(IoType) && IoType.Contains("D"));
+	public bool IsDigital => (!string.IsNullOrEmpty(IoType) && IoType.Contains('D'));
 	[ReadOnly(true)]
 	[Editable(false)]
 	public string FullTagName => $"{GetPrefix()}{ObjectName}_{EqSuffix}";
@@ -71,9 +71,9 @@ public class DisplayTagModel
 	public string? Hierarchy2 { get; set; }
 	public string? Cabinet { get; set; }
 	public string? InterfaceModule { get; set; } = string.Empty;
-	public bool UserLock { get; set; }
-	public bool IOLock { get; set; }
-	public int BeijerBoxId { get; set; }
+	public bool UserLock { get; set; } = false;
+	public bool IOLock { get; set; } = false;
+	public int? BeijerBoxId { get; set; }
 	public string? CSF => $"\"792_{Cabinet}_{InterfaceModule}\".yboMissing";
     private string? GetPrefix()
 	{
