@@ -1,7 +1,6 @@
 @page "/engineer-objects"
 
 
-@inject State State
 @inject ISnackbar Snackbar
 @inject IObjectService _objectService
 @inject ITagService _tagService
@@ -695,6 +694,13 @@
 		return style;
 	};
 	#endregion
+
+	public enum State
+	{
+		Add,
+		Edit,
+		Normal
+	}
 }
 
 <style>
