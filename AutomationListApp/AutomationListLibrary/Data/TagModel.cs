@@ -4,12 +4,12 @@ public class TagModel
 {
     public int Id { get; set; }
     public int ObjectId { get; set; }
-	public string? EqSuffix { get; set; }
-    public string? Description { get; set; }
-    public string? Symbol { get; set; }
-    public string? IoType { get; set; }
-    public string? SignalType { get; set; }
-    public string? AlarmDelay { get; set; }
+    public string EqSuffix { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+	public string? Symbol { get; set; }
+    public string IoType { get; set; } = string.Empty;
+	public string SignalType { get; set; } = string.Empty;
+	public string? AlarmDelay { get; set; }
     public string? EngUnit { get; set; }
     public int? RangeLow { get; set; }
     public int? RangeHigh { get; set; }
@@ -28,13 +28,13 @@ public class TagModel
     public string? DBName { get; set; }
     public int? ModbusAddress { get; set; }
     public int? ModbusBit { get; set; }
-    public bool? IsE0 { get; set; }
-    public bool? IsVDR { get; set; }
+    public bool IsE0 { get; set; } = false;
+    public bool IsVDR { get; set; } = false;
     public string? IOStatus { get; set; }
     public DateTime? LastModified { get; }
     public string? ObjectName { get; set; }
 	public string? InterfaceModule { get; set; }
-    public bool UserLock { get; set; }
-    public bool IOLock { get; set; }
-    public int BeijerBoxId { get; set; }
+    public bool UserLock { get; set; } = false;
+    public bool IOLock { get; set; } = false;
+    public int? BeijerBoxId { get; set; }
 }
