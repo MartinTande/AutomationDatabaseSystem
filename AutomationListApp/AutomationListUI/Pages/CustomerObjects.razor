@@ -1,141 +1,147 @@
 ﻿@page "/customer-objects"
+@using AutomationListUI.Utils
 
-@inject State State
 @inject ISnackbar Snackbar
 @inject IObjectService _objectService
 @inject ITagService _tagService
+@inject ExcelService _excelService
 @inject CategoryDataManager _categoryDM
 @inject SubCategoryDataManager _subCategoryDM
+@inject DialogService _dialogService
 
-<!--FilterMode="MudBlazor.DataGridFilterMode.ColumnFilterRow"-->
-<!--	@bind-FilteredItems="filteredItems"-->
-
-<MudDataGrid 
-	T="DisplayObjectModel"
-	Items="@Objects"
-	@ref="@ObjectGrid"
-	Height="600px"
-	MultiSelection="false"
-	RowStyleFunc="@_objectRowStyleFunc"
-	SortMode="SortMode.Multiple"
-	Filterable=true
-	QuickFilter="@_quickFilter"
-	Hover=true
-	HeaderClass="font-weight:bold"
-	FixedHeader=true
-	ColumnResizeMode=@ResizeMode.Container
-	Striped=true
-	Dense=true
-	ReadOnly=@(_objectGridState is State.Normal)
-	SelectedItem="@SelectedObject"
-	EditMode="@DataGridEditMode.Cell"
-	SelectedItemChanged="@SelectedObjectChanged"
-	SelectedItemsChanged="@SelectedObjectsChanged"
-	EditTrigger="@DataGridEditTrigger.OnRowClick">
-	<ToolBarContent>
-		<MudStack>
-			<MudStack Row="true" Spacing="2">
-				<MudText Typo="Typo.h6">Objects</MudText>
-				<MudText Typo="Typo.h6">@objectCount</MudText>
-				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Disabled=@(_objectGridState is not State.Normal) OnClick="@AddEmptyObjectRow">Add</MudButton>
-				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Disabled=@(_objectGridState is not State.Normal || SelectedObject is null) OnClick="@StartObjectEditMode">Edit</MudButton>
-				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Disabled=@(_objectGridState is State.Normal) OnClick="@SaveObjectIfValid">Save</MudButton>
-				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Disabled=@(_objectGridState is not State.Normal || SelectedObject is null) OnClick="@DeleteObject">Delete</MudButton>
-				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Disabled=@(_objectGridState is State.Normal) OnClick="@CancelObjectOperation">Cancel</MudButton>
-				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.ContentCopy" Disabled=@(_objectGridState is not State.Normal || SelectedObject is null) OnClick="@DuplicateObject">Duplicate</MudButton>
-				<MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileOpen" Disabled=@(_objectGridState is not State.Normal) OnClick="@DuplicateObject">Excel import</MudButton>
+<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
+	<!-- Object Grid-->
+	<MudDataGrid 
+		T="DisplayObjectModel"
+		Items="@Objects"
+		@ref="@ObjectGrid"
+		Height="600px"
+		MultiSelection="false"
+		RowStyleFunc="@_objectRowStyleFunc"
+		SortMode="SortMode.Multiple"
+		Filterable=false
+		QuickFilter="@_quickFilter"
+		Hover=true
+		HeaderClass="font-weight:bold"
+		FixedHeader=true
+		ColumnResizeMode=@ResizeMode.Container
+		Striped=true
+		Dense=true
+		ReadOnly=@(_objectGridState is State.Normal)
+		SelectedItem="@SelectedObject"
+		EditMode="@DataGridEditMode.Cell"
+		SelectedItemChanged="@SelectedObjectChanged"
+		SelectedItemsChanged="@SelectedObjectsChanged"
+		EditTrigger="@DataGridEditTrigger.OnRowClick">
+		<ToolBarContent>
+			<MudStack>
+				<MudStack Row="true" Spacing="2">
+					<MudText Typo="Typo.h6">Objects</MudText>
+					<MudText Typo="Typo.h6">@objectCount</MudText>
+					<MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Disabled=@(_objectGridState is not State.Normal) OnClick="@AddEmptyObjectRow">Add</MudButton>
+					<MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Disabled=@(_objectGridState is not State.Normal || SelectedObject is null) OnClick="@StartObjectEditMode">Edit</MudButton>
+					<MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Disabled=@(_objectGridState is State.Normal) OnClick="@SaveObjectIfValid">Save</MudButton>
+					<MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Disabled=@(_objectGridState is not State.Normal || SelectedObject is null) OnClick="@DeleteObject">Delete</MudButton>
+					<MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Disabled=@(_objectGridState is State.Normal) OnClick="@CancelObjectOperation">Cancel</MudButton>
+					<MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.ContentCopy" Disabled=@(_objectGridState is not State.Normal || SelectedObject is null) OnClick="@DuplicateObject">Duplicate</MudButton>
+					<MudFileUpload Class="me-2" T="IBrowserFile" @ref="excelUpload" FilesChanged="UploadFile">
+						<ActivatorContent>
+							<MudButton Variant="Variant.Filled" Color="Color.Success" StartIcon="@Icons.Custom.FileFormats.FileExcel">Import Excel</MudButton>
+						</ActivatorContent>
+					</MudFileUpload>
+					<MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Custom.FileFormats.FileExcel" OnClick="@ExportToExcel">Export Excel</MudButton>
+				</MudStack>
+				<MudStack Row="true" Spacing="0">
+					<MudTextField @bind-Value="_sfiNrSearch" Immediate="true" Label="Sfi Nr" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 100px" />
+					<MudTextField @bind-Value="_mainEqNrSearch" Immediate="true" Label="Main Eq Nr" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 110px" />
+					<MudTextField @bind-Value="_eqNrSearch" Immediate="true"  Label="Eq Nr" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 120px" />
+					<MudTextField @bind-Value="_objectNameSearch" Immediate="true"  Label="Object Name" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true"  Style="width: 120px" />
+					<MudTextField @bind-Value="_descSearch" Immediate="true"  Label="Description" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 120px" />
+					<MudTextField @bind-Value="_vduGroupSearch" Immediate="true" Label="Vdu Group" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 110px" />
+					<MudTextField @bind-Value="_cabinetSearch" Immediate="true"  Label="Cabinet" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 110px" />
+					<MudButton Size="Size.Small" Variant="Variant.Filled" Icon="@Icons.Material.Filled.Clear" OnClick="@ClearFilters">Clear filters</MudButton>
+				</MudStack>
 			</MudStack>
-			<MudStack Row="true" Spacing="0">
-				<MudTextField @bind-Value="_sfiNrSearch" Immediate="true" Label="Sfi Nr" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 100px" />
-				<MudTextField @bind-Value="_mainEqNrSearch" Immediate="true" Label="Main Eq Nr" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 110px" />
-				<MudTextField @bind-Value="_eqNrSearch" Immediate="true"  Label="Eq Nr" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 120px" />
-				<MudTextField @bind-Value="_objectNameSearch" Immediate="true"  Label="Object Name" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true"  Style="width: 120px" />
-				<MudTextField @bind-Value="_descSearch" Immediate="true"  Label="Description" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 120px" />
-				<MudTextField @bind-Value="_vduGroupSearch" Immediate="true" Label="Vdu Group" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 110px" />
-				<MudTextField @bind-Value="_cabinetSearch" Immediate="true"  Label="Cabinet" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 110px" />
-				<MudButton Size="Size.Small" Variant="Variant.Filled" Icon="@Icons.Material.Filled.Clear" OnClick="@ClearFilters">Clear filters</MudButton>
-			</MudStack>
-		</MudStack>
-	</ToolBarContent>
+		</ToolBarContent>
     
-	<Columns>
-		<SelectColumn T="DisplayObjectModel" />
-		<PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required="true">
-			<EditTemplate>
-				<MudForm @bind-IsValid="@_sfiNumberIsValid">
-					<MudTextField @bind-Value="context.Item.SfiNumber" Margin="@Margin.Dense" For="@(() => context.Item.SfiNumber)" />
-				</MudForm>
-			</EditTemplate>
-		</PropertyColumn>
-		<PropertyColumn Property="x => x.MainEqNumber" Title="Main Eq" Required="true">
-			<EditTemplate>
-				<MudForm @bind-IsValid="@_mainEqNumberIsValid">
-					<MudTextField @bind-Value="context.Item.MainEqNumber" Margin="@Margin.Dense" For="@(() => context.Item.MainEqNumber)" />
-				</MudForm>
-			</EditTemplate>
-		</PropertyColumn>
-		<PropertyColumn Property="x => x.EqNumber" Title="Eq" Required="false"/>
-		<PropertyColumn Property="x => x.FullObjectName" Title="Object Name" SortBy="@_sortByName" CellStyleFunc="@_cellStyleFunc">
-			<EditTemplate>
-				<MudForm @bind-IsValid="@_objectNameIsValid">
-					<MudTextField @bind-Value="context.Item.FullObjectName" ReadOnly="true" Validation="@(new ObjectNameValidator2(_objectService))" />
-				</MudForm>
-			</EditTemplate>
-		</PropertyColumn>
-		<PropertyColumn Property="x => x.Description" Title="Description">
-			<EditTemplate>
-				<MudForm @bind-IsValid="@_descriptionIsValid">
-					<MudTextField @bind-Value="context.Item.Description" Clearable Margin="@Margin.Dense" For="() => context.Item.Description"/>
-				</MudForm>
-			</EditTemplate>
-		</PropertyColumn>
-		<PropertyColumn Property="x => x.VduGroup" Title="Vdu Group">
-			<EditTemplate>
-				<MudForm @bind-IsValid="@_vduGroupIsValid">
-					<MudTextField @bind-Value="context.Item.VduGroup" Clearable Margin="@Margin.Dense" For="() => context.Item.VduGroup" />
-				</MudForm>
-			</EditTemplate>
-		</PropertyColumn>
-		<PropertyColumn Property="x => x.ObjectType" Title="Object Type">
-			<EditTemplate>
-				<MudSelect @bind-Value="context.Item.ObjectType" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
-					@foreach (var type in ObjectTypes)
-					{
-						<MudSelectItem Value="@type.Name"/>
-					}
-				</MudSelect>
-			</EditTemplate>
-		</PropertyColumn>
-		<PropertyColumn Property="x => x.Cabinet" Title="Cabinet">
-			<EditTemplate>
-				<MudSelect @bind-Value="context.Item.Cabinet" T="string" AnchorOrigin="Origin.BottomCenter">
-					@foreach (var cabinet in Cabinets)
-					{
-						<MudSelectItem Value="@cabinet.Name" />
-					}
-				</MudSelect>
-			</EditTemplate>
-		</PropertyColumn>
-		<PropertyColumn Property="x => x.Revision" Title="Revision" Required=false />
-    </Columns>
-</MudDataGrid>
+		<Columns>
+			<SelectColumn T="DisplayObjectModel" />
+			<PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required="true">
+				<EditTemplate>
+					<MudForm @bind-IsValid="@_sfiNumberIsValid">
+						<MudTextField @bind-Value="context.Item.SfiNumber" Margin="@Margin.Dense" For="@(() => context.Item.SfiNumber)" />
+					</MudForm>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.MainEqNumber" Title="Main Eq" Required="true">
+				<EditTemplate>
+					<MudForm @bind-IsValid="@_mainEqNumberIsValid">
+						<MudTextField @bind-Value="context.Item.MainEqNumber" Margin="@Margin.Dense" For="@(() => context.Item.MainEqNumber)" />
+					</MudForm>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.EqNumber" Title="Eq" Required="false"/>
+			<PropertyColumn Property="x => x.FullObjectName" Title="Object Name" SortBy="@_sortByName" CellStyleFunc="@_cellStyleFunc">
+				<EditTemplate>
+					<MudForm @bind-IsValid="@_objectNameIsValid">
+						<MudTextField @bind-Value="context.Item.FullObjectName" ReadOnly="true" Validation="@(new ObjectNameValidator2(_objectService))" />
+					</MudForm>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.Description" Title="Description">
+				<EditTemplate>
+					<MudForm @bind-IsValid="@_descriptionIsValid">
+						<MudTextField @bind-Value="context.Item.Description" Clearable Margin="@Margin.Dense" For="() => context.Item.Description"/>
+					</MudForm>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.VduGroup" Title="Vdu Group">
+				<EditTemplate>
+					<MudForm @bind-IsValid="@_vduGroupIsValid">
+						<MudTextField @bind-Value="context.Item.VduGroup" Clearable Margin="@Margin.Dense" For="() => context.Item.VduGroup" />
+					</MudForm>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.ObjectType" Title="Object Type">
+				<EditTemplate>
+					<MudSelect @bind-Value="context.Item.ObjectType" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
+						@foreach (var type in ObjectTypes)
+						{
+							<MudSelectItem Value="@type.Name"/>
+						}
+					</MudSelect>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.Cabinet" Title="Cabinet">
+				<EditTemplate>
+					<MudSelect @bind-Value="context.Item.Cabinet" T="string" AnchorOrigin="Origin.BottomCenter">
+						@foreach (var cabinet in Cabinets)
+						{
+							<MudSelectItem Value="@cabinet.Name" />
+						}
+					</MudSelect>
+				</EditTemplate>
+			</PropertyColumn>
+			<PropertyColumn Property="x => x.Revision" Title="Revision" Required=false />
+		</Columns>
+	</MudDataGrid>
 <br>
-
-<!-- Tags -->
-<MudDataGrid T="DisplayTagModel"
-			 Items="@Tags"
-			 RowStyleFunc="@_tagRowStyleFunc"
-			 SortMode="SortMode.Multiple"
-			 Hover=true
-			 Dense=true
-			 Filterable="false"
-			 Striped=true
-			 Height="300px"
-			 ReadOnly=@(_tagGridState is State.Normal)
-			 SelectedItem="@SelectedTag"
-			 SelectedItemChanged="@GetSelectedTag"
-			 EditMode="@DataGridEditMode.Cell"
-			 EditTrigger="@DataGridEditTrigger.OnRowClick">
+	<!-- Tag grid -->
+	<MudDataGrid 
+		T="DisplayTagModel"
+		Items="@Tags"
+		RowStyleFunc="@_tagRowStyleFunc"
+		SortMode="SortMode.Multiple"
+		Hover=true
+		Dense=true
+		Filterable="false"
+		Striped=true
+		Height="300px"
+		ReadOnly=@(_tagGridState is State.Normal)
+		SelectedItem="@SelectedTag"
+		SelectedItemChanged="@GetSelectedTag"
+		EditMode="@DataGridEditMode.Cell"
+		EditTrigger="@DataGridEditTrigger.OnRowClick">
 	<ToolBarContent>
 		<MudStack Row="true" Spacing="2">
 			<MudText Typo="Typo.h6">Tags</MudText>
@@ -244,6 +250,7 @@
 		</PropertyColumn>
 	</Columns>
 </MudDataGrid>
+</MudContainer>
 
 @code {
 	// Validator checks
@@ -269,24 +276,29 @@
 	// Filter
 	private int objectCount;
 
+	// Excel
+	MudFileUpload<IBrowserFile>? excelUpload;
+	const int MAX_ALLOWED_FILE_SIZE = 1_500_000;    // Bytes
+
 	// Color
-	string EditModeColor = "#c9d8f0";
-	string SelectedItemColor = "#d0d5d9";
+	private string _editModeColor = "#c9d8f0";
+	private string _selectedItemColor = "#d0d5d9";
 
 	// Objects and tags
 	public List<DisplayTagModel>? Tags { get; set; }
 	public List<DisplayObjectModel>? Objects { get; set; }
-
 	public DisplayTagModel? SelectedTag { get; set; }
 	public DisplayObjectModel? SelectedObject { get; set; }
 	public HashSet<DisplayObjectModel> SelectedObjects { get; set; } = new();
 
+	// Categories
 	public List<IoType>? IoTypes { get; set; } = new();
 	public List<Cabinet>? Cabinets { get; set; } = new();
 	public List<EngUnit>? EngUnits { get; set; } = new();
 	public List<SignalType>? SignalTypes { get; set; } = new();
 	public List<ObjectType>? ObjectTypes { get; set; } = new();
 
+	// Data grids
 	public MudDataGrid<DisplayObjectModel>? ObjectGrid { get; set; }
 	public MudDataGrid<DisplayTagModel>? TagGrid { get; set; }
 
@@ -295,10 +307,67 @@
 
 	private List<string> _events = new();
 
-	private Func<DisplayObjectModel, string> _cellStyleFunc => x =>
+	protected override async Task OnInitializedAsync()
 	{
-		return ";font-weight:bold";
-	};
+		_objectGridState = State.Normal;
+		_tagGridState = State.Normal;
+
+		await GetObjects();
+		IoTypes = await _categoryDM.GetIoTypes();
+		EngUnits = await _categoryDM.GetEngUnits();
+		Cabinets = await _categoryDM.GetCabinets();
+		ObjectTypes = await _categoryDM.GetObjectTypeCategory();
+
+		if (IoTypes is null) return;
+
+		foreach (var ioType in IoTypes)
+		{
+			ioType.SignalTypes = await _subCategoryDM.GetSignalTypesAsync(ioType.Name);
+		}
+	}
+
+	#region Excel
+	private async Task UploadFile(IBrowserFile file)
+	{
+		if (file is null) return;
+
+		try
+		{
+			using var stream = new MemoryStream();
+			await file.OpenReadStream(MAX_ALLOWED_FILE_SIZE).CopyToAsync(stream);
+
+			stream.Position = 0;
+
+			Dictionary<string, DisplayObjectModel> excelObjects = _excelService.ReadExcelObjects(stream);
+
+			var parameters = new DialogParameters<ImportDialog>
+			{
+				{x => x.objects, excelObjects}
+			};
+
+			var options = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge };
+
+			var dialog = await _dialogService.ShowAsync<ImportDialog>("Ready to import", parameters, options);
+			var result = await dialog.Result;
+
+			if (result != null && !result.Canceled)
+			{
+				await ObjectGrid.ReloadServerData();
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+			throw;
+		}
+	}
+
+	private async Task ExportToExcel()
+	{
+		
+	}
+
+	#endregion
 
 	#region Sorting and Filter functions
 	private Func<DisplayObjectModel, bool> _quickFilter => x =>
@@ -393,25 +462,6 @@
 		}
 	}
 	#endregion
-
-	protected override async Task OnInitializedAsync()
-	{
-		_objectGridState = State.Normal;
-		_tagGridState = State.Normal;
-
-		await GetObjects();
-		IoTypes = await _categoryDM.GetIoTypes();
-		EngUnits = await _categoryDM.GetEngUnits();
-		Cabinets = await _categoryDM.GetCabinets();
-		ObjectTypes = await _categoryDM.GetObjectTypeCategory();
-
-		if (IoTypes is null) return;
-
-		foreach (var ioType in IoTypes)
-		{
-			ioType.SignalTypes = await _subCategoryDM.GetSignalTypesAsync(ioType.Name);
-		}
-	}
 
 	#region Object methods
 	private async Task GetObjects()
@@ -644,7 +694,7 @@
 			case State.Normal:
 				if (x.Equals(SelectedObject))
 				{
-					style += $"background-color:{SelectedItemColor}";
+					style += $"background-color:{_selectedItemColor}";
 				}
 				break;
 			case State.Add:
@@ -660,7 +710,7 @@
 				}
 				else
 				{
-					style += $"background-color:{EditModeColor}";
+					style += $"background-color:{_editModeColor}";
 				}
 				break;
 			default:
@@ -678,7 +728,7 @@
 			case State.Normal:
 				if (x.Equals(SelectedTag))
 				{
-					style += $"background-color:{SelectedItemColor}";
+					style += $"background-color:{_selectedItemColor}";
 				}
 				break;
 			case State.Add:
@@ -694,7 +744,7 @@
 				}
 				else
 				{
-					style += $"background-color:{EditModeColor}";
+					style += $"background-color:{_editModeColor}";
 				}
 				break;
 			default:
@@ -703,7 +753,19 @@
 
 		return style;
 	};
+
+	private Func<DisplayObjectModel, string> _cellStyleFunc => x =>
+	{
+	return ";font-weight:bold";
+	};
 	#endregion
+
+	public enum State
+	{
+		Add,
+		Edit,
+		Normal
+	}
 }
 
 <style>

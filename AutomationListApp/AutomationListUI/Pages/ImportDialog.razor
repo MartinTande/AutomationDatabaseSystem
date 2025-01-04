@@ -1,0 +1,265 @@
+﻿@inject ObjectService _objectService
+@inject ExcelService _excelService
+@inject CategoryDataManager _categoryDM
+@inject SubCategoryDataManager _subCategoryDM
+@inject ISnackbar SnackBar
+
+
+<MudDialog>
+    <DialogContent>
+		<MudDataGrid T="DisplayObjectModel"
+					 Items="@Objects"
+					 @ref="@ObjectGrid"
+					 Height="600px"
+					 MultiSelection="false"
+					 SortMode="SortMode.Multiple"
+					 Hover=true
+					 FixedHeader=true
+					 ColumnResizeMode=@ResizeMode.Container
+					 Striped=true
+					 Dense=true
+					 EditMode="@DataGridEditMode.Cell"
+					 EditTrigger="@DataGridEditTrigger.OnRowClick">
+			<Columns>
+				<SelectColumn T="DisplayObjectModel" />
+				<PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required="true">
+					<EditTemplate>
+						<MudForm @bind-IsValid="@_sfiNumberIsValid">
+							<MudTextField @bind-Value="context.Item.SfiNumber" Margin="@Margin.Dense" For="@(() => context.Item.SfiNumber)" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.MainEqNumber" Title="Main Eq" Required="true">
+					<EditTemplate>
+						<MudForm @bind-IsValid="@_mainEqNumberIsValid">
+							<MudTextField @bind-Value="context.Item.MainEqNumber" Margin="@Margin.Dense" For="@(() => context.Item.MainEqNumber)" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.EqNumber" Title="Eq" Required="false" />
+				<PropertyColumn Property="x => x.FullObjectName" Title="Object Name">
+					<EditTemplate>
+						<MudForm @bind-IsValid="@_objectNameIsValid">
+							<MudTextField @bind-Value="context.Item.FullObjectName" ReadOnly="true" Validation="@(new ObjectNameValidator2(_objectService))" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.Description" Title="Description">
+					<EditTemplate>
+						<MudForm @bind-IsValid="@_descriptionIsValid">
+							<MudTextField @bind-Value="context.Item.Description" Clearable Margin="@Margin.Dense" For="() => context.Item.Description" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.VduGroup" Title="Vdu Group">
+					<EditTemplate>
+						<MudForm @bind-IsValid="@_vduGroupIsValid">
+							<MudTextField @bind-Value="context.Item.VduGroup" Clearable Margin="@Margin.Dense" For="() => context.Item.VduGroup" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.ObjectType" Title="Object Type">
+					<EditTemplate>
+						<MudSelect @bind-Value="context.Item.ObjectType" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
+							@foreach (var type in ObjectTypes)
+							{
+								<MudSelectItem Value="@type.Name" />
+							}
+						</MudSelect>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.Cabinet" Title="Cabinet">
+					<EditTemplate>
+						<MudSelect @bind-Value="context.Item.Cabinet" T="string" AnchorOrigin="Origin.BottomCenter">
+							@foreach (var cabinet in Cabinets)
+							{
+								<MudSelectItem Value="@cabinet.Name" />
+							}
+						</MudSelect>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.Revision" Title="Revision" Required=false />
+			</Columns>
+		</MudDataGrid>
+		<!-- Tags -->
+		<MudDataGrid T="DisplayTagModel"
+					 Items="@Tags"
+					 SortMode="SortMode.Multiple"
+					 Hover=true
+					 Dense=true
+					 Filterable="false"
+					 Striped=true
+					 Height="300px"
+					 EditMode="@DataGridEditMode.Cell"
+					 EditTrigger="@DataGridEditTrigger.OnRowClick">
+			<Columns>
+				<SelectColumn T="DisplayTagModel" />
+				<PropertyColumn Property="x => x.FullTagName" Title="Tag Name" Editable=false />
+				<PropertyColumn Property="x => x.EqSuffix" Title="Eq" Required="true">
+					<EditTemplate>
+						<MudForm @bind-IsValid="@_eqSuffixIsValid">
+							<MudTextField @bind-Value="context.Item.EqSuffix" Margin="@Margin.Dense" For="() => context.Item.Description" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.Description" Title="Description">
+					<EditTemplate>
+						<MudForm @bind-IsValid="@_descriptionIsValid">
+							<MudTextField @bind-Value="context.Item.Description" Clearable Margin="@Margin.Dense" For="() => context.Item.Description" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.IoType" Title="Io Type">
+					<EditTemplate>
+						<MudSelect @bind-Value="context.Item.IoType" T="string" AnchorOrigin="Origin.BottomCenter" OnClose="@(()=>IoTypeChange(context.Item))">
+							@foreach (var ioType in IoTypes)
+							{
+								<MudSelectItem Value="@ioType.Name" />
+							}
+						</MudSelect>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.SignalType" Title="Signal Type">
+					<EditTemplate>
+						<MudSelect @bind-Value="context.Item.SignalType" T="string" AnchorOrigin="Origin.BottomCenter">
+							@foreach (var signalType in SignalTypes)
+							{
+								<MudSelectItem Value="@signalType.Name" />
+							}
+						</MudSelect>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.EngUnit" Title="Eng Unit">
+					<EditTemplate>
+						<MudSelect @bind-Value="context.Item.EngUnit" T="string" AnchorOrigin="Origin.BottomCenter" ReadOnly="@(context.Item.IsDigital)">
+							@foreach (var engUnit in EngUnits)
+							{
+								<MudSelectItem Value="@engUnit.Name" />
+							}
+						</MudSelect>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.AlarmDelay" Title="Alm Delay" Editable=false>
+					<EditTemplate>
+						<MudForm>
+							<MudTextField @bind-Value="context.Item.AlarmDelay" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.RangeLow" Title="Range Low" Editable=false>
+					<EditTemplate>
+						<MudForm>
+							<MudTextField @bind-Value="context.Item.RangeLow" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.RangeHigh" Title="Range High" Editable=false>
+					<EditTemplate>
+						<MudForm>
+							<MudTextField @bind-Value="context.Item.RangeHigh" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.LowLowLimit" Title="Alm LL" Editable=false>
+					<EditTemplate>
+						<MudForm>
+							<MudNumericField @bind-Value="context.Item.LowLowLimit" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.LowLimit" Title="Alm L" Editable=false>
+					<EditTemplate>
+						<MudForm>
+							<MudNumericField @bind-Value="context.Item.LowLimit" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.HighLimit" Title="Alm H" Editable=false>
+					<EditTemplate>
+						<MudForm>
+							<MudNumericField @bind-Value="context.Item.HighLimit" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.HighHighLimit" Title="Alm HH" Editable=false>
+					<EditTemplate>
+						<MudForm>
+							<MudNumericField @bind-Value="context.Item.HighHighLimit" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
+						</MudForm>
+					</EditTemplate>
+				</PropertyColumn>
+			</Columns>
+		</MudDataGrid>
+
+    </DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">Cancel</MudButton>
+		<MudButton OnClick="Submit" Color="Color.Primary" Variant="Variant.Filled">Submit</MudButton>
+	</DialogActions>
+</MudDialog>
+
+
+
+
+@code {
+	// Validator checks
+	private bool _objectNameIsValid;
+	private bool _sfiNumberIsValid;
+	private bool _mainEqNumberIsValid;
+	private bool _descriptionIsValid;
+	private bool _vduGroupIsValid;
+	private bool _eqSuffixIsValid;
+	private bool _tagNameIsValid;
+	private bool _ioTypeIsValid;
+
+	// Objects and tags
+	public List<DisplayTagModel>? Tags { get; set; }
+	public List<DisplayObjectModel>? Objects { get; set; }
+	public DisplayTagModel? SelectedTag { get; set; }
+	public DisplayObjectModel? SelectedObject { get; set; }
+	public HashSet<DisplayObjectModel> SelectedObjects { get; set; } = new();
+
+	// Categories
+	public List<IoType>? IoTypes { get; set; } = new();
+	public List<Cabinet>? Cabinets { get; set; } = new();
+	public List<EngUnit>? EngUnits { get; set; } = new();
+	public List<SignalType>? SignalTypes { get; set; } = new();
+	public List<ObjectType>? ObjectTypes { get; set; } = new();
+
+	// Data grids
+	public MudDataGrid<DisplayObjectModel>? ObjectGrid { get; set; }
+	public MudDataGrid<DisplayTagModel>? TagGrid { get; set; }
+
+	[Parameter]
+	public Dictionary<string, DisplayObjectModel> objects { get; set; } = new();
+
+	[CascadingParameter]
+	public MudDialogInstance MudDialog { get; set; }
+
+	private async Task Submit()
+	{
+		var result = await _excelService.ImportObjects(objects);
+		if (result)
+		{
+			SnackBar.Add("Successfully imported the objects", Severity.Success);
+			MudDialog.Close(DialogResult.Ok(true));
+		}
+		else
+		{
+			SnackBar.Add("Failed to import the objects", Severity.Error);
+		}
+
+	}
+
+	private void Cancel()
+	{
+		MudDialog.Cancel();
+	}
+
+	private async void IoTypeChange(DisplayTagModel tag)
+	{
+		SignalTypes = await _subCategoryDM.GetSignalTypesAsync(tag.IoType);
+		tag.SignalType = null;
+		StateHasChanged();
+	}
+}
