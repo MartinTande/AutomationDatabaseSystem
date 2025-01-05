@@ -76,9 +76,9 @@ public class ExcelService
 				IOLock = row.Cell(_headers["IO_LOCK"]).GetString() == "Y",
 			};
 
-			if (excelObjects.ContainsKey(objectName))
+			if (excelObjects.TryGetValue(objectName, out DisplayObjectModel? value))
 			{
-				excelObjects[objectName].Tags.Add(tag);
+				value.Tags.Add(tag);
 			}
 			else
 			{
@@ -101,6 +101,7 @@ public class ExcelService
 					Revision = row.Cell(_headers["Revision"]).GetString(),
 				};
 
+				newObject.Tags.Add(tag);
 				excelObjects.Add(objectName, newObject);
 			}
 		}

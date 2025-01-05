@@ -8,74 +8,146 @@
 <MudDialog>
     <DialogContent>
 		<!-- Objects -->
-		<MudDataGrid 
+		<MudDataGrid
 			T="DisplayObjectModel"
 			Items="@objects"
 			@ref="@ObjectGrid"
-			Height="600px"
 			MultiSelection="false"
 			SortMode="SortMode.Multiple"
 			Hover=true
+			Height="700px"
 			FixedHeader=true
+			RowStyleFunc="@_objectRowStyleFunc"
 			ColumnResizeMode=@ResizeMode.Container
 			Striped=true
 			Dense=true
 			EditMode="@DataGridEditMode.Cell"
+			SelectedItemChanged="@SelectedObjectChanged"
 			EditTrigger="@DataGridEditTrigger.OnRowClick">
 			<Columns>
 				<SelectColumn T="DisplayObjectModel" />
-				<PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required="true">
+				<PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required="true" CellStyleFunc="@_objectCellStyleFunc">
 					<EditTemplate>
 						<MudForm @bind-IsValid="@_sfiNumberIsValid">
 							<MudTextField @bind-Value="context.Item.SfiNumber" Margin="@Margin.Dense" For="@(() => context.Item.SfiNumber)" />
 						</MudForm>
 					</EditTemplate>
 				</PropertyColumn>
-				<PropertyColumn Property="x => x.MainEqNumber" Title="Main Eq" Required="true">
+				<PropertyColumn Property="x => x.MainEqNumber" Title="Main Eq" Required="true" CellStyleFunc="@_objectCellStyleFunc">
 					<EditTemplate>
 						<MudForm @bind-IsValid="@_mainEqNumberIsValid">
 							<MudTextField @bind-Value="context.Item.MainEqNumber" Margin="@Margin.Dense" For="@(() => context.Item.MainEqNumber)" />
 						</MudForm>
 					</EditTemplate>
 				</PropertyColumn>
-				<PropertyColumn Property="x => x.EqNumber" Title="Eq" Required="false" />
-				<PropertyColumn Property="x => x.FullObjectName" Title="Object Name">
+				<PropertyColumn Property="x => x.EqNumber" Title="Eq" Required="false" CellStyleFunc="@_objectCellStyleFunc" />
+				<PropertyColumn Property="x => x.FullObjectName" Title="Object Name" CellStyleFunc="@_objectCellStyleFunc">
 					<EditTemplate>
 						<MudForm @bind-IsValid="@_objectNameIsValid">
-							<MudTextField @bind-Value="context.Item.FullObjectName" ReadOnly="true" Validation="@(new ObjectNameValidator2(_objectService))" />
+							<MudTextField @bind-Value="context.Item.FullObjectName" Validation="@(new ObjectNameValidator2(_objectService))" />
 						</MudForm>
 					</EditTemplate>
 				</PropertyColumn>
-				<PropertyColumn Property="x => x.Description" Title="Description">
+				<PropertyColumn Property="x => x.Description" Title="Description" CellStyleFunc="@_objectCellStyleFunc">
 					<EditTemplate>
 						<MudForm @bind-IsValid="@_descriptionIsValid">
 							<MudTextField @bind-Value="context.Item.Description" Clearable Margin="@Margin.Dense" For="() => context.Item.Description" />
 						</MudForm>
 					</EditTemplate>
 				</PropertyColumn>
-				<PropertyColumn Property="x => x.VduGroup" Title="Vdu Group">
+				<PropertyColumn Property="x => x.VduGroup" Title="Vdu Group" CellStyleFunc="@_objectCellStyleFunc">
 					<EditTemplate>
 						<MudForm @bind-IsValid="@_vduGroupIsValid">
 							<MudTextField @bind-Value="context.Item.VduGroup" Clearable Margin="@Margin.Dense" For="() => context.Item.VduGroup" />
 						</MudForm>
 					</EditTemplate>
 				</PropertyColumn>
-				<PropertyColumn Property="x => x.ObjectType" Title="Object Type">
+				<PropertyColumn Property="x => x.Node" Title="Node" CellStyleFunc="@_objectCellStyleFunc">
 					<EditTemplate>
-						<MudSelect @bind-Value="context.Item.ObjectType" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
-							@foreach (var type in ObjectTypes)
+						<MudSelect @bind-Value="context.Item.Node" T="string" AnchorOrigin="Origin.BottomCenter">
+							@foreach (var nodes in Nodes)
+							{
+								<MudSelectItem Value="@nodes.Name" />
+							}
+						</MudSelect>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.Cabinet" Title="Cabinet" CellStyleFunc="@_objectCellStyleFunc">
+					<EditTemplate>
+						<MudSelect @bind-Value="context.Item.Cabinet" T="string" AnchorOrigin="Origin.BottomCenter">
+							@foreach (var cabinet in Cabinets)
+							{
+								<MudSelectItem Value="@cabinet.Name" />
+							}
+						</MudSelect>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.Otd" Title="Otd" CellStyleFunc="@_objectCellStyleFunc">
+					<EditTemplate>
+						<MudSelect @bind-Value="context.Item.Otd" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
+							@foreach (var type in Otds)
 							{
 								<MudSelectItem Value="@type.Name" />
 							}
 						</MudSelect>
 					</EditTemplate>
 				</PropertyColumn>
-				<PropertyColumn Property="x => x.Cabinet" Title="Cabinet">
+				<PropertyColumn Property="x => x.Hierarchy1" Title="Main Picture" CellStyleFunc="@_objectCellStyleFunc">
 					<EditTemplate>
-						<MudSelect @bind-Value="context.Item.Cabinet" T="string" AnchorOrigin="Origin.BottomCenter">
-							@foreach (var cabinet in Cabinets)
+						<MudSelect @bind-Value="context.Item.Hierarchy1" T="string" AnchorOrigin="Origin.BottomCenter">
+							@foreach (var mainPicture in MainPictures)
 							{
-								<MudSelectItem Value="@cabinet.Name" />
+								<MudSelectItem Value="@mainPicture.Name" />
+							}
+						</MudSelect>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.Hierarchy2" Title="Sub Picture" CellStyleFunc="@_objectCellStyleFunc">
+					<EditTemplate>
+						<MudSelect @bind-Value="context.Item.Hierarchy2" T="string" AnchorOrigin="Origin.BottomCenter">
+							@foreach (var subPicture in SubPictures)
+							{
+								<MudSelectItem Value="@subPicture.Name" />
+							}
+						</MudSelect>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.EasGroup" Title="Eas Group" CellStyleFunc="@_objectCellStyleFunc">
+					<EditTemplate>
+						<MudSelect @bind-Value="context.Item.EasGroup" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
+							@foreach (var easGroup in EasGroups)
+							{
+								<MudSelectItem Value="@easGroup.Name" />
+							}
+						</MudSelect>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.AlarmGroup" Title="Alarm Group" CellStyleFunc="@_objectCellStyleFunc">
+					<EditTemplate>
+						<MudSelect @bind-Value="context.Item.AlarmGroup" T="string" Clearable AnchorOrigin="Origin.BottomCenter">
+							@foreach (var alarmGroup in AlarmGroups)
+							{
+								<MudSelectItem Value="@alarmGroup.Name" />
+							}
+						</MudSelect>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.AcknowledgeAllowed" Title="Acknowledge Allowed" CellStyleFunc="@_objectCellStyleFunc">
+					<EditTemplate>
+						<MudSelect @bind-Value="context.Item.AcknowledgeAllowed" T="string" AnchorOrigin="Origin.BottomCenter">
+							@foreach (var ackAllowedGroup in AcknowledgeAllowedGroups)
+							{
+								<MudSelectItem Value="@ackAllowedGroup.Name" />
+							}
+						</MudSelect>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.AlwaysVisible" Title="Always Visible" CellStyleFunc="@_objectCellStyleFunc">
+					<EditTemplate>
+						<MudSelect @bind-Value="context.Item.AlwaysVisible" T="string" AnchorOrigin="Origin.BottomCenter">
+							@foreach (var alwaysVisibleGroup in AlwaysVisibleGroups)
+							{
+								<MudSelectItem Value="@alwaysVisibleGroup.Name" />
 							}
 						</MudSelect>
 					</EditTemplate>
@@ -97,22 +169,32 @@
 			EditTrigger="@DataGridEditTrigger.OnRowClick">
 			<Columns>
 				<SelectColumn T="DisplayTagModel" />
-				<PropertyColumn Property="x => x.FullTagName" Title="Tag Name" Editable=false />
-				<PropertyColumn Property="x => x.EqSuffix" Title="Eq" Required="true">
+				<PropertyColumn Property="x => x.FullTagName" Title="Tag Name" Editable=false CellStyleFunc="@_tagCellStyleFunc" />
+				<PropertyColumn Property="x => x.EqSuffix" Title="Eq" Required="true" CellStyleFunc="@_tagCellStyleFunc">
 					<EditTemplate>
 						<MudForm @bind-IsValid="@_eqSuffixIsValid">
 							<MudTextField @bind-Value="context.Item.EqSuffix" Margin="@Margin.Dense" For="() => context.Item.Description" />
 						</MudForm>
 					</EditTemplate>
 				</PropertyColumn>
-				<PropertyColumn Property="x => x.Description" Title="Description">
+				<PropertyColumn Property="x => x.Description" Title="Description" CellStyleFunc="@_tagCellStyleFunc">
 					<EditTemplate>
 						<MudForm @bind-IsValid="@_descriptionIsValid">
 							<MudTextField @bind-Value="context.Item.Description" Clearable Margin="@Margin.Dense" For="() => context.Item.Description" />
 						</MudForm>
 					</EditTemplate>
 				</PropertyColumn>
-				<PropertyColumn Property="x => x.IoType" Title="Io Type">
+				<PropertyColumn Property="x => x.Symbol" Title="Symbol" CellStyleFunc="@_tagCellStyleFunc">
+					<EditTemplate>
+						<MudSelect @bind-Value="context.Item.Symbol" T="string" AnchorOrigin="Origin.BottomCenter">
+							@foreach (var symbol in Symbols)
+							{
+								<MudSelectItem Value="@symbol.Name" />
+							}
+						</MudSelect>
+					</EditTemplate>
+				</PropertyColumn>
+				<PropertyColumn Property="x => x.IoType" Title="Io Type" CellStyleFunc="@_tagCellStyleFunc">
 					<EditTemplate>
 						<MudSelect @bind-Value="context.Item.IoType" T="string" AnchorOrigin="Origin.BottomCenter" OnClose="@(()=>IoTypeChange(context.Item))">
 							@foreach (var ioType in IoTypes)
@@ -122,7 +204,7 @@
 						</MudSelect>
 					</EditTemplate>
 				</PropertyColumn>
-				<PropertyColumn Property="x => x.SignalType" Title="Signal Type">
+				<PropertyColumn Property="x => x.SignalType" Title="Signal Type" CellStyleFunc="@_tagCellStyleFunc">
 					<EditTemplate>
 						<MudSelect @bind-Value="context.Item.SignalType" T="string" AnchorOrigin="Origin.BottomCenter">
 							@foreach (var signalType in SignalTypes)
@@ -132,7 +214,7 @@
 						</MudSelect>
 					</EditTemplate>
 				</PropertyColumn>
-				<PropertyColumn Property="x => x.EngUnit" Title="Eng Unit">
+				<PropertyColumn Property="x => x.EngUnit" Title="Eng Unit" CellStyleFunc="@_tagCellStyleFunc">
 					<EditTemplate>
 						<MudSelect @bind-Value="context.Item.EngUnit" T="string" AnchorOrigin="Origin.BottomCenter" ReadOnly="@(context.Item.IsDigital)">
 							@foreach (var engUnit in EngUnits)
@@ -142,14 +224,14 @@
 						</MudSelect>
 					</EditTemplate>
 				</PropertyColumn>
-				<PropertyColumn Property="x => x.AlarmDelay" Title="Alm Delay" Editable=false>
+				<PropertyColumn Property="x => x.AlarmDelay" Title="Alm Delay" Editable=false CellStyleFunc="@_tagCellStyleFunc">
 					<EditTemplate>
 						<MudForm>
 							<MudTextField @bind-Value="context.Item.AlarmDelay" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
 						</MudForm>
 					</EditTemplate>
 				</PropertyColumn>
-				<PropertyColumn Property="x => x.RangeLow" Title="Range Low" Editable=false>
+				<PropertyColumn Property="x => x.RangeLow" Title="Range Low" Editable=false CellStyleFunc="@_tagCellStyleFunc">
 					<EditTemplate>
 						<MudForm>
 							<MudTextField @bind-Value="context.Item.RangeLow" Margin="@Margin.Dense" ReadOnly="@(context.Item.IsDigital)" />
@@ -212,6 +294,7 @@
 	private bool _tagNameIsValid;
 	private bool _ioTypeIsValid;
 
+
 	// Objects and tags
 	public List<DisplayTagModel>? Tags { get; set; }
 	public List<DisplayObjectModel>? Objects { get; set; }
@@ -220,11 +303,20 @@
 	public HashSet<DisplayObjectModel> SelectedObjects { get; set; } = new();
 
 	// Categories
+	public List<Otd>? Otds { get; set; } = new();
+	public List<Node>? Nodes { get; set; } = new();
 	public List<IoType>? IoTypes { get; set; } = new();
+	public List<Symbol>? Symbols { get; set; } = new();
 	public List<Cabinet>? Cabinets { get; set; } = new();
 	public List<EngUnit>? EngUnits { get; set; } = new();
+	public List<EasGroup>? EasGroups { get; set; } = new();
 	public List<SignalType>? SignalTypes { get; set; } = new();
 	public List<ObjectType>? ObjectTypes { get; set; } = new();
+	public List<AlarmGroup>? AlarmGroups { get; set; } = new();
+	public List<Hierarchy1>? MainPictures { get; set; } = new();
+	public List<Hierarchy2>? SubPictures { get; set; } = new();
+	public List<LocationGroup>? AlwaysVisibleGroups { get; set; } = new();
+	public List<LocationGroup>? AcknowledgeAllowedGroups { get; set; } = new();
 
 	// Data grids
 	public MudDataGrid<DisplayObjectModel>? ObjectGrid { get; set; }
@@ -262,4 +354,63 @@
 		tag.SignalType = null;
 		StateHasChanged();
 	}
+
+	private async Task SelectedObjectChanged(DisplayObjectModel item)
+	{
+		SelectedObject = item;
+		if (SelectedObject is null || SelectedObject.Tags is null) return;
+
+		Tags = SelectedObject.Tags;
+		foreach (var tag in Tags)
+		{
+			tag.ObjectName = SelectedObject.FullObjectName;
+		}
+	}
+
+	private Func<DisplayObjectModel, string> _objectCellStyleFunc => x =>
+	{
+		string style = "";
+
+		// if (string.IsNullOrEmpty(x.VduGroup))
+		// 	style += "background-color:#8CED8C";
+
+		// else if (string.IsNullOrEmpty(x.Cabinet))
+		// 	style += "background-color:#d16976";
+
+		// else
+		// 	style += "background-color:#8CED8C";
+
+		// if (x.Description.Length > 10)
+		// 	style += ";font-weight:bold";
+		return style;
+	};
+
+	private Func<DisplayTagModel, string> _tagCellStyleFunc => x =>
+	{
+		string style = "";
+
+		if (x.Description == "C01")
+			style += "background-color:#8CED8C";
+
+		else if (x.Cabinet == "C02")
+			style += "background-color:#E5BDE5";
+
+		else if (x.Cabinet == "C03")
+			style += "background-color:#EACE5D";
+
+		else if (x.Cabinet == "C04")
+			style += "background-color:#F1F165";
+
+		if (x.Description.Length > 10)
+			style += ";font-weight:bold";
+
+		return style;
+	};
+
+	private Func<DisplayObjectModel, int, string> _objectRowStyleFunc => (x, i) =>
+	{
+		string VALID_OBJECT_COLOR = "#8CED8C";
+		string INVALID_OBJECT_COLOR = "#eb7886";
+		return x.ReadyForPreliminaryPLCGeneration ? $"background-color:{Color.Success}" : $"background-color:{Color.Error}";
+	};
 }

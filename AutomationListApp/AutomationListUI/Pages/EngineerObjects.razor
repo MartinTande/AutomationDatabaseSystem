@@ -332,8 +332,8 @@
 	private bool _resizeColumn;
 
 	// Color
-	string EditModeColor = "#c9d8f0";
-	string SelectedItemColor = "#d0d5d9";
+	const string EDIT_STATE_COLOR = "#c9d8f0";
+	const string SELECTED_ITEM_COLOR = "#d0d5d9";
 
 	// Objects and tags
 	public List<DisplayTagModel>? Tags { get; set; }
@@ -343,6 +343,7 @@
 	public DisplayObjectModel? SelectedObject { get; set; }
 	public HashSet<DisplayObjectModel> SelectedObjects { get; set; } = new();
 
+	// Categories
 	public List<Otd>? Otds { get; set; } = new();
 	public List<Node>? Nodes { get; set; } = new();
 	public List<IoType>? IoTypes { get; set; } = new();
@@ -357,9 +358,11 @@
 	public List<LocationGroup>? AlwaysVisibleGroups { get; set; } = new();
 	public List<LocationGroup>? AcknowledgeAllowedGroups { get; set; } = new();
 
+	// Grids
 	public MudDataGrid<DisplayObjectModel>? ObjectGrid { get; set; }
 	public MudDataGrid<DisplayTagModel>? TagGrid { get; set; }
 
+	// States
 	private State _objectGridState;
 	private State _tagGridState;
 
@@ -634,7 +637,7 @@
 			case State.Normal:
 				if (x.Equals(SelectedObject))
 				{
-					style += $"background-color:{SelectedItemColor}";
+					style += $"background-color:{SELECTED_ITEM_COLOR}";
 				}
 				break;
 			case State.Add:
@@ -650,7 +653,7 @@
 				}
 				else
 				{
-					style += $"background-color:{EditModeColor}";
+					style += $"background-color:{EDIT_STATE_COLOR}";
 				}
 				break;
 			default:
@@ -668,7 +671,7 @@
 			case State.Normal:
 				if (x.Equals(SelectedTag))
 				{
-					style += $"background-color:{SelectedItemColor}";
+					style += $"background-color:{SELECTED_ITEM_COLOR}";
 				}
 				break;
 			case State.Add:
@@ -684,7 +687,7 @@
 				}
 				else
 				{
-					style += $"background-color:{EditModeColor}";
+					style += $"background-color:{EDIT_STATE_COLOR}";
 				}
 				break;
 			default:

@@ -62,7 +62,7 @@ public class DisplayObjectModel
     [Editable(false)]
 	public DateTime? LastModified { get; set; }
 
-    public List<DisplayTagModel>? Tags { get; set; } = new();
+    public List<DisplayTagModel> Tags { get; set; } = new();
 
     [ReadOnly(true)]
 	[Editable(false)]
@@ -98,7 +98,7 @@ public class DisplayObjectModel
 					                        !string.IsNullOrEmpty(Node);
 	[Editable(false)]
     [ReadOnly(true)]
-	public bool ReadyForPreliminaryPLCGeneration => !string.IsNullOrEmpty(Otd) && !string.IsNullOrEmpty(Node);
+	public bool ReadyForPreliminaryPLCGeneration => !string.IsNullOrEmpty(Otd) && !string.IsNullOrEmpty(Node) && (Description?.Length <= 46);
 
 	private bool IsRequiredTagSuffixPresent(string suffix)
     {

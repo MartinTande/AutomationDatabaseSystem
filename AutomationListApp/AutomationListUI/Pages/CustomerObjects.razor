@@ -280,8 +280,8 @@
 	const int MAX_ALLOWED_FILE_SIZE = 1_500_000;    // Bytes
 
 	// Color
-	private string _editModeColor = "#c9d8f0";
-	private string _selectedItemColor = "#d0d5d9";
+	const string EDIT_STATE_COLOR = "#c9d8f0";
+	const string SELECTED_ITEM_COLOR = "#d0d5d9";
 
 	// Objects and tags
 	public List<DisplayTagModel>? Tags { get; set; }
@@ -344,7 +344,7 @@
 				{x => x.objects, excelObjects}
 			};
 
-			var options = new DialogOptions() { MaxWidth = MaxWidth.ExtraExtraLarge, CloseOnEscapeKey = true, Position = DialogPosition.Center };
+			var options = new DialogOptions() { FullScreen = true, CloseOnEscapeKey = true, CloseButton = true };
 
 			var dialog = await _dialogService.ShowAsync<ImportDialog>("Ready to import", parameters, options);
 			var result = await dialog.Result;
@@ -693,7 +693,7 @@
 			case State.Normal:
 				if (x.Equals(SelectedObject))
 				{
-					style += $"background-color:{_selectedItemColor}";
+					style += $"background-color:{SELECTED_ITEM_COLOR}";
 				}
 				break;
 			case State.Add:
@@ -709,7 +709,7 @@
 				}
 				else
 				{
-					style += $"background-color:{_editModeColor}";
+					style += $"background-color:{EDIT_STATE_COLOR}";
 				}
 				break;
 			default:
@@ -727,7 +727,7 @@
 			case State.Normal:
 				if (x.Equals(SelectedTag))
 				{
-					style += $"background-color:{_selectedItemColor}";
+					style += $"background-color:{SELECTED_ITEM_COLOR}";
 				}
 				break;
 			case State.Add:
@@ -743,7 +743,7 @@
 				}
 				else
 				{
-					style += $"background-color:{_editModeColor}";
+					style += $"background-color:{EDIT_STATE_COLOR}";
 				}
 				break;
 			default:

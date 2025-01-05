@@ -105,7 +105,14 @@ public class DisplayTagModel
 		};
 		if (string.IsNullOrEmpty(SignalType)) return null;
 
-		return ioPrefix + signalPrefix[SignalType.ToUpper()];
+		try
+		{
+			return ioPrefix + signalPrefix[SignalType.ToUpper()];
+		}
+		catch
+		{
+			return null;
+		}
 	}
 
 	private bool AbsoluteAddressIsValid
@@ -153,7 +160,7 @@ public class DisplayTagModel
 		}
 	}
 
-	public bool? ReadyForSWGeneration => !string.IsNullOrEmpty(IoType) &&
+	public bool ReadyForSWGeneration => !string.IsNullOrEmpty(IoType) &&
 										   !string.IsNullOrEmpty(SignalType) &&
 										   !string.IsNullOrEmpty(Path) &&
 										   AbsoluteAddressIsValid;
