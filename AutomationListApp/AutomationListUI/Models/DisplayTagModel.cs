@@ -82,6 +82,7 @@ public class DisplayTagModel
 		{
 			{ "NC", "bo" },
 			{ "NO", "bo" },
+			{ "NO, 230V Relay", "bo" },
 			{ "BYTE", "by" },
 			{ "WORD", "wo" },
 			{ "DWORD", "dw" },
@@ -103,6 +104,7 @@ public class DisplayTagModel
 			{ "CHAR", "ch" },
 			{ "STRING", "sti" }
 		};
+
 		if (string.IsNullOrEmpty(SignalType)) return null;
 
 		try

@@ -1,8 +1,8 @@
-﻿@inject IObjectService _objectService
+﻿@inject ISnackbar Snackbar
+@inject IObjectService _objectService
 @inject ExcelService _excelService
 @inject CategoryDataManager _categoryDM
 @inject SubCategoryDataManager _subCategoryDM
-@inject ISnackbar SnackBar
 
 
 <MudDialog>
@@ -15,6 +15,8 @@
 			MultiSelection="false"
 			SortMode="SortMode.Multiple"
 			Hover=true
+			QuickFilter="@_quickFilter"
+			ReadOnly=@(_objectGridState is State.Normal)
 			Height="700px"
 			FixedHeader=true
 			RowStyleFunc="@_objectRowStyleFunc"
@@ -24,6 +26,17 @@
 			EditMode="@DataGridEditMode.Cell"
 			SelectedItemChanged="@SelectedObjectChanged"
 			EditTrigger="@DataGridEditTrigger.OnRowClick">
+			<ToolBarContent>
+				<MudStack Row="true" Spacing="2">
+					<MudText Typo="Typo.h6">Objects</MudText>
+					<MudText Typo="Typo.h6">@objectCount</MudText>
+					<MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" Disabled=@(_objectGridState is not State.Normal || SelectedObject is null) OnClick="@StartObjectEditMode">Edit</MudButton>
+					<MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Disabled=@(_objectGridState is State.Normal) OnClick="@SaveObjectIfValid">Save</MudButton>
+					<MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Disabled=@(_objectGridState is not State.Normal || SelectedObject is null) OnClick="@DeleteObject">Delete</MudButton>
+					<MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Disabled=@(_objectGridState is State.Normal) OnClick="@CancelObjectOperation">Cancel</MudButton>
+					<MudCheckBox @bind-Value=@_filterObjects Label="Filter On Ready to Import"></MudCheckBox>
+				</MudStack>
+			</ToolBarContent>
 			<Columns>
 				<SelectColumn T="DisplayObjectModel" />
 				<PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required="true" CellStyleFunc="@_objectCellStyleFunc">
@@ -294,6 +307,9 @@
 	private bool _tagNameIsValid;
 	private bool _ioTypeIsValid;
 
+	// Filter
+	private bool _filterObjects = false;
+	private int objectCount;
 
 	// Objects and tags
 	public List<DisplayTagModel>? Tags { get; set; }
@@ -321,6 +337,9 @@
 	// Data grids
 	public MudDataGrid<DisplayObjectModel>? ObjectGrid { get; set; }
 	public MudDataGrid<DisplayTagModel>? TagGrid { get; set; }
+
+	// States 
+	private State _objectGridState;
 
 	// Parameters
 	[Parameter]
@@ -371,38 +390,12 @@
 	{
 		string style = "";
 
-		// if (string.IsNullOrEmpty(x.VduGroup))
-		// 	style += "background-color:#8CED8C";
-
-		// else if (string.IsNullOrEmpty(x.Cabinet))
-		// 	style += "background-color:#d16976";
-
-		// else
-		// 	style += "background-color:#8CED8C";
-
-		// if (x.Description.Length > 10)
-		// 	style += ";font-weight:bold";
 		return style;
 	};
 
 	private Func<DisplayTagModel, string> _tagCellStyleFunc => x =>
 	{
 		string style = "";
-
-		if (x.Description == "C01")
-			style += "background-color:#8CED8C";
-
-		else if (x.Cabinet == "C02")
-			style += "background-color:#E5BDE5";
-
-		else if (x.Cabinet == "C03")
-			style += "background-color:#EACE5D";
-
-		else if (x.Cabinet == "C04")
-			style += "background-color:#F1F165";
-
-		if (x.Description.Length > 10)
-			style += ";font-weight:bold";
 
 		return style;
 	};
@@ -411,6 +404,106 @@
 	{
 		string VALID_OBJECT_COLOR = "#8CED8C";
 		string INVALID_OBJECT_COLOR = "#eb7886";
-		return x.ReadyForPreliminaryPLCGeneration ? $"background-color:{Color.Success}" : $"background-color:{Color.Error}";
+		return x.ReadyForPreliminaryPLCGeneration ? $"background-color:{VALID_OBJECT_COLOR}" : $"background-color:{INVALID_OBJECT_COLOR}";
 	};
+
+	private Func<DisplayObjectModel, bool> _quickFilter => x =>
+	{
+		var filters = new List<Func<DisplayObjectModel, bool>>();
+
+		// Add filters dynamically based on non-empty search strings
+		if (_filterObjects)
+			filters.Add(obj => obj.ReadyForPreliminaryPLCGeneration.Equals(false));
+
+		// Return true if no filters are specified (i.e., show all items)
+		if (!filters.Any())
+			return true;
+
+		// Check if the object satisfies all the filters
+		return filters.All(filter => filter(x));
+	};
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		try
+		{
+			if (ObjectGrid is null || ObjectGrid.FilteredItems is null) return;
+			
+			var newFilteredCount = ObjectGrid.FilteredItems.Count();
+			if (newFilteredCount != objectCount)
+			{
+				objectCount = newFilteredCount;
+				StateHasChanged();
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	#region Object methods
+	private async void SaveObjectIfValid()
+	{
+		DisplayObjectModel obj = new();
+		switch (_objectGridState)
+		{
+			case State.Add:
+				obj = Objects[0];
+				break;
+			case State.Edit:
+				obj = SelectedObject;
+				break;
+			default:
+				break;
+		}
+		if (!ObjectIsValid(obj))
+		{
+			Snackbar.Add("Object is not valid, not saved", Severity.Error);
+			return;
+		}
+		try
+		{
+			objects.Add(obj);
+			Snackbar.Add("Object saved", Severity.Success);
+		}
+		catch
+		{
+			Snackbar.Add("Object not saved, something went wrong", Severity.Error);
+		}
+
+		_objectGridState = State.Normal;
+	}
+
+	private bool ObjectIsValid(DisplayObjectModel obj)
+	{
+		return (_sfiNumberIsValid && _mainEqNumberIsValid && _objectNameIsValid && _descriptionIsValid && _vduGroupIsValid && obj is not null);
+	}
+
+	private async Task DeleteObject()
+	{
+		if (SelectedObject is null) return;
+
+		objects.Remove(SelectedObject);
+
+		_objectGridState = State.Normal;
+	}
+
+	private async void StartObjectEditMode()
+	{
+		_objectGridState = State.Edit;
+	}
+	
+	private async Task CancelObjectOperation()
+	{
+		_objectGridState = State.Normal;
+	}
+	#endregion
+
+	public enum State
+	{
+		Add,
+		Edit,
+		Normal
+	}
 }
