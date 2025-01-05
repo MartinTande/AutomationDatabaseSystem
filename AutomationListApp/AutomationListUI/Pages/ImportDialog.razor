@@ -353,12 +353,12 @@
 		var result = await _excelService.ImportObjects(objects);
 		if (result)
 		{
-			SnackBar.Add("Successfully imported the objects", Severity.Success);
+			Snackbar.Add("Successfully imported the objects", Severity.Success);
 			MudDialog.Close(DialogResult.Ok(true));
 		}
 		else
 		{
-			SnackBar.Add("Failed to import the objects", Severity.Error);
+			Snackbar.Add("Failed to import the objects", Severity.Error);
 		}
 	}
 
