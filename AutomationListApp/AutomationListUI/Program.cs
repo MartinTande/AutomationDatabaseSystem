@@ -27,7 +27,6 @@ builder.Services.AddSingleton<ExcelConnector>();
 builder.Services.AddSingleton<SqlConnectionStringBuilder>();
 builder.Services.AddTransient<DatabaseManager>();
 builder.Services.AddTransient<ExcelService>();
-builder.Services.AddTransient<DialogService>();
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddMudServices();
 

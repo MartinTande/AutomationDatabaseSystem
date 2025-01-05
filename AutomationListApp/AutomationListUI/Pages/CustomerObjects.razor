@@ -1,5 +1,4 @@
 ﻿@page "/customer-objects"
-@using AutomationListUI.Utils
 
 @inject ISnackbar Snackbar
 @inject IObjectService _objectService
@@ -7,7 +6,7 @@
 @inject ExcelService _excelService
 @inject CategoryDataManager _categoryDM
 @inject SubCategoryDataManager _subCategoryDM
-@inject DialogService _dialogService
+@inject IDialogService _dialogService
 
 <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
 	<!-- Object Grid-->
@@ -338,14 +337,14 @@
 
 			stream.Position = 0;
 
-			Dictionary<string, DisplayObjectModel> excelObjects = _excelService.ReadExcelObjects(stream);
+			List<DisplayObjectModel> excelObjects = _excelService.ReadExcelObjects(stream);
 
 			var parameters = new DialogParameters<ImportDialog>
 			{
 				{x => x.objects, excelObjects}
 			};
 
-			var options = new DialogOptions() { MaxWidth = MaxWidth.ExtraLarge };
+			var options = new DialogOptions() { MaxWidth = MaxWidth.ExtraExtraLarge, CloseOnEscapeKey = true, Position = DialogPosition.Center };
 
 			var dialog = await _dialogService.ShowAsync<ImportDialog>("Ready to import", parameters, options);
 			var result = await dialog.Result;

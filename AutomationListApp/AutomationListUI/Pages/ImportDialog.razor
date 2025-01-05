@@ -1,4 +1,4 @@
-﻿@inject ObjectService _objectService
+﻿@inject IObjectService _objectService
 @inject ExcelService _excelService
 @inject CategoryDataManager _categoryDM
 @inject SubCategoryDataManager _subCategoryDM
@@ -7,19 +7,21 @@
 
 <MudDialog>
     <DialogContent>
-		<MudDataGrid T="DisplayObjectModel"
-					 Items="@Objects"
-					 @ref="@ObjectGrid"
-					 Height="600px"
-					 MultiSelection="false"
-					 SortMode="SortMode.Multiple"
-					 Hover=true
-					 FixedHeader=true
-					 ColumnResizeMode=@ResizeMode.Container
-					 Striped=true
-					 Dense=true
-					 EditMode="@DataGridEditMode.Cell"
-					 EditTrigger="@DataGridEditTrigger.OnRowClick">
+		<!-- Objects -->
+		<MudDataGrid 
+			T="DisplayObjectModel"
+			Items="@objects"
+			@ref="@ObjectGrid"
+			Height="600px"
+			MultiSelection="false"
+			SortMode="SortMode.Multiple"
+			Hover=true
+			FixedHeader=true
+			ColumnResizeMode=@ResizeMode.Container
+			Striped=true
+			Dense=true
+			EditMode="@DataGridEditMode.Cell"
+			EditTrigger="@DataGridEditTrigger.OnRowClick">
 			<Columns>
 				<SelectColumn T="DisplayObjectModel" />
 				<PropertyColumn Property="x => x.SfiNumber" Title="Sfi" Required="true">
@@ -82,16 +84,17 @@
 			</Columns>
 		</MudDataGrid>
 		<!-- Tags -->
-		<MudDataGrid T="DisplayTagModel"
-					 Items="@Tags"
-					 SortMode="SortMode.Multiple"
-					 Hover=true
-					 Dense=true
-					 Filterable="false"
-					 Striped=true
-					 Height="300px"
-					 EditMode="@DataGridEditMode.Cell"
-					 EditTrigger="@DataGridEditTrigger.OnRowClick">
+		<MudDataGrid 
+			T="DisplayTagModel"
+			Items="@Tags"
+			SortMode="SortMode.Multiple"
+			Hover=true
+			Dense=true
+			Filterable="false"
+			Striped=true
+			Height="300px"
+			EditMode="@DataGridEditMode.Cell"
+			EditTrigger="@DataGridEditTrigger.OnRowClick">
 			<Columns>
 				<SelectColumn T="DisplayTagModel" />
 				<PropertyColumn Property="x => x.FullTagName" Title="Tag Name" Editable=false />
@@ -190,15 +193,12 @@
 				</PropertyColumn>
 			</Columns>
 		</MudDataGrid>
-
     </DialogContent>
 	<DialogActions>
 		<MudButton OnClick="Cancel">Cancel</MudButton>
 		<MudButton OnClick="Submit" Color="Color.Primary" Variant="Variant.Filled">Submit</MudButton>
 	</DialogActions>
 </MudDialog>
-
-
 
 
 @code {
@@ -230,8 +230,9 @@
 	public MudDataGrid<DisplayObjectModel>? ObjectGrid { get; set; }
 	public MudDataGrid<DisplayTagModel>? TagGrid { get; set; }
 
+	// Parameters
 	[Parameter]
-	public Dictionary<string, DisplayObjectModel> objects { get; set; } = new();
+	public List<DisplayObjectModel> objects { get; set; } = new();
 
 	[CascadingParameter]
 	public MudDialogInstance MudDialog { get; set; }
@@ -248,7 +249,6 @@
 		{
 			SnackBar.Add("Failed to import the objects", Severity.Error);
 		}
-
 	}
 
 	private void Cancel()
