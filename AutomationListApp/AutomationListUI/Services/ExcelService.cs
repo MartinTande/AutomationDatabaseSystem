@@ -1,4 +1,5 @@
-﻿using AutomationListUI.Models;
+﻿using AutomationListLibrary.Data;
+using AutomationListUI.Models;
 using ClosedXML.Excel;
 
 namespace AutomationListUI.Services;
@@ -8,8 +9,10 @@ public class ExcelService
 	private readonly IObjectService _objectService;
 	private readonly ITagService _tagService;
 	private Dictionary<string, int> _headers;
+	const int MASTER_IO_LIST_INDEX = 1;
+	const int PICTURE_HIERARCHY_INDEX = 10;
 
-    public ExcelService(IObjectService objectService, ITagService tagService)
+	public ExcelService(IObjectService objectService, ITagService tagService)
     {
 		_objectService = objectService;
 		_tagService = tagService;
@@ -19,17 +22,21 @@ public class ExcelService
 	public List<DisplayObjectModel>? ReadExcelObjects(MemoryStream memoryStream)
 	{
 		using var workbook = new XLWorkbook(memoryStream);
-		var ioListWorksheet = workbook.Worksheets.ElementAtOrDefault(1);
+		var ioListWorksheet = workbook.Worksheets.ElementAtOrDefault(MASTER_IO_LIST_INDEX);
+		var picHierarchyWorksheet = workbook.Worksheets.ElementAt(PICTURE_HIERARCHY_INDEX);
 
-		if (ioListWorksheet == null) return null;
+		var picHierarchy = ReadPictureHierarchy(picHierarchyWorksheet);
+
+		if (ioListWorksheet == null) 
+			return null;
 
 		int headerRow = 1;
 		int columnNumber = 1;
 		
 		// get _headers
-		while (!string.IsNullOrEmpty(ioListWorksheet.Cell(headerRow, columnNumber).Value.ToString()))
+		while (!string.IsNullOrEmpty(ioListWorksheet.Cell(headerRow, columnNumber).GetString()))
 		{
-			_headers.Add(ioListWorksheet.Cell(headerRow, columnNumber).Value.ToString(), columnNumber);
+			_headers.Add(ioListWorksheet.Cell(headerRow, columnNumber).GetString(), columnNumber);
 			columnNumber++;
 		}
 		var rows = ioListWorksheet.RowsUsed().Skip(1);      // skip header row
@@ -40,9 +47,7 @@ public class ExcelService
 		{
 			string objectName = row.Cell(_headers["Object"]).GetString();
 			if (string.IsNullOrEmpty(objectName))
-			{
 				continue;
-			}
 
 			DisplayTagModel tag = new DisplayTagModel()
 			{
@@ -105,9 +110,39 @@ public class ExcelService
 				excelObjects.Add(objectName, newObject);
 			}
 		}
-
+		
 		List<DisplayObjectModel> objectlist = excelObjects.Values.ToList();
 		return objectlist;
+	}
+
+	private List<Hierarchy1>? ReadPictureHierarchy(IXLWorksheet worksheet)
+	{
+		if (worksheet == null) return null;
+
+		int headerRow = 1;
+		int columnNumber = 1;
+
+		List<Hierarchy1>? pictureHierarchy = new();
+
+		while (!string.IsNullOrEmpty(worksheet.Cell(headerRow, columnNumber).GetString()))
+		{
+			var item = worksheet.Cell(headerRow, columnNumber).GetString();
+			Hierarchy1 newMainPic = new() { Name = item };
+
+			int subRow = 1;
+			while (!worksheet.Cell(subRow, columnNumber).GetString().Contains("PICT"))
+			{
+				string subItem = worksheet.Cell(subRow,columnNumber).GetString();
+				Hierarchy2 subPic = new() { Name = subItem };
+				newMainPic.SubPictures.Add(subPic);
+				subRow++;
+			}
+
+			pictureHierarchy.Add(newMainPic);
+			columnNumber++;
+		}
+
+		return pictureHierarchy;
 	}
 
     public async Task<bool> ImportObjects(List<DisplayObjectModel> excelObjects)
