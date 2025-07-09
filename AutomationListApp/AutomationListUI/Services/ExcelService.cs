@@ -1,6 +1,7 @@
 ﻿using AutomationListLibrary.Data;
 using AutomationListUI.Models;
 using ClosedXML.Excel;
+using System.Diagnostics;
 
 namespace AutomationListUI.Services;
 
@@ -8,7 +9,7 @@ public class ExcelService
 {
 	private readonly IObjectService _objectService;
 	private readonly ITagService _tagService;
-	private Dictionary<string, int> _headers;
+	private readonly Dictionary<string, int> _headers;
 	const int MASTER_IO_LIST_INDEX = 1;
 	const int PICTURE_HIERARCHY_INDEX = 10;
 
@@ -21,103 +22,150 @@ public class ExcelService
 
 	public List<DisplayObjectModel>? ReadExcelObjects(MemoryStream memoryStream)
 	{
-		using var workbook = new XLWorkbook(memoryStream);
-		var ioListWorksheet = workbook.Worksheets.ElementAtOrDefault(MASTER_IO_LIST_INDEX);
-		var picHierarchyWorksheet = workbook.Worksheets.ElementAt(PICTURE_HIERARCHY_INDEX);
-
-		var picHierarchy = ReadPictureHierarchy(picHierarchyWorksheet);
-
-		if (ioListWorksheet == null) 
-			return null;
-
-		int headerRow = 1;
-		int columnNumber = 1;
-		
-		// get _headers
-		while (!string.IsNullOrEmpty(ioListWorksheet.Cell(headerRow, columnNumber).GetString()))
+		var stopwatch = Stopwatch.StartNew();
+		var timings = new Dictionary<string, long>();
+		try
 		{
-			_headers.Add(ioListWorksheet.Cell(headerRow, columnNumber).GetString(), columnNumber);
-			columnNumber++;
-		}
-		var rows = ioListWorksheet.RowsUsed().Skip(1);      // skip header row
+			var workbookStart = Stopwatch.GetTimestamp();
+			using var workbook = new XLWorkbook(memoryStream);
+			var ioListWorksheet = workbook.Worksheets.ElementAtOrDefault(MASTER_IO_LIST_INDEX);
+			var picHierarchyWorksheet = workbook.Worksheets.ElementAt(PICTURE_HIERARCHY_INDEX);
+			timings["WorkbookLoad"] = Stopwatch.GetElapsedTime(workbookStart).Ticks;
 
-		Dictionary<string, DisplayObjectModel> excelObjects = new Dictionary<string, DisplayObjectModel>();
+			var hierarchyStart = Stopwatch.GetTimestamp();
+			var picHierarchy = ReadPictureHierarchy(picHierarchyWorksheet);
+			timings["HierarchyRead"] = Stopwatch.GetElapsedTime(hierarchyStart).Ticks;
 
-		foreach (var row in rows)
-		{
-			string objectName = row.Cell(_headers["Object"]).GetString();
-			if (string.IsNullOrEmpty(objectName))
-				continue;
+			if (ioListWorksheet == null)
+				return null;
 
-			DisplayTagModel tag = new DisplayTagModel()
+			// Read headers efficiently
+			var headerStart = Stopwatch.GetTimestamp();
+			_headers.Clear(); // Clear existing headers
+			var headerRow = ioListWorksheet.Row(1);
+			var lastColumn = headerRow.LastCellUsed()?.Address.ColumnNumber ?? 0;
+			_headers.EnsureCapacity(lastColumn); // Pre-allocate capacity
+
+			for (int col = 1; col <= lastColumn; col++)
 			{
-				EqSuffix = row.Cell(_headers["Eq_suffix"]).GetString(),
-				Description = row.Cell(_headers["Tag_description"]).GetString(),
-				IoType = row.Cell(_headers["IO_type"]).GetString(),
-				SignalType = row.Cell(_headers["Signal_type"]).GetString(),
-				Symbol = row.Cell(_headers["Symbol"]).GetString(),
-				EngUnit = row.Cell(_headers["Eng_unit"]).GetString(),
-				AlarmDelay = row.Cell(_headers["Alarm_delay"]).GetString(),
-				RangeLow = int.TryParse(row.Cell(_headers["Range_min"]).GetString(), out int rangeLow) ? rangeLow : null,
-				RangeHigh = int.TryParse(row.Cell(_headers["Range_max"]).GetString(), out int rangeHigh) ? rangeHigh : null,
-				LowLowLimit = int.TryParse(row.Cell(_headers["AlmLL"]).GetString(), out int lowLowLimit) ? lowLowLimit : null,
-				LowLimit = int.TryParse(row.Cell(_headers["AlmL"]).GetString(), out int lowLimit) ? lowLimit : null,
-				HighLimit = int.TryParse(row.Cell(_headers["AlmH"]).GetString(), out int highLimit) ? highLimit : null,
-				HighHighLimit = int.TryParse(row.Cell(_headers["AlmHH"]).GetString(), out int highHighLimit) ? highHighLimit : null,
-				Slot = int.TryParse(row.Cell(_headers["Slot"]).GetString(), out int slot) ? slot : null,
-				Channel = int.TryParse(row.Cell(_headers["Channel"]).GetString(), out int channel) ? channel : null,
-				TP1 = int.TryParse(row.Cell(_headers["TP1"]).GetString(), out int tp1) ? tp1 : null,
-				TP2 = int.TryParse(row.Cell(_headers["TP2"]).GetString(), out int tp2) ? tp2 : null,
-				TP3 = int.TryParse(row.Cell(_headers["TP3"]).GetString(), out int tp3) ? tp3 : null,
-				TP4 = int.TryParse(row.Cell(_headers["TP4"]).GetString(), out int tp4) ? tp4 : null,
-				AbsoluteAddress = row.Cell(_headers["AbsoluteAddr"]).GetString(),
-				SWPath = row.Cell(_headers["SW_Path"]).GetString(),
-				DBName = row.Cell(_headers["DB_name"]).GetString(),
-				IsE0 = row.Cell(_headers["E0_Req"]).Value.ToString() == "Y",
-				IsVDR = row.Cell(_headers["VDR_Req"]).Value.ToString() == "Y",
-				IOStatus = row.Cell(_headers["IO_status"]).GetString(),
-				InterfaceModule = row.Cell(_headers["IM"]).GetString(),
-				UserLock = row.Cell(_headers["User_Lock"]).GetString() == "Y",
-				IOLock = row.Cell(_headers["IO_LOCK"]).GetString() == "Y",
-			};
-
-			if (excelObjects.TryGetValue(objectName, out DisplayObjectModel? value))
-			{
-				value.Tags.Add(tag);
+				var cellValue = headerRow.Cell(col).GetString();
+				if (string.IsNullOrEmpty(cellValue)) break;
+				_headers.Add(cellValue, col);
 			}
-			else
+			timings["HeaderRead"] = Stopwatch.GetElapsedTime(headerStart).Ticks;
+
+			var processingStart = Stopwatch.GetTimestamp();
+			var rows = ioListWorksheet.RowsUsed().Skip(1);
+			var estimatedObjectCount = ioListWorksheet.RowsUsed().Count() / 5; // Estimate objects
+			var excelObjects = new Dictionary<string, DisplayObjectModel>(estimatedObjectCount);
+
+			foreach (var row in rows)
 			{
-				var newObject = new DisplayObjectModel()
+				string objectName = row.Cell(_headers["Object"]).GetString();
+				if (string.IsNullOrEmpty(objectName))
+					continue;
+
+				DisplayTagModel tag = new DisplayTagModel()
 				{
-					SfiNumber = row.Cell(_headers["SFI_no"]).GetString(),
-					MainEqNumber = row.Cell(_headers["Main_eq_no"]).GetString(),
-					EqNumber = row.Cell(_headers["Eq_no"]).GetString(),
-					FullObjectName = row.Cell(_headers["Object"]).GetString(),
-					Description = row.Cell(_headers["Object_description"]).GetString(),
-					Hierarchy1 = row.Cell(_headers["Hierarchy_1"]).GetString(),
-					Hierarchy2 = row.Cell(_headers["Hierarchy_2"]).GetString(),
-					VduGroup = row.Cell(_headers["VduGrp"]).GetString(),
-					AcknowledgeAllowed = row.Cell(_headers["AcknowledgeAllowed"]).GetString(),
-					AlwaysVisible = row.Cell(_headers["AlwaysVisible"]).GetString(),
-					AlarmGroup = row.Cell(_headers["AlmGrp"]).GetString(),
-					Node = row.Cell(_headers["Node"]).GetString(),
-					Cabinet = row.Cell(_headers["Cabinet"]).GetString(),
-					Otd = row.Cell(_headers["OTD"]).GetString(),
-					Revision = row.Cell(_headers["Revision"]).GetString(),
+					EqSuffix = row.Cell(_headers["Eq_suffix"]).GetString(),
+					Description = row.Cell(_headers["Tag_description"]).GetString(),
+					IoType = row.Cell(_headers["IO_type"]).GetString(),
+					SignalType = row.Cell(_headers["Signal_type"]).GetString(),
+					Symbol = row.Cell(_headers["Symbol"]).GetString(),
+					EngUnit = row.Cell(_headers["Eng_unit"]).GetString(),
+					AlarmDelay = row.Cell(_headers["Alarm_delay"]).GetString(),
+					RangeLow = int.TryParse(row.Cell(_headers["Range_min"]).GetString().AsSpan(), out int rangeLow) ? rangeLow : null,
+					RangeHigh = int.TryParse(row.Cell(_headers["Range_max"]).GetString().AsSpan(), out int rangeHigh) ? rangeHigh : null,
+					LowLowLimit = int.TryParse(row.Cell(_headers["AlmLL"]).GetString().AsSpan(), out int lowLowLimit) ? lowLowLimit : null,
+					LowLimit = int.TryParse(row.Cell(_headers["AlmL"]).GetString().AsSpan(), out int lowLimit) ? lowLimit : null,
+					HighLimit = int.TryParse(row.Cell(_headers["AlmH"]).GetString().AsSpan(), out int highLimit) ? highLimit : null,
+					HighHighLimit = int.TryParse(row.Cell(_headers["AlmHH"]).GetString().AsSpan(), out int highHighLimit) ? highHighLimit : null,
+					Slot = int.TryParse(row.Cell(_headers["Slot"]).GetString().AsSpan(), out int slot) ? slot : null,
+					Channel = int.TryParse(row.Cell(_headers["Channel"]).GetString().AsSpan(), out int channel) ? channel : null,
+					TP1 = int.TryParse(row.Cell(_headers["TP1"]).GetString().AsSpan(), out int tp1) ? tp1 : null,
+					TP2 = int.TryParse(row.Cell(_headers["TP2"]).GetString().AsSpan(), out int tp2) ? tp2 : null,
+					TP3 = int.TryParse(row.Cell(_headers["TP3"]).GetString().AsSpan(), out int tp3) ? tp3 : null,
+					TP4 = int.TryParse(row.Cell(_headers["TP4"]).GetString().AsSpan(), out int tp4) ? tp4 : null,
+					AbsoluteAddress = row.Cell(_headers["AbsoluteAddr"]).GetString(),
+					SWPath = row.Cell(_headers["SW_Path"]).GetString(),
+					DBName = row.Cell(_headers["DB_name"]).GetString(),
+					IsE0 = row.Cell(_headers["E0_Req"]).GetString().Equals("Y", StringComparison.OrdinalIgnoreCase),
+					IsVDR = row.Cell(_headers["VDR_Req"]).GetString().Equals("Y", StringComparison.OrdinalIgnoreCase),
+					IOStatus = row.Cell(_headers["IO_status"]).GetString(),
+					InterfaceModule = row.Cell(_headers["IM"]).GetString(),
+					UserLock = row.Cell(_headers["User_Lock"]).GetString().Equals("Y", StringComparison.OrdinalIgnoreCase),
+					IOLock = row.Cell(_headers["IO_LOCK"]).GetString().Equals("Y", StringComparison.OrdinalIgnoreCase),
 				};
 
-				newObject.Tags.Add(tag);
-				excelObjects.Add(objectName, newObject);
+				if (excelObjects.TryGetValue(objectName, out DisplayObjectModel? value))
+				{
+					value.Tags.Add(tag);
+				}
+				else
+				{
+					var newObject = new DisplayObjectModel()
+					{
+						SfiNumber = row.Cell(_headers["SFI_no"]).GetString(),
+						MainEqNumber = row.Cell(_headers["Main_eq_no"]).GetString(),
+						EqNumber = row.Cell(_headers["Eq_no"]).GetString(),
+						FullObjectName = objectName, // Reuse already retrieved value
+						Description = row.Cell(_headers["Object_description"]).GetString(),
+						Hierarchy1 = row.Cell(_headers["Hierarchy_1"]).GetString(),
+						Hierarchy2 = row.Cell(_headers["Hierarchy_2"]).GetString(),
+						VduGroup = row.Cell(_headers["VduGrp"]).GetString(),
+						AcknowledgeAllowed = row.Cell(_headers["AcknowledgeAllowed"]).GetString(),
+						AlwaysVisible = row.Cell(_headers["AlwaysVisible"]).GetString(),
+						AlarmGroup = row.Cell(_headers["AlmGrp"]).GetString(),
+						Node = row.Cell(_headers["Node"]).GetString(),
+						Cabinet = row.Cell(_headers["Cabinet"]).GetString(),
+						Otd = row.Cell(_headers["OTD"]).GetString(),
+						Revision = row.Cell(_headers["Revision"]).GetString(),
+						Tags = new List<DisplayTagModel> { tag } // Initialize with first tag
+					};
+
+					excelObjects.Add(objectName, newObject);
+				}
 			}
+			timings["RowProcessing"] = Stopwatch.GetElapsedTime(processingStart).Ticks;
+
+			// Optimized conversion - pre-allocate with exact capacity
+			var conversionStart = Stopwatch.GetTimestamp();
+			var objectList = new List<DisplayObjectModel>(excelObjects.Count);
+			objectList.AddRange(excelObjects.Values);
+			timings["ListConversion"] = Stopwatch.GetElapsedTime(conversionStart).Ticks;
+
+			stopwatch.Stop();
+			timings["Total"] = stopwatch.ElapsedTicks;
+
+			// Log performance metrics
+			var totalRows = ioListWorksheet.RowsUsed().Count();
+			var totalTime = TimeSpan.FromTicks(timings["Total"]);
+
+			Console.WriteLine("=== Performance Metrics ===");
+			Console.WriteLine($"Workbook Load: {TimeSpan.FromTicks(timings["WorkbookLoad"]).TotalMilliseconds:F2}ms");
+			Console.WriteLine($"Hierarchy Read: {TimeSpan.FromTicks(timings["HierarchyRead"]).TotalMilliseconds:F2}ms");
+			Console.WriteLine($"Header Read: {TimeSpan.FromTicks(timings["HeaderRead"]).TotalMilliseconds:F2}ms ({_headers.Count} columns)");
+			Console.WriteLine($"Row Processing: {TimeSpan.FromTicks(timings["RowProcessing"]).TotalMilliseconds:F2}ms");
+			Console.WriteLine($"List Conversion: {TimeSpan.FromTicks(timings["ListConversion"]).TotalMilliseconds:F2}ms");
+			Console.WriteLine($"Total Time: {totalTime.TotalMilliseconds:F2}ms");
+			Console.WriteLine($"Rows Processed: {totalRows:N0}");
+			Console.WriteLine($"Objects Created: {objectList.Count:N0}");
+			Console.WriteLine($"Tags per Object: {(totalRows > 0 ? (double)totalRows / objectList.Count : 0):F1}");
+			Console.WriteLine($"Processing Rate: {(totalTime.TotalSeconds > 0 ? totalRows / totalTime.TotalSeconds : 0):F0} rows/second");
+			Console.WriteLine($"Memory Efficiency: {(excelObjects.Count > 0 ? (double)totalRows / excelObjects.Count : 0):F1}x consolidation");
+
+			return objectList;
 		}
-		
-		List<DisplayObjectModel> objectlist = excelObjects.Values.ToList();
-		return objectlist;
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Error after {stopwatch.ElapsedMilliseconds}ms: {ex}");
+			throw;
+		}
 	}
 
-	private List<Hierarchy1>? ReadPictureHierarchy(IXLWorksheet worksheet)
+	private static List<Hierarchy1> ReadPictureHierarchy(IXLWorksheet worksheet)
 	{
-		if (worksheet == null) return null;
+		if (worksheet == null) return [];
 
 		int headerRow = 1;
 		int columnNumber = 1;
@@ -129,8 +177,8 @@ public class ExcelService
 			var item = worksheet.Cell(headerRow, columnNumber).GetString();
 			Hierarchy1 newMainPic = new() { Name = item };
 
-			int subRow = 1;
-			while (!worksheet.Cell(subRow, columnNumber).GetString().Contains("PICT"))
+			int subRow = 2;
+			while (!worksheet.Cell(subRow, columnNumber).GetString().Contains("PICT") && !string.IsNullOrEmpty(worksheet.Cell(subRow, columnNumber).GetString()))
 			{
 				string subItem = worksheet.Cell(subRow,columnNumber).GetString();
 				Hierarchy2 subPic = new() { Name = subItem };
@@ -145,7 +193,7 @@ public class ExcelService
 		return pictureHierarchy;
 	}
 
-    public async Task<bool> ImportObjects(List<DisplayObjectModel> excelObjects)
+	public async Task<bool> ImportObjects(List<DisplayObjectModel> excelObjects)
 	{
 		try
 		{
